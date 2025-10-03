@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace="매퍼 인터페이스 경로" --> 
+<mapper namespace="com.dohwan.board.mapper.FileMapper">
+
+    <!-- 파일 목록 -->
+    <select id="list" resultType="Files">
+        SELECT *
+        FROM files
+        ORDER BY created_at DESC
+    </select>
+
+    <!-- 파일 목록 - 부모 테이블 기준 -->
+    <!-- * 파일이 종속되는 테이블을 기준으로 파일 목록을 조회 -->
+    <!-- * 게시글 번호 10 
+           📄 파일 번호 1
+           📄 파일 번호 2
+           📄 파일 번호 3
+     -->
+    <select id="listByParent" resultType="Files">
+        SELECT *
+        FROM files
+        WHERE p_table = #{pTable}
+          AND p_no = #{pNo}
+        ORDER BY created_at DESC
+    </select>
+
+    <!-- 파일 조회 -->
+    <select id="select" resultType="Files">
+        SELECT *
+        FROM files
+        WHERE no = #{no}
+    </select>
+
+    <!-- 파일 조회 -->
+    <select id="selectById" resultType="Files">
+        SELECT *
+        FROM files
+        WHERE id = #{id}
+    </select>
+
+    <!-- 파일 등록 -->
+    <insert id="insert" parameterType="Files" useGeneratedKeys="true" keyProperty="no">
+        INSERT INTO files( 
+        id, 
+        p_table,
+        p_no,
+        file_name,
+        origin_name,
+        file_path,
+        file_size,
+        type,
+        seq 
+        )
+        VALUES ( 
+        #{id},
+        #{pTable}, 
+        #{pNo}, 
+        #{fileName}, 
+        #{originName}, 
+        #{filePath}, 
+        #{fileSize}, 
+        #{type},
+        #{seq} 
+        )
+    </insert>
+
+    <!-- 파일 수정 -->
+    <update id="update">
+        UPDATE files
+        <set>
+        <if test="type != null">
+        type = #{type},
+        </if>
+        <if test="seq != null">
+        seq = #{seq},
+        </if>
+        <if test="pTable != null">
+            p_table = #{pTable},
+            <if test="pNo != null">
+            p_no = #{pNo},
+            </if>
+            <if test="fileName != null">
+            file_name = #{fileName},
+            </if>
+            <if test="originName != null">
+            </if>
+            origin_name = #{originName},
+            </if>
+            <if test="filePath != null">
+            file_path = #{filePath},
+            </if>
+            <if test="fileSize != null">
+            file_size = #{fileSize},
+            </if>
+            update_at = now()
+       </set>
+        WHERE no = #{no}
+    </update>
+
+        <!-- 파일 수정 -->
+    <update id="updateById">
+        UPDATE files
+        <set>
+        <if test="type != null">
+        type = #{type},
+        </if>
+        <if test="seq != null">
+        seq = #{seq},
+        </if>
+        <if test="pTable != null">
+            p_table = #{pTable},
+            <if test="pNo != null">
+            p_no = #{pNo},
+            </if>
+            <if test="fileName != null">
+            file_name = #{fileName},
+            </if>
+            <if test="originName != null">
+            </if>
+            origin_name = #{originName},
+            </if>
+            <if test="filePath != null">
+            file_path = #{filePath},
+            </if>
+            <if test="fileSize != null">
+            file_size = #{fileSize},
+            </if>
+            update_at = now()
+       </set>
+        WHERE id = #{id}
+    </update>
+
+    <!-- 파일 삭제 -->
+    <delete id="delete">
+        DELETE FROM files
+        WHERE no = #{no}
+    </delete>
+
+      <!-- 파일 삭제 -->
+    <delete id="deleteById">
+        DELETE FROM files
+        WHERE id = #{id}
+    </delete>
+
+
+    <!-- 파일 목록 삭제 - 부모 테이블 기준 파일 목록 삭제 -->
+    <delete id="deleteByParent">
+        DELETE FROM files
+        WHERE p_table = #{pTable}
+          AND p_no = #{pNo}
+    </delete>
+
+    <!-- ✨ #{}  vs ${} -->
+    <!-- #{변수명} ➡️ '값' -->
+    <!-- ${변수명} ➡️  값  -->
+
+
+    <!-- 선택 삭제 -no (문자열 - IN) -->
+    <delete id="delteFiles">
+    DELETE FROM files
+    WHERE no IN ( ${no} )
+    </delete>
+   
+    <!-- 선택 삭제 -id (문자열 - IN) -->
+    <!--id IN ('ID1', 'ID2', 'ID3')-->
+    <delete id="delteFilesById">
+    DELETE FROM files
+    WHERE no IN ( ${id} )
+    </delete>
+
+    <!-- 선택 삭제 -no (List 컬렉션 )--> 
+   <delete id="delteFilesList">
+    DELETE FROM files
+    WHERE id IN 
+        <foreach collection="noList" item="no" open="(" separator="," close=")">
+            #{no}
+        </foreach>
+    </delete>
+   
+    <!-- 선택 삭제 -id (List 컬렉션 )-->
+    <delete id="delteFilesListById">
+    DELETE FROM files
+    WHERE id IN 
+        <foreach collection="noList" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+   
+    <!-- 타입별 파일 조회-->
+    <select id="selecfByType" resultType="Files">
+        SLECT *
+        FROM files
+        WHERE p_table = #{pTable}
+        AND p_no = #{pNo}
+        AND type = #{type}
+        LIMIT 0, 1
+    </select>
+
+    <!-- 타입별 파일 목록-->
+    <select id="listByType" resultType="Files">
+        SLECT *
+        FROM files
+        WHERE p_table = #{pTable}
+        AND p_no = #{pNo}
+        AND type = #{type}
+    </select>
+
+</mapper>
