@@ -1,10 +1,22 @@
 import axios from 'axios';
 
 // axios 객체 생성
-const api = axios.create()
+const api = axios.create({
+  baseURL: '/api',
+});
 
-// 기본 URL 설정
-api.defaults.baseURL = '/api'
-
+// ✅ 요청 인터셉터 추가
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('jwt');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
 export default api;

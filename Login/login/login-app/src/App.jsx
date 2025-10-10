@@ -18,14 +18,12 @@ import "./assets/css/join.css";
 import "./assets/css/user.css";
 import "./assets/css/record.css";
 import "./assets/css/footer.css";
-import AuthContextProvider from './contexts/AuthContext'
 
 
 const App = () => {
   return (
     <BrowserRouter>
       <LoginContextProvider>
-        <AuthContextProvider >
           <Header />
           <Routes>
             <Route path="/" element={<Home />} />
@@ -36,7 +34,6 @@ const App = () => {
             <Route path="/record" element={<Record />} />
           </Routes>
           <Footer />
-        </AuthContextProvider>
       </LoginContextProvider>
     </BrowserRouter>
   )

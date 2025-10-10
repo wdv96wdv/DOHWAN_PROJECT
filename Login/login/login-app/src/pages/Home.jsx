@@ -7,7 +7,7 @@ import "../assets/css/fonts.css"; // ✅ Google Fonts import
 
 import heroImage1 from "../assets/img/dongapopup.png";
 import heroImage2 from "../assets/img/jtbcpopup.jpg";
-import { AuthContext } from "../contexts/AuthContext";
+import { LoginContext } from "../contexts/LoginContextProvider";
 
 const Popup = ({ imageSrc, linkUrl, width = "300px", height = "auto", position = { top: "10%", left: "50%", transform: "translateX(-50%)" }, zIndex = 1000 }) => {
   const [visible, setVisible] = useState(false);
@@ -56,7 +56,7 @@ const Popup = ({ imageSrc, linkUrl, width = "300px", height = "auto", position =
 };
 
 const Home = () => {
-  const { isLogin } = useContext(AuthContext);
+  const { isLogin } = useContext(LoginContext);
   const navigate = useNavigate();
   const popups = [
     { img: heroImage1, link: "https://marathon.jtbc.com/", position: { top: "50%", left: "75%", transform: "translateX(-50%)" } },

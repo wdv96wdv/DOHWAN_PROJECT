@@ -79,5 +79,10 @@
          WHERE username = #{username}
     </delete>
 
+    <!-- 회원 권한 삭제 -->
+    <delete id="deletetAuth">
+        DELETE FROM user_auth
+         WHERE username = #{username}
+    </delete>
 
 </mapper>

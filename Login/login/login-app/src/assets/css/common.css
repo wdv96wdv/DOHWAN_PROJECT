@@ -46,3 +46,19 @@ button {
   padding: 0 20px;
   margin-top: 130px;
 }
+
+h1, h2, h3, h4, p, a, button, label, div{
+  caret-color: transparent;
+  user-select: none;
+}
+
+input {
+  caret-color: transparent; /* 기본적으로 커서 숨김 */
+}
+
+input:focus {
+  caret-color: auto; /* 포커스 시 커서 나타남 */
+}
+textarea:focus {
+  caret-color: auto; /* 포커스 시 커서 나타남 */
+}

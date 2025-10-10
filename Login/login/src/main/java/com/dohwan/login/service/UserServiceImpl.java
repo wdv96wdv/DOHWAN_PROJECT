@@ -66,9 +66,19 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public boolean delete(String username) throws Exception {
-    return userMapper.delete(username) > 0;
-  }
+public boolean delete(String username) throws Exception {
+    // 1. 권한 삭제
+    UserAuth userAuth = UserAuth.builder()
+                                .username(username)
+                                .build();
+                      userMapper.deleteAuth(userAuth);
+
+    // 2. 회원 삭제
+    int userResult = userMapper.delete(username);
+
+    return userResult > 0; // 회원 삭제가 성공하면 true
+}
+
 
   
 }
