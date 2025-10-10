@@ -1,13 +1,15 @@
 import React, { useState, useEffect, useContext } from "react";
-import styles from "../assets/css/Home.module.css";
+import styles from "../../assets/css/Home.module.css";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import 'sweetalert2/dist/sweetalert2.min.css'; // ✅ SweetAlert2 CSS import
-import "../assets/css/fonts.css"; // ✅ Google Fonts import
+import "../../assets/css/fonts.css"; // ✅ Google Fonts import
 
-import heroImage1 from "../assets/img/dongapopup.png";
-import heroImage2 from "../assets/img/jtbcpopup.jpg";
-import { LoginContext } from "../contexts/LoginContextProvider";
+import { list } from "../../apis/boards.js"
+
+import heroImage1 from "../../assets/img/dongapopup.png";
+import heroImage2 from "../../assets/img/jtbcpopup.jpg";
+import { LoginContext } from "../../contexts/LoginContextProvider";
 
 const Popup = ({ imageSrc, linkUrl, width = "300px", height = "auto", position = { top: "10%", left: "50%", transform: "translateX(-50%)" }, zIndex = 1000 }) => {
   const [visible, setVisible] = useState(false);
@@ -57,10 +59,31 @@ const Popup = ({ imageSrc, linkUrl, width = "300px", height = "auto", position =
 
 const Home = () => {
   const { isLogin } = useContext(LoginContext);
+  const [boards, setBoards] = useState([]);
+
+  // 테스트용 하드코딩 데이터
+  // const boards = [
+  //   { id: 1, title: "첫 번째 게시글", author: "두환", createdAt: "2025-10-10T10:00:00Z" },
+  //   { id: 2, title: "두 번째 게시글", author: "하정", createdAt: "2025-10-09T15:00:00Z" },
+  //   { id: 3, title: "세 번째 게시글", author: "두현", createdAt: "2025-10-08T12:30:00Z" },
+  //   { id: 4, title: "네 번째 게시글", author: "은상", createdAt: "2025-10-07T08:45:00Z" },
+  //   { id: 5, title: "다섯 번째 게시글", author: "익명", createdAt: "2025-10-06T18:20:00Z" },
+  // ];
+
+  useEffect(() => {
+    // 페이지 0, 사이즈 5로 최신 5개 가져오기
+    list(0, 5)
+      .then((res) => {
+        console.log("API 응답 구조:", res);
+        setBoards(res.data.list); // res.data 형식이 [{id, title, author, createdAt}, ...]여야 함
+      })
+      .catch((err) => console.error(err));
+  }, []);
+
   const navigate = useNavigate();
   const popups = [
-    { img: heroImage1, link: "https://marathon.jtbc.com/", position: { top: "50%", left: "75%", transform: "translateX(-50%)" } },
-    { img: heroImage2, link: "https://seoul-marathon.com/", position: { top: "10%", left: "75%", transform: "translateX(-50%)" } }
+    { img: heroImage1, link: "https://marathon.jtbc.com/", position: { top: "26%", left: "85%", transform: "translateX(-50%)" } },
+    { img: heroImage2, link: "https://seoul-marathon.com/", position: { top: "6%", left: "85%", transform: "translateX(-50%)" } }
   ];
 
   const handleStart = () => {
@@ -116,6 +139,34 @@ const Home = () => {
             <p>로그인만 하면 언제 어디서든 기록이 저장됩니다.</p>
           </div>
         </div>
+      </section>
+
+      {/* Community Section */}
+      <section className={styles.communitySection}>
+        <h2 className={styles.sectionTitle}>🏃‍♀️ 커뮤니티 최신글</h2>
+        <div className={styles.communityList}>
+          {boards.length > 0 ? (
+            boards.slice(0, 5).map((post) => (
+              <div
+                key={post.id}
+                className={styles.communityCard}
+                onClick={() => navigate(`/boards/${post.id}`)}
+              >
+                <h3>{post.title}</h3>
+                <p>{post.author}</p>
+                <small>{new Date(post.createdAt).toLocaleDateString()}</small>
+              </div>
+            ))
+          ) : (
+            <p>아직 작성된 게시글이 없습니다.</p>
+          )}
+        </div>
+        <button
+          className={styles.btnSecondary}
+          onClick={() => navigate("/boards")}
+        >
+          커뮤니티 더보기 ➡️
+        </button>
       </section>
 
       {/* 하단 CTA */}

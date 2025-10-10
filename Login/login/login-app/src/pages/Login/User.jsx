@@ -1,9 +1,9 @@
 import React, { useContext, useEffect } from 'react'
-import UserForm from '../components/User/UserForm'
-import { LoginContext } from '../contexts/LoginContextProvider'
+import UserForm from '../../components/User/UserForm'
+import { LoginContext } from '../../contexts/LoginContextProvider'
 import { useNavigate } from 'react-router-dom'
-import * as auth from '../apis/auth'
-import * as Swal from '../apis/alert'
+import * as auth from '../../apis/auth'
+import * as Swal from '../../apis/alert'
 
 const User = () => {
 

@@ -86,19 +86,21 @@
 }
 
 .btnSecondary {
-  background-color: transparent;
-  color: #fff;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  background-color: #0f8;
+  color: #111;
   padding: 12px 24px;
   border-radius: 8px;
-  border: 2px solid white;
+  border: px solid black;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .btnSecondary:hover {
-  background-color: rgba(255, 255, 255, 0.2);
   transform: scale(1.05);
+  box-shadow: 0 0 15px #0f8, 0 0 30px #0ff;
 }
 
 /* ========================= */
@@ -157,6 +159,49 @@
 
 .callToAction h2 {
   margin-bottom: 20px;
+}
+
+.homeContainer {
+  padding: 2rem;
+}
+
+.communitySection {
+  margin-top: 2rem;
+}
+
+.sectionTitle {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.communityList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.communityCard {
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff; /* 배경 흰색 */
+  color: #000; /* 글자 색 검정 */
+}
+
+
+.communityCard:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.postTitle {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.postAuthor, .postDate {
+  font-size: 0.9rem;
+  color: #666;
 }
 
 /* ========================= */

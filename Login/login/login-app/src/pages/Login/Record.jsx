@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import RecordList from "../components/Record/RecordList";
-import RecordForm from "../components/Record/RecordForm";
-import "../assets/css/record.css";
+import RecordList from "../../components/Record/RecordList";
+import RecordForm from "../../components/Record/RecordForm";
+import "../../assets/css/record.css";
 
 export default function RecordPage() {
   const [records, setRecords] = useState([]);

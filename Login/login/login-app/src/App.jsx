@@ -1,15 +1,28 @@
 import React from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import './App.css'
-import Home from './pages/Home'
-import Login from './pages/Login'
-import Join from './pages/Join'
-import User from './pages/User'
-import About from './pages/About'
+import LoginContextProvider from './contexts/LoginContextProvider'
+
+// page import
+import Home from './pages/Login/Home'
+import Login from './pages/Login/Login'
+import Join from './pages/Login/Join'
+import User from './pages/Login/User'
+import About from './pages/Login/About'
+import Record from './pages/Login/Record'
+
+// board page import
+import Listpage from './pages/board/Listpage'
+import Insertpage from './pages/board/Insertpage'
+import Readpage from './pages/board/Readpage'
+import Updatepage from './pages/board/Updatepage'
+
+
+// 공통 컴포넌트
 import Header from './components/Header/Header'
 import Footer from './components/Footer/Footer'
-import Record from './pages/Record'
-import LoginContextProvider from './contexts/LoginContextProvider'
+
+
 import "./assets/css/common.css";
 import "./assets/css/header.css";
 import "./assets/css/Home.module.css";
@@ -26,13 +39,20 @@ const App = () => {
       <LoginContextProvider>
           <Header />
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/join" element={<Join />} />
-            <Route path="/user" element={<User />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/record" element={<Record />} />
-          </Routes>
+          {/* 기본 페이지 */}
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/join" element={<Join />} />
+          <Route path="/user" element={<User />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/record" element={<Record />} />
+
+          {/* 게시판 페이지 */}
+          <Route path="/boards" element={<Listpage />} />
+          <Route path="/boards/insert" element={<Insertpage />} />
+          <Route path="/boards/:id" element={<Readpage />} />
+          <Route path="/boards/update/:id" element={<Updatepage />} />
+        </Routes>
           <Footer />
       </LoginContextProvider>
     </BrowserRouter>

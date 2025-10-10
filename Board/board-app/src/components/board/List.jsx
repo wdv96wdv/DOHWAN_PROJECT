@@ -1,7 +1,7 @@
 import React, { use } from 'react'
 import { createStaticHandler, Link } from 'react-router-dom';
 import styles from './css/List.module.css';
-import noImage from '../../assets/react.svg'
+import noImage from '../../assets/img/no-image.png'
 import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight'; 
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';

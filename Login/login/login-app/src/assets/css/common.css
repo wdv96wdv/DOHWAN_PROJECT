@@ -25,7 +25,6 @@
 body {
   font-family: "Rajdhani", sans-serif;
   background-color: #fff;
-  color: var(--text-primary);
   line-height: 1.6;
   overflow-x: hidden;
 }
@@ -62,3 +61,4 @@ input:focus {
 textarea:focus {
   caret-color: auto; /* 포커스 시 커서 나타남 */
 }
+
