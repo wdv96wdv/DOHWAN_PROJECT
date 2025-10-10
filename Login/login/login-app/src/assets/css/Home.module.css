@@ -1,5 +1,5 @@
 /* ========================= */
-/* 홈 화면 전체 스타일 */
+/* 홈 화면 전체 스타일 (라이트 모드 기본) */
 /* ========================= */
 .home {
   text-align: center;
@@ -7,7 +7,7 @@
 }
 
 /* ========================= */
-/* Hero 섹션 */
+/* Hero 섹션 (항상 동일, 다크 모드 미적용) */
 /* ========================= */
 .hero {
   padding: 80px 20px;
@@ -46,16 +46,9 @@
   letter-spacing: 2px;
 }
 
-/* ========================= */
-/* Gradient shift 애니메이션 */
-/* ========================= */
 @keyframes gradient-shift {
-  0%, 100% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
 }
 
 /* ========================= */
@@ -108,16 +101,15 @@
 /* ========================= */
 .features {
   padding: 60px 20px;
-  background: #f7f7f7;
+  background-color: #fff; /* 라이트 모드 기본 */
+  color: #111;
 }
 
 .features h2 {
-  color: #111;
   font-size: 2rem;
   margin-bottom: 30px;
 }
 
-/* Feature 카드 그리드 */
 .featureGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -126,26 +118,38 @@
   margin: 0 auto;
 }
 
-/* Feature 카드 개별 */
 .featureCard {
-  background: #fff;
+  background-color: #fff;
+  color: #000;
   padding: 20px;
   border-radius: 12px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .featureCard:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
 }
 
-.featureCard h3 {
-  margin-bottom: 10px;
+/* ========================= */
+/* Community 섹션 */
+/* ========================= */
+.communitySection {
+  margin-top: 2rem;
 }
 
-.featureCard p {
-  color: #555;
+.communityCard {
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+  color: #000;
+}
+
+.communityCard:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 /* ========================= */
@@ -156,92 +160,31 @@
   background: #111;
   color: #fff;
 }
-
-.callToAction h2 {
-  margin-bottom: 20px;
+.darkSection {
+  background-color: #1e1e1e;
+  color: #eee;
 }
 
-.homeContainer {
-  padding: 2rem;
-}
-
-.communitySection {
-  margin-top: 2rem;
-}
-
-.sectionTitle {
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
-}
-
-.communityList {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.communityCard {
-  padding: 1rem;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background-color: #fff; /* 배경 흰색 */
-  color: #000; /* 글자 색 검정 */
-}
-
-
-.communityCard:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-
-.postTitle {
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-}
-
-.postAuthor, .postDate {
-  font-size: 0.9rem;
-  color: #666;
+.darkCard {
+  background-color: #2c2c2c;
+  color: #fff;
+  border: 1px solid #444;
+  box-shadow: 0 2px 6px rgba(255,255,255,0.05);
 }
 
 /* ========================= */
 /* 반응형 디자인 */
 /* ========================= */
 @media (max-width: 768px) {
-  .hero h1 {
-    font-size: 3rem;
-  }
-
-  .hero p {
-    font-size: 1.2rem;
-  }
-
-  .cta {
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .features h2 {
-    font-size: 1.5rem;
-  }
-
-  .featureGrid {
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  }
+  .hero h1 { font-size: 3rem; }
+  .hero p { font-size: 1.2rem; }
+  .cta { flex-direction: column; gap: 10px; }
+  .features h2 { font-size: 1.5rem; }
+  .featureGrid { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
 }
 
 @media (max-width: 480px) {
-  .hero h1 {
-    font-size: 2.2rem;
-  }
-
-  .hero p {
-    font-size: 1rem;
-  }
-
-  .btnPrimary,
-  .btnSecondary {
-    font-size: 16px;
-    padding: 10px 20px;
-  }
+  .hero h1 { font-size: 2.2rem; }
+  .hero p { font-size: 1rem; }
+  .btnPrimary, .btnSecondary { font-size: 16px; padding: 10px 20px; }
 }

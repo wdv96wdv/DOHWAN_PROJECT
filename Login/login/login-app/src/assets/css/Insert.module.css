@@ -1,31 +1,108 @@
-.form-input{
+.container {
+  max-width: 900px;
+  margin: 40px auto;
+  background: #fff;
+  padding: 30px 40px;
+  border-radius: 12px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+  margin-top: 100px;
+}
+
+.title {
+  font-size: 1.8rem;
+  text-align: center;
+  margin-bottom: 30px;
+  color: #222;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th {
+  width: 140px;
+  text-align: left;
+  padding: 12px;
+  background-color: #f7f9fc;
+  border: 1px solid #ddd;
+}
+
+.table td {
+  padding: 12px;
+  border: 1px solid #ddd;
+}
+
+.formInput {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 15px;
+  transition: border-color 0.2s;
+}
+
+.formInput:focus {
+  border-color: #4b8cf5;
+  outline: none;
+}
+
+.btnBox {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 30px;
+}
+
+.btnBlue {
+  background-color: #4b8cf5;
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btnBlue:hover {
+  background-color: #3a76d4;
+}
+
+.btnGray {
+  background-color: #e4e7eb;
+  color: #333;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btnGray:hover {
+  background-color: #d5d8db;
+}
+
+/* 반응형 */
+@media screen and (max-width: 768px) {
+  .container {
+    padding: 20px;
+  }
+
+  .table th {
+    width: 100px;
+    font-size: 14px;
+  }
+
+  .formInput {
+    font-size: 14px;
+  }
+
+  .btnBox {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .btnBlue, .btnGray {
     width: 100%;
-    padding: 4px;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
-    outline: none;
-    border: 2px solid gray;
-    resize: none;
+  }
 }
-
-.form-input:hover,
-.form-input:focus{
-    border: 2px solid lightblue;
-    background-color: lightgray;
-}
-
-.table th, .table td{
-    border: 1px solid black;
-    padding: 8px;
-}
-
-.table th{
-    background-color: black;
-    color: white;
-}
-.table th:nth-child(1), .table td:nth-child(1){
-    width: 20%;
-}
-.table th:nth-child(2), .table td:nth-child(2){
-    width: 80%;
-}   

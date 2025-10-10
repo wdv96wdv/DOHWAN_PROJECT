@@ -1,184 +1,182 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import styles from '../../assets/css/Insert.module.css'
-import { useState } from 'react';
-// ckeditor5
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import styles from '../../assets/css/Insert.module.css';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import * as fileApi from '../../apis/files'
+import Swal from 'sweetalert2';
+import * as fileApi from '../../apis/files';
 
-const Insert = ( {onInsert}) => {
+const Insert = ({ onInsert }) => {
+  const [title, setTitle] = useState('');
+  const [writer, setWriter] = useState('');
+  const [content, setContent] = useState('');
+  const [mainFile, setMainFile] = useState(null);
+  const [files, setFiles] = useState(null);
 
-  // 🧊 state
-   const [title, setTitle] = useState('');
-   const [writer, setWriter] = useState('');
-   const [content, setContent] = useState('');  
-   const [mainFile, setMainFile] = useState(null);
-   const [files, setFiles] = useState(null);
+  // 입력 핸들러
+  const changeTitle = (e) => setTitle(e.target.value);
+  const changeWriter = (e) => setWriter(e.target.value);
+  const changeMainFile = (e) => setMainFile(e.target.files[0]);
+  const changeFiles = (e) => setFiles(e.target.files);
 
-  // 🧊 변경 이벤트 함수
-  const changeTitle = (e) => { setTitle(e.target.value); }
-  const changeWriter = (e) => { setWriter(e.target.value); }    
-  const changeContent = (e) => { setContent(e.target.value); }  
-  const changeMainFile = (e) => { setMainFile(e.target.files[0]);}
-  const changeFiles = (e) => { setFiles(e.target.files);}
-
-  // 🧊 등록 이벤트 함수
-  const onSubmit = (e) => {
-  // application/json
-  //  const data = {
-  //    'title': title,
-  //    'writer': writer,
-  //   'content': content
-  //  };
-  // multipart/form=data
-  const formData = new FormData()
-  formData.append('title', title)
-  formData.append('writer', writer)
-  formData.append('content', content)
-  // 🗒️ 파일 데이터 세팅
-  if(mainFile) formData.append('mainFile', mainFile)
-    if(files){
-      for(let i=0; i< files.length; i++){
-        const file = files[i];
-        formData.append("files",file)
-      }
-    }
-   const headers = {'Content-Type': 'multipart/form-data'};
-
-   //onInsert(data, headers) 전달받아서 호출
-   onInsert(formData, headers);
-  }
-
+  // CKEditor 업로드 플러그인
   function uploadPlugin(editor) {
-    editor.plugins.get("FileRepository").createUploadAdapter = (loader) => {
-        return customUploadAdapter(loader);
+    editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
+      return customUploadAdapter(loader);
     };
   }
 
   const customUploadAdapter = (loader) => {
     return {
       upload() {
-        return new Promise( (resolve, reject) => {
+        return new Promise((resolve) => {
           const formData = new FormData();
-          loader.file.then( async (file) => {
-                // console.log(file);
-                formData.append("pTable", 'editor');
-                formData.append("pNo", 0);
-                formData.append("type", 'SUB');
-                formData.append("seq", 0);
-                formData.append("data", file);
+          loader.file.then(async (file) => {
+            formData.append('pTable', 'editor');
+            formData.append('pNo', 0);
+            formData.append('type', 'SUB');
+            formData.append('seq', 0);
+            formData.append('data', file);
 
-                const headers = {
-                  'Content-Type' : 'multipart/form-data',
-                };
+            const headers = { 'Content-Type': 'multipart/form-data' };
+            const response = await fileApi.upload(formData, headers);
+            const data = await response.data;
+            const id = data.id;
 
-                let response = await fileApi.upload(formData, headers);
-                let data = await response.data;
-                let id = data.id;
-
-                // 이미지 렌더링
-                await resolve({
-                  default: `http://localhost:8080/files/img/${id}`
-                })
-
+            resolve({
+              default: `http://localhost:8080/files/img/${id}`,
+            });
           });
         });
       },
     };
   };
-  
+
+  // 등록 버튼
+  const onSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!title || !writer || !content) {
+      Swal.fire({
+        icon: 'warning',
+        title: '⚠️ 입력 누락',
+        text: '제목, 작성자, 내용을 모두 입력해주세요.',
+      });
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('writer', writer);
+    formData.append('content', content);
+    if (mainFile) formData.append('mainFile', mainFile);
+    if (files) {
+      for (let i = 0; i < files.length; i++) {
+        formData.append('files', files[i]);
+      }
+    }
+
+    const headers = { 'Content-Type': 'multipart/form-data' };
+
+    // 등록 확인
+    Swal.fire({
+      title: '게시글을 등록하시겠습니까?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: '등록',
+      cancelButtonText: '취소',
+    }).then((res) => {
+      if (res.isConfirmed) {
+        onInsert(formData, headers);
+      }
+    });
+  };
+
   return (
-    <div className='container'>
-      <h1 className='title'>게시글 쓰기</h1>
-    <table className={styles.table} border={1}>
-       <tr>
-          <th>제목</th>
-          <td>
-            {/* <input type="text" className='form-input'/> */}
-            {/*
-              CSS moduels의 클래스 선택자는 카멜케이스 쓰는것이 관례
-                            CSS                  JavaScript
-              * 카멜케이스 : formInput : { styles.formInput }
-              * 케밥케이스 : form-input : { styles['form-input'] }              
-            */}
-            <input type="text" onChange={changeTitle} className={styles['form-input']} />
-          </td>
-        </tr>
-        <tr>
-          <th>작성자</th>
-          <td>
-            <input type="text" onChange={changeWriter} className={styles['form-input']} /> 
-          </td>        
-        </tr>
-        <tr>
-            <td colSpan={2}>
-            {/* <textarea cols={40} rows={10} onChange={changeContent} className={styles['form-input']}></textarea> */}
-            <CKEditor
-              editor={ ClassicEditor }
-              config={{
-                  placeholder: "내용을 입력하세요.",
-                  toolbar: {
+    <div className={styles.container}>
+      <h1 className={styles.title}>🏃‍♀️ 새 게시글 작성</h1>
+
+      <form onSubmit={onSubmit}>
+        <table className={styles.table}>
+          <tbody>
+            <tr>
+              <th>제목</th>
+              <td>
+                <input
+                  type="text"
+                  value={title}
+                  onChange={changeTitle}
+                  placeholder="제목을 입력하세요"
+                  className={styles.formInput}
+                />
+              </td>
+            </tr>
+
+            <tr>
+              <th>작성자</th>
+              <td>
+                <input
+                  type="text"
+                  value={writer}
+                  onChange={changeWriter}
+                  placeholder="작성자를 입력하세요"
+                  className={styles.formInput}
+                />
+              </td>
+            </tr>
+
+            <tr>
+              <th colSpan={2}>내용</th>
+            </tr>
+            <tr>
+              <td colSpan={2}>
+                <CKEditor
+                  editor={ClassicEditor}
+                  config={{
+                    placeholder: '내용을 입력하세요.',
+                    toolbar: {
                       items: [
-                          'undo', 'redo',
-                          '|', 'heading',
-                          '|', 'fontfamily', 'fontsize', 'fontColor', 'fontBackgroundColor',
-                          '|', 'bold', 'italic', 'strikethrough', 'subscript', 'superscript', 'code',
-                          '|', 'bulletedList', 'numberedList', 'todoList', 'outdent', 'indent',
-                          '|', 'link', 'uploadImage', 'blockQuote', 'codeBlock',
-                          '|', 'mediaEmbed',
+                        'undo', 'redo',
+                        '|', 'heading',
+                        '|', 'bold', 'italic', 'link',
+                        '|', 'bulletedList', 'numberedList', 'blockQuote',
+                        '|', 'uploadImage', 'mediaEmbed',
                       ],
-                      shouldNotGroupWhenFull: false
-                  },
-                  editorConfig: {
-                      height: 500, // Set the desired height in pixels
-                  },
-                  alignment: {
-                      options: ['left', 'center', 'right', 'justify'],
-                  },
-                  
-                   extraPlugins: [uploadPlugin]            // 업로드 플러그인
-              }}
-              data=""         // ⭐ 기존 컨텐츠 내용 입력 (HTML)
-              onReady={ editor => {
-                  // You can store the "editor" and use when it is needed.
-                  console.log( 'Editor is ready to use!', editor );
-              } }
-              onChange={ ( event, editor ) => {
-                  const data = editor.getData();
-                  console.log( { event, editor, data } );
-                  setContent(data);
-              } }
-              onBlur={ ( event, editor ) => {
-                  console.log( 'Blur.', editor );
-              } }
-              onFocus={ ( event, editor ) => {
-                  console.log( 'Focus.', editor );
-              } } edi
-              />
-            </td>
-        </tr>
-        <tr>
-          <td>메인파일</td>
-          <td>
-            <input type="file" onChange={changeMainFile}/>
-          </td>
-        </tr>
-        <tr>
-          <td>첨부 파일</td>
-          <td>
-            <input type="file" multiple onChange={changeFiles}/>
-          </td>
-        </tr>
-      </table>
+                      shouldNotGroupWhenFull: false,
+                    },
+                    alignment: { options: ['left', 'center', 'right', 'justify'] },
+                    extraPlugins: [uploadPlugin],
+                  }}
+                  data={content}
+                  onChange={(event, editor) => setContent(editor.getData())}
+                />
+              </td>
+            </tr>
 
-      <div className='btn-box'>
-        <Link to="/boards" className='btn'>목록</Link>
-        <button className='btn' onClick={onSubmit}>등록</button>
-        <Link to="/boards" className='btn'>취소</Link>  
-      </div>
-    </div> 
-  )
-}
+            <tr>
+              <th>메인 파일</th>
+              <td>
+                <input type="file" onChange={changeMainFile} />
+              </td>
+            </tr>
 
-export default Insert
+            <tr>
+              <th>첨부 파일</th>
+              <td>
+                <input type="file" multiple onChange={changeFiles} />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div className={styles.btnBox}>
+          <Link to="/boards" className={styles.btnGray}>목록</Link>
+          <button type="submit" className={styles.btnBlue}>등록</button>
+          <Link to="/boards" className={styles.btnGray}>취소</Link>
+        </div>
+      </form>
+    </div>
+  );
+};
+
+export default Insert;

@@ -7,6 +7,7 @@ import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArro
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import * as format from '../../utils/format';
+import '../../assets/css/common.module.css'
 
 const List = ({ list, pagination }) => {
   const [pageList, setPageList] = useState([]);
@@ -26,7 +27,7 @@ const List = ({ list, pagination }) => {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>게시글 제목</h1>
+      <h1 className={styles.title}>🏃‍♀️ 러닝 커뮤니티</h1>
       <Link to="/boards/insert" className={styles.btn}>
         글쓰기
       </Link>

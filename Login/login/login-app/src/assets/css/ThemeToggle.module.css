@@ -1,0 +1,23 @@
+.toggleBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--sub-bg);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  padding: 6px 12px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+.toggleBtn:hover {
+  background: var(--accent);
+  color: white;
+  transform: scale(1.05);
+}
+
+.label {
+  font-weight: 500;
+}

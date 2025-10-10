@@ -164,6 +164,7 @@ const Update = ({
             {/* <textarea cols={40} rows={10} onChange={changeContent} value={content} className={styles['form-input']}></textarea> */}
             <CKEditor
                 editor={ ClassicEditor }
+                data={content ?? ''}  // undefined/null 방지
                 config={{
                     placeholder: "내용을 입력하세요.",
                     toolbar: {

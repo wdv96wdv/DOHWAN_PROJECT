@@ -1,15 +1,11 @@
-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
+header.header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 10px 20px;
-  background-color: #fff;
+  background-color: #fff; /* 항상 라이트 */
+  color: #333; /* 항상 라이트 글자색 */
   border-bottom: 1px solid #ddd;
-  z-index: 1000;
   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
 }
 
@@ -40,7 +36,7 @@ header {
 
 .util ul {
   display: flex;
-  gap: 15px;
+  gap: 10px;
 }
 .btn,.btn:link,.btn:visited {
     display: inline-block;

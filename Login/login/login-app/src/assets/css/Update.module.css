@@ -1,31 +1,109 @@
-.form-input{
+.container {
+    max-width: 900px;
+    margin: 120px auto;
+    padding: 16px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+/* ----------------- 입력 폼 ----------------- */
+.formInput {
     width: 100%;
-    padding: 4px;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
+    padding: 10px 12px;
+    border: 2px solid #ccc;
+    border-radius: 6px;
     outline: none;
-    border: 2px solid gray;
-    resize: none;
+    font-size: 1rem;
+    transition: all 0.2s ease-in-out;
+    margin-bottom: 12px;
 }
 
-.form-input:hover,
-.form-input:focus{
-    border: 2px solid lightblue;
-    background-color: lightgray;
+.formInput:focus,
+.formInput:hover {
+    border-color: #4da6ff;
+    background-color: #f5f8ff;
 }
 
-.table th, .table td{
-    border: 1px solid black;
-    padding: 8px;
+/* ----------------- 파일 리스트 ----------------- */
+.fileList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 12px;
 }
 
-.table th{
-    background-color: black;
+.fileItem {
+    background-color: #f9f9f9;
+    padding: 10px;
+    border-radius: 6px;
+    flex: 1 1 calc(50% - 12px); /* 2열 배치 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: background-color 0.2s;
+}
+
+.fileItem:hover {
+    background-color: #e6f2ff;
+}
+
+.fileImg {
+    width: 100%;
+    max-width: 200px;
+    height: auto;
+    border-radius: 4px;
+    margin-bottom: 8px;
+}
+
+.badge {
+    position: absolute;
+    background-color: #ff4d4f;
     color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    top: 4px;
+    left: 4px;
 }
-.table th:nth-child(1), .table td:nth-child(1){
-    width: 20%;
+
+/* 버튼 */
+.btn {
+    padding: 6px 12px;
+    border: none;
+    background-color: #4da6ff;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 4px;
+    transition: background-color 0.2s;
+    text-decoration: none;
+    text-align: center;
+    margin-left: 10px;
 }
-.table th:nth-child(2), .table td:nth-child(2){
-    width: 80%;
-}   
+
+.btn:hover {
+    background-color: #357acc;
+}
+
+/* 버튼 그룹 */
+.btnBox {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-top: 20px;
+    gap: 10px;
+}
+
+/* 반응형 */
+@media screen and (max-width: 768px) {
+    .fileItem {
+        flex: 1 1 100%;
+    }
+}
