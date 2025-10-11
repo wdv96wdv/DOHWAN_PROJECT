@@ -1,5 +1,5 @@
 import axios from 'axios';
-axios.defaults.baseURL = "/api";
+axios.defaults.baseURL = "https://dohwan-project.onrender.com/api";
 
 //목록
 export const list = (page, size) => axios.get(`/boards?page=${page}&size=${size}`);
