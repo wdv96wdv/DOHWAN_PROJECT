@@ -19,7 +19,7 @@ public interface RecordRepository extends JpaRepository<Records, Long> {
     List<Records> findByExerciseNameContainingIgnoreCaseOrderByCreatedAtDesc(String exerciseName);
     
     // 날짜별 운동 기록 조회
-    @Query("SELECT r FROM Records r WHERE DATE(r.createdAt) = CURRENT_DATE ORDER BY r.createdAt DESC")
+    @Query("SELECT r FROM Records r WHERE r.createdAt >= :todayStart AND r.createdAt < :tomorrowStart ORDER BY r.createdAt DESC")
     List<Records> findTodayRecords();
     
     // 특정 운동의 최신 기록 조회

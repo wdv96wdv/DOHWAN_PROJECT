@@ -1,6 +1,5 @@
 plugins {
 	id 'java'
-	id 'war'
 	id 'org.springframework.boot' version '3.5.5'
 	id 'io.spring.dependency-management' version '1.1.7'
 }
@@ -41,8 +40,11 @@ dependencies {
 	// DevTools
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	
-	// MySQL
-	runtimeOnly 'com.mysql:mysql-connector-j'
+	// MySQL(local)
+	//runtimeOnly 'com.mysql:mysql-connector-j'
+	
+	// PostGreSQL(prod)
+	runtimeOnly 'org.postgresql:postgresql'
 	
 	// JWT
 	implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
@@ -68,6 +70,10 @@ dependencies {
 
 springBoot {
     mainClass = 'com.dohwan.login.LoginApplication'
+}
+
+tasks.named('jar') {
+    enabled = true
 }
 
 tasks.named('test') {
