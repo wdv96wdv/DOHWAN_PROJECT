@@ -1,9 +1,10 @@
 import axios from 'axios';
 
+const API_BASE_URL = "https://dohwan-project.onrender.com/api";
 // axios 객체 생성
-const api = axios.create({
-  baseURL: 'https://dohwan-project.onrender.com/api',
-});
+const instance = axios.create({
+  baseURL: API_BASE_URL,
+  });
 
 // ✅ 요청 인터셉터 추가
 api.interceptors.request.use(
