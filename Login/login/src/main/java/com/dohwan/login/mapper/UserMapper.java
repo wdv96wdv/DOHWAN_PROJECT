@@ -24,8 +24,10 @@ public interface UserMapper {
     public int delete(String username) throws Exception;
 
     // 회원 권한 삭제
-
     public int deleteAuth(UserAuth userAuth) throws Exception;
+
+     // 회원아이디찾기
+    public Users findByUsername(String username) throws Exception;
 
   
 }

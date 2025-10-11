@@ -44,6 +44,12 @@
         WHERE username = #{username}
     </select>
 
+    <select id="findByUsername" resultType="userMap">
+        SELECT * 
+        FROM users 
+        WHERE username = #{username}
+    </select>
+
     <!-- 회원 권한 -->
     <select id="authList" resultMap="authMap">
         SELECT *

@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dohwan.login.domain.AuthenticationRequest;
-import com.dohwan.login.domain.UserAuth;
 import com.dohwan.login.domain.Users;
 import com.dohwan.login.mapper.UserMapper;
 import com.dohwan.login.security.constants.SecurityConstants;
@@ -65,14 +64,19 @@ public class LoginController {
         log.info("password : " + password);
 
         // 사용자 조회
-        Users user = userMapper.select(username);
-         if (user == null) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("사용자 없음");
-    }
-    // 2️⃣ 비밀번호 검증
-    if (!passwordEncoder.matches(password, user.getPassword())) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("비밀번호 틀림");
-    }
+        Users user = null;
+        try {
+            user = userMapper.select(username); // mapper 호출
+        } catch (Exception e) {
+            log.error("❌ 사용자 조회 중 오류 발생", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("사용자 조회 실패");
+        }
+
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("존재하지 않는 사용자입니다.");
+        }
 
         // 사용자 권한 정보 세팅
         List<String> roles = new ArrayList<String>();
