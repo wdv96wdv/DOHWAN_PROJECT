@@ -1,6 +1,6 @@
 import { useEffect ,useState } from 'react';
 import * as boards from '../../apis/boards';
-import List from '../../components/board/List';
+import List from '../../components/Board/List';
 import { useLoaderData, useLocation } from 'react-router-dom';
 
 const ListContainer = () => {
