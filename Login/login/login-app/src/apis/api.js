@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const API_BASE_URL = "https://dohwan-project.onrender.com/api";
 // axios 객체 생성
-const instance = axios.create({
+const api = axios.create({
   baseURL: API_BASE_URL,
   });
 
