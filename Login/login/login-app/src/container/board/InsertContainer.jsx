@@ -1,5 +1,5 @@
 import React from 'react'
-import Insert from '../../components/board/Insert'
+import Insert from '../../components/Board/Insert'
 import * as boards from '../../apis/boards'
 import { useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
