@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import styles from '../../assets/css/common.module.css';
+import styles from '../../assets/css/Update.module.css';
 import Swal from 'sweetalert2';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import * as fileApi from '../../apis/files';
 import DownloadIcon from '@mui/icons-material/Download';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import Checkbox from '@mui/material/Checkbox';

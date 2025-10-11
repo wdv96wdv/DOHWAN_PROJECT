@@ -1,13 +1,15 @@
+/* 전체 컨테이너 */
 .container {
-  max-width: 900px;
-  margin: 40px auto;
+  padding: 20px;
   background: #fff;
-  padding: 30px 40px;
-  border-radius: 12px;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-  margin-top: 100px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  font-family: 'Pretendard', sans-serif;
+  margin-top: auto;
+  margin-bottom: auto;
 }
 
+/* 제목 */
 .title {
   font-size: 1.8rem;
   text-align: center;
@@ -15,6 +17,7 @@
   color: #222;
 }
 
+/* 테이블 */
 .table {
   width: 100%;
   border-collapse: collapse;
@@ -33,12 +36,14 @@
   border: 1px solid #ddd;
 }
 
+/* 입력 폼 */
 .formInput {
   width: 100%;
-  padding: 10px;
+  padding: 10px 14px;
   border: 1px solid #ccc;
   border-radius: 8px;
   font-size: 15px;
+  background-color: #fafafa;
   transition: border-color 0.2s;
 }
 
@@ -47,11 +52,81 @@
   outline: none;
 }
 
+/* 썸네일 박스 */
+.thumbnailBox {
+  text-align: center;
+  margin: 24px 0;
+  position: relative;
+}
+
+.badge {
+  display: inline-block;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: #ff5b5b;
+  color: white;
+  padding: 4px 10px;
+  font-size: 13px;
+  border-radius: 10px;
+}
+
+.mainImage {
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+}
+
+/* 첨부파일 목록 */
+.fileList {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.fileItem {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 12px;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  transition: transform 0.2s ease;
+}
+
+.fileItem:hover {
+  transform: translateY(-2px);
+}
+
+.fileImg {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+/* 버튼 박스 */
 .btnBox {
+  margin-top: 24px;
   display: flex;
   justify-content: center;
   gap: 10px;
-  margin-top: 30px;
+}
+
+.btn {
+  background: #007bff;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+
+.btn:hover {
+  background: #0056b3;
 }
 
 .btnBlue {
@@ -62,6 +137,7 @@
   border-radius: 8px;
   cursor: pointer;
   transition: 0.2s;
+  font-size: 20px;
 }
 
 .btnBlue:hover {
@@ -86,6 +162,12 @@
 @media screen and (max-width: 768px) {
   .container {
     padding: 20px;
+    min-height: calc(100vh - 120px); /* 헤더+푸터 조정 */
+  }
+
+  .title {
+    font-size: 22px;
+    margin-bottom: 20px;
   }
 
   .table th {
@@ -95,6 +177,11 @@
 
   .formInput {
     font-size: 14px;
+    padding: 8px 12px;
+  }
+
+  .fileImg {
+    height: 120px;
   }
 
   .btnBox {

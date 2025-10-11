@@ -2,7 +2,6 @@
 
 .container {
   max-width: 1200px;
-  margin: 0 auto;
   padding: 40px 16px;
   font-family: 'Noto Sans KR', sans-serif;
   color: #333;
@@ -12,7 +11,6 @@
 .title {
   font-size: 28px;
   font-weight: 700;
-  margin-bottom: 24px;
   text-align: left;
   color: #222;
   display: flex;
@@ -38,6 +36,27 @@
   background-color: #ccc;
   cursor: not-allowed;
 }
+
+.table {
+  width: 100%;
+  table-layout: fixed; /* ✅ 고정된 테이블 레이아웃 */
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+  word-wrap: break-word; /* ✅ 글자 줄바꿈 */
+  white-space: normal; /* ✅ 너무 긴 단어도 줄바꿈 */
+}
+
+.table th {
+  background-color: #f7f7f7;
+  font-weight: bold;
+}
+
 /* 입력폼, 버튼, 제목 공통 스타일 추가 */
 
 .formBox {

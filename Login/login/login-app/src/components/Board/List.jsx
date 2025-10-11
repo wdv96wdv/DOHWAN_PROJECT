@@ -33,6 +33,15 @@ const List = ({ list, pagination }) => {
       </Link>
 
       <table className={styles.table}>
+        {window.innerWidth > 768 && (
+          <colgroup>
+            <col style={{ width: '10%' }} />
+            <col style={{ width: '15%' }} />
+            <col style={{ width: '45%' }} />
+            <col style={{ width: '15%' }} />
+            <col style={{ width: '15%' }} />
+          </colgroup>
+        )}
         <thead>
           <tr>
             <th>번호</th>

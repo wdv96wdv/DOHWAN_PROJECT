@@ -1,13 +1,12 @@
 /* 전체 컨테이너 */
 .container {
-  max-width: 900px;
-  margin: 40px auto;
   padding: 20px;
   background: #fff;
   border-radius: 16px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.08);
   font-family: 'Pretendard', sans-serif;
-  margin-top: 100px;
+  margin-top: auto;
+  margin-bottom: auto;
 }
 
 /* 제목 */
@@ -16,7 +15,6 @@
   font-weight: 700;
   color: #333;
   text-align: center;
-  margin-bottom: 24px;
 }
 
 /* 공통 입력 스타일 */
@@ -94,17 +92,23 @@
 }
 
 .btn {
-  background: #007bff;
+  background-color: #4b8cf5;
   color: white;
-  padding: 8px 16px;
+  border: none;
   border-radius: 8px;
-  font-size: 14px;
-  text-decoration: none;
-  transition: background 0.2s ease;
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+  font-size: 20px;
 }
 
 .btn:hover {
-  background: #0056b3;
+  background-color: #3a77d4;
+}
+
+.btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
 }
 
 /* 🧱 반응형 */

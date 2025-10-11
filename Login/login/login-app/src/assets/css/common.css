@@ -38,14 +38,6 @@ button {
   cursor: pointer;
 }
 
-.container {
-  width: 100%;
-  max-width: 1200px;
-  margin: 100px auto 50px;
-  padding: 0 20px;
-  margin-top: 130px;
-}
-
 h1, h2, h3, h4, p, a, button, label, div{
   caret-color: transparent;
   user-select: none;
@@ -60,5 +52,18 @@ input:focus {
 }
 textarea:focus {
   caret-color: auto; /* 포커스 시 커서 나타남 */
+}
+.app {
+  min-height: 100vh; /* 전체 높이를 화면 높이로 */
+  display: flex;
+  flex-direction: column; /* 세로 정렬 */
+}
+
+.container {
+  flex: 1; /* 남는 공간을 다 차지 */
+  display: flex;
+  justify-content: center; /* 가로 중앙 */
+  align-items: center; /* 세로 중앙 */
+  padding: 40px 0;
 }
 
