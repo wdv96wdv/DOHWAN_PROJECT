@@ -9,9 +9,9 @@ export const login = async (username, password) => {
     const response = await api.post(`/login`, { username, password });
 
     // Authorization 헤더에서 JWT 추출
-    // token body에서 JWT 추출
-    const token = response.data.token;
-    if (token) {
+    const authorization = response.headers['authorization'];
+    if (authorization) {
+      const token = authorization.replace('Bearer ', '');
       localStorage.setItem('jwt', token);
       console.log('✅ JWT 저장 완료:', token);
     } else {

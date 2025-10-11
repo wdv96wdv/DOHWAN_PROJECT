@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dohwan.login.domain.AuthenticationRequest;
+import com.dohwan.login.domain.UserAuth;
 import com.dohwan.login.domain.Users;
 import com.dohwan.login.mapper.UserMapper;
 import com.dohwan.login.security.constants.SecurityConstants;
@@ -40,7 +41,6 @@ public class LoginController {
 
     @Autowired
     private JwtProps jwtProps; // secretKey
-    private UserMapper userMapper;
 
     /**
      * 로그인 요청
@@ -63,20 +63,6 @@ public class LoginController {
         log.info("username : " + username);
         log.info("password : " + password);
 
-        // 사용자 조회
-        Users user = null;
-        try {
-            user = userMapper.select(username); // mapper 호출
-        } catch (Exception e) {
-            log.error("❌ 사용자 조회 중 오류 발생", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("사용자 조회 실패");
-        }
-
-        if (user == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body("존재하지 않는 사용자입니다.");
-        }
 
         // 사용자 권한 정보 세팅
         List<String> roles = new ArrayList<String>();
@@ -104,14 +90,8 @@ public class LoginController {
                 .compact(); // 토큰 생성
         log.info("jwt : " + jwt);
 
-        // JWT + 사용자 정보 함께 반환
-        Map<String, Object> body = Map.of(
-                "token", jwt,
-                "username", user.getUsername(),
-                "name", user.getName(),
-                "email", user.getEmail());
-
-        return ResponseEntity.ok(body);
+  
+        return new ResponseEntity<>(jwt, HttpStatus.OK);
 
     }
 
