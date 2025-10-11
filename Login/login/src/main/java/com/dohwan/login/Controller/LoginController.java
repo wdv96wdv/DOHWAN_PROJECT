@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,9 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dohwan.login.domain.AuthenticationRequest;
+import com.dohwan.login.domain.UserAuth;
+import com.dohwan.login.domain.Users;
+import com.dohwan.login.mapper.UserMapper;
 import com.dohwan.login.security.constants.SecurityConstants;
 import com.dohwan.login.security.props.JwtProps;
 
@@ -37,6 +41,7 @@ public class LoginController {
 
     @Autowired
     private JwtProps jwtProps; // secretKey
+    private UserMapper userMapper;
 
     /**
      * 로그인 요청
@@ -58,6 +63,16 @@ public class LoginController {
         String password = authReq.getPassword();
         log.info("username : " + username);
         log.info("password : " + password);
+
+        // 사용자 조회
+        Users user = userMapper.select(username);
+         if (user == null) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("사용자 없음");
+    }
+    // 2️⃣ 비밀번호 검증
+    if (!passwordEncoder.matches(password, user.getPassword())) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("비밀번호 틀림");
+    }
 
         // 사용자 권한 정보 세팅
         List<String> roles = new ArrayList<String>();
@@ -85,8 +100,13 @@ public class LoginController {
                 .compact(); // 토큰 생성
         log.info("jwt : " + jwt);
 
-        // ✅ JWT를 JSON 형태로 내려주기
-        Map<String, String> body = Map.of("token", jwt);
+        // JWT + 사용자 정보 함께 반환
+        Map<String, Object> body = Map.of(
+                "token", jwt,
+                "username", user.getUsername(),
+                "name", user.getName(),
+                "email", user.getEmail());
+
         return ResponseEntity.ok(body);
 
     }
