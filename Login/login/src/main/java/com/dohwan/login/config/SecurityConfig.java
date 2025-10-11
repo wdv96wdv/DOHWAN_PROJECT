@@ -1,5 +1,7 @@
 package com.dohwan.login.config;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,13 +15,15 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import static org.springframework.security.config.Customizer.withDefaults;
 
 import com.dohwan.login.security.filter.JwtAuthenticationFilter;
+import com.dohwan.login.security.filter.JwtRequestFilter;
 import com.dohwan.login.security.provider.JwtProvider;
 import com.dohwan.login.service.UserDetailServiceImpl;
-import com.dohwan.login.security.filter.JwtRequestFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -48,26 +52,25 @@ public class SecurityConfig {
 		// HTTP 기본 인증 비활성화
 		http.httpBasic(basic -> basic.disable());
 
-		// CSRF(Cross-Site Request Forgery) 공격 방어 기능 비활성화
+		// CSRF 비활성화
 		http.csrf(csrf -> csrf.disable());
 
-		// 세션 관리 정책 설정: STATELESS로 설정하면 서버는 세션을 생성하지 않음
-		// 🔐 세션을 사용하여 인증하지 않고, JWT 를 사용하여 인증하기 때문에, 세션 불필요
-		http.sessionManagement(management -> management
-				.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+		// 세션 관리: STATELESS
+		http.sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-		// ✅ 사용자 정의 인증 설정
+		// 사용자 정의 인증 서비스
 		http.userDetailsService(userDetailServiceImpl);
 
-		// 필터 설정
-		// ✅ JWT 요청 필터 설정 1️⃣
-		// ✅ JWT 인증 필터 설정 2️⃣
+		// CORS 활성화 (Spring Security 6.1 기준)
+		http.cors(withDefaults());
+
+		// JWT 필터 추가
 		http.addFilterAt(new JwtAuthenticationFilter(authenticationManager, jwtProvider),
 				UsernamePasswordAuthenticationFilter.class)
 				.addFilterBefore(new JwtRequestFilter(authenticationManager, jwtProvider),
 						UsernamePasswordAuthenticationFilter.class);
 
-		// 구성이 완료된 SecurityFilterChain을 반환합니다.
+		// SecurityFilterChain 반환
 		return http.build();
 	}
 
@@ -77,17 +80,17 @@ public class SecurityConfig {
 		return new BCryptPasswordEncoder();
 	}
 
+	// ✅ Security에서 사용할 CORS 설정
 	@Bean
-	public WebMvcConfigurer corsConfigurer() {
-		return new WebMvcConfigurer() {
-			@Override
-			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/**") // 모든 경로 허용
-						.allowedOrigins("https://dorunning2.netlify.app") // 프론트 도메인 허용
-						.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // HTTP 메서드 허용
-						.allowedHeaders("*") // 헤더 허용
-						.allowCredentials(true); // 쿠키/Authorization 허용
-			}
-		};
+	public CorsConfigurationSource corsConfigurationSource() {
+		CorsConfiguration configuration = new CorsConfiguration();
+		configuration.setAllowedOrigins(List.of("https://dorunning2.netlify.app")); // 프론트 도메인
+		configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+		configuration.setAllowedHeaders(List.of("*"));
+		configuration.setAllowCredentials(true);
+
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", configuration);
+		return source;
 	}
 }
