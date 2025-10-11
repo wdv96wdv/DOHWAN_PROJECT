@@ -1,5 +1,5 @@
 import React from 'react'
-import Update from '../../components/board/Update'
+import Update from '../../components/Board/Update'
 import * as boards from  '../../apis/boards'
 import { useState, useEffect} from 'react'
 import { useNavigate } from 'react-router-dom'

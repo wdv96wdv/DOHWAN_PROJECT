@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import Read from '../../components/board/Read'
+import Read from '../../components/Board/Read'
 import { useParams } from 'react-router-dom'
 import * as boards from '../../apis/boards'
 import * as files from '../../apis/files'
