@@ -66,7 +66,7 @@ public class BoardServiceImpl implements BoardService {
             mainFileInfo.setPTable(pTable);
             mainFileInfo.setPNo(pNo);
             mainFileInfo.setData(mainFile);
-            mainFileInfo.setType("MAIN");
+            mainFileInfo.setType(Files.FileType.MAIN);
             uploadFileList.add(mainFileInfo);
         }
         
@@ -79,7 +79,7 @@ public class BoardServiceImpl implements BoardService {
                 fileInfo.setPNo(pNo);
                 fileInfo.setPTable(pTable);
                 fileInfo.setData(multipartFile);
-                fileInfo.setType("SUB");
+                fileInfo.setType(Files.FileType.SUB);
                 uploadFileList.add(fileInfo);
             }
         }

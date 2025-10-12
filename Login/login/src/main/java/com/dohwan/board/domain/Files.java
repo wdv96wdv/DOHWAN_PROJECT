@@ -11,27 +11,30 @@ import lombok.Data;
 
 @Data
 public class Files {
-   private Long no;
-   private String id;
-   private String pTable;
-   private Long pNo;
-   private String fileName;
-   private String originName;
-   private String filePath;
-   private Long FileSize;
-   private Long seq;            // 순서
-   private String type;           // 파일종류 ('MAIN, 'SUB')
-   private Date createdAt;
-   private Date updatedAt;
 
+    public enum FileType {
+        MAIN,
+        SUB
+    }
 
+    private Long no;
+    private String id;
+    private String pTable;
+    private Long pNo;
+    private String fileName;
+    private String originName;
+    private String filePath;
+    private Long fileSize;   // 변수명 소문자로 수정
+    private Long seq;        // 순서
+    private FileType type;   // enum으로 변경
+    private Date createdAt;
+    private Date updatedAt;
 
-// 파일 데이터
-@JsonIgnore
-MultipartFile data;
+    // 파일 데이터
+    @JsonIgnore
+    private MultipartFile data;
 
-public Files(){
-    this.id = UUID.randomUUID().toString();
-}
-
+    public Files() {
+        this.id = UUID.randomUUID().toString();
+    }
 }
