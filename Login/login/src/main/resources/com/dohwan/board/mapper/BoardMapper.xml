@@ -5,9 +5,9 @@
 
 <mapper namespace="com.dohwan.board.mapper.BoardMapper">
 
-    <resultMap type ="Boards" id="BoardMap">
+    <!-- ResultMap -->
+    <resultMap id="BoardMap" type="com.dohwan.board.model.Board">
         <id property="no" column="no"/>
-        <result property="no" column="no"/>
         <result property="id" column="id"/>
         <result property="title" column="title"/>
         <result property="writer" column="writer"/>
@@ -15,58 +15,63 @@
         <result property="createdAt" column="created_at"/>
         <result property="updatedAt" column="updated_at"/>
         
-        <association property="file" column="no" javaType="Files" select="selectMainFile"></association>
+        <!-- 메인 파일 연관 매핑 -->
+        <association property="file" column="no" javaType="com.dohwan.board.model.File" select="selectMainFile"/>
     </resultMap>
 
     <!-- 메인(썸네일) 파일 조회 -->
-    <select id="selectMainFile" resultType="Files">
-    SELECT *
-    FROM files
-    WHERE p_no = #{no}
-        AND p_table = 'boards'
-        And TYPE = 'MAIN'
+    <select id="selectMainFile" resultType="com.dohwan.board.model.File">
+        SELECT *
+        FROM files
+        WHERE p_no = #{no}
+          AND p_table = 'boards'
+          AND type = 'MAIN'
+        LIMIT 1
     </select> 
 
     <!-- 전체 목록 조회 -->
     <select id="list" resultMap="BoardMap">
-        SELECT * FROM boards
+        SELECT *
+        FROM boards
         ORDER BY created_at DESC
     </select>
 
     <!-- 단건 조회 (PK로) -->
-    <select id="select"  resultType="Boards">
-        SELECT * FROM boards WHERE no = #{no}
+    <select id="select" resultType="com.dohwan.board.model.Board">
+        SELECT *
+        FROM boards
+        WHERE no = #{no}
     </select>
 
     <!-- 단건 조회 (id로) -->
-    <select id="selectById"  resultType="Boards">
-        SELECT * FROM boards WHERE id = #{id}
+    <select id="selectById" resultType="com.dohwan.board.model.Board">
+        SELECT *
+        FROM boards
+        WHERE id = #{id}
     </select>
 
     <!-- 등록 -->
-    <insert id="insert" parameterType="Boards" useGeneratedKeys="true" keyProperty="no">
-        INSERT INTO boards
-        (id, title, writer, content)
-        VALUES
-        (#{id}, #{title}, #{writer}, #{content})
+    <insert id="insert" parameterType="com.dohwan.board.model.Board" useGeneratedKeys="true" keyProperty="no">
+        INSERT INTO boards (id, title, writer, content)
+        VALUES (#{id}, #{title}, #{writer}, #{content})
     </insert>
 
     <!-- 전체 수정 (PK로) -->
-    <update id="update" parameterType="Boards">
+    <update id="update" parameterType="com.dohwan.board.model.Board">
         UPDATE boards
         <set>
             <if test="title != null">title = #{title},</if>
             <if test="writer != null">writer = #{writer},</if>
             <if test="content != null">content = #{content},</if>
+            updated_at = NOW()
         </set>
         WHERE no = #{no}
-
     </update>
 
     <!-- 전체 수정 (id로) -->
-    <update id="updateById" parameterType="Boards">
+    <update id="updateById" parameterType="com.dohwan.board.model.Board">
         UPDATE boards
-      <set>
+        <set>
             <if test="title != null">title = #{title},</if>
             <if test="writer != null">writer = #{writer},</if>
             <if test="content != null">content = #{content},</if>
@@ -77,12 +82,14 @@
 
     <!-- 삭제 (PK로) -->
     <delete id="delete" parameterType="long">
-        DELETE FROM boards WHERE no = #{no}
+        DELETE FROM boards
+        WHERE no = #{no}
     </delete>
 
     <!-- 삭제 (id로) -->
     <delete id="deleteById" parameterType="string">
-        DELETE FROM boards WHERE id = #{id}
+        DELETE FROM boards
+        WHERE id = #{id}
     </delete>
 
 </mapper>

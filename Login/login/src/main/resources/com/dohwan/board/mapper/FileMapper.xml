@@ -7,7 +7,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.dohwan.board.mapper.FileMapper">
 
     <!-- 파일 목록 -->
-    <select id="list" resultType="Files">
+    <select id="list" resultType="com.dohwan.board.model.File">
         SELECT *
         FROM files
         ORDER BY created_at DESC
@@ -20,7 +20,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
            📄 파일 번호 2
            📄 파일 번호 3
      -->
-    <select id="listByParent" resultType="Files">
+    <select id="listByParent" resultType="com.dohwan.board.model.File">
         SELECT *
         FROM files
         WHERE p_table = #{pTable}
@@ -29,21 +29,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <!-- 파일 조회 -->
-    <select id="select" resultType="Files">
+    <select id="select" resultType="Ficom.dohwan.board.model.Fileles">
         SELECT *
         FROM files
         WHERE no = #{no}
     </select>
 
     <!-- 파일 조회 -->
-    <select id="selectById" resultType="Files">
+    <select id="selectById" resultType="com.dohwan.board.model.File">
         SELECT *
         FROM files
         WHERE id = #{id}
     </select>
 
     <!-- 파일 등록 -->
-    <insert id="insert" parameterType="Files" useGeneratedKeys="true" keyProperty="no">
+    <insert id="insert" parameterType="com.dohwan.board.model.File" useGeneratedKeys="true" keyProperty="no">
         INSERT INTO files( 
         id, 
         p_table,
@@ -96,7 +96,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="fileSize != null">
             file_size = #{fileSize},
             </if>
-            update_at = now()
+            updated_at = now()
        </set>
         WHERE no = #{no}
     </update>
@@ -129,7 +129,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="fileSize != null">
             file_size = #{fileSize},
             </if>
-            update_at = now()
+            updated_at = now()
        </set>
         WHERE id = #{id}
     </update>
@@ -191,18 +191,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
    
     <!-- 타입별 파일 조회-->
-    <select id="selecfByType" resultType="Files">
-        SLECT *
+    <select id="selecfByType" resultType="com.dohwan.board.model.File">
+        SELECT *
         FROM files
         WHERE p_table = #{pTable}
         AND p_no = #{pNo}
         AND type = #{type}
-        LIMIT 0, 1
+        LIMIT 1
     </select>
 
     <!-- 타입별 파일 목록-->
-    <select id="listByType" resultType="Files">
-        SLECT *
+    <select id="listByType" resultType="com.dohwan.board.model.File">
+        SELECT *
         FROM files
         WHERE p_table = #{pTable}
         AND p_no = #{pNo}
