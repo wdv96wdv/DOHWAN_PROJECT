@@ -6,7 +6,7 @@
 <mapper namespace="com.dohwan.board.mapper.BoardMapper">
 
     <!-- ResultMap -->
-    <resultMap id="BoardMap" type="com.dohwan.board.model.Board">
+    <resultMap id="BoardMap" type="com.dohwan.board.domain.Boards">
         <id property="no" column="no"/>
         <result property="id" column="id"/>
         <result property="title" column="title"/>
@@ -16,11 +16,11 @@
         <result property="updatedAt" column="updated_at"/>
         
         <!-- 메인 파일 연관 매핑 -->
-        <association property="file" column="no" javaType="com.dohwan.board.model.File" select="selectMainFile"/>
+        <association property="file" column="no" javaType="com.dohwan.board.domain.Files" select="selectMainFile"/>
     </resultMap>
 
     <!-- 메인(썸네일) 파일 조회 -->
-    <select id="selectMainFile" resultType="com.dohwan.board.model.File">
+    <select id="selectMainFile" resultType="com.dohwan.board.domain.Files">
         SELECT *
         FROM files
         WHERE p_no = #{no}
@@ -37,27 +37,27 @@
     </select>
 
     <!-- 단건 조회 (PK로) -->
-    <select id="select" resultType="com.dohwan.board.model.Board">
+    <select id="select" resultType="com.dohwan.board.domain.Boards">
         SELECT *
         FROM boards
         WHERE no = #{no}
     </select>
 
     <!-- 단건 조회 (id로) -->
-    <select id="selectById" resultType="com.dohwan.board.model.Board">
+    <select id="selectById" resultType="com.dohwan.board.domain.Boards">
         SELECT *
         FROM boards
         WHERE id = #{id}
     </select>
 
     <!-- 등록 -->
-    <insert id="insert" parameterType="com.dohwan.board.model.Board" useGeneratedKeys="true" keyProperty="no">
+    <insert id="insert" parameterType="com.dohwan.board.domain.Boards" useGeneratedKeys="true" keyProperty="no">
         INSERT INTO boards (id, title, writer, content)
         VALUES (#{id}, #{title}, #{writer}, #{content})
     </insert>
 
     <!-- 전체 수정 (PK로) -->
-    <update id="update" parameterType="com.dohwan.board.model.Board">
+    <update id="update" parameterType="com.dohwan.board.domain.Boards">
         UPDATE boards
         <set>
             <if test="title != null">title = #{title},</if>
@@ -69,7 +69,7 @@
     </update>
 
     <!-- 전체 수정 (id로) -->
-    <update id="updateById" parameterType="com.dohwan.board.model.Board">
+    <update id="updateById" parameterType="com.dohwan.board.domain.Boards">
         UPDATE boards
         <set>
             <if test="title != null">title = #{title},</if>
