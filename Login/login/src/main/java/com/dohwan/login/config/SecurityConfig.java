@@ -95,7 +95,7 @@ public class SecurityConfig {
 
 		// ✅ 실제 프론트 도메인만 명시
 		configuration.setAllowedOrigins(List.of(
-				"https://dohwan-project.vercel.app",
+				"https://dorunning.vercel.app/",
 				"http://localhost:3000" // 개발용
 		));
 
