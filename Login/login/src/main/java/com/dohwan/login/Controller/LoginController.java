@@ -3,8 +3,6 @@ package com.dohwan.login.Controller;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,9 +14,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dohwan.login.domain.AuthenticationRequest;
-import com.dohwan.login.domain.UserAuth;
-import com.dohwan.login.domain.Users;
-import com.dohwan.login.mapper.UserMapper;
 import com.dohwan.login.security.constants.SecurityConstants;
 import com.dohwan.login.security.props.JwtProps;
 

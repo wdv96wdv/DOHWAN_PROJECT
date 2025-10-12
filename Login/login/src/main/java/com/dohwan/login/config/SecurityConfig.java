@@ -1,7 +1,4 @@
 package com.dohwan.login.config;
-
-import static org.springframework.security.config.Customizer.withDefaults;
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +18,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.dohwan.login.security.filter.JwtAuthenticationFilter;
 import com.dohwan.login.security.filter.JwtRequestFilter;
