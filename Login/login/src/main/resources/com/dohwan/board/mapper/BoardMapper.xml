@@ -54,7 +54,7 @@
     <!-- 전체 수정 (PK로) -->
     <update id="update" parameterType="Boards">
         UPDATE boards
-        <set>>
+        <set>
             <if test="title != null">title = #{title},</if>
             <if test="writer != null">writer = #{writer},</if>
             <if test="content != null">content = #{content},</if>
