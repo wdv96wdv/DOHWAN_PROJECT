@@ -63,10 +63,9 @@ public class SecurityConfig {
 		http.sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
 		// 사용자 정의 인증 서비스
-		http.userDetailsService(userDetailServiceImpl);
-
-		// CORS 활성화 (Spring Security 6.1 기준)
-		http.cors(withDefaults())
+		http.userDetailsService(userDetailServiceImpl)
+				// CORS 활성화 (Spring Security 6.1 기준)
+				.cors(cors -> cors.configurationSource(corsConfigurationSource())) // ✅ 명확히 지정
 				.authorizeHttpRequests(auth -> auth
 						.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // ✅ preflight 허용
 						.requestMatchers("/login", "/join").permitAll()
@@ -102,20 +101,5 @@ public class SecurityConfig {
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", configuration);
 		return source;
-	}
-
-	@Bean
-	public WebMvcConfigurer corsConfigurer() {
-		return new WebMvcConfigurer() {
-			@Override
-			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/**")
-						.allowedOrigins("https://dorunning2.netlify.app")
-						.allowedMethods("*")
-						.allowedHeaders("*")
-						.exposedHeaders("Authorization") // ⚠️ 이거 필수
-						.allowCredentials(true);
-			}
-		};
 	}
 }
