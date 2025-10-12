@@ -1,8 +1,12 @@
 import React from 'react'
 import '../../assets/css/user.css';
+import React, { useState } from 'react'
 import Swal from 'sweetalert2';
 
 const UserForm = ({ userInfo, updateUser, deleteUser }) => {
+
+   // Caps Lock 상태
+  const [capsLockOn, setCapsLockOn] = useState(false)
 
   // 정보 수정
   const onUpdate = (e) => {
@@ -17,6 +21,11 @@ const UserForm = ({ userInfo, updateUser, deleteUser }) => {
 
     updateUser({ username, password, name, email })
 
+  }
+  // Caps Lock 체크 (KeyDown, KeyUp 둘 다 사용)
+  const checkCapsLock = (e) => {
+    const isOn = e.getModifierState && e.getModifierState("CapsLock");
+    setCapsLockOn(isOn)
   }
 
   return (
@@ -33,6 +42,8 @@ const UserForm = ({ userInfo, updateUser, deleteUser }) => {
             required
             readOnly
             defaultValue={userInfo?.username}
+            onKeyUp={checkCapsLock}
+            onKeyDown={checkCapsLock}
           />
         </div>
 
@@ -44,6 +55,8 @@ const UserForm = ({ userInfo, updateUser, deleteUser }) => {
             name='password'
             autoComplete='password'
             required
+            onKeyUp={checkCapsLock}
+            onKeyDown={checkCapsLock}
           />
         </div>
 
@@ -56,6 +69,8 @@ const UserForm = ({ userInfo, updateUser, deleteUser }) => {
             autoComplete='name'
             required
             defaultValue={userInfo?.name}
+            onKeyUp={checkCapsLock}
+            onKeyDown={checkCapsLock}
           />
         </div>
 
@@ -68,6 +83,8 @@ const UserForm = ({ userInfo, updateUser, deleteUser }) => {
             autoComplete='email'
             required
             defaultValue={userInfo?.email}
+            onKeyUp={checkCapsLock}
+            onKeyDown={checkCapsLock}
           />
         </div>
 
@@ -94,6 +111,10 @@ const UserForm = ({ userInfo, updateUser, deleteUser }) => {
           }}
         > 회원 탈퇴
         </button>
+        {/* CapsLock 안내 */}
+        <div className="capslock-warning" style={{ display: capsLockOn ? 'block' : 'none' }}>
+          ⚠️ Caps Lock이 켜져 있습니다.
+        </div>
       </form>
     </div>
   )
