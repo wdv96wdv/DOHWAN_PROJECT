@@ -1,4 +1,5 @@
 package com.dohwan.login.config;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +64,12 @@ public class SecurityConfig {
 				.cors(cors -> cors.configurationSource(corsConfigurationSource())) // ✅ 명확히 지정
 				.authorizeHttpRequests(auth -> auth
 						.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // ✅ preflight 허용
-						.requestMatchers("/login", "/join").permitAll()
+						.requestMatchers(
+								"/login",
+								"/join",
+								"/",
+								"/boards/**" // ✅ 게시판 관련 API는 누구나 접근 가능하도록
+						).permitAll()
 						.anyRequest().authenticated());
 
 		// JWT 필터 추가
@@ -86,12 +92,17 @@ public class SecurityConfig {
 	@Bean
 	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
-		// 개발/테스트: 모든 도메인 허용
-		configuration.setAllowedOriginPatterns(List.of("*"));
+
+		// ✅ 실제 프론트 도메인만 명시
+		configuration.setAllowedOrigins(List.of(
+				"https://dohwan-project.vercel.app",
+				"http://localhost:3000" // 개발용
+		));
+
 		configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 		configuration.setAllowedHeaders(List.of("*"));
-		configuration.setExposedHeaders(List.of("Authorization")); // ✅ 추가!
-		configuration.setAllowCredentials(true);
+		configuration.setExposedHeaders(List.of("Authorization"));
+		configuration.setAllowCredentials(true); // 쿠키, Authorization 허용
 
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", configuration);
