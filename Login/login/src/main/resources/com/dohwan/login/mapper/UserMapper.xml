@@ -44,7 +44,7 @@
         WHERE username = #{username}
     </select>
 
-    <select id="findByUsername" resultType="userMap">
+    <select id="findByUsername" resultMap="userMap">
         SELECT * 
         FROM users 
         WHERE username = #{username}

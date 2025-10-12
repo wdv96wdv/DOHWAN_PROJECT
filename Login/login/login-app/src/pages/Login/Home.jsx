@@ -60,8 +60,8 @@ const Home = ({ theme }) => {
   }, []);
 
   const popups = [
-    { img: heroImage1, link: "https://marathon.jtbc.com/", position: { top: "26%", left: "85%", transform: "translateX(-50%)" } },
-    { img: heroImage2, link: "https://seoul-marathon.com/", position: { top: "6%", left: "85%", transform: "translateX(-50%)" } }
+    { img: heroImage1, link: "https://marathon.jtbc.com/", position: { top: "50%", left: "85%", transform: "translateX(-50%)" } },
+    { img: heroImage2, link: "https://seoul-marathon.com/", position: { top: "12%", left: "85%", transform: "translateX(-50%)" } }
   ];
 
   const handleStart = () => {
