@@ -7,11 +7,10 @@ import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArro
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import * as format from '../../utils/format';
-import '../../assets/css/common.module.css'
+import '../../assets/css/common.module.css';
 
 const List = ({ list, pagination }) => {
   const [pageList, setPageList] = useState([]);
-  const API_URL = 'https://dohwan-project.onrender.com'; // 운영 서버 주소
 
   // 페이지 번호 리스트 생성
   const createPageList = () => {
@@ -61,12 +60,10 @@ const List = ({ list, pagination }) => {
             </tr>
           ) : (
             list.map((board) => {
-              console.log(board.mainFile);
-              // 게시글의 mainFile이 있을 경우 URL 생성
+              // 게시글 mainFile이 존재하면 Supabase URL, 없으면 기본 no-image
               const thumbnailUrl = board.mainFile
-                ? `https://ismclnqslxnlsfmqjytc.supabase.co/storage/v1/object/public/MAIN/${board.mainFile}`  // Supabase Storage의 이미지 URL
+                ? `https://ismclnqslxnlsfmqjytc.supabase.co/storage/v1/object/public/MAIN/${board.mainFile}`
                 : noImage;
-
 
               return (
                 <tr key={board.no}>
@@ -76,6 +73,7 @@ const List = ({ list, pagination }) => {
                       src={thumbnailUrl}
                       alt={board.mainFile?.originName || 'no-image'}
                       className={styles.boardImg}
+                      onError={(e) => { e.target.src = noImage; }} // 이미지 로드 실패 시 대체
                     />
                   </td>
                   <td>

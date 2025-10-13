@@ -4,7 +4,8 @@ import styles from '../../assets/css/Insert.module.css';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import Swal from 'sweetalert2';
-import { uploadFile } from '../../utils/supabaseClient';
+import { uploadFile } from '../../utils/supabaseClients'; // Supabase 업로드 함수
+import * as fileApi from '../../apis/files';
 
 const Insert = ({ onInsert }) => {
   const [title, setTitle] = useState('');
@@ -13,7 +14,6 @@ const Insert = ({ onInsert }) => {
   const [mainFile, setMainFile] = useState(null);
   const [files, setFiles] = useState(null);
 
-  // 입력 핸들러
   const changeTitle = (e) => setTitle(e.target.value);
   const changeWriter = (e) => setWriter(e.target.value);
   const changeMainFile = (e) => setMainFile(e.target.files[0]);
@@ -30,19 +30,16 @@ const Insert = ({ onInsert }) => {
     return {
       upload() {
         return new Promise((resolve, reject) => {
-          const formData = new FormData();
           loader.file.then(async (file) => {
             try {
-              const uploadResponse = await uploadFile(file, 'SUB');  // 'SUB' 폴더에 업로드
-
-              // Supabase Storage에서 제공하는 공용 URL을 반환
-              const fileUrl = uploadResponse.path;  // 업로드된 파일의 public URL
+              // SUB 폴더에 업로드
+              const uploadResponse = await uploadFile(file, 'SUB');
               
-              resolve({
-                default: fileUrl,  // CKEditor에서 표시할 URL 반환
-              });
+              // 업로드 성공하면 Supabase URL 반환
+              const fileUrl = `https://ismclnqslxnlsfmqjytc.supabase.co/storage/v1/object/public/SUB/${uploadResponse.path}`;
+              resolve({ default: fileUrl });
             } catch (err) {
-              console.error('업로드 실패:', err);
+              console.error('CKEditor 업로드 실패:', err);
               reject(err);
             }
           });
@@ -51,7 +48,6 @@ const Insert = ({ onInsert }) => {
     };
   };
 
-  // 등록 버튼
   const onSubmit = async (e) => {
     e.preventDefault();
 
@@ -69,25 +65,35 @@ const Insert = ({ onInsert }) => {
     formData.append('writer', writer);
     formData.append('content', content);
 
-    // 메인 파일은 'MAIN' 폴더에 업로드
+    // -----------------------------
+    // 1. 메인 파일 업로드 (MAIN)
+    // -----------------------------
     if (mainFile) {
       try {
-        const mainFileData = await uploadFile(mainFile, 'MAIN');
-        formData.append('mainFile', mainFileData.path); // 업로드된 파일 URL 추가
+        const mainFileData = await uploadFile(mainFile, 'MAIN'); // Supabase Storage에 업로드
+        console.log('메인 파일 업로드 성공:', mainFileData);
+
+        // DB에 저장할 경로를 formData에 넣기
+        formData.append('mainFile', mainFileData.path); 
       } catch (error) {
         console.error('메인 파일 업로드 실패:', error);
         return;
       }
     }
 
-    // 첨부 파일은 'SUB' 폴더에 업로드
+    // -----------------------------
+    // 2. 첨부 파일 업로드 (SUB)
+    // -----------------------------
     if (files) {
       for (let i = 0; i < files.length; i++) {
         try {
           const fileData = await uploadFile(files[i], 'SUB');
-          formData.append('files', fileData.path); // 첨부 파일 URL 추가
+          console.log(`첨부파일 ${i} 업로드 성공:`, fileData);
+
+          // DB에 저장할 경로를 formData에 넣기
+          formData.append('files', fileData.path);
         } catch (error) {
-          console.error('첨부 파일 업로드 실패:', error);
+          console.error(`첨부 파일 ${i} 업로드 실패:`, error);
           return;
         }
       }
@@ -95,7 +101,9 @@ const Insert = ({ onInsert }) => {
 
     const headers = { 'Content-Type': 'multipart/form-data' };
 
-    // 등록 확인
+    // -----------------------------
+    // 3. 게시글 등록
+    // -----------------------------
     Swal.fire({
       title: '게시글을 등록하시겠습니까?',
       icon: 'question',
@@ -104,7 +112,7 @@ const Insert = ({ onInsert }) => {
       cancelButtonText: '취소',
     }).then((res) => {
       if (res.isConfirmed) {
-        onInsert(formData, headers);
+        onInsert(formData, headers); // 백엔드로 게시글 전송
       }
     });
   };
