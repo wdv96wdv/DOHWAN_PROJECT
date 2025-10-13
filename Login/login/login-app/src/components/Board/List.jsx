@@ -11,6 +11,7 @@ import '../../assets/css/common.module.css'
 
 const List = ({ list, pagination }) => {
   const [pageList, setPageList] = useState([]);
+  const API_URL = 'https://dohwan-project.onrender.com'; // 운영 서버 주소
 
   // 페이지 번호 리스트 생성
   const createPageList = () => {
@@ -59,25 +60,34 @@ const List = ({ list, pagination }) => {
               </td>
             </tr>
           ) : (
-            list.map((board) => (
-              <tr key={board.no}>
-                <td>{board.no}</td>
-                <td>
-                  <img
-                    src={board.fileUrl ? board.fileUrl : noImage} // fileUrl이 있으면 Supabase URL 사용, 없으면 noImage
-                    alt={board.file?.originName || 'no-image'}
-                    className={styles.boardImg}
-                  />
-                </td>
-                <td>
-                  <Link to={`/boards/${board.id}`} className={styles.link}>
-                    {board.title}
-                  </Link>
-                </td>
-                <td>{board.writer}</td>
-                <td>{format.formatDate(board.createdAt)}</td>
-              </tr>
-            ))
+            list.map((board) => {
+              console.log(board.mainFile);
+              // 게시글의 mainFile이 있을 경우 URL 생성
+              const thumbnailUrl = board.mainFile
+                ? `https://ismclnqslxnlsfmqjytc.supabase.co/storage/v1/object/public/MAIN/${board.mainFile}`  // Supabase Storage의 이미지 URL
+                : noImage;
+
+
+              return (
+                <tr key={board.no}>
+                  <td>{board.no}</td>
+                  <td>
+                    <img
+                      src={thumbnailUrl}
+                      alt={board.mainFile?.originName || 'no-image'}
+                      className={styles.boardImg}
+                    />
+                  </td>
+                  <td>
+                    <Link to={`/boards/${board.id}`} className={styles.link}>
+                      {board.title}
+                    </Link>
+                  </td>
+                  <td>{board.writer}</td>
+                  <td>{format.formatDate(board.createdAt)}</td>
+                </tr>
+              );
+            })
           )}
         </tbody>
       </table>

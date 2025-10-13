@@ -6,6 +6,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 const Read = ({ board, fileList, onDownload }) => {
   const { id } = useParams();
+  const API_URL = 'https://dohwan-project.onrender.com'; // 운영 서버 주소
 
   const mainFile = fileList?.find(
     (f) => f.type?.toUpperCase() === 'MAIN' || f.type?.toUpperCase() === 'THUMBNAIL'
@@ -32,7 +33,7 @@ const Read = ({ board, fileList, onDownload }) => {
         <div className={styles.thumbnailBox}>
           <span className={styles.badge}>대표 이미지</span>
           <img
-            src={`/api/files/img/${mainFile.id}`}
+            src={`${API_URL}/files/img/${mainFile.id}`}
             alt={mainFile.originName}
             className={styles.mainImage}
           />
@@ -59,7 +60,7 @@ const Read = ({ board, fileList, onDownload }) => {
                   <span className={styles.badge}>대표</span>
                 )}
                 <img
-                  src={`/api/files/img/${file.id}`}
+                  src={`${API_URL}/files/img/${file.id}`}
                   alt={file.originName}
                   className={styles.fileImg}
                 />

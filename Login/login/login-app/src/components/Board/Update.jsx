@@ -8,8 +8,18 @@ import DownloadIcon from '@mui/icons-material/Download';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import Checkbox from '@mui/material/Checkbox';
 
-const Update = ({ board, fileList, onUpdate, onDelete, onDownload, onDeleteFile, deleteCheckedFiles }) => {
+const Update = ({
+  board,
+  fileList,
+  onUpdate,
+  onDelete,
+  onDownload,
+  onDeleteFile,
+  deleteCheckedFiles
+}) => {
   const { id } = useParams();
+  const API_URL = 'https://dohwan-project.onrender.com'; // 운영 서버 주소
+
   const [title, setTitle] = useState('');
   const [writer, setWriter] = useState('');
   const [content, setContent] = useState('');
@@ -52,8 +62,9 @@ const Update = ({ board, fileList, onUpdate, onDelete, onDownload, onDeleteFile,
   };
 
   const handleCheckedFileDelete = () => {
-    if (fileIdList.length === 0)
+    if (fileIdList.length === 0) {
       return Swal.fire('선택된 파일이 없습니다.', '', 'info');
+    }
     Swal.fire({
       title: `${fileIdList.length}개의 파일을 삭제하시겠습니까?`,
       icon: 'warning',
@@ -111,14 +122,21 @@ const Update = ({ board, fileList, onUpdate, onDelete, onDownload, onDeleteFile,
               />
               {file.type === 'MAIN' && <span className={styles.badge}>대표</span>}
               <img
-                src={`/api/files/img/${file.id}`}
+                src={`${API_URL}/files/img/${file.id}`}
                 alt={file.originName}
                 className={styles.fileImg}
               />
               <div style={{ marginTop: '6px', fontSize: '13px' }}>
                 {file.originName}
               </div>
-              <div style={{ display: 'flex', justifyContent: 'center', gap: '4px', marginTop: '4px' }}>
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  gap: '4px',
+                  marginTop: '4px',
+                }}
+              >
                 <button
                   className={styles.btn}
                   onClick={() => onDownload(file.id, file.originName)}
@@ -139,7 +157,9 @@ const Update = ({ board, fileList, onUpdate, onDelete, onDownload, onDeleteFile,
 
       <div className={styles.btnBox}>
         <Link to="/boards" className={styles.btn}>목록</Link>
-        <button className={styles.btn} onClick={handleCheckedFileDelete}>선택 삭제</button>
+        <button className={styles.btn} onClick={handleCheckedFileDelete}>
+          선택 삭제
+        </button>
         <button className={styles.btn} onClick={onSubmit}>수정</button>
         <button className={styles.btn} onClick={handleDelete}>삭제</button>
       </div>
