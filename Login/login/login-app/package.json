@@ -18,6 +18,7 @@
     "@mui/material": "^7.3.4",
     "@mui/styled-engine": "^7.3.3",
     "@mui/styled-engine-sc": "^7.3.3",
+    "@supabase/supabase-js": "^2.75.0",
     "axios": "^1.11.0",
     "js-cookie": "^3.0.5",
     "react": "^19.1.0",
