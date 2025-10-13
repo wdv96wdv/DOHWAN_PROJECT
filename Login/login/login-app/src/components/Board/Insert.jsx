@@ -110,7 +110,6 @@ const Insert = ({ onInsert }) => {
       if (res.isConfirmed) {
         try {
           const newPost = await onInsert(formData, headers); 
-          // newPost.no를 받아 CKEditor 업로드에 반영 가능
           Swal.fire('등록 완료!', '', 'success');
         } catch (err) {
           console.error(err);

@@ -68,7 +68,7 @@ public class FileController {
             boolean result = fileService.upload(files);
             if (result){
                 String fileUrl = files.getFilePath();  // 업로드된 파일의 URL을 얻음
-                return new ResponseEntity<>(fileUrl, HttpStatus.OK);
+                return new ResponseEntity<>(files, HttpStatus.OK);
             }else
                 return new ResponseEntity<>("FAILE", HttpStatus.BAD_REQUEST);
         } catch (Exception e) {

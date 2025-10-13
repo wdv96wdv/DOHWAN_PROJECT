@@ -10,6 +10,8 @@ import jakarta.servlet.http.HttpServletResponse;
 
 public interface FileService extends BaseService<Files>{
 
+    
+
     // ⬆️ 파일 업로드
     public boolean upload(Files file) throws Exception;
     public int upload(List<Files> fileList) throws Exception; 
