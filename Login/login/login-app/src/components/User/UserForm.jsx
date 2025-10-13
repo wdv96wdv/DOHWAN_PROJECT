@@ -1,4 +1,3 @@
-import React from 'react'
 import '../../assets/css/user.css';
 import React, { useState } from 'react'
 import Swal from 'sweetalert2';
