@@ -4,7 +4,7 @@ import styles from '../../assets/css/Insert.module.css';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import Swal from 'sweetalert2';
-import supabase from '../../supabaseClient'; // Supabase 클라이언트 임포트
+import supabase from '../../utils/supabaseClient'; // Supabase 클라이언트 임포트
 
 const Insert = ({ onInsert }) => {
   const [title, setTitle] = useState('');

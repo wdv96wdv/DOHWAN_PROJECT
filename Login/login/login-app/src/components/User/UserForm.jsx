@@ -1,5 +1,5 @@
-import '../../assets/css/user.css';
 import React, { useState } from 'react'
+import '../../assets/css/user.css';
 import Swal from 'sweetalert2';
 
 const UserForm = ({ userInfo, updateUser, deleteUser }) => {
