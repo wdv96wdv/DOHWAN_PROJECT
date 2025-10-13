@@ -69,6 +69,12 @@ dependencies {
 	// 게시판 이미지 서버
 	implementation 'org.springframework.boot:spring-boot-starter-webflux' // WebClient 사용
     implementation 'com.fasterxml.jackson.core:jackson-databind'
+
+	// SLF4J 로깅 (로깅을 위한 파사드)
+    implementation 'org.slf4j:slf4j-api:1.7.32' // SLF4J 의존성 추가
+
+    // Logback (로깅 구현체)
+    implementation 'ch.qos.logback:logback-classic:1.2.6' // Logback 의존성 추가
 	
 }
 

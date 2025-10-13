@@ -46,6 +46,21 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
   public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
       throws AuthenticationException {
 
+    // CORS 관련 로그
+    String origin = request.getHeader("Origin");
+    String method = request.getHeader("Access-Control-Request-Method");
+    String requestHeaders = request.getHeader("Access-Control-Request-Headers");
+    
+    if (origin != null) {
+        log.info("CORS Origin: {}", origin);
+    }
+    if (method != null) {
+        log.info("CORS Request Method: {}", method);
+    }
+    if (requestHeaders != null) {
+        log.info("CORS Request Headers: {}", requestHeaders);
+    }
+
     try {
       // 요청 JSON 파싱
       ObjectMapper mapper = new ObjectMapper();
@@ -101,14 +116,19 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     response.setStatus(200);
 
     // 👩‍💼 사용자 정보 body 세팅
-    ObjectMapper ObjectMapper = new ObjectMapper();
-    String jsonString = ObjectMapper.writeValueAsString(user);
+    ObjectMapper objectMapper = new ObjectMapper();
+    String jsonString = objectMapper.writeValueAsString(user);
     response.setContentType("application/json");
     response.setCharacterEncoding("UTF-8");
-    // jsonStrin : "{ 'username' : 'dohwan', 'name' : '사용자', ... }"
+    // jsonString : "{ 'username' : 'dohwan', 'name' : '사용자', ... }"
     PrintWriter printWriter = response.getWriter();
     printWriter.write(jsonString);
     printWriter.flush();
+    
+    // CORS 응답 로그
+    String authorizationHeader = response.getHeader("Authorization");
+    log.info("CORS Authorization Header: {}", authorizationHeader);
+    log.info("CORS Response Status: {}", response.getStatus());
   }
 
 }

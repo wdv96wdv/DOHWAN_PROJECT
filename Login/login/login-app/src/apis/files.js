@@ -1,21 +1,6 @@
 import axios from "axios";
 import supabase from "../utils/supabaseClient";
 
-// 업로드
-export const upload = (data, headers) => axios.post(`/files`, data, headers)
-
-// 다운로드
-export const download = (id) => axios.get(`/files/download/${id}`, {responseType: 'bolb'})
-
-// 파일 삭제
-export const remove = (id) => axios.delete(`/files/${id}`)
-
-// 파일 선택 삭제
-export const removeFiles = (idList) => axios.delete(`/files?idList=${idList}`)
-
-// 타입별 파일 목록
-export const fileByType = (pTable, pNo, type) => axios.get(`/files/${pTable}/${pNo}/?type=${type}`)
-
 // 파일 업로드 함수
 export const uploadFileToSupabase = async (file, fileType) => {
   try {
@@ -29,7 +14,15 @@ export const uploadFileToSupabase = async (file, fileType) => {
     if (error) throw error;
 
     // 업로드 성공 후 파일의 URL 반환
-    return `https://ismclnqslxnlsfmqjytc.supabase.co/storage/v1/object/public/${data.path}`;
+    const fileUrl = `https://ismclnqslxnlsfmqjytc.supabase.co/storage/v1/object/public/${data.path}`;
+
+    // URL을 백엔드로 전송
+    await axios.post('/your-api-endpoint', {
+      files: [fileUrl],  // 파일 URL 배열로 보내기
+    });
+
+    return fileUrl;  // 파일 URL 반환
+
   } catch (error) {
     console.error('File upload error:', error);
     throw error;

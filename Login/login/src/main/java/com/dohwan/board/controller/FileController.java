@@ -66,9 +66,10 @@ public class FileController {
     public ResponseEntity<?> createForm(Files files) {
         try {
             boolean result = fileService.upload(files);
-            if (result)
-                return new ResponseEntity<>(files, HttpStatus.OK);
-            else
+            if (result){
+                String fileUrl = files.getFilePath();  // 업로드된 파일의 URL을 얻음
+                return new ResponseEntity<>(fileUrl, HttpStatus.OK);
+            }else
                 return new ResponseEntity<>("FAILE", HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

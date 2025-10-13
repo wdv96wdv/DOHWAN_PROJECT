@@ -22,7 +22,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
   private final AuthenticationManager authenticationManager;
   private final JwtProvider jwtProvider;
 
-  public JwtRequestFilter( AuthenticationManager authenticationManager, JwtProvider jwtProvider ) {
+  public JwtRequestFilter(AuthenticationManager authenticationManager, JwtProvider jwtProvider) {
       this.authenticationManager = authenticationManager;
       this.jwtProvider = jwtProvider;
   }
@@ -41,39 +41,54 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                                   HttpServletResponse response, 
                                   FilterChain filterChain)
       throws ServletException, IOException {
+    
+    // CORS 관련 로그 추가
+    String origin = request.getHeader("Origin");
+    String method = request.getHeader("Access-Control-Request-Method");
+    String requestHeaders = request.getHeader("Access-Control-Request-Headers");
+    
+    if (origin != null) {
+        log.info("CORS Origin: {}", origin);
+    }
+    if (method != null) {
+        log.info("CORS Request Method: {}", method);
+    }
+    if (requestHeaders != null) {
+        log.info("CORS Request Headers: {}", requestHeaders);
+    }
+
     // 1. JWT 추출
-    String authorization = request.getHeader( SecurityConstants.TOKEN_HEADER ); // Authorization
-    log.info("authorization : " + authorization);
+    String authorization = request.getHeader(SecurityConstants.TOKEN_HEADER); // Authorization
+    log.info("Authorization Header: {}", authorization);
 
     // 💍 "Bearer {jwt}" 체크
     // 헤더가 없거나 올바르지 않으면 다음 필터로 진행
-    if( authorization == null || authorization.length() == 0 || !authorization.startsWith( SecurityConstants.TOKEN_PREFIX ) ) {
+    if (authorization == null || authorization.length() == 0 || !authorization.startsWith(SecurityConstants.TOKEN_PREFIX)) {
         filterChain.doFilter(request, response);
         return;
     }
 
     // 💍 JWT 
     // : "Bearer {jwt}" ➡ "Bearer " 제거 = JWT
-    String jwt = authorization.replace( SecurityConstants.TOKEN_PREFIX, "");
-    // 1. JWT 유효성 검증
-if(jwtProvider.validateToken(jwt)) {
-    // 2. 검증 성공 시 인증 객체 생성
-    Authentication authentication = jwtProvider.getAuthenticationToken(jwt);
+    String jwt = authorization.replace(SecurityConstants.TOKEN_PREFIX, "");
     
-    if(authentication != null) {
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        log.info("유효한 JWT 토큰, 인증 처리 완료. 사용자: {}, 권한: {}", 
-                 authentication.getName(), authentication.getAuthorities());
+    // 1. JWT 유효성 검증
+    if (jwtProvider.validateToken(jwt)) {
+        // 2. 검증 성공 시 인증 객체 생성
+        Authentication authentication = jwtProvider.getAuthenticationToken(jwt);
+        
+        if (authentication != null) {
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            log.info("유효한 JWT 토큰, 인증 처리 완료. 사용자: {}, 권한: {}", 
+                     authentication.getName(), authentication.getAuthorities());
+        } else {
+            log.warn("JWT 토큰은 유효하지만 인증 객체 생성 실패");
+        }
     } else {
-        log.warn("JWT 토큰은 유효하지만 인증 객체 생성 실패");
+        log.warn("유효하지 않은 JWT 토큰");
     }
-} else {
-    log.warn("유효하지 않은 JWT 토큰");
-}
-
 
     // 4. 다음 필터로 진행
     filterChain.doFilter(request, response);
   }
-  
 }
