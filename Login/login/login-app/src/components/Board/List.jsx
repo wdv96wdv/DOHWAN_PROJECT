@@ -64,7 +64,7 @@ const List = ({ list, pagination }) => {
                 <td>{board.no}</td>
                 <td>
                   <img
-                    src={board.file ? `/api/files/img/${board.file.id}` : noImage}
+                    src={board.fileUrl ? board.fileUrl : noImage} // fileUrl이 있으면 Supabase URL 사용, 없으면 noImage
                     alt={board.file?.originName || 'no-image'}
                     className={styles.boardImg}
                   />

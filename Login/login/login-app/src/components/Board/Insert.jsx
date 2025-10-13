@@ -4,7 +4,7 @@ import styles from '../../assets/css/Insert.module.css';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import Swal from 'sweetalert2';
-import * as fileApi from '../../apis/files';
+import supabase from '../../supabaseClient'; // Supabase 클라이언트 임포트
 
 const Insert = ({ onInsert }) => {
   const [title, setTitle] = useState('');
@@ -19,40 +19,7 @@ const Insert = ({ onInsert }) => {
   const changeMainFile = (e) => setMainFile(e.target.files[0]);
   const changeFiles = (e) => setFiles(e.target.files);
 
-  // CKEditor 업로드 플러그인
-  function uploadPlugin(editor) {
-    editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
-      return customUploadAdapter(loader);
-    };
-  }
-
-  const customUploadAdapter = (loader) => {
-    return {
-      upload() {
-        return new Promise((resolve) => {
-          const formData = new FormData();
-          loader.file.then(async (file) => {
-            formData.append('pTable', 'editor');
-            formData.append('pNo', 0);
-            formData.append('type', 'SUB');
-            formData.append('seq', 0);
-            formData.append('data', file);
-
-            const headers = { 'Content-Type': 'multipart/form-data' };
-            const response = await fileApi.upload(formData, headers);
-            const data = await response.data;
-            const id = data.id;
-
-            resolve({
-              default: `http://localhost:8080/files/img/${id}`,
-            });
-          });
-        });
-      },
-    };
-  };
-
-  // 등록 버튼
+  // 게시글 등록 시 이미지 업로드
   const onSubmit = async (e) => {
     e.preventDefault();
 
@@ -76,6 +43,39 @@ const Insert = ({ onInsert }) => {
       }
     }
 
+    // 파일 업로드 후 URL 가져오기
+    let fileUrl = '';
+    if (mainFile) {
+      const fileName = `${mainFile.name}_${Date.now()}`;
+      const { data, error } = await supabase
+        .storage
+        .from('upload') // 'upload'는 Supabase Storage 버킷 이름
+        .upload(fileName, mainFile, {
+          cacheControl: '3600', // 캐시 제어
+          upsert: true, // 파일이 이미 있으면 덮어쓰기
+        });
+
+      if (error) {
+        Swal.fire({
+          icon: 'error',
+          title: '파일 업로드 실패',
+          text: error.message,
+        });
+        return;
+      }
+
+      // 업로드된 파일의 공개 URL
+      const publicUrl = supabase
+        .storage
+        .from('upload')
+        .getPublicUrl(fileName).publicURL;
+
+      fileUrl = publicUrl; // URL을 사용
+    }
+
+    // formData에 fileUrl 추가
+    formData.append('fileUrl', fileUrl);
+
     const headers = { 'Content-Type': 'multipart/form-data' };
 
     // 등록 확인
@@ -87,7 +87,7 @@ const Insert = ({ onInsert }) => {
       cancelButtonText: '취소',
     }).then((res) => {
       if (res.isConfirmed) {
-        onInsert(formData, headers);
+        onInsert(formData, headers); // 백엔드에 파일과 함께 데이터 전달
       }
     });
   };
@@ -145,7 +145,6 @@ const Insert = ({ onInsert }) => {
                       shouldNotGroupWhenFull: false,
                     },
                     alignment: { options: ['left', 'center', 'right', 'justify'] },
-                    extraPlugins: [uploadPlugin],
                   }}
                   data={content}
                   onChange={(event, editor) => setContent(editor.getData())}
