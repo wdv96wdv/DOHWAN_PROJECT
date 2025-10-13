@@ -4,7 +4,7 @@ import styles from '../../assets/css/Insert.module.css';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import Swal from 'sweetalert2';
-import { uploadFile } from '../../utils/supabaseClients'; // Supabase 업로드 함수
+import { uploadFile } from '../../utils/supabaseClient'; // Supabase 업로드 함수
 import * as fileApi from '../../apis/files';
 
 const Insert = ({ onInsert }) => {
