@@ -9,7 +9,7 @@ import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import * as format from '../../utils/format';
 import '../../assets/css/common.module.css'
 
-const List = ({ list = [] , pagination }) => {
+const List = ({ list = [], pagination }) => {
   const [pageList, setPageList] = useState([]);
   const API_URL = 'https://dohwan-project.onrender.com'; // 운영 서버 주소
 
@@ -61,9 +61,9 @@ const List = ({ list = [] , pagination }) => {
             </tr>
           ) : (
             list.map((board) => {
-              // 게시글의 mainFile이 있을 경우 file_path로 URL 생성
-              const thumbnailUrl = board.mainFile && board.mainFile.url
-                ? board.mainFile.url
+              // file_path가 있으면 서버 이미지, 없으면 noImage
+              const thumbnailUrl = board.mainFile && board.mainFile.filePath
+                ? `${API_URL}/files/img/${board.mainFile.filePath}`
                 : noImage;
 
               return (

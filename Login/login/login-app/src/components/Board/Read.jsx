@@ -4,7 +4,10 @@ import styles from '../../assets/css/Read.module.css';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
-const Read = ({ board, fileList, onDownload }) => {
+const Read = ({ board = {}, fileList = {}, onDownload }) => {
+  if (!board || !board.title) {
+    return <div>게시글 정보를 불러오는 중입니다...</div>;
+  }
   const { id } = useParams();
   const API_URL = 'https://dohwan-project.onrender.com'; // 운영 서버 주소
 
@@ -34,7 +37,7 @@ const Read = ({ board, fileList, onDownload }) => {
         <div className={styles.thumbnailBox}>
           <span className={styles.badge}>대표 이미지</span>
           <img
-            src={mainFile.url ? mainFile.url : noImage}
+            src={mainFile.filePath ? `${API_URL}/files/img/${mainFile.filePath}` : noImage}
             alt={mainFile.originName}
             className={styles.mainImage}
           />
@@ -61,7 +64,7 @@ const Read = ({ board, fileList, onDownload }) => {
                   <span className={styles.badge}>대표</span>
                 )}
                 <img
-                  src={file.url ? file.url : noImage}
+                  src={file.filePath ? `${API_URL}/files/img/${file.filePath}` : noImage}
                   alt={file.originName}
                   className={styles.fileImg}
                 />

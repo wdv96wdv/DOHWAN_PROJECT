@@ -36,19 +36,19 @@ const Update = ({
   }, [board]);
 
   const onSubmit = async () => {
-  // 새 파일이 있다면 Supabase에 업로드 후 정보 배열 생성
-  let newFilesInfo = [];
-  if (newFiles.length > 0) {
-    for (let file of newFiles) {
-      const fileUrl = await fileApi.uploadFileToSupabase(file, 'SUB');
-      newFilesInfo.push({
-        url: fileUrl,
-        name: file.name,
-        originName: file.name,
-        size: file.size,
-      });
+    // 새 파일이 있다면 Supabase에 업로드 후 정보 배열 생성
+    let newFilesInfo = [];
+    if (newFiles.length > 0) {
+      for (let file of newFiles) {
+        const fileUrl = await fileApi.uploadFileToSupabase(file, 'SUB');
+        newFilesInfo.push({
+          url: fileUrl,
+          name: file.name,
+          originName: file.name,
+          size: file.size,
+        });
+      }
     }
-  }
 
     Swal.fire({
       title: '수정하시겠습니까?',
@@ -151,7 +151,7 @@ const Update = ({
               />
               {file.type === 'MAIN' && <span className={styles.badge}>대표</span>}
               <img
-                src={file.url ? file.url : noImage}
+                src={file.filePath ? `${API_URL}/files/img/${file.filePath}` : noImage}
                 alt={file.originName}
                 className={styles.fileImg}
               />
