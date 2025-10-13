@@ -44,12 +44,12 @@ public class BoardServiceImpl implements BoardService {
     public boolean insert(Boards boards) {
         // 게시글 등록
         int result = boardMapper.insert(boards);
-        // 파일 업로드
+         // 파일 URL만 전달하므로, 파일 관련 로직 수정
         result += upload(boards);
         return result > 0;
     }
     /**
-     * 파일 업로드
+     * 파일 업로드 (파일 URL만 저장)
      * @param boards
      * @return
      */
@@ -60,25 +60,27 @@ public class BoardServiceImpl implements BoardService {
 
         List<Files> uploadFileList = new ArrayList<>();
 
-        MultipartFile mainFile = board.getMainFile();
-        if( mainFile != null && !mainFile.isEmpty()){
+         // mainFile URL 처리
+        String mainFileUrl = board.getMainFile();
+        if( mainFileUrl != null && !mainFileUrl.isEmpty()){
             Files mainFileInfo = new Files();
             mainFileInfo.setPTable(pTable);
             mainFileInfo.setPNo(pNo);
-            mainFileInfo.setData(mainFile);
+            mainFileInfo.setData(mainFileUrl);  // URL을 Files 객체에 설정
             mainFileInfo.setType(Files.FileType.MAIN);
             uploadFileList.add(mainFileInfo);
         }
         
-        List<MultipartFile> files = board.getFiles();
-        if( files != null && !files.isEmpty()){
-            for(MultipartFile multipartFile : files){
-                if(multipartFile.isEmpty())
-                continue;
+        // files URL 처리
+        List<String> fileUrls = board.getFiles();
+        if( fileUrls != null && !fileUrls.isEmpty()){
+            for(String fileUrl : fileUrls){
+                if(fileUrl.isEmpty())
+                    continue;
                 Files fileInfo = new Files();
                 fileInfo.setPNo(pNo);
                 fileInfo.setPTable(pTable);
-                fileInfo.setData(multipartFile);
+                fileInfo.setData(fileUrl);  // URL을 Files 객체에 설정
                 fileInfo.setType(Files.FileType.SUB);
                 uploadFileList.add(fileInfo);
             }
