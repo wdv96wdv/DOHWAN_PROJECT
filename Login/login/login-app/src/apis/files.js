@@ -30,6 +30,6 @@ const fileName = `${folder}/${Date.now()}-${file.name}`; // 파일 이름에 타
     throw new Error('파일 업로드 실패: ' + error.message);
   }
     // 업로드 성공 후 파일의 URL 반환
-     const fileUrl = `https://<supabase-url>.supabase.co/storage/v1/object/public/upload/${fileName}`;
+     const fileUrl = `https://ismclnqslxnlsfmqjytc.supabase.co/storage/v1/object/public/upload/${fileName}`;
     return fileUrl;  // 파일 URL 반환
 };
