@@ -16,7 +16,7 @@ const Insert = ({ onInsert }) => {
   const [filePreviews, setFilePreviews] = useState([]);
   const [submitting, setSubmitting] = useState(false);
 
-  const API_URL = "https://dohwan-project.onrender.com";
+  const API_URL = "https://dohwan-project.onrender.com";  // 서버 URL
 
   // 입력 핸들러
   const changeTitle = (e) => setTitle(e.target.value);
@@ -25,13 +25,13 @@ const Insert = ({ onInsert }) => {
   const changeMainFile = (e) => {
     const file = e.target.files[0];
     setMainFile(file);
-    if (file) setMainPreview(URL.createObjectURL(file));
+    if (file) setMainPreview(URL.createObjectURL(file)); // 미리보기 생성
   };
 
   const changeFiles = (e) => {
     const selectedFiles = Array.from(e.target.files);
     setFiles(selectedFiles);
-    setFilePreviews(selectedFiles.map(f => URL.createObjectURL(f)));
+    setFilePreviews(selectedFiles.map(f => URL.createObjectURL(f))); // 파일 미리보기
   };
 
   // CKEditor 업로드 플러그인
@@ -47,19 +47,11 @@ const Insert = ({ onInsert }) => {
         return new Promise((resolve, reject) => {
           loader.file.then(async (file) => {
             try {
-              const formData = new FormData();
-              formData.append('pTable', 'editor');
-              formData.append('pNo', pNo); // 게시글 no 반영
-              formData.append('type', 'SUB');
-              formData.append('seq', 0);
-              formData.append('data', file);
-
-              const headers = { 'Content-Type': 'multipart/form-data' };
-              const response = await fileApi.upload(formData, headers);
-              const id = response.data.id;
+              // Supabase로 파일 업로드
+              const fileUrl = await fileApi.uploadFileToSupabase(file, 'SUB'); // 'SUB'는 파일 종류
 
               resolve({
-                default: `${API_URL}/files/img/${id}`,
+                default: fileUrl,  // 업로드된 파일의 URL을 CKEditor에 반환
               });
             } catch (err) {
               console.error('CKEditor 업로드 실패', err);
@@ -75,6 +67,7 @@ const Insert = ({ onInsert }) => {
     e.preventDefault();
     if (submitting) return;
 
+    // 필수 입력 체크
     if (!title || !writer || !content) {
       Swal.fire({
         icon: 'warning',
@@ -90,9 +83,19 @@ const Insert = ({ onInsert }) => {
     formData.append('title', title);
     formData.append('writer', writer);
     formData.append('content', content);
-    if (mainFile) formData.append('mainFile', mainFile);
+
+    // 메인 파일은 'MAIN' 폴더에 업로드
+    if (mainFile) {
+      const mainFileUrl = await fileApi.uploadFileToSupabase(mainFile, 'MAIN'); // 'MAIN' 폴더에 업로드
+      formData.append('mainFileUrl', mainFileUrl);
+    }
+
+    // 첨부 파일들
     if (files.length > 0) {
-      files.forEach((f) => formData.append('files', f));
+      for (let file of files) {
+        const fileUrl = await fileApi.uploadFileToSupabase(file, 'SUB'); // 'SUB' 폴더에 업로드
+        formData.append('files', fileUrl);
+      }
     }
 
     const headers = { 'Content-Type': 'multipart/form-data' };
