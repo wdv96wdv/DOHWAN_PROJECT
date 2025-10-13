@@ -35,7 +35,21 @@ const Update = ({
     }
   }, [board]);
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
+  // 새 파일이 있다면 Supabase에 업로드 후 정보 배열 생성
+  let newFilesInfo = [];
+  if (newFiles.length > 0) {
+    for (let file of newFiles) {
+      const fileUrl = await fileApi.uploadFileToSupabase(file, 'SUB');
+      newFilesInfo.push({
+        url: fileUrl,
+        name: file.name,
+        originName: file.name,
+        size: file.size,
+      });
+    }
+  }
+
     Swal.fire({
       title: '수정하시겠습니까?',
       icon: 'question',
@@ -44,12 +58,12 @@ const Update = ({
       cancelButtonText: '취소',
     }).then((res) => {
       if (res.isConfirmed) {
-        const data = { 
-          id, 
-          title, 
-          writer, 
-          content, 
-          newFiles, // 새로 추가된 파일들
+        const data = {
+          id,
+          title,
+          writer,
+          content,
+          newFiles: newFilesInfo, // 새로 추가된 파일들
           deleteFiles: fileIdList // 삭제할 파일들
         };
         const headers = { 'Content-Type': 'application/json' };
@@ -137,7 +151,7 @@ const Update = ({
               />
               {file.type === 'MAIN' && <span className={styles.badge}>대표</span>}
               <img
-                src={file.filePath ? `${API_URL}/files/img/${file.filePath}` : noImage} // filePath로 변경
+                src={file.url ? file.url : noImage}
                 alt={file.originName}
                 className={styles.fileImg}
               />

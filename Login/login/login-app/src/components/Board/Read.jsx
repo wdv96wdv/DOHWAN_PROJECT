@@ -34,7 +34,7 @@ const Read = ({ board, fileList, onDownload }) => {
         <div className={styles.thumbnailBox}>
           <span className={styles.badge}>대표 이미지</span>
           <img
-            src={mainFile.filePath ? `${API_URL}/files/img/${mainFile.filePath}` : noImage} // filePath 사용
+            src={mainFile.url ? mainFile.url : noImage}
             alt={mainFile.originName}
             className={styles.mainImage}
           />
@@ -61,7 +61,7 @@ const Read = ({ board, fileList, onDownload }) => {
                   <span className={styles.badge}>대표</span>
                 )}
                 <img
-                  src={file.filePath ? `${API_URL}/files/img/${file.filePath}` : noImage} // filePath 사용
+                  src={file.url ? file.url : noImage}
                   alt={file.originName}
                   className={styles.fileImg}
                 />

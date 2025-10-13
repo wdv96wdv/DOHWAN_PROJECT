@@ -9,7 +9,7 @@ import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import * as format from '../../utils/format';
 import '../../assets/css/common.module.css'
 
-const List = ({ list, pagination }) => {
+const List = ({ list = [] , pagination }) => {
   const [pageList, setPageList] = useState([]);
   const API_URL = 'https://dohwan-project.onrender.com'; // 운영 서버 주소
 
