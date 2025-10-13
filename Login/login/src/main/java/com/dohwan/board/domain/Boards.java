@@ -18,8 +18,11 @@ public class Boards {
     private Date updatedAt;         // 수정일자
 
     // 🗒️ 파일
-    private MultipartFile mainFile;
-    private List<MultipartFile> files;
+    // private MultipartFile mainFile;
+    // private List<MultipartFile> files;
+    private String mainFile;        // 파일 URL
+    private List<String> files;     // 파일 URL 리스트
+
 
     // 파일
     private Files File;
