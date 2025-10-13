@@ -61,9 +61,9 @@ const List = ({ list, pagination }) => {
             </tr>
           ) : (
             list.map((board) => {
-              // 게시글의 mainFile이 있을 경우 URL 생성
-              const thumbnailUrl = board.mainFile
-                ? `${API_URL}/files/img/${board.mainFile.id}`
+              // 게시글의 mainFile이 있을 경우 file_path로 URL 생성
+              const thumbnailUrl = board.mainFile?.filePath
+                ? `${API_URL}/files/img/${board.mainFile.filePath}`  // filePath로 URL 생성
                 : noImage;
 
               return (

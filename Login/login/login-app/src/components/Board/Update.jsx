@@ -7,6 +7,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import DownloadIcon from '@mui/icons-material/Download';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import Checkbox from '@mui/material/Checkbox';
+import noImage from '../../assets/img/no-image.png';
 
 const Update = ({
   board,
@@ -24,6 +25,7 @@ const Update = ({
   const [writer, setWriter] = useState('');
   const [content, setContent] = useState('');
   const [fileIdList, setFileIdList] = useState([]);
+  const [newFiles, setNewFiles] = useState([]); // 새로 추가된 파일 목록
 
   useEffect(() => {
     if (board) {
@@ -42,7 +44,14 @@ const Update = ({
       cancelButtonText: '취소',
     }).then((res) => {
       if (res.isConfirmed) {
-        const data = { id, title, writer, content };
+        const data = { 
+          id, 
+          title, 
+          writer, 
+          content, 
+          newFiles, // 새로 추가된 파일들
+          deleteFiles: fileIdList // 삭제할 파일들
+        };
         const headers = { 'Content-Type': 'application/json' };
         onUpdate(data, headers);
       }
@@ -85,6 +94,11 @@ const Update = ({
     );
   };
 
+  const handleFileChange = (e) => {
+    const selectedFiles = Array.from(e.target.files);
+    setNewFiles(selectedFiles); // 새로 추가된 파일을 상태에 추가
+  };
+
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>게시글 수정</h1>
@@ -112,6 +126,7 @@ const Update = ({
         />
       </div>
 
+      {/* 파일 목록 */}
       {fileList.length > 0 && (
         <div className={styles.fileList}>
           {fileList.map((file) => (
@@ -122,7 +137,7 @@ const Update = ({
               />
               {file.type === 'MAIN' && <span className={styles.badge}>대표</span>}
               <img
-                src={`${API_URL}/files/img/${file.id}`}
+                src={file.filePath ? `${API_URL}/files/img/${file.filePath}` : noImage} // filePath로 변경
                 alt={file.originName}
                 className={styles.fileImg}
               />
@@ -154,6 +169,11 @@ const Update = ({
           ))}
         </div>
       )}
+
+      {/* 새 파일 추가 */}
+      <div className={styles.fileInput}>
+        <input type="file" multiple onChange={handleFileChange} />
+      </div>
 
       <div className={styles.btnBox}>
         <Link to="/boards" className={styles.btn}>목록</Link>

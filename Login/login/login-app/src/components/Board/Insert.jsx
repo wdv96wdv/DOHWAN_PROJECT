@@ -49,10 +49,17 @@ const Insert = ({ onInsert }) => {
             try {
               // Supabase로 파일 업로드
               const fileUrl = await fileApi.uploadFileToSupabase(file, 'SUB'); // 'SUB'는 파일 종류
+              const fileName = file.name;
+              const originName = file.name;  // 원본 파일명
+              const fileSize = file.size;
 
               resolve({
                 default: fileUrl,  // 업로드된 파일의 URL을 CKEditor에 반환
               });
+
+              // 파일의 메타데이터도 추가로 서버로 전송
+              await fileApi.uploadFileMetadataToServer({ fileUrl, fileName, originName, fileSize });
+
             } catch (err) {
               console.error('CKEditor 업로드 실패', err);
               reject(err);
@@ -88,6 +95,10 @@ const Insert = ({ onInsert }) => {
     if (mainFile) {
       const mainFileUrl = await fileApi.uploadFileToSupabase(mainFile, 'MAIN'); // 'MAIN' 폴더에 업로드
       formData.append('mainFileUrl', mainFileUrl);
+      // 메인 파일의 추가 정보 (fileName, originName, fileSize)도 전송
+      formData.append('mainFileName', mainFile.name);
+      formData.append('mainOriginName', mainFile.name);
+      formData.append('mainFileSize', mainFile.size);
     }
 
     // 첨부 파일들
@@ -95,6 +106,10 @@ const Insert = ({ onInsert }) => {
       for (let file of files) {
         const fileUrl = await fileApi.uploadFileToSupabase(file, 'SUB'); // 'SUB' 폴더에 업로드
         formData.append('files', fileUrl);
+        // 첨부 파일의 추가 정보도 전송
+        formData.append('fileNames', file.name);
+        formData.append('originNames', file.name);
+        formData.append('fileSizes', file.size);
       }
     }
 
@@ -109,7 +124,7 @@ const Insert = ({ onInsert }) => {
     }).then(async (res) => {
       if (res.isConfirmed) {
         try {
-          const newPost = await onInsert(formData, headers); 
+          const newPost = await onInsert(formData, headers);
           Swal.fire('등록 완료!', '', 'success');
         } catch (err) {
           console.error(err);

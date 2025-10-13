@@ -66,21 +66,29 @@ public class BoardServiceImpl implements BoardService {
             Files mainFileInfo = new Files();
             mainFileInfo.setPTable(pTable);
             mainFileInfo.setPNo(pNo);
-            mainFileInfo.setData(mainFileUrl);  // URL을 Files 객체에 설정
+            mainFileInfo.setData(mainFileUrl, 
+                                 "mainFile.jpg", // 실제 파일명 처리 필요
+                                 "mainFile.jpg", // 원본 파일명 처리 필요
+                                 123456L); // 파일 크기 처리 필요
             mainFileInfo.setType(Files.FileType.MAIN);
             uploadFileList.add(mainFileInfo);
         }
         
-        // files URL 처리
+           // files URL 처리
         List<String> fileUrls = board.getFiles();
         if( fileUrls != null && !fileUrls.isEmpty()){
             for(String fileUrl : fileUrls){
-                if(fileUrl.isEmpty())
-                    continue;
+                if(fileUrl.isEmpty()) continue;
+
                 Files fileInfo = new Files();
                 fileInfo.setPNo(pNo);
                 fileInfo.setPTable(pTable);
-                fileInfo.setData(fileUrl);  // URL을 Files 객체에 설정
+
+                fileInfo.setData(fileUrl, 
+                                 "subFile.jpg", // 실제 파일명 처리 필요
+                                 "subFile.jpg", // 원본 파일명 처리 필요
+                                 789012L); // 파일 크기 처리 필요
+
                 fileInfo.setType(Files.FileType.SUB);
                 uploadFileList.add(fileInfo);
             }

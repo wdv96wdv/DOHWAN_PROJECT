@@ -112,51 +112,62 @@ public class FileServiceImpl implements FileService {
     @Override
     public boolean upload(Files file) throws Exception {
         boolean result = false;
-       String fileUrl = file.getData();
+        String fileUrl = file.getData(); // 파일 URL
 
         if (fileUrl == null || fileUrl.isEmpty()) {
-            return false;  // 파일 URL이 없다면 처리하지 않음
+            return false; // 파일 URL이 없다면 처리하지 않음
         }
-        // 파일 정보를 DB에 저장 (파일 URL만 저장)
-        file.setFilePath(fileUrl);  // 파일 경로 (URL)
-        
+
+        // 파일 정보 처리
+        String fileName = file.getFileName(); // 파일명
+        String originName = file.getOriginName(); // 원본 파일명
+        Long fileSize = file.getFileSize(); // 파일 크기
+
+        // 파일 경로는 URL로 설정
+        file.setFilePath(fileUrl);
+
+        // 추가적인 정보 설정
+        file.setFileName(fileName);
+        file.setOriginName(originName);
+        file.setFileSize(fileSize);
+
         // DB에 파일 정보 등록
         result = fileMapper.insert(file) > 0;
         return result;
     }
 
-    //     // 업로드 경로 확인 및 폴더 자동 생성
-    //     File uploadDir = new File(uploadPath);
-    //     if (!uploadDir.exists()) {
-    //         boolean created = uploadDir.mkdirs(); // 여러 경로 한 번에 생성
-    //         if (!created) {
-    //             log.error("업로드 폴더 생성 실패: {}", uploadPath);
-    //             throw new RuntimeException("업로드 폴더 생성 실패");
-    //         } else {
-    //             log.info("업로드 폴더 생성 완료: {}", uploadPath);
-    //         }
-    //     }
+    // // 업로드 경로 확인 및 폴더 자동 생성
+    // File uploadDir = new File(uploadPath);
+    // if (!uploadDir.exists()) {
+    // boolean created = uploadDir.mkdirs(); // 여러 경로 한 번에 생성
+    // if (!created) {
+    // log.error("업로드 폴더 생성 실패: {}", uploadPath);
+    // throw new RuntimeException("업로드 폴더 생성 실패");
+    // } else {
+    // log.info("업로드 폴더 생성 완료: {}", uploadPath);
+    // }
+    // }
 
-    //     // 1 파일 시스템 등록 (파일 복사)
-    //     // - 파일 정보 : 원본파일명, 파일 용량 파일 데이터
-    //     // 파일명, 파일경로
+    // // 1 파일 시스템 등록 (파일 복사)
+    // // - 파일 정보 : 원본파일명, 파일 용량 파일 데이터
+    // // 파일명, 파일경로
 
-    //     String originName = multipartFile.getOriginalFilename();
-    //     long fileSize = multipartFile.getSize();
-    //     byte[] fileDate = multipartFile.getBytes();
-    //     String fileName = UUID.randomUUID().toString() + "_" + originName;
-    //     String filePath = uploadPath + "/" + fileName;
-    //     File uploadFile = new File(filePath);
-    //     FileCopyUtils.copy(fileDate, uploadFile); // 파일 복사(업로드)
+    // String originName = multipartFile.getOriginalFilename();
+    // long fileSize = multipartFile.getSize();
+    // byte[] fileDate = multipartFile.getBytes();
+    // String fileName = UUID.randomUUID().toString() + "_" + originName;
+    // String filePath = uploadPath + "/" + fileName;
+    // File uploadFile = new File(filePath);
+    // FileCopyUtils.copy(fileDate, uploadFile); // 파일 복사(업로드)
 
-    //     // 2 db에 등록
-    //     file.setOriginName(originName);
-    //     file.setFileName(fileName);
-    //     file.setFilePath(filePath);
-    //     file.setFileSize(fileSize);
+    // // 2 db에 등록
+    // file.setOriginName(originName);
+    // file.setFileName(fileName);
+    // file.setFilePath(filePath);
+    // file.setFileSize(fileSize);
 
-    //     result = fileMapper.insert(file) > 0;
-    //     return result;
+    // result = fileMapper.insert(file) > 0;
+    // return result;
     // }
 
     @Override
@@ -295,6 +306,5 @@ public class FileServiceImpl implements FileService {
         return fileMapper.listByType(file);
     }
 }
-
 
 // 운영

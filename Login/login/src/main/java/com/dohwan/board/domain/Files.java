@@ -32,14 +32,22 @@ public class Files {
     // private MultipartFile data;
 
     // 기존 MultipartFile을 String으로 수정
-    private String data; // 파일 URL을 저장할 필드로 수정
+    private String fileUrl; // 파일 URL을 저장할 필드로 수정
 
     public Files() {
         this.id = UUID.randomUUID().toString();
     }
 
     // setData 메서드 수정: MultipartFile을 String URL로 변경
-    public void setData(String fileUrl) {
-        this.data = fileUrl;  // 파일 URL을 저장
+    public void setData(String fileUrl, String fileName, String originName, Long fileSize) {
+        this.fileUrl  = fileUrl;  // 파일 URL을 저장
+        this.fileName = fileName;
+        this.originName = originName;
+        this.fileSize = fileSize;
+    }
+
+     // 데이터 반환을 위한 메서드
+    public String getData() {
+        return this.fileUrl;
     }
 }

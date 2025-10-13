@@ -8,6 +8,7 @@ const Read = ({ board, fileList, onDownload }) => {
   const { id } = useParams();
   const API_URL = 'https://dohwan-project.onrender.com'; // 운영 서버 주소
 
+  // 대표 파일 찾기 (메인 파일 또는 썸네일)
   const mainFile = fileList?.find(
     (f) => f.type?.toUpperCase() === 'MAIN' || f.type?.toUpperCase() === 'THUMBNAIL'
   );
@@ -33,7 +34,7 @@ const Read = ({ board, fileList, onDownload }) => {
         <div className={styles.thumbnailBox}>
           <span className={styles.badge}>대표 이미지</span>
           <img
-            src={`${API_URL}/files/img/${mainFile.id}`}
+            src={mainFile.filePath ? `${API_URL}/files/img/${mainFile.filePath}` : noImage} // filePath 사용
             alt={mainFile.originName}
             className={styles.mainImage}
           />
@@ -60,7 +61,7 @@ const Read = ({ board, fileList, onDownload }) => {
                   <span className={styles.badge}>대표</span>
                 )}
                 <img
-                  src={`${API_URL}/files/img/${file.id}`}
+                  src={file.filePath ? `${API_URL}/files/img/${file.filePath}` : noImage} // filePath 사용
                   alt={file.originName}
                   className={styles.fileImg}
                 />
