@@ -3,7 +3,7 @@ import { createClient } from '@supabase/supabase-js';
 const supabaseUrl = 'https://ismclnqslxnlsfmqjytc.supabase.co'; // Supabase URL
 const supabaseKey = 'sb_publishable_RWdFyo-SAjkjsNnQJC2JBw_jbX6bdXd'; // API Key
 
-consoel.log("supabaseUrl = " + supabaseUrl);
+console.log("supabaseUrl = " + supabaseUrl);
 console.log("supabaseKey = " + supabaseKey);
 
 const supabase = createClient(supabaseUrl, supabaseKey); // Supabase 클라이언트 생성
@@ -11,15 +11,16 @@ const supabase = createClient(supabaseUrl, supabaseKey); // Supabase 클라이�
 // 파일 업로드 함수
 export const uploadFile = async (file, folder) => {
   try {
-    // Supabase Storage에서 지정된 폴더에 파일 업로드
+    const fileName = `${crypto.randomUUID()}_${file.name}`;  // 파일 이름에 고유값 추가
     const { data, error } = await supabase.storage
-      .from(folder)  // 폴더 지정
-      .upload(file.name, file);  // 업로드할 파일과 파일 이름
+      .from('upload') // 폴더 지정
+      .upload(`${folder}/${fileName}`, file);  // 폴더 이름과 파일 경로 지정
 
     if (error) {
-        console.error('업로드 실패:', error);
+      console.error('업로드 실패:', error);
       throw error;
     }
+    
     console.log('파일 업로드 성공:', data);
     // 업로드 성공 시 파일 경로 반환
     return data;
@@ -28,5 +29,6 @@ export const uploadFile = async (file, folder) => {
     throw error;
   }
 };
+
 
 export default supabase;
