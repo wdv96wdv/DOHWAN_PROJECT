@@ -65,6 +65,10 @@ dependencies {
 	
 	// Spring Boot Configuration Processor
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+
+	// 게시판 이미지 서버
+	implementation 'org.springframework.boot:spring-boot-starter-webflux' // WebClient 사용
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
 	
 }
 

@@ -25,6 +25,6 @@ public interface FileMapper extends BaseMapper<Files> {
     
     // 타입별 파일 조회
     public Files selectByType(Files file);
-    // 탕빕별 파일 목록
+    // 타입별 파일 목록
     public List<Files> listByType(Files file);
 } 
