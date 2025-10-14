@@ -4,7 +4,7 @@ import styles from '../../assets/css/Read.module.css';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
-const Read = ({ board = {}, fileList = {}, onDownload }) => {
+const Read = ({ board = {}, fileList = [], onDownload }) => {
   if (!board || !board.title) {
     return <div>게시글 정보를 불러오는 중입니다...</div>;
   }
@@ -37,8 +37,8 @@ const Read = ({ board = {}, fileList = {}, onDownload }) => {
         <div className={styles.thumbnailBox}>
           <span className={styles.badge}>대표 이미지</span>
           <img
-            src={mainFile.filePath ? `${API_URL}/files/img/${mainFile.filePath}` : noImage}
-            alt={mainFile.originName}
+            src={mainFile?.filePath ? mainFile.filePath : noImage}
+            alt={mainFile?.originName}
             className={styles.mainImage}
           />
         </div>
@@ -64,9 +64,9 @@ const Read = ({ board = {}, fileList = {}, onDownload }) => {
                   <span className={styles.badge}>대표</span>
                 )}
                 <img
-                  src={file.filePath ? `${API_URL}/files/img/${file.filePath}` : noImage}
-                  alt={file.originName}
-                  className={styles.fileImg}
+                  src={file?.filePath ? file.filePath : noImage}
+                  alt={file?.originName}
+                  className={styles.fileImage}
                 />
               </div>
               <span>{file.originName} ({file.fileSize})</span>

@@ -149,11 +149,11 @@ const Update = ({
                 checked={fileIdList.includes(file.id)}
                 onChange={() => checkFileId(file.id)}
               />
-              {file.type === 'MAIN' && <span className={styles.badge}>대표</span>}
+              {file.type == 'MAIN' && <span className={styles.badge}>대표</span>}
               <img
-                src={file.filePath ? `${API_URL}/files/img/${file.filePath}` : noImage}
-                alt={file.originName}
-                className={styles.fileImg}
+                src={file?.filePath ? file.filePath : noImage}
+                alt={file?.originName}
+                className={styles.fileImage}
               />
               <div style={{ marginTop: '6px', fontSize: '13px' }}>
                 {file.originName}

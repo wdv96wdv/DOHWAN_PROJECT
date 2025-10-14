@@ -63,7 +63,7 @@ const List = ({ list = [], pagination }) => {
             list.map((board) => {
               // file_path가 있으면 서버 이미지, 없으면 noImage
               const thumbnailUrl = board.mainFile && board.mainFile.filePath
-                ? `${API_URL}/files/img/${board.mainFile.filePath}`
+                ? board.mainFile.filePath
                 : noImage;
 
               return (
