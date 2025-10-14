@@ -60,8 +60,7 @@ public class BoardServiceImpl implements BoardService {
         Long pNo = board.getNo();
 
         List<Files> uploadFileList = new ArrayList<>();
-        
-        
+
         // mainFile 처리
         FileInfo mainFileInfo = board.getMainFile();
         if (mainFileInfo != null && mainFileInfo.getUrl() != null && !mainFileInfo.getUrl().isEmpty()) {

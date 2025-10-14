@@ -1,3 +1,13 @@
+@import './common.module.css';
+
+.container {
+  composes: container from './common.module.css';
+}
+
+.title {
+  composes: title from './common.module.css';
+}
+
 /* 전체 컨테이너 */
 .container {
   padding: 20px;
@@ -5,7 +15,7 @@
   border-radius: 16px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.08);
   font-family: 'Pretendard', sans-serif;
-  margin-top: auto;
+  margin-top: 100px;
   margin-bottom: auto;
 }
 
@@ -34,6 +44,8 @@
   margin: 24px 0;
   position: relative;
 }
+
+
 
 .badge {
   display: inline-block;
@@ -75,10 +87,11 @@
   transform: translateY(-2px);
 }
 
-.fileImg {
-  width: 100%;
-  height: 160px;
-  object-fit: cover;
+.fileImage {
+  width: 100%; /* 부모 요소의 너비에 맞게 이미지 크기 조정 */
+  max-width: 300px; /* 최대 크기 제한 (필요에 따라 조정) */
+  height: auto; /* 자동 높이로 비율 유지 */
+  object-fit: contain; /* 비율을 유지하면서 이미지가 잘리지 않게 조정 */
   border-radius: 8px;
   margin-bottom: 8px;
 }

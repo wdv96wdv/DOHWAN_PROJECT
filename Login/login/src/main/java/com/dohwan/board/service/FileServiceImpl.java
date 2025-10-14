@@ -306,5 +306,4 @@ public class FileServiceImpl implements FileService {
         return fileMapper.listByType(file);
     }
 }
-
 // 운영

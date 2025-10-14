@@ -61,17 +61,12 @@ const List = ({ list = [], pagination }) => {
             </tr>
           ) : (
             list.map((board) => {
-              // file_path가 있으면 서버 이미지, 없으면 noImage
-              const thumbnailUrl = board.mainFile && board.mainFile.filePath
-                ? board.mainFile.filePath
-                : noImage;
-
               return (
                 <tr key={board.no}>
                   <td>{board.no}</td>
                   <td>
                     <img
-                      src={thumbnailUrl}
+                      src={board.file.filePath}
                       alt={board.mainFile?.originName || 'no-image'}
                       className={styles.boardImg}
                     />

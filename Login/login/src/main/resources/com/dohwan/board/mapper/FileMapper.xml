@@ -122,5 +122,4 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
           AND p_no = #{pNo}
           AND type = #{type}
     </select>
-
 </mapper>

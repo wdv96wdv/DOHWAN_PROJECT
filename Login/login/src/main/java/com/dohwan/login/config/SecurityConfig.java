@@ -99,7 +99,7 @@ public class SecurityConfig {
 		// 실제 프론트 도메인만 명시
 		List<String> allowedOrigins = List.of(
 				"https://dorunning.vercel.app",
-				"http://localhost:3000" // 개발용
+				"http://localhost:5173" // 개발용
 		);
 		configuration.setAllowedOrigins(allowedOrigins);
 		log.info("CORS 설정 - Allowed Origins: {}", allowedOrigins);
