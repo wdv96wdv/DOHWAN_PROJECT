@@ -1,5 +1,6 @@
 import axios from "axios";
 import supabase from "../utils/supabaseClient";
+import api from './api';
 
 // 로컬
 // 업로드
@@ -98,4 +99,4 @@ export const deleteMultipleFilesFromSupabase = async (filePaths) => {
 };
 
 // 파일 삭제
-export const removeFromSupabase = (id) => axios.delete(`/files/${id}`)
+export const removeFromSupabase = (id) => api.delete(`/files/${id}`)
