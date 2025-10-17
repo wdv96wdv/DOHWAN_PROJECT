@@ -1,35 +1,17 @@
 @import './common.module.css';
 
-.container {
-  composes: container from './common.module.css';
-}
-
-.title {
-  composes: title from './common.module.css';
-}
+.container { composes: container from './common.module.css'; }
+.title { composes: title from './common.module.css'; }
+.btn { composes: btn from './common.module.css'; }
 
 .btn {
-  composes: btn from './common.module.css';
   float: right;
   margin-bottom: 20px;
 }
 
-.table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-}
-
-.table th, .table td {
-  border-bottom: 1px solid #ddd;
-  padding: 12px;
-  text-align: center;
-}
-
-.table th {
-  background-color: #f7f9fc;
-  font-weight: 600;
-}
+/* ✅ 리스트 전용 */
+.table { composes: table from './common.module.css'; }
+.table th { background-color: #f7f9fc; }
 
 .boardImg {
   width: 80px;
@@ -44,13 +26,12 @@
   text-decoration: none;
   font-weight: 500;
 }
-
 .link:hover {
   text-decoration: underline;
   color: #4b8cf5;
 }
 
-/* 페이지네이션 */
+/* ✅ 페이지네이션 */
 .pagination {
   display: flex;
   justify-content: center;
@@ -70,53 +51,39 @@
   text-decoration: none;
   transition: 0.2s;
 }
-
-.btn-page:hover {
+.btn-page:hover, .active {
   background-color: #4b8cf5;
   color: white;
 }
 
-.active {
-  background-color: #4b8cf5;
-  color: white;
-}
-
-/* 반응형 */
+/* ✅ 반응형 */
 @media (max-width: 768px) {
-  .table thead {
-    display: none;
-  }
-
+  .table thead { display: none; }
   .table tr {
     display: block;
     border-bottom: 1px solid #ddd;
     margin-bottom: 12px;
     padding: 10px;
   }
-
   .table td {
     display: flex;
     justify-content: space-between;
     padding: 6px 0;
     text-align: left;
   }
-
   .table td::before {
     content: attr(data-label);
     font-weight: 600;
     color: #666;
   }
-
   .boardImg {
     width: 100%;
     height: auto;
   }
-
   .btn {
     float: none;
     display: block;
     width: 100%;
     text-align: center;
-    margin-bottom: 20px;
   }
 }

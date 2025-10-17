@@ -25,7 +25,6 @@ const Update = ({
   const [writer, setWriter] = useState('');
   const [content, setContent] = useState('');
   const [fileIdList, setFileIdList] = useState([]);
-  const [newFiles, setNewFiles] = useState([]); // 새로 추가된 파일 목록
 
   useEffect(() => {
     if (board) {
@@ -36,20 +35,6 @@ const Update = ({
   }, [board]);
 
   const onSubmit = async () => {
-    // 새 파일이 있다면 Supabase에 업로드 후 정보 배열 생성
-    let newFilesInfo = [];
-    if (newFiles.length > 0) {
-      for (let file of newFiles) {
-        const fileUrl = await fileApi.uploadFileToSupabase(file, 'SUB');
-        newFilesInfo.push({
-          url: fileUrl,
-          name: file.name,
-          originName: file.name,
-          size: file.size,
-        });
-      }
-    }
-
     Swal.fire({
       title: '수정하시겠습니까?',
       icon: 'question',
@@ -63,7 +48,6 @@ const Update = ({
           title,
           writer,
           content,
-          newFiles: newFilesInfo, // 새로 추가된 파일들
           deleteFiles: fileIdList // 삭제할 파일들
         };
         const headers = { 'Content-Type': 'application/json' };
@@ -106,11 +90,6 @@ const Update = ({
     setFileIdList((prev) =>
       prev.includes(id) ? prev.filter((fid) => fid !== id) : [...prev, id]
     );
-  };
-
-  const handleFileChange = (e) => {
-    const selectedFiles = Array.from(e.target.files);
-    setNewFiles(selectedFiles); // 새로 추가된 파일을 상태에 추가
   };
 
   return (
@@ -183,11 +162,6 @@ const Update = ({
           ))}
         </div>
       )}
-
-      {/* 새 파일 추가 */}
-      <div className={styles.fileInput}>
-        <input type="file" multiple onChange={handleFileChange} />
-      </div>
 
       <div className={styles.btnBox}>
         <Link to="/boards" className={styles.btn}>목록</Link>

@@ -66,10 +66,10 @@ public class FileController {
     public ResponseEntity<?> createForm(Files files) {
         try {
             boolean result = fileService.upload(files);
-            if (result){
-                String fileUrl = files.getFilePath();  // 업로드된 파일의 URL을 얻음
+            if (result) {
+                String fileUrl = files.getFilePath(); // 업로드된 파일의 URL을 얻음
                 return new ResponseEntity<>(files, HttpStatus.OK);
-            }else
+            } else
                 return new ResponseEntity<>("FAILE", HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -140,7 +140,9 @@ public class FileController {
     public void fileDownload(
             @PathVariable("id") String id,
             HttpServletResponse response) throws Exception {
-        fileService.download(id, response);
+        System.out.println("Controller: download called for ID = " + id);
+        boolean result = fileService.download(id, response);
+        System.out.println("Controller: download result = " + result);
     }
 
     @GetMapping("/img/{id}")
@@ -160,8 +162,7 @@ public class FileController {
 
         // 확장자 기반 MIME 결정
         String ext = filePath.substring(filePath.lastIndexOf(".") + 1);
-        String mimeType = "image/" + ext; // "imgae" 오타 수정
-
+        String mimeType = "image/" + ext;
         try {
             MediaType mType = MediaType.valueOf(mimeType);
             response.setContentType(mType.toString());

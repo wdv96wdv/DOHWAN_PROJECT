@@ -3,34 +3,16 @@ header.header {
   justify-content: space-between;
   align-items: center;
   padding: 10px 20px;
-  background-color: #fff; /* 항상 라이트 */
-  color: #333; /* 항상 라이트 글자색 */
+  background-color: #fff;
+  color: #333;
   border-bottom: 1px solid #ddd;
   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
-}
-
-.btn {
-    font-weight: 700;
-}
-
-/* ========================= */
-/* 로고 스타일 */
-/* ========================= */
-.logo-container {
-  display: flex;
-  align-items: center;
 }
 
 .logo-container img {
   height: 80px;
   width: auto;
-  transition: transform .3s ease, box-shadow .3s ease;
   cursor: pointer;
-}
-
-
-.logo-container img {
-  height: 80px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -38,15 +20,31 @@ header.header {
   display: flex;
   gap: 10px;
 }
-.btn,.btn:link,.btn:visited {
-    display: inline-block;
-    text-decoration: none;
-    font-size: 16px;
-    border: none;
-    border-radius: 9px;
-    font-family: inherit;
-    padding: 8px 16px;
-    transition: background .2s ease,transform .2s ease
+
+.btn,
+.btn:link,
+.btn:visited {
+  display: inline-block;
+  text-decoration: none;
+  font-size: 16px;
+  border: none;
+  border-radius: 9px;
+  font-family: inherit;
+  padding: 8px 16px;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.util li a,
+.util li button {
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: #333;
+  text-decoration: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s ease;
 }
 
 .util li a:hover,
@@ -54,17 +52,52 @@ header.header {
   background-color: rgba(0, 0, 0, 0.05);
 }
 
-.util li button,.util li a {
-    background: none;
-    border: none;
-    font-size: 14px;
-    color: #333;
-    text-decoration: none;
-    padding: 6px 12px;
-    border-radius: 4px;
-    transition: background .2s ease;
-    cursor: pointer;
-    font-size: 16px
+/* ============================= */
+/* ✅ 햄버거 버튼 (기본: 숨김) */
+/* ============================= */
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 28px;
+  color: #333;
 }
 
+/* ============================= */
+/* ✅ 반응형 (모바일 이하 768px) */
+/* ============================= */
+@media (max-width: 768px) {
+  header.header {
+    position: relative;
+  }
 
+  .menu-toggle {
+    display: block;
+    position: absolute;
+    right: 20px;   /* 👉 오른쪽 끝으로 이동 */
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1100; /* 메뉴보다 위에 표시 */
+  }
+
+  .util {
+    position: absolute;
+    top: 70px;
+    right: 20px;
+  }
+
+  .util ul {
+    display: none;
+    flex-direction: column;
+    background: #fff;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+  }
+
+  .util.active ul {
+    display: flex;
+  }
+}

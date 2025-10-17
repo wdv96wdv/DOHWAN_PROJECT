@@ -97,6 +97,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </delete>
 
+     <!-- 파일 삭제 -->
+    <delete id="deleteById">
+        DELETE FROM files
+        WHERE id = #{id}
+    </delete>
+
     <!-- 부모 테이블 기준 삭제 -->
     <delete id="deleteByParent">
         DELETE FROM files

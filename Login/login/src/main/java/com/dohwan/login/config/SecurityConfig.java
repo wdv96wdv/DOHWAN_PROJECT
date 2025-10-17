@@ -66,14 +66,15 @@ public class SecurityConfig {
 				// CORS 활성화 (Spring Security 6.1 기준)
 				.cors(cors -> cors.configurationSource(corsConfigurationSource())) // ✅ 명확히 지정
 				.authorizeHttpRequests(auth -> auth
-						.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // ✅ preflight 허용
-						.requestMatchers(
-								"/login",
-								"/join",
-								"/",
-								"/boards/**" // ✅ 게시판 관련 API는 누구나 접근 가능하도록
-						).permitAll()
-						.anyRequest().authenticated());
+						// 로컬
+						.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // preflight 허용
+                        .requestMatchers("/**").permitAll() // 로컬용 전체 허용
+				
+						// 운영
+						//.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // ✅ preflight 허용
+						//.requestMatchers("/login","/join","/","/boards/**").permitAll()
+						//.anyRequest().authenticated()
+						);
 
 		// JWT 필터 추가
 		http.addFilterAt(new JwtAuthenticationFilter(authenticationManager, jwtProvider),

@@ -36,8 +36,8 @@ const List = ({ list = [], pagination }) => {
       <table className={styles.table}>
         {window.innerWidth > 768 && (
           <colgroup>
-            <col style={{ width: '10%' }} />
-            <col style={{ width: '15%' }} />
+            <col style={{ width: '5%' }} />
+            <col style={{ width: '20%' }} />
             <col style={{ width: '45%' }} />
             <col style={{ width: '15%' }} />
             <col style={{ width: '15%' }} />
@@ -60,27 +60,25 @@ const List = ({ list = [], pagination }) => {
               </td>
             </tr>
           ) : (
-            list.map((board) => {
-              return (
-                <tr key={board.no}>
-                  <td>{board.no}</td>
-                  <td>
-                    <img
-                      src={board.file.filePath}
-                      alt={board.mainFile?.originName || 'no-image'}
-                      className={styles.boardImg}
-                    />
-                  </td>
-                  <td>
-                    <Link to={`/boards/${board.id}`} className={styles.link}>
-                      {board.title}
-                    </Link>
-                  </td>
-                  <td>{board.writer}</td>
-                  <td>{format.formatDate(board.createdAt)}</td>
-                </tr>
-              );
-            })
+            list.map((board) => (
+              <tr key={board.no}>
+                <td>{board.no}</td>
+                <td>
+                  <img
+                    src={board.file?.filePath || noImage}
+                    alt={board.file?.originName || 'no-image'}
+                    className={styles.boardImg}
+                  />
+                </td>
+                <td>
+                  <Link to={`/boards/${board.id}`} className={styles.link}>
+                    {board.title}
+                  </Link>
+                </td>
+                <td>{board.writer}</td>
+                <td>{format.formatDate(board.createdAt)}</td>
+              </tr>
+            ))
           )}
         </tbody>
       </table>

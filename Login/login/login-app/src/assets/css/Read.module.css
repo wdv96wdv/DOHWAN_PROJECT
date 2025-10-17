@@ -1,146 +1,22 @@
 @import './common.module.css';
 
+.container { composes: container from './common.module.css'; }
+.title { composes: title from './common.module.css'; }
+.btnBox { composes: btnBox from './common.module.css'; }
+.fileList { composes: fileList from './common.module.css'; }
+.fileItem { composes: fileItem from './common.module.css'; }
+.fileImage { composes: fileImage from './common.module.css'; }
+.badge { composes: badge from './common.module.css'; }
+.thumbnailBox { composes: thumbnailBox from './common.module.css'; }
+.mainImage { composes: mainImage from './common.module.css'; }
+
+/* ✅ 조회 전용 */
+/* 첨부파일이 없을 때도 너무 작아보이지 않게 컨테이너 높이 보정 */
 .container {
-  composes: container from './common.module.css';
-}
-
-.title {
-  composes: title from './common.module.css';
-}
-
-/* 전체 컨테이너 */
-.container {
-  padding: 20px;
-  background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  font-family: 'Pretendard', sans-serif;
-  margin-top: 100px;
-  margin-bottom: auto;
-}
-
-/* 제목 */
-.title {
-  font-size: 28px;
-  font-weight: 700;
-  color: #333;
-  text-align: center;
-}
-
-/* 공통 입력 스타일 */
-.formInput {
-  width: 100%;
-  padding: 10px 14px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  background-color: #fafafa;
-  margin-bottom: 16px;
-  font-size: 15px;
-}
-
-/* 🧊 대표 썸네일 섹션 */
-.thumbnailBox {
-  text-align: center;
-  margin: 24px 0;
-  position: relative;
-}
-
-
-
-.badge {
-  display: inline-block;
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  background: #ff5b5b;
-  color: white;
-  padding: 4px 10px;
-  font-size: 13px;
-  border-radius: 10px;
-}
-
-.mainImage {
-  max-width: 100%;
-  height: auto;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.12);
-}
-
-/* 첨부파일 목록 */
-.fileList {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 16px;
-  margin-top: 24px;
-}
-
-.fileItem {
-  background: #f8f9fa;
-  border-radius: 12px;
-  padding: 12px;
-  text-align: center;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-  transition: transform 0.2s ease;
-}
-
-.fileItem:hover {
-  transform: translateY(-2px);
-}
-
-.fileImage {
-  width: 100%; /* 부모 요소의 너비에 맞게 이미지 크기 조정 */
-  max-width: 300px; /* 최대 크기 제한 (필요에 따라 조정) */
-  height: auto; /* 자동 높이로 비율 유지 */
-  object-fit: contain; /* 비율을 유지하면서 이미지가 잘리지 않게 조정 */
-  border-radius: 8px;
-  margin-bottom: 8px;
-}
-
-/* 버튼 박스 */
-.btnBox {
-  margin-top: 24px;
+  min-height: 70vh; /* 화면의 70% 높이 확보 */
   display: flex;
-  justify-content: center;
-  gap: 10px;
-}
-
-.btn {
-  background-color: #4b8cf5;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 8px 14px;
-  cursor: pointer;
-  transition: 0.2s ease-in-out;
-  font-size: 20px;
-}
-
-.btn:hover {
-  background-color: #3a77d4;
-}
-
-.btn:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-
-/* 🧱 반응형 */
-@media (max-width: 768px) {
-  .container {
-    width: 90%;
-    padding: 16px;
-  }
-
-  .title {
-    font-size: 22px;
-  }
-
-  .fileImg {
-    height: 120px;
-  }
-
-  .btn {
-    font-size: 13px;
-    padding: 6px 12px;
-  }
+  flex-direction: column;
+  justify-content: flex-start; /* 필요시 center로 변경 가능 */
+  padding: 40px 20px; /* 기본보다 약간 여백 늘림 */
+  min-height: 65vh;
 }

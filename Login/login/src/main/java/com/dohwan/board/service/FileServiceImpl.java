@@ -4,6 +4,7 @@ package com.dohwan.board.service;
 import java.io.File;
 import java.io.FileInputStream;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.UUID;
 
@@ -184,38 +185,91 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public boolean download(String id, HttpServletResponse response) throws Exception {
+        System.out.println("Download method called for ID: " + id);
         Files file = fileMapper.selectById(id);
 
         // 파일이 없으면
         if (file == null) {
+            System.out.println("Service: file not found");
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return false;
         }
 
-        // 파일 입력
-        String fileName = file.getOriginName(); // 파일명 (다운로드시-원본파일명)
+        String fileName = file.getOriginName(); // 다운로드 시 원본 파일명
         String filePath = file.getFilePath(); // 파일 경로
         File downloadFile = new File(filePath);
-        FileInputStream fis = new FileInputStream(downloadFile);
 
-        // 파일 출력
-        ServletOutputStream sos = response.getOutputStream();
+        if (!downloadFile.exists()) {
+            System.out.println("Service: file does not exist on disk");
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            return false;
+        }
 
-        // 파일 다운로드를 위한 응답 헤더 세팅
-        // - Content-Type : application/octet-stream
-        // - Content-Disposition : attachment, filename="파일명.확장자"
-        fileName = URLEncoder.encode(fileName, "UTF-8");
-        response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
-        response.setHeader("Content-Disposition",
-                "attachment; filename\"" + fileName + " \"");
+        // MIME 타입 자동 감지
+        String contentType = java.nio.file.Files.probeContentType(downloadFile.toPath());
+        if (contentType == null) {
+            contentType = MediaType.APPLICATION_OCTET_STREAM_VALUE;
+        }
+        System.out.println("Detected MIME type: " + contentType);
 
-        // 다운로드
-        boolean result = FileCopyUtils.copy(fis, sos) > 0;
-        fis.close();
-        sos.close();
-        return result;
+        // UTF-8 파일명 인코딩
+        fileName = URLEncoder.encode(fileName, StandardCharsets.UTF_8)
+                .replaceAll("\\+", "%20"); // 공백 깨짐 방지
 
+        // 응답 헤더 설정
+        response.setContentType(contentType);
+        response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
+
+        // 파일 스트림 처리
+        try (FileInputStream fis = new FileInputStream(downloadFile);
+                ServletOutputStream sos = response.getOutputStream()) {
+            FileCopyUtils.copy(fis, sos);
+            sos.flush();
+            System.out.println("Service: file sent successfully");
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return false;
+        }
     }
+
+    // 로컬
+    // @Override
+    // public boolean download(String id, HttpServletResponse response) throws
+    // Exception {
+    // Files file = fileMapper.selectById(id);
+
+    // // 파일이 없으면
+    // if (file == null) {
+    // response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+    // return false;
+    // }
+
+    // // 파일 입력
+    // String fileName = file.getOriginName(); // 파일명 (다운로드시-원본파일명)
+    // String filePath = file.getFilePath(); // 파일 경로
+    // File downloadFile = new File(filePath);
+    // FileInputStream fis = new FileInputStream(downloadFile);
+
+    // // 파일 출력
+    // ServletOutputStream sos = response.getOutputStream();
+
+    // // 파일 다운로드를 위한 응답 헤더 세팅
+    // // - Content-Type : application/octet-stream
+    // // - Content-Disposition : attachment, filename="파일명.확장자"
+    // fileName = URLEncoder.encode(fileName, "UTF-8");
+    // response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
+    // response.setHeader("Content-Disposition",
+    // "attachment; filename=\"" + fileName + " \"");
+
+    // // 다운로드
+    // boolean result = FileCopyUtils.copy(fis, sos) > 0;
+    // fis.close();
+    // sos.close();
+    // return result;
+
+    // }
 
     @Override
     public List<Files> listByParent(Files file) {
