@@ -108,7 +108,7 @@ const UpdateContainer = () => {
 
       // DB 삭제 시 실패해도 UI 진행
       try {
-        await files.remove(fileId)
+        await files.removeFromSupabase(fileId)
       } catch (err) {
         console.warn('DB 삭제 실패', err)
       }

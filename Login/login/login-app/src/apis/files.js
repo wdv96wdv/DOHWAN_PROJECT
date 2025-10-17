@@ -96,3 +96,6 @@ export const deleteMultipleFilesFromSupabase = async (filePaths) => {
     throw err;
   }
 };
+
+// 파일 삭제
+export const removeFromSupabase = (id) => axios.delete(`/files/${id}`)
