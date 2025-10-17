@@ -1,9 +1,10 @@
 import '../../assets/css/user.css';
 import React, { useState } from 'react'
 import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom'; // 추가 ✅
 
 const UserForm = ({ userInfo, updateUser, deleteUser }) => {
-
+const navigate = useNavigate(); // 이동용 훅
    // Caps Lock 상태
   const [capsLockOn, setCapsLockOn] = useState(false)
 
@@ -105,6 +106,7 @@ const UserForm = ({ userInfo, updateUser, deleteUser }) => {
               if (result.isConfirmed) {
                 deleteUser(userInfo.username);
                 Swal.fire('완료!', '회원 탈퇴가 완료되었습니다.', 'success');
+                navigate("/") // 메인으로 이동
               }
             })
           }}
