@@ -10,6 +10,9 @@ import User from './pages/Login/User';
 import About from './pages/Login/About';
 import Record from './pages/Login/Record';
 
+import Course from './pages/Course';
+import Event from './pages/Event';
+
 import Listpage from './pages/board/Listpage';
 import Insertpage from './pages/board/Insertpage';
 import Readpage from './pages/board/Readpage';
@@ -17,6 +20,7 @@ import Updatepage from './pages/board/Updatepage';
 
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
+
 
 import "./assets/css/common.css";
 import "./assets/css/header.css";
@@ -26,6 +30,8 @@ import "./assets/css/join.css";
 import "./assets/css/user.css";
 import "./assets/css/record.css";
 import "./assets/css/footer.css";
+import "./assets/css/Course.module.css"
+import "./assets/css/Event.module.css"
 
 const App = () => {
   const [theme, setTheme] = useState('light');
@@ -44,7 +50,8 @@ const App = () => {
             <Route path="/user" element={<User />} />
             <Route path="/about" element={<About />} />
             <Route path="/record" element={<Record />} />
-
+            <Route path="/course" element={<Course />} />
+            <Route path="/event" element={<Event />} />
             <Route path="/boards" element={<Listpage />} />
             <Route path="/boards/insert" element={<Insertpage />} />
             <Route path="/boards/:id" element={<Readpage />} />

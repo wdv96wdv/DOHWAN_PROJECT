@@ -1,12 +1,27 @@
+/* ============================= */
+/* 공통 스타일 - 테마 설정 */
+/* ============================= */
+:root {
+  --primary-color: #3498db;
+  --secondary-color: #2c3e50;
+  --background-color: #fff;
+  --text-color: #333;
+  --hover-color: rgba(0, 0, 0, 0.1);
+  --border-color: #ddd;
+}
+
+/* ============================= */
+/* 헤더 기본 스타일 */
 header.header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 10px 20px;
-  background-color: #fff;
-  color: #333;
-  border-bottom: 1px solid #ddd;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  border-bottom: 1px solid var(--border-color);
   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+  position: relative; /* 모바일 메뉴 위치 기준 */
 }
 
 .logo-container img {
@@ -16,11 +31,60 @@ header.header {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+
+/* ============================= */
+/* 핵심 서비스 메뉴 (PC버전) */
+.main-menu ul {
+  display: flex;
+  gap: 20px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.main-menu li a {
+  text-decoration: none;
+  font-size: 16px;
+  color: var(--text-color);
+  padding: 6px 12px;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.main-menu li a:hover {
+  background-color: var(--hover-color);
+}
+
+/* ============================= */
+/* 유틸 메뉴 (로그인 / 회원가입 / 소개 / Darkmode) */
 .util ul {
   display: flex;
   gap: 10px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
+.util li a,
+.util li button {
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: var(--text-color);
+  text-decoration: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.util li a:hover,
+.util li button:hover {
+  background-color: var(--hover-color);
+}
+
+/* ============================= */
+/* 버튼 기본 스타일 */
 .btn,
 .btn:link,
 .btn:visited {
@@ -34,70 +98,107 @@ header.header {
   transition: background 0.2s ease, transform 0.2s ease;
 }
 
-.util li a,
-.util li button {
-  background: none;
-  border: none;
-  font-size: 16px;
-  color: #333;
-  text-decoration: none;
-  padding: 6px 12px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-.util li a:hover,
-.util li button:hover {
-  background-color: rgba(0, 0, 0, 0.05);
+.btn:hover {
+  background-color: var(--hover-color);
+  transform: scale(1.05);
 }
 
 /* ============================= */
-/* ✅ 햄버거 버튼 (기본: 숨김) */
-/* ============================= */
+/* 햄버거 버튼 (모바일용) */
 .menu-toggle {
   display: none;
   background: none;
   border: none;
   cursor: pointer;
   font-size: 28px;
-  color: #333;
+  color: var(--text-color);
+  z-index: 2000; /* 항상 위에 표시 */
+}
+
+/* PC 메뉴 표시 */
+.main-menu,
+.util {
+  display: flex;
+}
+
+/* 모바일 메뉴 기본 숨김 */
+.mobile-menu {
+  display: none;
+  flex-direction: column;
+  position: absolute;
+  top: 70px;
+  left: 20px;
+  right: 20px;
+  background: var(--background-color);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  padding: 10px 0;
+  z-index: 1500;
+}
+
+/* 모바일 메뉴 열렸을 때 표시 */
+.mobile-menu.active {
+  display: flex;
+}
+
+/* 모바일 메뉴 리스트 */
+.mobile-menu ul {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.mobile-menu li a,
+.mobile-menu li button {
+  display: block;
+  padding: 10px;
+  text-align: center;
+  width: 100%;
+}
+
+.mobile-menu li a:hover,
+.mobile-menu li button:hover {
+  background-color: var(--hover-color);
 }
 
 /* ============================= */
-/* ✅ 반응형 (모바일 이하 768px) */
-/* ============================= */
+/* 모바일 대응 (max-width: 768px) */
 @media (max-width: 768px) {
-  header.header {
-    position: relative;
+  .main-menu,
+  .util {
+    display: none; /* PC 메뉴 숨김 */
   }
 
   .menu-toggle {
     display: block;
-    position: absolute;
-    right: 20px;   /* 👉 오른쪽 끝으로 이동 */
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 1100; /* 메뉴보다 위에 표시 */
   }
+}
 
-  .util {
-    position: absolute;
-    top: 70px;
-    right: 20px;
-  }
+/* ============================= */
+/* 다크모드 스타일 */
+body.dark-mode {
+  --primary-color: #34495e;
+  --secondary-color: #ecf0f1;
+  --background-color: #2c3e50;
+  --text-color: #ecf0f1;
+  --border-color: #7f8c8d;
+  --hover-color: rgba(255, 255, 255, 0.2);
+}
 
-  .util ul {
-    display: none;
-    flex-direction: column;
-    background: #fff;
-    padding: 10px;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    z-index: 1000;
-  }
+body.dark-mode .header {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  border-bottom: 1px solid var(--border-color);
+}
 
-  .util.active ul {
-    display: flex;
-  }
+body.dark-mode .main-menu li a,
+body.dark-mode .util li a,
+body.dark-mode .util li button {
+  color: var(--text-color);
+}
+
+body.dark-mode .main-menu li a:hover,
+body.dark-mode .util li a:hover,
+body.dark-mode .util li button:hover {
+  background-color: var(--hover-color);
 }

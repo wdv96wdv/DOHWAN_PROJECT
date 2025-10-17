@@ -1,0 +1,226 @@
+/* ===== 컨테이너 ===== */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+/* ===== Hero Section ===== */
+.hero {
+  text-align: center;
+  padding: 60px 20px;
+  background-color: #f0f8ff;
+  border-radius: 12px;
+  margin-bottom: 50px;
+}
+
+.hero h1 {
+  font-size: 2.8rem;
+  margin-bottom: 15px;
+}
+
+.hero p {
+  font-size: 1.3rem;
+  color: #555;
+}
+
+/* ===== Courses ===== */
+.courses h2 {
+  font-size: 2.2rem;
+  margin-bottom: 30px;
+  text-align: center;
+  color: #222;
+}
+
+.courseList {
+  display: flex;
+  flex-direction: column;
+  gap: 40px; /* 카드 사이 간격 넓힘 */
+}
+
+.courseCard {
+  background: #f9f9f9;
+  padding: 28px;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.courseCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 22px rgba(0,0,0,0.12);
+}
+
+.courseImageContainer {
+  position: relative;
+  cursor: pointer;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.courseImageContainer:hover .overlay {
+  opacity: 1;
+  background: rgba(0,0,0,0.25);
+  transition: opacity 0.3s;
+}
+
+.courseImage {
+  width: 100%;
+  max-height: 300px;
+  object-fit: cover;
+  border-radius: 12px;
+  transition: transform 0.3s;
+}
+
+.courseImageContainer:hover .courseImage {
+  transform: scale(1.03);
+}
+
+.guideText {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  font-size: 16px;
+  color: #fff;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
+}
+
+.overlay {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 24px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.courseTitle {
+  font-size: 26px;
+  margin: 16px 0 8px;
+  color: #222;
+}
+
+.courseDesc {
+  font-size: 19px;
+  color: #555;
+  line-height: 1.6;
+}
+
+/* ===== 지도 ===== */
+.mapContainer {
+  margin-top: 20px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* ===== CTA Section ===== */
+.cta {
+  text-align: center;
+  margin-top: 60px;
+  padding: 50px 20px;
+  background-color: #3498db;
+  color: white;
+  border-radius: 12px;
+}
+
+.cta button {
+  padding: 14px 28px;
+  font-size: 1.1rem;
+  background-color: white;
+  color: #3498db;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: background-color 0.3s;
+}
+
+.cta button:hover {
+  background-color: #ddd;
+  color: #3498db;
+}
+
+/* ===== Close 버튼 ===== */
+.closeBtn {
+  margin-top: 16px;
+  padding: 10px 18px;
+  border: none;
+  background-color: #3498db;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.closeBtn:hover {
+  background-color: #2980b9;
+}
+
+/* ===== 반응형 ===== */
+@media (max-width: 1024px) {
+  .hero h1 {
+    font-size: 2.4rem;
+  }
+  .hero p {
+    font-size: 1.2rem;
+  }
+  .courseTitle {
+    font-size: 24px;
+  }
+  .courseDesc {
+    font-size: 18px;
+  }
+  .courseImage {
+    max-height: 260px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 30px 16px;
+  }
+  .hero h1 {
+    font-size: 2rem;
+  }
+  .hero p {
+    font-size: 1.1rem;
+  }
+  .courses h2 {
+    font-size: 1.8rem;
+  }
+  .courseTitle {
+    font-size: 22px;
+  }
+  .courseDesc {
+    font-size: 16px;
+  }
+  .courseImage {
+    max-height: 220px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero h1 {
+    font-size: 1.8rem;
+  }
+  .hero p {
+    font-size: 1rem;
+  }
+  .courses h2 {
+    font-size: 1.6rem;
+  }
+  .courseTitle {
+    font-size: 20px;
+  }
+  .courseDesc {
+    font-size: 15px;
+  }
+  .courseImage {
+    max-height: 180px;
+  }
+}

@@ -70,11 +70,6 @@ body.custom-bg::before {
     z-index: 1;
 }
 
-.header {
-    text-align: center;
-    margin-bottom: 40px;
-    position: relative;
-}
 
 .header h1 {
     font-family: 'Orbitron', monospace;

@@ -169,6 +169,7 @@
   border-radius: 10px;
 }
 
+
 /* ✅ 반응형 */
 @media (max-width: 768px) {
   .container {

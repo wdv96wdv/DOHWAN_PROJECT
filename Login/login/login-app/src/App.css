@@ -1,3 +1,5 @@
+@import "leaflet/dist/leaflet.css";
+
 /* 앱 전체 다크 모드 */
 .app.light {
   --bg-color: #fff;
