@@ -8,8 +8,16 @@ import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import * as format from '../../utils/format';
 import '../../assets/css/common.module.css'
+import Swal from "sweetalert2";
 
 const List = ({ list = [], pagination }) => {
+
+  // 로그인 여부 확인 함수
+  const isLoggedIn = () => {
+    const token = localStorage.getItem("jwt");
+    return !!token; // token이 있으면 true, 없으면 false
+  };
+
   const [pageList, setPageList] = useState([]);
   const API_URL = 'https://dohwan-project.onrender.com'; // 운영 서버 주소
 
@@ -29,9 +37,26 @@ const List = ({ list = [], pagination }) => {
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>🏃‍♀️ 러닝 커뮤니티</h1>
-      <Link to="/boards/insert" className={styles.btn}>
-        글쓰기
-      </Link>
+      {isLoggedIn() ? (
+        <Link to="/boards/insert" className={styles.btn}>
+          글쓰기
+        </Link>
+      ) : (
+        <button
+          className={styles.btn}
+          // 버튼 클릭 이벤트
+          onClick={() => {
+            Swal.fire({
+              icon: "info", // info, warning, success 등 선택 가능
+              title: "로그인 필요",
+              text: "글쓰기는 로그인 후 이용 가능합니다.",
+              confirmButtonText: "확인"
+            });
+          }}
+        >
+          글쓰기
+        </button>
+      )}
 
       <table className={styles.table}>
         {window.innerWidth > 768 && (

@@ -41,12 +41,23 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public boolean insert(Boards boards) {
-        // 게시글 등록
-        int result = boardMapper.insert(boards);
-        // 파일 URL만 전달하므로, 파일 관련 로직 수정
-        result += upload(boards);
+        int result = 0;
+        try {
+            // 게시글 등록
+            result = boardMapper.insert(boards);
+            log.info("게시글 등록 성공, no={}", boards.getNo());
+
+            // 파일 업로드
+            int uploadResult = upload(boards);
+            log.info("파일 업로드 결과: {}", uploadResult);
+            result += uploadResult;
+
+        } catch (Exception e) {
+            log.error("게시글 등록 실패", e);
+        }
         return result > 0;
     }
+
 
     /**
      * 파일 업로드 (파일 URL만 저장)
@@ -59,48 +70,64 @@ public class BoardServiceImpl implements BoardService {
         String pTable = "boards";
         Long pNo = board.getNo();
 
+        if (pNo == null) {
+            log.warn("board.getNo()가 null입니다. 게시글 insert가 정상적으로 이루어졌는지 확인하세요.");
+            return 0;
+        }
+
         List<Files> uploadFileList = new ArrayList<>();
 
-        // mainFile 처리
-        FileInfo mainFileInfo = board.getMainFile();
-        if (mainFileInfo != null && mainFileInfo.getUrl() != null && !mainFileInfo.getUrl().isEmpty()) {
-            Files mainFile = new Files();
-            mainFile.setPTable(pTable);
-            mainFile.setPNo(pNo);
-            mainFile.setData(
-                    mainFileInfo.getUrl(),
-                    mainFileInfo.getName(),
-                    mainFileInfo.getOriginName(),
-                    mainFileInfo.getSize());
-            mainFile.setType(Files.FileType.MAIN);
-            uploadFileList.add(mainFile);
-        }
-
-        // files 처리
-        List<FileInfo> fileInfos = board.getFiles();
-        if (fileInfos != null && !fileInfos.isEmpty()) {
-            for (FileInfo info : fileInfos) {
-                if (info.getUrl() == null || info.getUrl().isEmpty())
-                    continue;
-                Files file = new Files();
-                file.setPNo(pNo);
-                file.setPTable(pTable);
-                file.setData(
-                        info.getUrl(),
-                        info.getName(),
-                        info.getOriginName(),
-                        info.getSize());
-                file.setType(Files.FileType.SUB);
-                uploadFileList.add(file);
-            }
-        }
         try {
-            result += fileService.upload(uploadFileList);
+            // mainFile 처리
+            FileInfo mainFileInfo = board.getMainFile();
+            if (mainFileInfo != null && mainFileInfo.getUrl() != null && !mainFileInfo.getUrl().isEmpty()) {
+                Files mainFile = new Files();
+                mainFile.setPTable(pTable);
+                mainFile.setPNo(pNo);
+                mainFile.setData(
+                        mainFileInfo.getUrl(),
+                        mainFileInfo.getName(),
+                        mainFileInfo.getOriginName(),
+                        mainFileInfo.getSize()
+                );
+                mainFile.setType(Files.FileType.MAIN);
+                uploadFileList.add(mainFile);
+            }
+
+            // sub files 처리
+            List<FileInfo> fileInfos = board.getFiles();
+            if (fileInfos != null && !fileInfos.isEmpty()) {
+                for (FileInfo info : fileInfos) {
+                    if (info.getUrl() == null || info.getUrl().isEmpty()) continue;
+
+                    Files file = new Files();
+                    file.setPTable(pTable);
+                    file.setPNo(pNo);
+                    file.setData(
+                            info.getUrl(),
+                            info.getName(),
+                            info.getOriginName(),
+                            info.getSize()
+                    );
+                    file.setType(Files.FileType.SUB);
+                    uploadFileList.add(file);
+                }
+            }
+
+            log.info("업로드할 파일 리스트: {}", uploadFileList);
+
+            // 실제 업로드
+            if (!uploadFileList.isEmpty()) {
+                result = fileService.upload(uploadFileList);
+                log.info("fileService.upload() 결과: {}", result);
+            } else {
+                log.info("업로드할 파일이 없습니다.");
+            }
 
         } catch (Exception e) {
-            log.error("게시글 파일 업로드가 실패 하였습니다.");
-            e.printStackTrace();
+            log.error("파일 업로드 중 예외 발생", e);
         }
+
         return result;
     }
 

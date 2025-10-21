@@ -104,12 +104,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     Users user = customUser.getUser();
     String id = user.getId();
     String username = user.getUsername();
+    Long no = user.getNo();
     List<String> roles = customUser.getAuthorities()
         .stream()
         .map(GrantedAuthority::getAuthority)
         .collect(Collectors.toList());
     // 💍 JWT 생성
-    String jwt = jwtProvider.createToken(id, username, roles);
+    String jwt = jwtProvider.createToken(id, username, roles, no);
 
     // Authorization 응답 헤더 세팅
     response.addHeader("Authorization", SecurityConstants.TOKEN_PREFIX + jwt);

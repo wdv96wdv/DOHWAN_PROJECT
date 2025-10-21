@@ -16,6 +16,7 @@ public class Boards {
     private String content; // 내용
     private Date createdAt; // 등록일자
     private Date updatedAt; // 수정일자
+    private Long userNo; //user(FK)
 
     // 🗒️ 파일
     // private MultipartFile mainFile;
@@ -37,4 +38,13 @@ public class Boards {
     public Boards() {
         this.id = java.util.UUID.randomUUID().toString();
     }
+    // MyBatis가 찾을 수 있는 getter
+    public Long getUserNo() {
+        return userNo;
+    }
+
+    public void setUserNo(Long userNo) {
+        this.userNo = userNo;
+    }
+
 }

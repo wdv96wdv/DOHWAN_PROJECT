@@ -11,6 +11,23 @@ const Read = ({ board = {}, fileList = [], onDownload }) => {
   const { id } = useParams();
   const API_URL = 'https://dohwan-project.onrender.com'; // 운영 서버 주소
 
+  // JWT에서 user_no 추출
+  const getUserNoFromJWT = () => {
+    const token = localStorage.getItem("jwt");
+    if (!token) return null;
+    try {
+      const payload = JSON.parse(atob(token.split(".")[1]));
+      return payload.no;
+    } catch {
+      return null;
+    }
+  };
+
+  const user_no = getUserNoFromJWT();
+  console.log("board 전체:", board);
+  console.log("user_no=" + user_no);
+  console.log("board.userNo=" + board.userNo);
+
   // 대표 파일 찾기 (메인 파일 또는 썸네일)
   const mainFile = fileList?.find(
     (f) => f.type?.toUpperCase() === 'MAIN' || f.type?.toUpperCase() === 'THUMBNAIL'
@@ -81,7 +98,10 @@ const Read = ({ board = {}, fileList = [], onDownload }) => {
       {/* 버튼 영역 */}
       <div className={styles.btnBox}>
         <Link to="/boards" className={styles.btn}>목록</Link>
-        <Link to={`/boards/update/${id}`} className={styles.btn}>수정</Link>
+        {/* 로그인된 본인 글만 수정 버튼 표시 */}
+        {user_no && user_no === board.userNo && (
+          <Link to={`/boards/update/${id}`} className={styles.btn}>수정</Link>
+        )}
       </div>
     </div>
   );

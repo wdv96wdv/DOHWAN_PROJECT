@@ -16,6 +16,21 @@ const Insert = ({ onInsert }) => {
   const [filePreviews, setFilePreviews] = useState([]);
   const [submitting, setSubmitting] = useState(false);
 
+  const getUserNoFromJWT = () => {
+    const token = localStorage.getItem("jwt");
+    console.log("jwt ="+token);
+    if (!token) return null;
+
+    try {
+      const payload = JSON.parse(atob(token.split(".")[1]));
+      console.log("payload:", payload); // user_no가 정상인지 확인
+      return payload.no; // JWT payload에서 사용자 no(pk)
+    } catch (err) {
+      console.error("JWT 파싱 실패:", err);
+      return null;
+    }
+  };
+
   const handleMainFileChange = (e) => {
     const file = e.target.files[0];
     setMainFile(file);
@@ -31,6 +46,11 @@ const Insert = ({ onInsert }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (submitting) return;
+
+    const userNo = getUserNoFromJWT();
+    if (!userNo) {
+      return Swal.fire('로그인 필요', '글쓰기는 로그인 후 이용 가능합니다.', 'warning');
+    }
 
     if (!title || !writer || !content) {
       return Swal.fire('입력 누락', '제목, 작성자, 내용을 입력해주세요.', 'warning');
@@ -61,7 +81,7 @@ const Insert = ({ onInsert }) => {
       });
     }
 
-    const data = { title, writer, content, mainFile: mainFileInfo, files: filesInfo };
+    const data = { title, writer, content, mainFile: mainFileInfo, files: filesInfo, userNo};
     const headers = { 'Content-Type': 'multipart/form-data' };
 
     Swal.fire({

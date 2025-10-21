@@ -52,7 +52,7 @@ const Header = ({ theme, toggleTheme }) => {
               <li><Link className="btn" to="/about">소개</Link></li>
             </>
           )}
-          <li><ThemeToggle theme={theme} toggleTheme={toggleTheme} /></li>
+          {/* <li><ThemeToggle theme={theme} toggleTheme={toggleTheme} /></li> */}
         </ul>
       </div>
 
@@ -82,7 +82,7 @@ const Header = ({ theme, toggleTheme }) => {
               <li><Link to="/about" onClick={closeMenu}>소개</Link></li>
             </>
           )}
-          <li><ThemeToggle theme={theme} toggleTheme={toggleTheme} /></li>
+          {/* <li><ThemeToggle theme={theme} toggleTheme={toggleTheme} /></li> */}
         </ul>
       </div>
     </header>

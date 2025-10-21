@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from "react";
-import Swal from "sweetalert2";
-import '../../assets/css/record.css';
+import React from "react";
+import "../../assets/css/record.css";
 
 export default function RecordForm({ formData, setFormData, onSubmit, submitText }) {
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   return (
@@ -14,18 +13,19 @@ export default function RecordForm({ formData, setFormData, onSubmit, submitText
       <form onSubmit={onSubmit}>
         <div className="form-grid">
           <div className="form-group">
-            <label htmlFor="exerciseName">러닝 제목 *</label>
+            <label htmlFor="exercise_name">러닝 제목 *</label>
             <input
               type="text"
-              id="exerciseName"
-              name="exerciseName"
-              value={formData.exerciseName}
+              id="exercise_name"
+              name="exercise_name"
+              value={formData.exercise_name}
               placeholder="예: 아침 러닝, 트레드밀 5km 등"
               maxLength={30}
               onChange={handleChange}
               required
             />
           </div>
+
           <div className="form-group">
             <label htmlFor="weight">거리 (km)</label>
             <input
@@ -37,21 +37,22 @@ export default function RecordForm({ formData, setFormData, onSubmit, submitText
               value={formData.weight}
               onChange={handleChange}
               placeholder="예: 5.2"
-
             />
           </div>
+
           <div className="form-group">
-            <label htmlFor="roundCount">평균 페이스 (분/km)</label>
+            <label htmlFor="round_count">평균 페이스 (분/km)</label>
             <input
-              type="number"
-              id="roundCount"
-              name="roundCount"
+              type="text"
+              id="round_count"
+              name="round_count"
               min="1"
               placeholder="예: 547 -> 5'47''"
-              value={formData.roundCount}
+              value={formData.round_count ?? ""}
               onChange={handleChange}
             />
           </div>
+
           <div className="form-group">
             <label htmlFor="reps">케이던스 (보/분)</label>
             <input
@@ -66,6 +67,7 @@ export default function RecordForm({ formData, setFormData, onSubmit, submitText
             />
           </div>
         </div>
+
         <div className="form-group">
           <label htmlFor="note">노트</label>
           <textarea
@@ -76,6 +78,7 @@ export default function RecordForm({ formData, setFormData, onSubmit, submitText
             onChange={handleChange}
           />
         </div>
+
         <div className="btn-container">
           <button type="submit" className="record">{submitText}</button>
         </div>
@@ -83,4 +86,3 @@ export default function RecordForm({ formData, setFormData, onSubmit, submitText
     </div>
   );
 }
-
