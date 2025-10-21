@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import styles from "../../assets/css/Common.module.css";
+import styles from "../../assets/css/common.module.css";
 import Swal from "sweetalert2"; 
 
 
