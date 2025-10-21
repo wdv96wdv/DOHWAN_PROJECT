@@ -1,4 +1,4 @@
-package com.dohwan.login.Controller;
+package com.dohwan.login.controller;
 import com.dohwan.login.entity.Records;
 import com.dohwan.login.repository.RecordRepository;
 

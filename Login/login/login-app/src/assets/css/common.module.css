@@ -168,6 +168,101 @@
   font-size: 13px;
   border-radius: 10px;
 }
+/* About / Privacy / Contact 전용 컨테이너 */
+
+.pageContainer {
+  max-width: 900px;
+  margin: 60px auto;
+  padding: 30px 25px;
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  font-family: 'Noto Sans KR', sans-serif;
+  color: #333333;
+  line-height: 1.7;
+}
+
+/* ===== 제목 ===== */
+.pageTitle {
+  font-size: 30px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 30px;
+  color: #222222;
+}
+
+/* ===== 섹션 ===== */
+.section {
+  margin-bottom: 30px;
+  padding: 20px;
+  border-radius: 12px;
+  background-color: #f8f9fa;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+}
+
+/* ===== 소제목 ===== */
+.subtitle {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #444444;
+}
+
+/* ===== 본문 텍스트 ===== */
+.pageText {
+  font-size: 15px;
+  color: #555555;
+  margin-bottom: 12px;
+}
+
+/* ===== 강조 박스 ===== */
+.highlight {
+  background-color: #eaf2ff;
+  padding: 12px 16px;
+  border-left: 4px solid #4b8cf5;
+  margin-bottom: 16px;
+  border-radius: 8px;
+  font-weight: 500;
+  color: #333333;
+}
+
+/* ===== 링크 ===== */
+.pageLink {
+  color: #4b8cf5;
+  text-decoration: underline;
+}
+
+.pageLink:hover {
+  color: #3a77d4;
+}
+
+/* ===== 이미지 ===== */
+.pageImage {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  margin: 15px 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+/* 글자 수 표시 */
+.charCount {
+  font-size: 14px;
+  color: #666;
+  margin-top: 5px;
+  text-align: right;
+}
+
+/* .formTextarea 스타일 (기존에 있는 스타일에 추가로 수정) */
+.formTextarea {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: vertical;
+  box-sizing: border-box; /* padding을 포함한 크기 조정 */
+}
 
 
 /* ✅ 반응형 */
@@ -182,5 +277,17 @@
   .btn {
     font-size: 13px;
     padding: 6px 12px;
+  }
+   .pageContainer {
+    width: 90%;
+    padding: 20px;
+  }
+
+  .pageTitle {
+    font-size: 22px;
+  }
+
+  .subtitle {
+    font-size: 18px;
   }
 }

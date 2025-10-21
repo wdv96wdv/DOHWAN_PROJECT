@@ -7,16 +7,15 @@ import ThemeToggle from '../../components/ThemeToggle/ThemeToggle';
 import { Menu } from 'lucide-react'; // 햄버거 아이콘
 
 const Header = ({ theme, toggleTheme }) => {
-  const { isLogin = false, logout = () => {} } = useContext(LoginContext) || {};
+  // LoginContext에서 roles와 isLogin 가져오기
+  const { isLogin = false, logout = () => {}, roles } = useContext(LoginContext) || {};
   const [menuOpen, setMenuOpen] = useState(false); // 모바일 메뉴 상태
 
-  const toggleMenu = () => {
-    setMenuOpen((prev) => !prev);
-  };
+  const toggleMenu = () => setMenuOpen(prev => !prev);
+  const closeMenu = () => setMenuOpen(false);
 
-  const closeMenu = () => {
-    setMenuOpen(false);
-  };
+  // ✅ 관리자 여부 확인
+  const isAdmin = roles?.isAdmin; // roles.isAdmin이 true면 관리자 메뉴 표시
 
   return (
     <header className={`header ${theme}`}>
@@ -34,6 +33,9 @@ const Header = ({ theme, toggleTheme }) => {
           <li><Link to="/record">기록</Link></li>
           <li><Link to="/event">이벤트</Link></li>
           <li><Link to="/boards">커뮤니티</Link></li>
+
+          {/* 관리자 메뉴 (ROLE_ADMIN만 표시) */}
+          {isAdmin && <li><Link to="/admin">관리자</Link></li>}
         </ul>
       </nav>
 
@@ -56,18 +58,19 @@ const Header = ({ theme, toggleTheme }) => {
         </ul>
       </div>
 
-      {/* 모바일용 햄버거 버튼 */}
+      {/* 모바일 햄버거 버튼 */}
       <button className="menu-toggle" onClick={toggleMenu} aria-label="메뉴 열기">
         <Menu size={28} />
       </button>
 
-      {/* 모바일 메뉴: main-menu + util 통합 */}
+      {/* 모바일 메뉴 */}
       <div className={`mobile-menu ${menuOpen ? 'active' : ''}`}>
         <ul className="main-menu">
           <li><Link to="/course" onClick={closeMenu}>코스</Link></li>
           <li><Link to="/record" onClick={closeMenu}>기록</Link></li>
           <li><Link to="/event" onClick={closeMenu}>이벤트</Link></li>
           <li><Link to="/boards" onClick={closeMenu}>커뮤니티</Link></li>
+          {isAdmin && <li><Link to="/admin" onClick={closeMenu}>관리자</Link></li>}
         </ul>
         <ul className="util">
           {isLogin ? (
@@ -82,7 +85,6 @@ const Header = ({ theme, toggleTheme }) => {
               <li><Link to="/about" onClick={closeMenu}>소개</Link></li>
             </>
           )}
-          {/* <li><ThemeToggle theme={theme} toggleTheme={toggleTheme} /></li> */}
         </ul>
       </div>
     </header>

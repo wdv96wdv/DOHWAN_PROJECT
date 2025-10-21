@@ -7,11 +7,17 @@ import Home from './pages/Login/Home';
 import Login from './pages/Login/Login';
 import Join from './pages/Login/Join';
 import User from './pages/Login/User';
-import About from './pages/Login/About';
 import Record from './pages/Login/Record';
 
 import Course from './pages/Course';
 import Event from './pages/Event';
+
+import About from './pages/About';
+import Privacy from './pages/Privacy';
+import Contact from './pages/Contact';
+
+import AdminContact from "./pages/admin/AdminContact";
+
 
 import Listpage from './pages/board/Listpage';
 import Insertpage from './pages/board/Insertpage';
@@ -48,7 +54,10 @@ const App = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/join" element={<Join />} />
             <Route path="/user" element={<User />} />
+            <Route path="/admin" element={<AdminContact />} />
             <Route path="/about" element={<About />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/contact" element={<Contact />} />
             <Route path="/record" element={<Record />} />
             <Route path="/course" element={<Course />} />
             <Route path="/event" element={<Event />} />
