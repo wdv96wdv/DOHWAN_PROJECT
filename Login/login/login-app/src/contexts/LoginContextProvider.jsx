@@ -44,13 +44,6 @@ const LoginContextProvider = ({ children }) => {
       const headers = response.headers
       const authorization = headers.authorization
       const jwt = authorization.replace("Bearer ", "")
-      console.log(`data : ${data}`);
-      console.dir(data)
-      console.log(`data : ${data}`);
-      console.log(`status : ${status}`);
-      console.log(`headers : ${headers}`);
-      console.log(`authorization : ${authorization}`);
-      console.log(`jwt : ${jwt}`);
 
       // 로그인 성공 ✅
       if (status == 200) {
@@ -109,8 +102,7 @@ const LoginContextProvider = ({ children }) => {
 
     if (!jwt)
       return
-
-    console.log(`jwt : ${jwt}`);
+    
     const authorization = `Bearer ${jwt}`
 
     // 💍 JWT 를 Authorization 헤더에 등록

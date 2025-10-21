@@ -72,7 +72,7 @@ public class SecurityConfig {
 				
 						// 운영
 						.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // ✅ preflight 허용
-						.requestMatchers("/login","/join","/","/boards/**").permitAll()
+						.requestMatchers("/login","/users","/join","/","/boards/**").permitAll()
 						.anyRequest().authenticated()
 						);
 
