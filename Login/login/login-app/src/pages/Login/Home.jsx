@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import 'sweetalert2/dist/sweetalert2.min.css';
 import "../../assets/css/fonts.css";
-
 import { list } from "../../apis/boards.js";
 import heroImage1 from "../../assets/img/dongapopup.png";
 import heroImage2 from "../../assets/img/jtbcpopup.jpg";
@@ -64,6 +63,21 @@ const Home = ({ theme }) => {
     { img: heroImage2, link: "https://seoul-marathon.com/", position: { top: "12%", left: "85%", transform: "translateX(-50%)" } }
   ];
 
+  const handleGoToCalendar = () => {
+    if (isLogin) {
+      navigate("/calendar"); // 캘린더 페이지로 이동
+    } else {
+      Swal.fire({
+        title: "로그인이 필요합니다",
+        text: "로그인 페이지로 이동하시겠습니까?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "이동",
+        cancelButtonText: "취소"
+      }).then((result) => { if (result.isConfirmed) navigate("/login"); });
+    }
+  };
+
   const handleStart = () => {
     if (isLogin) navigate("/record");
     else {
@@ -97,8 +111,9 @@ const Home = ({ theme }) => {
           {[{ title: "📝 기록 관리", desc: "러닝 거리, 페이스, 노트를 손쉽게 기록하세요." },
             { title: "📊 통계 보기", desc: "주간/월간 기록을 그래프로 확인할 수 있어요." },
             { title: "🔍 검색/필터", desc: "날짜, 제목으로 원하는 기록을 바로 찾아보세요." },
-            { title: "☁️ 어디서든 접속", desc: "로그인만 하면 언제 어디서든 기록이 저장됩니다." }].map((feature, idx) => (
-            <div key={idx} className={`${styles.featureCard} ${theme === 'dark' ? styles.darkCard : ''}`}>
+            { title: "☁️ 어디서든 접속", desc: "로그인만 하면 언제 어디서든 기록이 저장됩니다." },
+            { title: "📅 캘린더", desc: "캘린더로 운동 기록을 한눈에 파악하세요." }].map((feature, idx) => (
+            <div key={idx} className={`${styles.featureCard} ${theme === 'dark' ? styles.darkCard : ''}`} onClick={feature.title === "📅 캘린더" ? handleGoToCalendar : null}>
               <h3>{feature.title}</h3>
               <p>{feature.desc}</p>
             </div>

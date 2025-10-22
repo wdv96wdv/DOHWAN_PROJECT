@@ -26,17 +26,8 @@ const getUserNoFromJWT = () => {
  * 평균 페이스 숫자 → 화면용 포맷 1'23''
  */
 const formatPace = (value) => {
-  if (!value) return "-";
-  if (isNaN(value)) return value;
-  const num = parseInt(value, 10);
-  let minutes = Math.floor(num / 100);
-  let seconds = num % 100;
-  if (seconds >= 60) {
-    minutes += Math.floor(seconds / 60);
-    seconds = seconds % 60;
-  }
-  return `${minutes}'${seconds.toString().padStart(2, "0")}''`;
-};
+  return value;
+}
 
 export default function RecordPage() {
   const [records, setRecords] = useState([]);
@@ -93,6 +84,12 @@ export default function RecordPage() {
     try {
       const submitData = { ...formData };
 
+      // round_count 값을 "1'23''" 형식에서 숫자형 123으로 변환
+      if (submitData.round_count) {
+        const pace = submitData.round_count.replace("'", "").replace("''", ""); // '와 '' 제거
+        submitData.round_count = parseInt(pace, 10); // 숫자형으로 저장
+      }
+
       // 수정 시 created_at 제거
       if (editingId) {
         delete submitData.created_at;
@@ -141,10 +138,9 @@ export default function RecordPage() {
 
   // 수정 버튼 클릭
   const handleEdit = (record) => {
-    // DB 값 그대로 form에 넣음 (숫자형 round_count)
     setFormData({
       ...record,
-      round_count: record.round_count,
+      round_count: record.round_count,  // 숫자형 그대로 form에 넣기
     });
     setEditingId(record.id);
   };
@@ -180,8 +176,8 @@ export default function RecordPage() {
   // 화면용 레코드 변환 (평균 페이스, 날짜)
   const formattedRecords = records.map((r) => ({
     ...r,
-    round_count_display: formatPace(r.round_count),
-    created_at_display: new Date(r.created_at).toLocaleString(),
+    round_count: r.round_count,  // 이제 숫자 그대로 저장
+    created_at: new Date(r.created_at).toLocaleString(),
   }));
 
   return (

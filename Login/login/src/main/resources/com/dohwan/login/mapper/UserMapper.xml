@@ -6,29 +6,22 @@
 <mapper namespace="com.dohwan.login.mapper.UserMapper">
 
     <resultMap type="com.dohwan.login.domain.Users" id="userMap">
-      <id property="no" column="no" />
-      
-      <result property="no" column="no" />
-      <result property="id" column="id" />
-      <result property="username" column="username" />
-      <result property="password" column="password" />
-      <result property="name" column="name" />
-      <result property="email" column="email" />
-      <result property="enabled" column="enabled" />
-      <result property="createdAt" column="created_at" />
-      <result property="updatedAt" column="updated_at" />
-      
-      <!-- 1:N 관계 매핑 -->
-      <!-- 
-          property : 현재 resultMap 의 객체 안에 매핑해줄 변수명
-          select : 1:N 관계의 서브쿼리 ID
-          column : 서브쿼리에 넘겨줄 값의 컬럼명
-          ofType : 서브쿼리로 조회된 데이터를 매핑할 객체타입
-        -->
-      <collection property="authList" 
-                  select="authList" 
-                  column="username" 
-                  ofType="UserAuth"></collection>
+        <id property="no" column="no" />
+        <result property="no" column="no" />
+        <result property="id" column="id" />
+        <result property="username" column="username" />
+        <result property="password" column="password" />
+        <result property="name" column="name" />
+        <result property="email" column="email" />
+        <result property="enabled" column="enabled" />
+        <result property="createdAt" column="created_at" />
+        <result property="updatedAt" column="updated_at" />
+        
+        <!-- 1:N 관계 매핑 -->
+        <collection property="authList" 
+                    select="authList" 
+                    column="username" 
+                    ofType="UserAuth"></collection>
     </resultMap>
 
     <resultMap type="com.dohwan.login.domain.UserAuth" id="authMap">
@@ -79,16 +72,19 @@
         VALUES ( #{username}, #{auth} )
     </insert>
 
-    <!-- 회원 삭제 -->
-    <delete id="delete">
-        DELETE FROM users
-         WHERE username = #{username}
+    <!-- 회원 삭제 SQL -->
+    <delete id="delete" parameterType="String">
+        DELETE FROM users WHERE username = #{username};
     </delete>
 
-    <!-- 회원 권한 삭제 -->
-    <delete id="deletetAuth">
-        DELETE FROM user_auth
-         WHERE username = #{username}
+    <!-- 회원 권한 삭제 SQL -->
+    <delete id="deleteAuth" parameterType="String">
+        DELETE FROM user_auth WHERE username = #{username};
+    </delete>
+
+    <!-- 운동 기록 삭제 SQL -->
+    <delete id="deleteByUserNo" parameterType="Long">
+        DELETE FROM records WHERE user_no = #{userNo};
     </delete>
 
 </mapper>

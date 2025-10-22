@@ -20,7 +20,6 @@ import com.dohwan.login.service.UserService;
 
 import lombok.extern.slf4j.Slf4j;
 
-
 @Slf4j
 @RestController
 @RequestMapping("/users")
@@ -29,96 +28,99 @@ public class UserController {
   @Autowired
   private UserService userService;
 
-
   /**
    * 사용자 정보 조회
+   * 
    * @param customUser
    * @return
    */
   @GetMapping("/info")
   public ResponseEntity<?> userInfo(
-      @AuthenticationPrincipal CustomUser customUser
-  ) {
-      log.info("::::: 사용자 정보 조회 :::::");
-      log.info("customUser : " + customUser);
+      @AuthenticationPrincipal CustomUser customUser) {
+    log.info("::::: 사용자 정보 조회 :::::");
+    log.info("customUser : " + customUser);
 
-      if( customUser == null ) {
-          return new ResponseEntity<>("UNAUTHORIZED", HttpStatus.UNAUTHORIZED);
-      }
-
-      Users user = customUser.getUser();
-      log.info("user : " + user);
-
-      // 인증된 사용자 정보
-      if( user != null ) {
-          return new ResponseEntity<>(user, HttpStatus.OK);
-      }
-      // 인증 되지 않은 경우
+    if (customUser == null) {
       return new ResponseEntity<>("UNAUTHORIZED", HttpStatus.UNAUTHORIZED);
+    }
+
+    Users user = customUser.getUser();
+    log.info("user : " + user);
+
+    // 인증된 사용자 정보
+    if (user != null) {
+      return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+    // 인증 되지 않은 경우
+    return new ResponseEntity<>("UNAUTHORIZED", HttpStatus.UNAUTHORIZED);
   }
 
   /**
    * 회원 가입
+   * 
    * @param user
    * @return
    * @throws Exception
    */
   @PostMapping("")
   public ResponseEntity<?> join(@RequestBody Users user) throws Exception {
-      log.info("회원 가입 요청");
-      boolean result = userService.insert(user);
+    log.info("회원 가입 요청");
+    boolean result = userService.insert(user);
 
-      if( result ) {
-          log.info("회원가입 성공!");
-          return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
-      }
-      else {
-          log.info("회원가입 실패!");
-          return new ResponseEntity<>("FAIL", HttpStatus.BAD_REQUEST);
-      }
+    if (result) {
+      log.info("회원가입 성공!");
+      return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
+    } else {
+      log.info("회원가입 실패!");
+      return new ResponseEntity<>("FAIL", HttpStatus.BAD_REQUEST);
+    }
   }
 
   /**
    * 회원 정보 수정
+   * 
    * @param user
    * @return
    * @throws Exception
    */
-  // @PreAuthorize(" hasRole('ROLE_USER') ")                  // 👩‍💼 사용자 권한
-  // @PreAuthorize(" hasRole('ROLE_ADMIN') ")                 // 👮‍♀️ 관리자 권한
-  // @PreAuthorize(" hasAnyRole('ROLE_USER', 'ROLE_ADMIN') ")    // 👩‍💼 사용자 OR 👮‍♀️ 관리자
-  @PreAuthorize(" hasRole('ROLE_ADMIN') or #p0.username == authentication.name ")  // 👮‍♀️+👩‍💻
+  // @PreAuthorize(" hasRole('ROLE_USER') ") // 👩‍💼 사용자 권한
+  // @PreAuthorize(" hasRole('ROLE_ADMIN') ") // 👮‍♀️ 관리자 권한
+  // @PreAuthorize(" hasAnyRole('ROLE_USER', 'ROLE_ADMIN') ") // 👩‍💼 사용자 OR
+  // 👮‍♀️ 관리자
+  @PreAuthorize(" hasRole('ROLE_ADMIN') or #p0.username == authentication.name ") // 👮‍♀️+👩‍💻
   @PutMapping("")
   public ResponseEntity<?> update(@RequestBody Users user) throws Exception {
 
     boolean result = userService.update(user);
 
-    if( result ) {
+    if (result) {
       log.info("회원 수정 성공!");
       return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
-    }
-    else {
+    } else {
       log.info("회원 수정 실패!");
       return new ResponseEntity<>("FAIL", HttpStatus.BAD_REQUEST);
     }
   }
 
-
-  // 회원 삭제(탈퇴)
-  @PreAuthorize(" hasRole('ROLE_ADMIN') or #p0 == authentication.name ")
+  // 회원 삭제 (탈퇴)
+  @PreAuthorize("hasRole('ROLE_ADMIN') or #username == authentication.name")
   @DeleteMapping("/{username}")
-  public ResponseEntity<?> delete(
-    @PathVariable("username") String username
-  ) throws Exception {
+  public ResponseEntity<?> delete(@PathVariable("username") String username) {
     try {
       boolean result = userService.delete(username);
-      if( result ) 
-        return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
-      else 
-        return new ResponseEntity<>("FAIL", HttpStatus.BAD_REQUEST);
-      } catch (Exception e) {
-        return new ResponseEntity<>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR);
+
+      if (result) {
+        // 성공적으로 탈퇴 처리된 경우
+        return new ResponseEntity<>("회원탈퇴 성공", HttpStatus.OK);
+      } else {
+        // 탈퇴 실패한 경우
+        return new ResponseEntity<>("회원탈퇴 실패: 예기치 못한 오류", HttpStatus.BAD_REQUEST);
+      }
+    } catch (Exception e) {
+      // 예외 발생 시 오류 로깅 후, 500 오류 반환
+      log.error("회원 탈퇴 처리 중 오류 발생: {}", e.getMessage(), e);
+      return new ResponseEntity<>("회원탈퇴 실패: 서버 오류", HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
-  
+
 }

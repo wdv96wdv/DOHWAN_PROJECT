@@ -22,9 +22,9 @@ export default function RecordCard({ record, onEdit, onDelete }) {
             <div className="stat-label">거리</div>
           </div>
         )}
-        {record.round_count_display && (
+        {record.round_count && (
           <div className="stat-item">
-            <div className="stat-value">{record.round_count_display}</div>
+            <div className="stat-value">{record.round_count}</div> {/* 숫자로만 표시 */}
             <div className="stat-label">평균 페이스</div>
           </div>
         )}

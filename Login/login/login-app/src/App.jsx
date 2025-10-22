@@ -17,7 +17,7 @@ import Privacy from './pages/Privacy';
 import Contact from './pages/Contact';
 
 import AdminContact from "./pages/admin/AdminContact";
-
+import Calendar from './pages/Calendar';  
 
 import Listpage from './pages/board/Listpage';
 import Insertpage from './pages/board/Insertpage';
@@ -55,6 +55,7 @@ const App = () => {
             <Route path="/join" element={<Join />} />
             <Route path="/user" element={<User />} />
             <Route path="/admin" element={<AdminContact />} />
+            <Route path="/calendar" element={<Calendar />} />
             <Route path="/about" element={<About />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/contact" element={<Contact />} />

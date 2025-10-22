@@ -1,10 +1,24 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "../../assets/css/record.css";
 
 export default function RecordForm({ formData, setFormData, onSubmit, submitText }) {
+  const [noteLength, setNoteLength] = useState(formData.note.length);  // 글자수 상태 추가
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+
+    if (name === "note") {
+      setNoteLength(value.length);  // 노트 입력시 글자수 업데이트
+    }
+
+    // 'round_count' 처리: "분"과 "초"를 숫자로만 처리
+    if (name === "round_count") {
+      // 숫자만 입력받을 수 있도록 처리
+      const numericValue = value.replace(/[^0-9]/g, ""); // 숫자 이외의 문자 제거
+      setFormData((prev) => ({ ...prev, [name]: numericValue }));
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
   return (
@@ -47,7 +61,7 @@ export default function RecordForm({ formData, setFormData, onSubmit, submitText
               id="round_count"
               name="round_count"
               min="1"
-              placeholder="예: 547 -> 5'47''"
+              placeholder="예: 547"
               value={formData.round_count ?? ""}
               onChange={handleChange}
             />
@@ -74,9 +88,13 @@ export default function RecordForm({ formData, setFormData, onSubmit, submitText
             id="note"
             name="note"
             placeholder="러닝에 대한 추가 메모를 입력하세요..."
+            maxLength={500}
             value={formData.note}
             onChange={handleChange}
           />
+          <div className="char-count">
+            <span>{noteLength} / 500</span> {/* 글자수 표시 */}
+          </div>
         </div>
 
         <div className="btn-container">

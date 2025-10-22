@@ -20,26 +20,34 @@
 
 /* RecordPage 전용 컨테이너 */
 .record-page {
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* 가로 중앙 */
-  justify-content: flex-start; /* 상단 정렬, 필요 시 center로 바꿀 수 있음 */
-  padding: 40px 20px; /* 상하 40px, 좌우 20px 여백 */
-  min-height: calc(100vh - 80px); /* 헤더/푸터 제외 최소 높이 */
-  box-sizing: border-box;
-  gap: 30px; /* RecordForm과 RecordList 사이 간격 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* 가로 중앙 */
+    justify-content: flex-start;
+    /* 상단 정렬, 필요 시 center로 바꿀 수 있음 */
+    padding: 40px 20px;
+    /* 상하 40px, 좌우 20px 여백 */
+    min-height: calc(100vh - 80px);
+    /* 헤더/푸터 제외 최소 높이 */
+    box-sizing: border-box;
+    gap: 30px;
+    /* RecordForm과 RecordList 사이 간격 */
 }
 
 .record-page .records-section {
-  width: 100%;
-  max-width: 900px; /* 최대 넓이 제한 */
+    width: 100%;
+    max-width: 900px;
+    /* 최대 넓이 제한 */
 }
 
 /* RecordForm 너비를 records-section과 동일하게 */
 .record-page .input-section {
-  width: 100%;
-  max-width: 900px; /* records-section과 동일 */
-  box-sizing: border-box; /* 패딩 포함 너비 계산 */
+    width: 100%;
+    max-width: 900px;
+    /* records-section과 동일 */
+    box-sizing: border-box;
+    /* 패딩 포함 너비 계산 */
 }
 
 
@@ -50,13 +58,15 @@ body.custom-bg {
     color: var(--text-primary);
     min-height: 100vh;
     width: 100%;
-    
+
     /* 배경 이미지 */
-    background-image: url('/running.jpg'); /* public 폴더 기준 */
+    background-image: url('/running.jpg');
+    /* public 폴더 기준 */
     background-repeat: no-repeat;
     background-position: center center;
-    background-size: cover; /* 화면 크기에 맞춰 꽉 채움 */
-    
+    background-size: cover;
+    /* 화면 크기에 맞춰 꽉 채움 */
+
     /* 기타 */
     position: relative;
     overflow-x: hidden;
@@ -73,18 +83,32 @@ body.custom-bg::before {
     height: 100%;
 
     /* 배경 이미지 */
-    background-image: url('/running.jpg'); /* public 폴더 기준 */
+    background-image: url('/running.jpg');
+    /* public 폴더 기준 */
     background-repeat: no-repeat;
     background-position: center center;
-    background-size: cover; /* 화면 크기에 맞춰 꽉 채움 */
+    background-size: cover;
+    /* 화면 크기에 맞춰 꽉 채움 */
 
     animation: grid-move 20s linear infinite;
     z-index: -1;
 }
 
+.char-count {
+    font-size: 14px;
+    color: #666;
+    text-align: right;
+    margin-top: 5px;
+}
+
 @keyframes grid-move {
-    0% { transform: translate(0, 0); }
-    100% { transform: translate(50px, 50px); }
+    0% {
+        transform: translate(0, 0);
+    }
+
+    100% {
+        transform: translate(50px, 50px);
+    }
 }
 
 .container {
@@ -118,8 +142,15 @@ body.custom-bg::before {
 }
 
 @keyframes gradient-shift {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
+
+    0%,
+    100% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
 }
 
 /* Input Section */
@@ -130,7 +161,7 @@ body.custom-bg::before {
     padding: 30px;
     margin-bottom: 40px;
     position: relative;
-    box-shadow: 
+    box-shadow:
         0 0 20px rgba(0, 255, 255, 0.1),
         inset 0 0 20px rgba(0, 255, 255, 0.05);
 }
@@ -201,7 +232,7 @@ body.custom-bg::before {
 .form-group textarea:focus {
     outline: none;
     border-color: var(--neon-cyan);
-    box-shadow: 
+    box-shadow:
         0 0 10px rgba(0, 255, 255, 0.3),
         inset 0 0 10px rgba(0, 255, 255, 0.1);
 }
@@ -230,7 +261,7 @@ body.custom-bg::before {
 
 .record:hover {
     transform: translateY(-2px);
-    box-shadow: 
+    box-shadow:
         0 10px 20px rgba(0, 255, 255, 0.3),
         0 0 30px rgba(255, 0, 255, 0.3);
 }
@@ -366,6 +397,22 @@ body.custom-bg::before {
     background: var(--card-bg);
     border-radius: 6px;
     border-left: 3px solid var(--neon-cyan);
+    white-space: pre-wrap;
+    /* 줄 바꿈을 자동으로 처리 */
+    word-wrap: break-word;
+    /* 단어가 길어지면 강제로 줄 바꿈 */
+    word-break: break-word;
+    /* 단어가 너무 길 때 줄 바꿈 */
+    margin-top: 10px;
+    /* 적당한 간격 추가 */
+    font-size: 14px;
+    /* 글씨 크기 조정 */
+    line-height: 1.5;
+    /* 줄 간격 조정 */
+    max-width: 100%;
+    /* 최대 너비 설정 */
+    overflow-wrap: break-word;
+    /* 길어진 단어의 줄 바꿈 */
 }
 
 .loading {

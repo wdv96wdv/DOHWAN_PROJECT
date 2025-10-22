@@ -27,7 +27,7 @@ export default function RecordList({ records, onEdit, onDelete }) {
       {records.map(record => {
         const formattedRecord = {
           ...record,
-          round_count_display: formatPace(record.round_count), // 화면용 필드
+          round_count: formatPace(record.round_count), // 화면용 필드
           created_at: new Date(record.created_at).toLocaleString(),
         };
         return (

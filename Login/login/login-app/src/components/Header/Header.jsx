@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate  } from 'react-router-dom';
 import '../../assets/css/header.css';
 import { LoginContext } from '../../contexts/LoginContextProvider';
 import logo from '../../assets/img/dorunninglogo.png';
@@ -10,12 +10,21 @@ const Header = ({ theme, toggleTheme }) => {
   // LoginContext에서 roles와 isLogin 가져오기
   const { isLogin = false, logout = () => {}, roles } = useContext(LoginContext) || {};
   const [menuOpen, setMenuOpen] = useState(false); // 모바일 메뉴 상태
+  const navigate = useNavigate();
 
   const toggleMenu = () => setMenuOpen(prev => !prev);
   const closeMenu = () => setMenuOpen(false);
 
   // ✅ 관리자 여부 확인
   const isAdmin = roles?.isAdmin; // roles.isAdmin이 true면 관리자 메뉴 표시
+
+   // 기록 페이지 접근 처리
+  const handleRecordClick = (e) => {
+    if (!isLogin) {
+      e.preventDefault();  // 기본 링크 동작 막기
+      navigate('/login');  // 로그인 페이지로 리다이렉트
+    }
+  };
 
   return (
     <header className={`header ${theme}`}>
@@ -30,7 +39,8 @@ const Header = ({ theme, toggleTheme }) => {
       <nav className="main-menu">
         <ul>
           <li><Link to="/course">코스</Link></li>
-          <li><Link to="/record">기록</Link></li>
+          {/* 로그인한 사용자만 접근 가능한 링크 */}
+          <li><Link to="/record" onClick={handleRecordClick}>기록</Link></li>
           <li><Link to="/event">이벤트</Link></li>
           <li><Link to="/boards">커뮤니티</Link></li>
 
@@ -67,7 +77,8 @@ const Header = ({ theme, toggleTheme }) => {
       <div className={`mobile-menu ${menuOpen ? 'active' : ''}`}>
         <ul className="main-menu">
           <li><Link to="/course" onClick={closeMenu}>코스</Link></li>
-          <li><Link to="/record" onClick={closeMenu}>기록</Link></li>
+          {/* 로그인한 사용자만 접근 가능한 링크 */}
+          <li><Link to="/record" onClick={handleRecordClick}>기록</Link></li>
           <li><Link to="/event" onClick={closeMenu}>이벤트</Link></li>
           <li><Link to="/boards" onClick={closeMenu}>커뮤니티</Link></li>
           {isAdmin && <li><Link to="/admin" onClick={closeMenu}>관리자</Link></li>}
