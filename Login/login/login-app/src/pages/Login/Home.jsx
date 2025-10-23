@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "../../assets/css/Home.module.css";
 import heroVideo from "../../assets/video/girrunning.mp4";
@@ -12,6 +12,101 @@ import "aos/dist/aos.css";
 import CountUp from "react-countup";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
+import heroImage1 from "../../assets/img/dongapopup.png";
+import heroImage2 from "../../assets/img/jtbcpopup.jpg";
+
+// ========================
+// 팝업 컴포넌트
+// ========================
+const Popup = ({
+  imageSrc,
+  linkUrl,
+  width = "300px",
+  height = "auto",
+  position = { top: "10%", left: "85%", transform: "translateX(0)" },
+  zIndex = 1000,
+}) => {
+  const [visible, setVisible] = useState(false);
+  const [mobilePosition, setMobilePosition] = useState(position);
+
+  useEffect(() => {
+    const hideUntil = localStorage.getItem("popupHideUntil");
+    if (!hideUntil || new Date().getTime() > Number(hideUntil)) setVisible(true);
+  }, []);
+
+  // 모바일/PC 위치 조정
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 768) {
+        setMobilePosition({ top: "25%", left: "45%", transform: "translateX(-50%)" });
+      } else {
+        setMobilePosition(position);
+      }
+    };
+    handleResize(); // 초기 위치 설정
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [position]);
+
+  const closePopup = (hideToday = false) => {
+    if (hideToday) {
+      const endOfDay = new Date();
+      endOfDay.setHours(23, 59, 59, 999);
+      localStorage.setItem("popupHideUntil", endOfDay.getTime());
+    }
+    setVisible(false);
+  };
+
+  if (!visible) return null;
+
+  return (
+    <div style={{ position: "absolute", ...mobilePosition, width, zIndex }}>
+      <div
+        style={{
+          borderRadius: 10,
+          overflow: "hidden",
+          boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
+          position: "relative",
+          backgroundColor: "white",
+        }}
+      >
+        <button
+          onClick={(e) => { e.stopPropagation(); closePopup(); }}
+          style={{
+            position: "absolute",
+            top: 8,
+            right: 8,
+            background: "none",
+            border: "none",
+            width: 24,
+            height: 24,
+            cursor: "pointer",
+            fontWeight: "bold",
+          }}
+        >
+          X
+        </button>
+        <a href={linkUrl} target="_blank" rel="noopener noreferrer">
+          <img src={imageSrc} alt="팝업 이미지" style={{ width: "100%", height, display: "block" }} />
+        </a>
+        <div style={{ display: "flex", borderTop: "1px solid #ccc" }}>
+          <button
+            onClick={(e) => { e.stopPropagation(); closePopup(true); }}
+            style={{ flex: 1, padding: 10, border: "none", cursor: "pointer", backgroundColor: "#f5f5f5" }}
+          >
+            오늘 하루 보지 않기
+          </button>
+          <button
+            onClick={(e) => { e.stopPropagation(); closePopup(); }}
+            style={{ flex: 1, padding: 10, border: "none", cursor: "pointer", backgroundColor: "#f5f5f5" }}
+          >
+            닫기
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const Home = () => {
   const navigate = useNavigate();
@@ -26,6 +121,11 @@ const Home = () => {
       mirror: false,
     });
   }, []);
+
+  const popups = [
+    { img: heroImage1, link: "https://marathon.jtbc.com/", position: { top: "55%", left: "85%", transform: "translateX(-50%)" } },
+    { img: heroImage2, link: "https://seoul-marathon.com/", position: { top: "15%", left: "85%", transform: "translateX(-50%)" } }
+  ];
 
   // 섹션 컴포넌트 모음
   const HeroSection = () => (
@@ -68,7 +168,7 @@ const Home = () => {
       </div>
       <div className={styles.trainingVideo}>
         <video autoPlay loop muted playsInline className={styles.video}>
-          <source src={heroVideo} type="video/mp4" playsInline/>
+          <source src={heroVideo} type="video/mp4" playsInline />
         </video>
       </div>
     </section>
@@ -86,8 +186,8 @@ const Home = () => {
             AI 기반 피드백과 트레이너의 조언으로 최고의 결과를 만들어보세요.
           </p>
           <button className={styles.ctaBtn} onClick={() => navigate("/boards")}>
-        커뮤니티 가기
-      </button>
+            커뮤니티 가기
+          </button>
         </div>
         <div className={styles.coachingImgWrapper}>
           <img src={community} alt="Coaching" className={styles.coachingImg} />
@@ -210,6 +310,18 @@ const Home = () => {
 
   return (
     <div className={styles.home}>
+      {/* ================= Popup 렌더링 ================= */}
+      {popups.map((p, idx) => (
+        <Popup
+          key={idx}
+          imageSrc={p.img}
+          linkUrl={p.link}
+          position={p.position}
+          width="300px"
+          height="auto"
+          zIndex={1000}
+        />
+      ))}
       <HeroSection />
       <AboutSection />
       <TrainingSection />
