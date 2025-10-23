@@ -323,15 +323,15 @@ const Home = () => {
         />
       ))}
       <HeroSection />
-      <AboutSection />
+      {/* <AboutSection /> */}
       <TrainingSection />
       <CoachingSection />
-      <FeaturesSection />
-      <TestimonialsSection />
+      {/* <FeaturesSection /> */}
+      {/* <TestimonialsSection /> */}
       <GallerySection />
       <StatsSection />
       <FAQSection />
-      <CallToActionSection />
+      {/* <CallToActionSection /> */}
     </div>
   );
 };
