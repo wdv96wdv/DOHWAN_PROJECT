@@ -18,7 +18,7 @@ const Insert = ({ onInsert }) => {
 
   const getUserNoFromJWT = () => {
     const token = localStorage.getItem("jwt");
-    console.log("jwt ="+token);
+    console.log("jwt =" + token);
     if (!token) return null;
 
     try {
@@ -81,7 +81,7 @@ const Insert = ({ onInsert }) => {
       });
     }
 
-    const data = { title, writer, content, mainFile: mainFileInfo, files: filesInfo, userNo};
+    const data = { title, writer, content, mainFile: mainFileInfo, files: filesInfo, userNo };
     const headers = { 'Content-Type': 'multipart/form-data' };
 
     Swal.fire({
@@ -156,7 +156,7 @@ const Insert = ({ onInsert }) => {
             <tr>
               <th>메인 이미지</th>
               <td>
-                <input type="file" onChange={handleMainFileChange} />
+                <input type="file" onChange={handleMainFileChange} accept="image/*"/>
                 {mainPreview && (
                   <div className={styles.fileList}>
                     <img
@@ -172,7 +172,8 @@ const Insert = ({ onInsert }) => {
             <tr>
               <th>첨부 파일</th>
               <td>
-                <input type="file" multiple onChange={handleFilesChange} />
+                <input type="file" multiple onChange={handleFilesChange}
+                  accept="image/*" />
                 {filePreviews.length > 0 && (
                   <div className={styles.fileList}>
                     {filePreviews.map((src, idx) => (
