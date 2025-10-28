@@ -75,6 +75,7 @@ public class SecurityConfig {
 						.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // ✅ preflight 허용
 						.requestMatchers("/login","/users","/join","/contact","/","/boards/**").permitAll()
 						.requestMatchers("/admin/**").hasRole("ADMIN") // ✅ 관리자 전용
+						.requestMatchers("/manifest.json").permitAll()
 						.anyRequest().authenticated()
 						);
 
