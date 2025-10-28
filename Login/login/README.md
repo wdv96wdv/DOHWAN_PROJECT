@@ -43,3 +43,37 @@
  [POST]   /users              : 회원 가입
  [PUT]    /users              : 회원 정보 수정
  [DELETE] /users/{username}   : 회원 탈퇴
+
+
+# 🏃‍♂️ DOHWAN_PROJECT - DoRunning
+
+운동을 시작하려는 사람부터 마라톤을 실전으로 치른 사람까지, 목표 달성 운동으로 달리기의 즐거움을 함께 나누는 러닝 커뮤니티 플랫폼입니다.
+
+---
+
+## 🚀 주요 기능
+
+- 사용자 로그인 및 회원가입 (JWT 인증)
+- 러닝 코스 조회 및 기록 관리
+- 마일리지 적립 및 이벤트 참여
+- 커뮤니티 게시판
+- 관리자 문의 관리 기능
+
+---
+
+## 🛠️ 기술 스택
+
+- **Frontend**: React + Vite + React Router
+- **Backend**: Spring Boot (API 연동)
+- **Auth**: JWT + Cookies
+- **UI**: CSS Modules, SweetAlert2
+- **기타**: Axios, Firebase
+
+---
+
+## 📁 폴더 구조
+Login/ ├── login/ │   ├── login-app/ │   │   ├── src/ │   │   │   ├── pages/         # 주요 페이지 컴포넌트 │   │   │   ├── components/    # 공통 컴포넌트 │   │   │   ├── assets/        # CSS 및 이미지 │   │   │   ├── apis/          # API 호출 모듈 │   │   │   ├── contexts/      # 로그인 상태 관리 │   │   │   └── App.jsx        # 루트 컴포넌트
+
+---
+
+
