@@ -76,7 +76,7 @@ public class SecurityConfig {
 						.requestMatchers("/login","/users","/join","/contact","/","/boards/**").permitAll()
 						.requestMatchers("/admin/**").hasRole("ADMIN") // ✅ 관리자 전용
 						.requestMatchers("/manifest.json").permitAll()
-						.requestMatchers(HttpMethod.POST, "/auth/social-login").permitAll()
+						.requestMatchers(HttpMethod.POST, "/api/auth/social-login").permitAll()
 						.anyRequest().authenticated()
 						);
 
