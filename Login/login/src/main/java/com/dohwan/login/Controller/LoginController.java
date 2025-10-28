@@ -125,7 +125,7 @@ public class LoginController {
         }
     }
 
-    @PostMapping("/auth/social-login")
+    @PostMapping("/api/auth/social-login")
     public ResponseEntity<?> socialLogin(@RequestBody SocialLoginRequest request) {
         try {
             String username = request.getUsername();
