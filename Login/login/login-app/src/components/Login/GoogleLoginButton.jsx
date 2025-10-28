@@ -21,7 +21,7 @@ const GoogleLoginButton = () => {
                 avatar_url: user.photoURL
             };
 
-            const response = await axios.post('/api/auth/social-login', payload);
+            const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/auth/social-login`, payload)
             const { token, userInfo } = response.data;
 
             loginWithSocial(token, userInfo); // ✅ LoginContext에 로그인 처리

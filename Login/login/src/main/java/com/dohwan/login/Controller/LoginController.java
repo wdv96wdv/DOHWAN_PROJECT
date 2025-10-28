@@ -125,8 +125,7 @@ public class LoginController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("잘못된 토큰입니다.");
         }
     }
-
-    @RequestMapping("/api/")
+    
     @PostMapping("/auth/social-login")
     public ResponseEntity<?> socialLogin(@RequestBody SocialLoginRequest request) {
         try {
