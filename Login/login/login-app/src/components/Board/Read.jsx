@@ -3,15 +3,15 @@ import { Link, useParams } from 'react-router-dom';
 import styles from '../../assets/css/Read.module.css';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import noImage from '../../assets/img/no-image.png';
 
 const Read = ({ board = {}, fileList = [], onDownload }) => {
   if (!board || !board.title) {
     return <div>게시글 정보를 불러오는 중입니다...</div>;
   }
-  const { id } = useParams();
-  const API_URL = 'https://dohwan-project.onrender.com'; // 운영 서버 주소
 
-  // JWT에서 user_no 추출
+  const { id } = useParams();
+
   const getUserNoFromJWT = () => {
     const token = localStorage.getItem("jwt");
     if (!token) return null;
@@ -24,11 +24,7 @@ const Read = ({ board = {}, fileList = [], onDownload }) => {
   };
 
   const user_no = getUserNoFromJWT();
-  console.log("board 전체:", board);
-  console.log("user_no=" + user_no);
-  console.log("board.userNo=" + board.userNo);
 
-  // 대표 파일 찾기 (메인 파일 또는 썸네일)
   const mainFile = fileList?.find(
     (f) => f.type?.toUpperCase() === 'MAIN' || f.type?.toUpperCase() === 'THUMBNAIL'
   );
@@ -37,72 +33,118 @@ const Read = ({ board = {}, fileList = [], onDownload }) => {
     <div className={styles.container}>
       <h1 className={styles.title}>게시글 조회</h1>
 
-      {/* 제목 */}
-      <div>
-        <label>제목</label>
-        <input type="text" value={board.title ?? ''} className={styles.formInput} readOnly />
-      </div>
-
-      {/* 작성자 */}
-      <div>
-        <label>작성자</label>
-        <input type="text" value={board.writer ?? ''} className={styles.formInput} readOnly />
-      </div>
-
-      {/* 대표 썸네일 */}
-      {mainFile && (
-        <div className={styles.thumbnailBox}>
-          <span className={styles.badge}>대표 이미지</span>
-          <img
-            src={mainFile?.filePath ? mainFile.filePath : noImage}
-            alt={mainFile?.originName}
-            className={styles.mainImage}
-          />
-        </div>
-      )}
-
-      {/* 본문 */}
-      <div style={{ marginTop: '12px' }}>
-        <CKEditor
-          editor={ClassicEditor}
-          data={board.content ?? ''}
-          disabled={true}
-          config={{ toolbar: [] }}
-        />
-      </div>
-
-      {/* 첨부파일 리스트 */}
-      {fileList && fileList.length > 0 && (
-        <div className={styles.fileList}>
-          {fileList.map((file) => (
-            <div key={file.id} className={styles.fileItem}>
-              <div style={{ position: 'relative', width: '100%' }}>
-                {file.type?.toUpperCase() === 'MAIN' && (
-                  <span className={styles.badge}>대표</span>
-                )}
-                <img
-                  src={file?.filePath ? file.filePath : noImage}
-                  alt={file?.originName}
-                  className={styles.fileImage}
+      <form>
+        <table className={styles.table}>
+          <tbody>
+            <tr>
+              <th>제목</th>
+              <td>
+                <input
+                  type="text"
+                  value={board.title ?? ''}
+                  className={styles.formInput}
+                  readOnly
                 />
-              </div>
-              <span>{file.originName} ({file.fileSize})</span>
-              <button className={styles.btn} onClick={() => onDownload(file.id, file.originName)}>
-                다운로드
-              </button>
-            </div>
-          ))}
-        </div>
-      )}
+              </td>
+            </tr>
 
-      {/* 버튼 영역 */}
-      <div className={styles.btnBox}>
-        <Link to="/boards" className={styles.btn}>목록</Link>
-        {/* 로그인된 본인 글만 수정 버튼 표시 */}
-        {user_no && user_no === board.userNo && (
-          <Link to={`/boards/update/${id}`} className={styles.btn}>수정</Link>
-        )}
-      </div>
+            <tr>
+              <th>작성자</th>
+              <td>
+                <input
+                  type="text"
+                  value={board.writer ?? ''}
+                  className={styles.formInput}
+                  readOnly
+                />
+              </td>
+            </tr>
+
+            <tr>
+              <th colSpan={2}>대표 이미지</th>
+            </tr>
+            <tr>
+              <td colSpan={2}>
+                <div className={styles.thumbnailBox}>
+                  {mainFile ? (
+                    <>
+                      <span className={styles.badge}>대표 이미지</span>
+                      <img
+                        src={mainFile.filePath}
+                        alt={mainFile.originName}
+                        className={styles.mainImage}
+                      />
+                    </>
+                  ) : (
+                    <div style={{ height: '200px', background: '#f5f5f5', textAlign: 'center', lineHeight: '200px', color: '#aaa' }}>
+                      이미지 없음
+                    </div>
+                  )}
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <th colSpan={2}>내용</th>
+            </tr>
+            <tr>
+              <td colSpan={2}>
+                <div className={styles.contentBox}>
+                  <CKEditor
+                    editor={ClassicEditor}
+                    data={board.content ?? ''}
+                    disabled={true}
+                    config={{ toolbar: [] }}
+                  />
+                </div>
+              </td>
+            </tr>
+
+            {fileList.length > 0 && (
+              <>
+                <tr>
+                  <th colSpan={2}>첨부파일</th>
+                </tr>
+                <tr>
+                  <td colSpan={2}>
+                    <div className={styles.fileList}>
+                      {fileList.map((file) => (
+                        <div key={file.id} className={styles.fileItem}>
+                          <div style={{ position: 'relative', width: '100%' }}>
+                            {file.type?.toUpperCase() === 'MAIN' && (
+                              <span className={styles.badge}>대표</span>
+                            )}
+                            <img
+                              src={file?.filePath ? file.filePath : noImage}
+                              alt={file?.originName}
+                              className={styles.fileImage}
+                            />
+                          </div>
+                          <span>{file.originName} ({file.fileSize})</span>
+                          <button
+                            type="button"
+                            className={styles.btn}
+                            onClick={() => onDownload(file.id, file.originName)}
+                          >
+                            다운로드
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </td>
+                </tr>
+              </>
+            )}
+          </tbody>
+        </table>
+
+        <div className={styles.btnBox}>
+          <Link to="/boards" className={styles.btn}>목록</Link>
+          {user_no && user_no === board.userNo && (
+            <Link to={`/boards/update/${id}`} className={styles.btn}>수정</Link>
+          )}
+        </div>
+      </form>
     </div>
   );
 };

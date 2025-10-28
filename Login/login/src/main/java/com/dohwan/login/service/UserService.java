@@ -26,6 +26,7 @@ public interface UserService {
 
     // 회원 삭제
     public boolean delete(String username) throws Exception;
+    
 
   
 }

@@ -20,16 +20,6 @@
   color: var(--text-color);
   min-height: 100vh;
 }
-
-/* 헤더 고정 처리 */
-header.header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 1000;
-}
-
 /* 콘텐츠 상단 패딩: 헤더 높이만큼 띄우기 */
 .content {
   padding-top: 100px; /* 헤더 높이에 맞춰 조정 */

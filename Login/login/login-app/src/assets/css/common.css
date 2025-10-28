@@ -65,5 +65,6 @@ textarea:focus {
   justify-content: center; /* 가로 중앙 */
   align-items: center; /* 세로 중앙 */
   padding: 40px 0;
+  padding-top: 150px;
 }
 

@@ -13,12 +13,12 @@
 .table { composes: table from './common.module.css'; }
 .table th { background-color: #f7f9fc; }
 
+/* List.module.css */
 .boardImg {
-  width: 80px;
-  height: 60px;
+  width: 100px;
+  height: 100px;
   object-fit: cover;
   border-radius: 6px;
-  border: 1px solid #eee;
 }
 
 .link {

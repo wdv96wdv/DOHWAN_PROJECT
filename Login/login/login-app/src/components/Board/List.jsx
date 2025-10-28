@@ -7,50 +7,50 @@ import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArro
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import * as format from '../../utils/format';
-import '../../assets/css/common.module.css'
-import Swal from "sweetalert2";
+import Swal from 'sweetalert2';
 
 const List = ({ list = [], pagination }) => {
+  const [pageList, setPageList] = useState([]);
+  const [isWide, setIsWide] = useState(false);
 
-  // 로그인 여부 확인 함수
+  useEffect(() => {
+    setIsWide(window.innerWidth > 768);
+    createPageList();
+  }, [pagination]);
+
   const isLoggedIn = () => {
-    const token = localStorage.getItem("jwt");
-    return !!token; // token이 있으면 true, 없으면 false
+    const token = localStorage.getItem('jwt');
+    return !!token;
   };
 
-  const [pageList, setPageList] = useState([]);
-  const API_URL = 'https://dohwan-project.onrender.com'; // 운영 서버 주소
-
-  // 페이지 번호 리스트 생성
   const createPageList = () => {
-    let newPageList = [];
+    const newPageList = [];
     for (let i = pagination.start; i <= pagination.end; i++) {
       newPageList.push(i);
     }
     setPageList(newPageList);
   };
 
-  useEffect(() => {
-    createPageList();
-  }, [pagination]);
+  const truncateText = (text, maxLength) => {
+    if (!text) return '';
+    return text.length > maxLength ? text.slice(0, maxLength) + '...' : text;
+  };
 
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>🏃‍♀️ 러닝 커뮤니티</h1>
+
       {isLoggedIn() ? (
-        <Link to="/boards/insert" className={styles.btn}>
-          글쓰기
-        </Link>
+        <Link to="/boards/insert" className={styles.btn}>글쓰기</Link>
       ) : (
         <button
           className={styles.btn}
-          // 버튼 클릭 이벤트
           onClick={() => {
             Swal.fire({
-              icon: "info", // info, warning, success 등 선택 가능
-              title: "로그인 필요",
-              text: "글쓰기는 로그인 후 이용 가능합니다.",
-              confirmButtonText: "확인"
+              icon: 'info',
+              title: '로그인 필요',
+              text: '글쓰기는 로그인 후 이용 가능합니다.',
+              confirmButtonText: '확인',
             });
           }}
         >
@@ -59,12 +59,12 @@ const List = ({ list = [], pagination }) => {
       )}
 
       <table className={styles.table}>
-        {window.innerWidth > 768 && (
+        {isWide && (
           <colgroup>
-            <col style={{ width: '5%' }} />
-            <col style={{ width: '20%' }} />
-            <col style={{ width: '45%' }} />
-            <col style={{ width: '15%' }} />
+            <col style={{ width: '3%' }} />
+            <col style={{ width: '30%' }} />
+            <col style={{ width: '40%' }} />
+            <col style={{ width: '12%' }} />
             <col style={{ width: '15%' }} />
           </colgroup>
         )}
@@ -80,14 +80,12 @@ const List = ({ list = [], pagination }) => {
         <tbody>
           {list.length === 0 ? (
             <tr>
-              <td colSpan={5} align="center">
-                조회된 게시글이 없습니다.
-              </td>
+              <td colSpan={5} align="center">조회된 게시글이 없습니다.</td>
             </tr>
           ) : (
-            list.map((board) => (
-              <tr key={board.no}>
-                <td>{board.no}</td>
+            list.map((board, index) => (
+              <tr key={board.id}>
+                <td>{index + 1}</td>
                 <td>
                   <img
                     src={board.file?.filePath || noImage}
@@ -97,10 +95,10 @@ const List = ({ list = [], pagination }) => {
                 </td>
                 <td>
                   <Link to={`/boards/${board.id}`} className={styles.link}>
-                    {board.title}
+                    {truncateText(board.title, 30)}
                   </Link>
                 </td>
-                <td>{board.writer}</td>
+                <td>{truncateText(board.writer, 10)}</td>
                 <td>{format.formatDate(board.createdAt)}</td>
               </tr>
             ))
@@ -108,7 +106,6 @@ const List = ({ list = [], pagination }) => {
         </tbody>
       </table>
 
-      {/* 페이지네이션 */}
       <div className={styles.pagination}>
         <Link to={`/boards?page=${pagination.first}`} className={styles['btn-page']}>
           <KeyboardDoubleArrowLeftIcon />

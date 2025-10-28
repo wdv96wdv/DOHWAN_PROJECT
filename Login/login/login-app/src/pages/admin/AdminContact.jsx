@@ -17,7 +17,7 @@ const AdminContact = () => {
   const fetchContacts = async () => {
     try {
       setLoading(true);
-      const res = await axios.get("/api/admin/contact", {
+      const res = await axios.get("admin/contact", {
         headers: {
           Authorization: `Bearer ${token}`,
           'Accept': 'application/json',

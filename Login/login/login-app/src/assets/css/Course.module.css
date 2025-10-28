@@ -1,10 +1,6 @@
-/* ===== 컨테이너 ===== */
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 40px 20px;
-  font-family: 'Noto Sans KR', sans-serif;
-}
+@import './common.module.css';
+
+.container { composes: container from './common.module.css'; }
 
 /* ===== Hero Section ===== */
 .hero {

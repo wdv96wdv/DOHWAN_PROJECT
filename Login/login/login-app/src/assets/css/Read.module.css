@@ -1,22 +1,132 @@
 @import './common.module.css';
 
-.container { composes: container from './common.module.css'; }
-.title { composes: title from './common.module.css'; }
-.btnBox { composes: btnBox from './common.module.css'; }
-.fileList { composes: fileList from './common.module.css'; }
-.fileItem { composes: fileItem from './common.module.css'; }
-.fileImage { composes: fileImage from './common.module.css'; }
-.badge { composes: badge from './common.module.css'; }
-.thumbnailBox { composes: thumbnailBox from './common.module.css'; }
-.mainImage { composes: mainImage from './common.module.css'; }
+.title {
+  composes: title from './common.module.css';
+}
+
+.btnBox {
+  composes: btnBox from './common.module.css';
+}
+
+.fileList {
+  composes: fileList from './common.module.css';
+}
+
+.fileItem {
+  composes: fileItem from './common.module.css';
+}
+
+.fileImage {
+  composes: fileImage from './common.module.css';
+}
+
+.badge {
+  composes: badge from './common.module.css';
+}
+
+.thumbnailBox {
+  composes: thumbnailBox from './common.module.css';
+}
+
+.mainImage {
+  composes: mainImage from './common.module.css';
+}
 
 /* ✅ 조회 전용 */
-/* 첨부파일이 없을 때도 너무 작아보이지 않게 컨테이너 높이 보정 */
+/* Read.module.css */
+
 .container {
-  min-height: 70vh; /* 화면의 70% 높이 확보 */
+  composes: container from './common.module.css';
+  min-height: 70vh;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start; /* 필요시 center로 변경 가능 */
-  padding: 40px 20px; /* 기본보다 약간 여백 늘림 */
-  min-height: 65vh;
+  justify-content: flex-start;
+  padding: 40px 20px;
+  gap: 20px;
+  /* 각 섹션 간 간격 */
+}
+
+/* 제목, 작성자 input */
+.formInput {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  background-color: #f9f9f9;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  margin-top: 4px;
+}
+
+/* 대표 이미지 영역 */
+.thumbnailBox {
+  width: 100%;
+  min-height: 200px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.mainImage {
+  max-width: 100%;
+  max-height: 300px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+/* 본문 영역 */
+.contentBox {
+  margin-top: 20px;
+  line-height: 1.6;
+  font-size: 16px;
+}
+
+/* 첨부파일 리스트 */
+.fileList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.fileItem {
+  width: 160px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.fileImage {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 6px;
+  background-color: #eee;
+}
+
+/* 버튼 영역 */
+.btnBox {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 30px;
+}
+
+.btn {
+  padding: 8px 16px;
+  font-size: 15px;
+  border-radius: 6px;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.btn:hover {
+  background-color: #2980b9;
 }

@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Link, useNavigate  } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import '../../assets/css/header.css';
 import { LoginContext } from '../../contexts/LoginContextProvider';
 import logo from '../../assets/img/dorunninglogo.png';
@@ -8,7 +8,7 @@ import { Menu } from 'lucide-react'; // 햄버거 아이콘
 
 const Header = ({ theme, toggleTheme }) => {
   // LoginContext에서 roles와 isLogin 가져오기
-  const { isLogin = false, logout = () => {}, roles } = useContext(LoginContext) || {};
+  const { isLogin = false, logout = () => { }, roles, userInfo } = useContext(LoginContext) || {};
   const [menuOpen, setMenuOpen] = useState(false); // 모바일 메뉴 상태
   const navigate = useNavigate();
 
@@ -17,14 +17,6 @@ const Header = ({ theme, toggleTheme }) => {
 
   // ✅ 관리자 여부 확인
   const isAdmin = roles?.isAdmin; // roles.isAdmin이 true면 관리자 메뉴 표시
-
-   // 기록 페이지 접근 처리
-  const handleRecordClick = (e) => {
-    if (!isLogin) {
-      e.preventDefault();  // 기본 링크 동작 막기
-      navigate('/login');  // 로그인 페이지로 리다이렉트
-    }
-  };
 
   return (
     <header className={`header ${theme}`}>
@@ -40,7 +32,11 @@ const Header = ({ theme, toggleTheme }) => {
         <ul>
           <li><Link to="/course">코스</Link></li>
           {/* 로그인한 사용자만 접근 가능한 링크 */}
-          <li><Link to="/record" onClick={handleRecordClick}>기록</Link></li>
+          <li>
+            <Link to={isLogin ? "/record" : "/login"} onClick={closeMenu}>
+              기록
+            </Link>
+          </li>
           <li><Link to="/event">이벤트</Link></li>
           <li><Link to="/boards">커뮤니티</Link></li>
 
@@ -54,8 +50,21 @@ const Header = ({ theme, toggleTheme }) => {
         <ul>
           {isLogin ? (
             <>
-              <li><Link className="btn" to="/user">마이페이지</Link></li>
-              <li><button className="btn" onClick={logout}>로그아웃</button></li>
+              <li>
+                {userInfo?.avatarUrl ? (
+                  <Link to="/user" className="profile-link">
+                    <img
+                      src={userInfo.avatarUrl}
+                      alt="프로필"
+                      className="profile-image"
+                    />
+                  </Link>
+                ) : (
+                  <Link to="/user" className="btn">마이페이지</Link>
+                )}
+              </li>
+              <li className="logoutItem">
+                <button className="btn" onClick={logout}>로그아웃</button></li>
             </>
           ) : (
             <>
@@ -78,7 +87,11 @@ const Header = ({ theme, toggleTheme }) => {
         <ul className="main-menu">
           <li><Link to="/course" onClick={closeMenu}>코스</Link></li>
           {/* 로그인한 사용자만 접근 가능한 링크 */}
-          <li><Link to="/record" onClick={handleRecordClick}>기록</Link></li>
+          <li>
+            <Link to={isLogin ? "/record" : "/login"} onClick={closeMenu}>
+              기록
+            </Link>
+          </li>
           <li><Link to="/event" onClick={closeMenu}>이벤트</Link></li>
           <li><Link to="/boards" onClick={closeMenu}>커뮤니티</Link></li>
           {isAdmin && <li><Link to="/admin" onClick={closeMenu}>관리자</Link></li>}

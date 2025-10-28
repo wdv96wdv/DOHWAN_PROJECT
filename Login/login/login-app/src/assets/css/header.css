@@ -21,7 +21,10 @@ header.header {
   color: var(--text-color);
   border-bottom: 1px solid var(--border-color);
   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
-  position: relative; /* 모바일 메뉴 위치 기준 */
+  position: fixed;
+  /* 모바일 메뉴 위치 기준 */
+  z-index: 1000;
+  width: 100%;
 }
 
 .logo-container img {
@@ -104,6 +107,32 @@ header.header {
 }
 
 /* ============================= */
+/* 프로필 이미지 */
+.profile-link {
+  display: inline-block;
+  padding: 4px;
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
+}
+
+.profile-link:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  /* 살짝 회색 배경 */
+}
+
+.profile-image {
+  width: 50px;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.logoutItem {
+  align-self: center; /* 세로 중앙 정렬 */
+  margin-left: auto;
+  margin-right: auto; /* 가로 중앙 정렬 */
+}
+
+/* ============================= */
 /* 햄버거 버튼 (모바일용) */
 .menu-toggle {
   display: none;
@@ -112,7 +141,8 @@ header.header {
   cursor: pointer;
   font-size: 28px;
   color: var(--text-color);
-  z-index: 2000; /* 항상 위에 표시 */
+  z-index: 2000;
+  /* 항상 위에 표시 */
 }
 
 /* PC 메뉴 표시 */
@@ -164,9 +194,11 @@ header.header {
 /* ============================= */
 /* 모바일 대응 (max-width: 768px) */
 @media (max-width: 768px) {
+
   .main-menu,
   .util {
-    display: none; /* PC 메뉴 숨김 */
+    display: none;
+    /* PC 메뉴 숨김 */
   }
 
   .menu-toggle {

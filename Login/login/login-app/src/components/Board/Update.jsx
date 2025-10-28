@@ -19,22 +19,31 @@ const Update = ({
   deleteCheckedFiles
 }) => {
   const { id } = useParams();
-  const API_URL = 'https://dohwan-project.onrender.com'; // 운영 서버 주소
 
   const [title, setTitle] = useState('');
   const [writer, setWriter] = useState('');
   const [content, setContent] = useState('');
   const [fileIdList, setFileIdList] = useState([]);
+  const [charCount, setCharCount] = useState(0);
+  const MAX_LENGTH = 3000;
 
   useEffect(() => {
     if (board) {
       setTitle(board.title ?? '');
       setWriter(board.writer ?? '');
       setContent(board.content ?? '');
+      setCharCount(getTextLength(board.content ?? ''));
     }
   }, [board]);
 
-  const onSubmit = async () => {
+  const getTextLength = (html) => {
+    const temp = document.createElement('div');
+    temp.innerHTML = html;
+    return temp.textContent.length;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     Swal.fire({
       title: '수정하시겠습니까?',
       icon: 'question',
@@ -48,7 +57,7 @@ const Update = ({
           title,
           writer,
           content,
-          deleteFiles: fileIdList // 삭제할 파일들
+          deleteFiles: fileIdList
         };
         const headers = { 'Content-Type': 'application/json' };
         onUpdate(data, headers);
@@ -57,15 +66,7 @@ const Update = ({
   };
 
   const handleDelete = () => {
-    Swal.fire({
-      title: '정말 삭제하시겠습니까?',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: '삭제',
-      cancelButtonText: '취소',
-    }).then((res) => {
-      if (res.isConfirmed) onDelete(id);
-    });
+    onDelete(id);
   };
 
   const handleCheckedFileDelete = () => {
@@ -96,81 +97,125 @@ const Update = ({
     <div className={styles.container}>
       <h1 className={styles.title}>게시글 수정</h1>
 
-      <input
-        type="text"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        className={styles.formInput}
-        placeholder="제목"
-      />
-      <input
-        type="text"
-        value={writer}
-        onChange={(e) => setWriter(e.target.value)}
-        className={styles.formInput}
-        placeholder="작성자"
-      />
+      <form onSubmit={handleSubmit}>
+        <table className={styles.table}>
+          <tbody>
+            <tr>
+              <th>제목</th>
+              <td>
+                <input
+                  type="text"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  className={styles.formInput}
+                  placeholder="제목을 입력하세요"
+                  maxLength={100}
+                />
+              </td>
+            </tr>
 
-      <div style={{ marginBottom: '12px' }}>
-        <CKEditor
-          editor={ClassicEditor}
-          data={content ?? ''}
-          onChange={(e, editor) => setContent(editor.getData())}
-        />
-      </div>
+            <tr>
+              <th>작성자</th>
+              <td>
+                <input
+                  type="text"
+                  value={writer}
+                  onChange={(e) => setWriter(e.target.value)}
+                  className={styles.formInput}
+                  placeholder="작성자를 입력하세요"
+                  maxLength={100}
+                />
+              </td>
+            </tr>
 
-      {/* 파일 목록 */}
-      {fileList.length > 0 && (
-        <div className={styles.fileList}>
-          {fileList.map((file) => (
-            <div key={file.id} className={styles.fileItem}>
-              <Checkbox
-                checked={fileIdList.includes(file.id)}
-                onChange={() => checkFileId(file.id)}
-              />
-              {file.type == 'MAIN' && <span className={styles.badge}>대표</span>}
-              <img
-                src={file?.filePath ? file.filePath : noImage}
-                alt={file?.originName}
-                className={styles.fileImage}
-              />
-              <div style={{ marginTop: '6px', fontSize: '13px' }}>
-                {file.originName}
-              </div>
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  gap: '4px',
-                  marginTop: '4px',
-                }}
-              >
-                <button
-                  className={styles.btn}
-                  onClick={() => onDownload(file.id, file.originName)}
-                >
-                  <DownloadIcon fontSize="small" />
-                </button>
-                <button
-                  className={styles.btn}
-                  onClick={() => onDeleteFile(file.id)}
-                >
-                  <DeleteForeverIcon fontSize="small" />
-                </button>
-              </div>
-            </div>
-          ))}
+            <tr>
+              <th colSpan={2}>내용</th>
+            </tr>
+            <tr>
+              <td colSpan={2}>
+                <CKEditor
+                  editor={ClassicEditor}
+                  data={content}
+                  onChange={(event, editor) => {
+                    const data = editor.getData();
+                    const length = getTextLength(data);
+                    if (length <= MAX_LENGTH) {
+                      setContent(data);
+                      setCharCount(length);
+                    } else {
+                      Swal.fire('최대 글자 수를 초과했습니다.', '', 'warning');
+                    }
+                  }}
+                />
+                <div style={{ textAlign: 'right', fontSize: '13px', marginTop: '4px' }}>
+                  글자 수: {charCount} / {MAX_LENGTH}
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <th colSpan={2}>첨부 파일</th>
+            </tr>
+            <tr>
+              <td colSpan={2}>
+                {fileList.length > 0 && (
+                  <div className={styles.fileList}>
+                    {fileList.map((file) => (
+                      <div key={file.id} className={styles.fileItem}>
+                        <Checkbox
+                          checked={fileIdList.includes(file.id)}
+                          onChange={() => checkFileId(file.id)}
+                        />
+                        {file.type === 'MAIN' && <span className={styles.badge}>대표</span>}
+                        <img
+                          src={file?.filePath ? file.filePath : noImage}
+                          alt={file?.originName}
+                          className={styles.fileImage}
+                        />
+                        <div style={{ marginTop: '6px', fontSize: '13px' }}>
+                          {file.originName}
+                        </div>
+                        <div
+                          style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            gap: '4px',
+                            marginTop: '4px',
+                          }}
+                        >
+                          <button
+                            className={styles.btn}
+                            type="button"
+                            onClick={() => onDownload(file.id, file.originName)}
+                          >
+                            <DownloadIcon fontSize="small" />
+                          </button>
+                          <button
+                            className={styles.btn}
+                            type="button"
+                            onClick={() => onDeleteFile(file.id)}
+                          >
+                            <DeleteForeverIcon fontSize="small" />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div className={styles.btnBox}>
+          <Link to="/boards" className={styles.btnGray}>목록</Link>
+          <button type="button" className={styles.btnBlue} onClick={handleCheckedFileDelete}>
+            선택 삭제
+          </button>
+          <button type="submit" className={styles.btnBlue}>수정</button>
+          <button type="button" className={styles.btnGray} onClick={handleDelete}>삭제</button>
         </div>
-      )}
-
-      <div className={styles.btnBox}>
-        <Link to="/boards" className={styles.btn}>목록</Link>
-        <button className={styles.btn} onClick={handleCheckedFileDelete}>
-          선택 삭제
-        </button>
-        <button className={styles.btn} onClick={onSubmit}>수정</button>
-        <button className={styles.btn} onClick={handleDelete}>삭제</button>
-      </div>
+      </form>
     </div>
   );
 };

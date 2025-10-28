@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "../../assets/css/Home.module.css";
 import heroVideo from "../../assets/video/girrunning.mp4";
@@ -14,11 +14,14 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import heroImage1 from "../../assets/img/dongapopup.png";
 import heroImage2 from "../../assets/img/jtbcpopup.jpg";
+import { LoginContext } from "../../contexts/LoginContextProvider"; // 경로는 실제 위치에 맞게 조정
+
 
 // ========================
 // 팝업 컴포넌트
 // ========================
 const Popup = ({
+  id, // 팝업 고유 ID
   imageSrc,
   linkUrl,
   width = "300px",
@@ -30,29 +33,28 @@ const Popup = ({
   const [mobilePosition, setMobilePosition] = useState(position);
 
   useEffect(() => {
-    const hideUntil = localStorage.getItem("popupHideUntil");
-    if (!hideUntil || new Date().getTime() > Number(hideUntil)) setVisible(true);
-  }, []);
+    const today = new Date().toISOString().slice(0, 10);
+    const hideUntil = localStorage.getItem(`hidePopup_${id}`);
+    if (hideUntil !== today) setVisible(true);
+  }, [id]);
 
-  // 모바일/PC 위치 조정
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth <= 768) {
-        setMobilePosition({ top: "25%", left: "45%", transform: "translateX(-50%)" });
+        setMobilePosition({ top: "25%", left: "50%", transform: "translateX(-50%)" });
       } else {
         setMobilePosition(position);
       }
     };
-    handleResize(); // 초기 위치 설정
+    handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, [position]);
 
   const closePopup = (hideToday = false) => {
     if (hideToday) {
-      const endOfDay = new Date();
-      endOfDay.setHours(23, 59, 59, 999);
-      localStorage.setItem("popupHideUntil", endOfDay.getTime());
+      const today = new Date().toISOString().slice(0, 10);
+      localStorage.setItem(`hidePopup_${id}`, today);
     }
     setVisible(false);
   };
@@ -71,7 +73,10 @@ const Popup = ({
         }}
       >
         <button
-          onClick={(e) => { e.stopPropagation(); closePopup(); }}
+          onClick={(e) => {
+            e.stopPropagation();
+            closePopup();
+          }}
           style={{
             position: "absolute",
             top: 8,
@@ -87,18 +92,40 @@ const Popup = ({
           X
         </button>
         <a href={linkUrl} target="_blank" rel="noopener noreferrer">
-          <img src={imageSrc} alt="팝업 이미지" style={{ width: "100%", height, display: "block" }} />
+          <img
+            src={imageSrc}
+            alt="팝업 이미지"
+            style={{ width: "100%", height, display: "block" }}
+          />
         </a>
         <div style={{ display: "flex", borderTop: "1px solid #ccc" }}>
           <button
-            onClick={(e) => { e.stopPropagation(); closePopup(true); }}
-            style={{ flex: 1, padding: 10, border: "none", cursor: "pointer", backgroundColor: "#f5f5f5" }}
+            onClick={(e) => {
+              e.stopPropagation();
+              closePopup(true);
+            }}
+            style={{
+              flex: 1,
+              padding: 10,
+              border: "none",
+              cursor: "pointer",
+              backgroundColor: "#f5f5f5",
+            }}
           >
             오늘 하루 보지 않기
           </button>
           <button
-            onClick={(e) => { e.stopPropagation(); closePopup(); }}
-            style={{ flex: 1, padding: 10, border: "none", cursor: "pointer", backgroundColor: "#f5f5f5" }}
+            onClick={(e) => {
+              e.stopPropagation();
+              closePopup();
+            }}
+            style={{
+              flex: 1,
+              padding: 10,
+              border: "none",
+              cursor: "pointer",
+              backgroundColor: "#f5f5f5",
+            }}
           >
             닫기
           </button>
@@ -108,8 +135,19 @@ const Popup = ({
   );
 };
 
+
 const Home = () => {
   const navigate = useNavigate();
+  const { isLogin } = useContext(LoginContext);
+
+  const handleClick = () => {
+    if (isLogin === "true" || isLogin === true) {
+      navigate("/record");
+    } else {
+      navigate("/login");
+    }
+  };
+
 
   useEffect(() => {
     AOS.init({
@@ -122,11 +160,6 @@ const Home = () => {
     });
   }, []);
 
-  const popups = [
-    { img: heroImage1, link: "https://marathon.jtbc.com/", position: { top: "55%", left: "85%", transform: "translateX(-50%)" } },
-    { img: heroImage2, link: "https://seoul-marathon.com/", position: { top: "15%", left: "85%", transform: "translateX(-50%)" } }
-  ];
-
   // 섹션 컴포넌트 모음
   const HeroSection = () => (
     <section className={styles.hero}>
@@ -138,9 +171,11 @@ const Home = () => {
         <p>
           운동을 시작하려는 사람부터 마라톤을 수년간 달린 사람까지, 짧은 일일 운동으로 여러분을 코칭하여 달리기의 고민을 없애드립니다.
         </p>
-        <button className={styles.ctaBtn} onClick={() => navigate("/login")}>
+        <button className={styles.ctaBtn} onClick={handleClick}>
           지금 시작하기
         </button>
+
+
       </div>
     </section>
   );
@@ -311,17 +346,20 @@ const Home = () => {
   return (
     <div className={styles.home}>
       {/* ================= Popup 렌더링 ================= */}
-      {popups.map((p, idx) => (
-        <Popup
-          key={idx}
-          imageSrc={p.img}
-          linkUrl={p.link}
-          position={p.position}
-          width="300px"
-          height="auto"
-          zIndex={1000}
-        />
-      ))}
+      <Popup
+        id="eventPopup"
+        imageSrc={heroImage1}
+        linkUrl="https://marathon.jtbc.com/"
+        position={{ top: "55%", left: "85%", transform: "translateX(-50%)" }}
+      />
+
+      <Popup
+        id="noticePopup"
+        imageSrc={heroImage2}
+        linkUrl="https://seoul-marathon.com/"
+        position={{ top: "15%", left: "85%", transform: "translateX(-50%)" }}
+      />
+
       <HeroSection />
       {/* <AboutSection /> */}
       <TrainingSection />

@@ -107,6 +107,16 @@ const Insert = ({ onInsert }) => {
     });
   };
 
+  const getTextLength = (html) => {
+    const temp = document.createElement("div");
+    temp.innerHTML = html;
+    return temp.textContent.length;
+  };
+
+  const [charCount, setCharCount] = useState(0);
+  const MAX_LENGTH = 3000;
+
+
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>게시글 등록</h1>
@@ -123,6 +133,7 @@ const Insert = ({ onInsert }) => {
                   onChange={(e) => setTitle(e.target.value)}
                   className={styles.formInput}
                   placeholder="제목을 입력하세요"
+                  maxLength={100}
                 />
               </td>
             </tr>
@@ -136,6 +147,7 @@ const Insert = ({ onInsert }) => {
                   onChange={(e) => setWriter(e.target.value)}
                   className={styles.formInput}
                   placeholder="작성자를 입력하세요"
+                  maxLength={100}
                 />
               </td>
             </tr>
@@ -148,15 +160,27 @@ const Insert = ({ onInsert }) => {
                 <CKEditor
                   editor={ClassicEditor}
                   data={content}
-                  onChange={(event, editor) => setContent(editor.getData())}
+                  onChange={(event, editor) => {
+                    const data = editor.getData();
+                    const length = getTextLength(data);
+                    if (length <= MAX_LENGTH) {
+                      setContent(data);
+                      setCharCount(length);
+                    } else {
+                      Swal.fire('최대 글자 수를 초과했습니다.', '', 'warning');
+                    }
+                  }}
                 />
+                <div style={{ textAlign: 'right', fontSize: '13px', marginTop: '4px' }}>
+                  글자 수: {charCount} / {MAX_LENGTH}
+                </div>
               </td>
             </tr>
 
             <tr>
               <th>메인 이미지</th>
               <td>
-                <input type="file" onChange={handleMainFileChange} accept="image/*"/>
+                <input type="file" onChange={handleMainFileChange} accept="image/*" />
                 {mainPreview && (
                   <div className={styles.fileList}>
                     <img

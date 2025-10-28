@@ -33,6 +33,7 @@
     box-sizing: border-box;
     gap: 30px;
     /* RecordForm과 RecordList 사이 간격 */
+    padding-top: 150px;
 }
 
 .record-page .records-section {

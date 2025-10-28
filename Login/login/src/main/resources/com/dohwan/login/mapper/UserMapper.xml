@@ -32,16 +32,40 @@
 
     <!-- 회원 조회 - username -->
     <select id="select" resultMap="userMap">
-        SELECT *
-        FROM users
-        WHERE username = #{username}
+        SELECT 
+    u.no,
+    u.id,
+    u.username,
+    u.password,
+    u.name,
+    u.email,
+    u.created_at,
+    u.updated_at,
+    u.enabled,
+    p.bio,
+    p.avatar_url AS avatarUrl
+  FROM users u
+  LEFT JOIN profiles p ON u.no = p.no
+  WHERE u.username = #{username}
     </select>
 
-    <select id="findByUsername" resultMap="userMap">
-        SELECT * 
-        FROM users 
-        WHERE username = #{username}
-    </select>
+    <select id="findByUsername" resultType="com.dohwan.login.domain.Users">
+  SELECT 
+    u.no,
+    u.id,
+    u.username,
+    u.password,
+    u.name,
+    u.email,
+    u.created_at,
+    u.updated_at,
+    u.enabled,
+    p.bio,
+    p.avatar_url AS avatarUrl
+  FROM users u
+  LEFT JOIN profiles p ON u.no = p.no
+  WHERE u.username = #{username}
+</select>
 
     <!-- 회원 권한 -->
     <select id="authList" resultMap="authMap">
