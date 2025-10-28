@@ -11,18 +11,20 @@ const AdminContact = () => {
 
   // ✅ 관리자 JWT 토큰 가져오기
   const token = localStorage.getItem("jwt");
-  console.log("token =" + token);
 
   // ✅ 문의 목록 불러오기
   const fetchContacts = async () => {
     try {
       setLoading(true);
-      const res = await axios.get("admin/contact", {
+     const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/admin/contact`, { 
         headers: {
           Authorization: `Bearer ${token}`,
           'Accept': 'application/json',
         },
       });
+
+      console.log("res.data =", res.data); // ✅ 여기서 찍기!
+
       setContacts(res.data);
     } catch (err) {
       console.error(err);

@@ -126,12 +126,6 @@ header.header {
   border-radius: 50%;
   object-fit: cover;
 }
-.logoutItem {
-  align-self: center; /* 세로 중앙 정렬 */
-  margin-left: auto;
-  margin-right: auto; /* 가로 중앙 정렬 */
-}
-
 /* ============================= */
 /* 햄버거 버튼 (모바일용) */
 .menu-toggle {

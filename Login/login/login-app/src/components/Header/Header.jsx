@@ -63,8 +63,7 @@ const Header = ({ theme, toggleTheme }) => {
                   <Link to="/user" className="btn">마이페이지</Link>
                 )}
               </li>
-              <li className="logoutItem">
-                <button className="btn" onClick={logout}>로그아웃</button></li>
+              <li><button className="btn" onClick={logout}>로그아웃</button></li>
             </>
           ) : (
             <>
