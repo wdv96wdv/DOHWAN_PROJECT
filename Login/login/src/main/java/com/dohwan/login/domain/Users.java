@@ -18,6 +18,8 @@ public class Users {
     private Date createdAt;
     private Date updatedAt;
     private Boolean enabled;
+    private String bio;
+    private String avatarUrl;
 
     private List<UserAuth> authList;
 

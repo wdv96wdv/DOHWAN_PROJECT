@@ -18,6 +18,7 @@ import Contact from './pages/Contact';
 
 import AdminContact from "./pages/admin/AdminContact";
 import Calendar from './pages/Calendar';  
+import Profile from './pages/Profile';
 
 import Listpage from './pages/board/Listpage';
 import Insertpage from './pages/board/Insertpage';
@@ -38,6 +39,8 @@ import "./assets/css/record.css";
 import "./assets/css/footer.css";
 import "./assets/css/Course.module.css"
 import "./assets/css/Event.module.css"
+import "./assets/css/profile.css"
+
 
 const App = () => {
   const [theme, setTheme] = useState('light');
@@ -54,6 +57,7 @@ const App = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/join" element={<Join />} />
             <Route path="/user" element={<User />} />
+            <Route path="/profile" element={<Profile />} />
             <Route path="/admin" element={<AdminContact />} />
             <Route path="/calendar" element={<Calendar />} />
             <Route path="/about" element={<About />} />

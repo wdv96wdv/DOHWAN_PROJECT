@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react'
 import '../../assets/css/login.css';
 import { LoginContext } from '../../contexts/LoginContextProvider'
+import GoogleLoginButton from './GoogleLoginButton';
 
 const LoginForm = () => {
 
@@ -48,14 +49,14 @@ const LoginForm = () => {
         <div>
           <label htmlFor="username">ID</label>
           <input type="text"
-                 id="username"
-                 placeholder='ID'
-                 name='username'
-                 autoComplete='username'
-                 required
-                 onKeyUp={checkCapsLock}
-                 onKeyDown={checkCapsLock}
-                 disabled={loading} // 로딩 중 입력 불가
+            id="username"
+            placeholder='ID'
+            name='username'
+            autoComplete='username'
+            required
+            onKeyUp={checkCapsLock}
+            onKeyDown={checkCapsLock}
+            disabled={loading} // 로딩 중 입력 불가
           />
         </div>
 
@@ -63,14 +64,14 @@ const LoginForm = () => {
         <div>
           <label htmlFor="password">password</label>
           <input type="password"
-                 id="password"
-                 placeholder='password'
-                 name='password'
-                 autoComplete='password'
-                 required
-                 onKeyUp={checkCapsLock}
-                 onKeyDown={checkCapsLock}
-                 disabled={loading} // 로딩 중 입력 불가
+            id="password"
+            placeholder='password'
+            name='password'
+            autoComplete='password'
+            required
+            onKeyUp={checkCapsLock}
+            onKeyDown={checkCapsLock}
+            disabled={loading} // 로딩 중 입력 불가
           />
         </div>
 
@@ -78,6 +79,10 @@ const LoginForm = () => {
         <button type='submit' className='btn btn--form btn-login' disabled={loading}>
           {loading ? '로그인중입니다...' : '로그인'}
         </button>
+
+        {/* Google 로그인 버튼 추가 */}
+        <GoogleLoginButton />
+
 
         {/* CapsLock 안내 */}
         <div className="capslock-warning" style={{ display: capsLockOn ? 'block' : 'none' }}>

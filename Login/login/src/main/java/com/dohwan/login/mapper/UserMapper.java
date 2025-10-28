@@ -1,5 +1,7 @@
 package com.dohwan.login.mapper;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import com.dohwan.login.domain.UserAuth;
@@ -26,8 +28,16 @@ public interface UserMapper {
     // 회원 권한 삭제
     public int deleteAuth(UserAuth userAuth) throws Exception;
 
-     // 회원아이디찾기
+    // 회원아이디찾기
     public Users findByUsername(String username) throws Exception;
 
-  
+    // 소셜로그인
+    Users findByEmail(String email);
+
+    void insertUser(Users user);
+
+    void insertUserAuth(UserAuth auth);
+
+    List<UserAuth> findAuthListByUsername(String username);
+
 }

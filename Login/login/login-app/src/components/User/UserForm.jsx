@@ -1,99 +1,251 @@
 import '../../assets/css/user.css';
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
-import { useNavigate } from 'react-router-dom'; // 추가 ✅
+import { useNavigate } from 'react-router-dom';
+import supabase from '../../utils/supabaseClient';
 
 const UserForm = ({ userInfo, updateUser, deleteUser }) => {
-const navigate = useNavigate(); // 이동용 훅
-   // Caps Lock 상태
-  const [capsLockOn, setCapsLockOn] = useState(false)
+  const navigate = useNavigate();
 
-  // 정보 수정
-  const onUpdate = (e) => {
-    e.preventDefault()
+  const [form, setForm] = useState({
+    username: '',
+    name: '',
+    email: '',
+    avatar_url: '',
+    bio: '',
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: ''
+  });
 
-    const form = e.target
-    const username = form.username.value
-    const password = form.password.value
-    const name = form.name.value
-    const email = form.email.value
-    console.log(username, password, name, email);
 
-    updateUser({ username, password, name, email })
+  const [preview, setPreview] = useState('');
+  const [capsLockOn, setCapsLockOn] = useState(false);
 
-  }
-  // Caps Lock 체크 (KeyDown, KeyUp 둘 다 사용)
+  // userInfo가 바뀔 때 form 상태 초기화
+  useEffect(() => {
+    if (userInfo) {
+      setForm({
+        username: userInfo.username || '',
+        name: userInfo.name || '',
+        email: userInfo.email || '',
+        avatar_url: userInfo.avatar_url || '',
+        bio: userInfo.bio || '',
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: ''
+      });
+
+      if (userInfo.avatar_url) {
+        setPreview(userInfo.avatar_url);
+      }
+    }
+  }, [userInfo]);
+
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
   const checkCapsLock = (e) => {
-    const isOn = e.getModifierState && e.getModifierState("CapsLock");
-    setCapsLockOn(isOn)
-  }
+    const isOn = e.getModifierState && e.getModifierState('CapsLock');
+    setCapsLockOn(isOn);
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setPreview(URL.createObjectURL(file));
+    }
+  };
+
+  const onUpdate = async (e) => {
+    e.preventDefault();
+
+    const formEl = e.target;
+    const currentPassword = formEl.currentPassword.value;
+    const newPassword = formEl.newPassword.value;
+    const confirmPassword = formEl.confirmPassword.value;
+    const avatarFile = formEl.avatar.files[0];
+
+    // 비밀번호 변경 조건 확인
+    let passwordPayload = {};
+    if (newPassword || confirmPassword) {
+      if (!currentPassword || !newPassword || !confirmPassword) {
+        Swal.fire('비밀번호 변경 실패', '모든 비밀번호 입력란을 채워주세요.', 'error');
+        return;
+      }
+
+      if (newPassword !== confirmPassword) {
+        Swal.fire('비밀번호 변경 실패', '새 비밀번호가 일치하지 않습니다.', 'error');
+        return;
+      }
+
+      passwordPayload = {
+        currentPassword,
+        newPassword,
+        confirmPassword,
+      };
+    }
+
+
+    // 프로필 이미지 업로드
+    let avatar_url = form.avatar_url;
+    if (avatarFile) {
+      const fileExt = avatarFile.name.split('.').pop();
+      const fileName = `${form.username}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      const { data, error } = await supabase.storage
+        .from('avatars')
+        .upload(filePath, avatarFile, {
+          cacheControl: '3600',
+          upsert: true,
+        });
+
+      if (error) {
+        console.error('이미지 업로드 실패:', error);
+      } else {
+        avatar_url = `https://ismclnqslxnlsfmqjytc.supabase.co/storage/v1/object/public/avatars/${filePath}`;
+        setForm((prev) => ({ ...prev, avatar_url }));
+      }
+    }
+
+    // 모든 정보 통합해서 한 번에 요청
+    await updateUser({
+      username: form.username,
+      name: form.name,
+      email: form.email,
+      avatar_url,
+      bio: form.bio,
+      ...passwordPayload, // 비밀번호 관련 필드 포함 (있을 경우만)
+    });
+  };
+
 
   return (
     <div className="form">
       <h2 className="login-title">회원 정보</h2>
-      <form className='login-form' onSubmit={(e) => onUpdate(e)}>
+      <form className="login-form" onSubmit={onUpdate}>
+        {/* 안내 메세지 */}
+        <p style={{ fontSize: '0.9rem', color: '#666', marginBottom: '1rem' }}>
+          회원정보를 수정하려면 <strong>현재 비밀번호</strong>를 입력해주세요.<br />
+          비밀번호를 변경하려면 <strong>새 비밀번호</strong>와 <strong>확인</strong>까지 입력해주세요.
+        </p>
+        {/* 비밀번호 변경 섹션 */}
+        <h3>비밀번호 변경</h3>
         <div>
-          <label htmlFor="username">username</label>
-          <input type="text"
-            id='username'
-            placeholder='username'
-            name='username'
-            autoComplete='username'
+          <label htmlFor="currentPassword">현재 비밀번호</label>
+          <input
+            type="password"
+            id="currentPassword"
+            name="currentPassword"
+            placeholder="현재 비밀번호"
+            autoComplete="current-password"
+            value={form.currentPassword}
             required
-            readOnly
-            defaultValue={userInfo?.username}
+            onChange={handleChange}
+            onKeyUp={checkCapsLock}
+            onKeyDown={checkCapsLock}
+          />
+        </div>
+        <div>
+          <label htmlFor="newPassword">새 비밀번호</label>
+          <input
+            type="password"
+            id="newPassword"
+            name="newPassword"
+            placeholder="새 비밀번호"
+            autoComplete="new-password"
+            value={form.newPassword}
+            onKeyUp={checkCapsLock}
+            onKeyDown={checkCapsLock}
+            onChange={handleChange}
+          />
+        </div>
+        <div>
+          <label htmlFor="confirmPassword">새 비밀번호 확인</label>
+          <input
+            type="password"
+            id="confirmPassword"
+            name="confirmPassword"
+            placeholder="새 비밀번호 확인"
+            autoComplete="new-password"
+            value={form.confirmPassword}
+            onChange={handleChange}
             onKeyUp={checkCapsLock}
             onKeyDown={checkCapsLock}
           />
         </div>
 
+        {/* 이름 */}
         <div>
-          <label htmlFor="password">password</label>
-          <input type="password"
-            id='password'
-            placeholder='password'
-            name='password'
-            autoComplete='password'
+          <label htmlFor="name">이름</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            value={form.name}
+            onChange={handleChange}
             required
-            onKeyUp={checkCapsLock}
-            onKeyDown={checkCapsLock}
           />
         </div>
 
+        {/* 이메일 */}
         <div>
-          <label htmlFor="name">name</label>
-          <input type="text"
-            id='name'
-            placeholder='name'
-            name='name'
-            autoComplete='name'
+          <label htmlFor="email">이메일</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            value={form.email}
+            onChange={handleChange}
             required
-            defaultValue={userInfo?.name}
-            onKeyUp={checkCapsLock}
-            onKeyDown={checkCapsLock}
           />
         </div>
 
+        {/* 프로필 이미지 */}
         <div>
-          <label htmlFor="email">email</label>
-          <input type="text"
-            id='email'
-            placeholder='email'
-            name='email'
-            autoComplete='email'
-            required
-            defaultValue={userInfo?.email}
-            onKeyUp={checkCapsLock}
-            onKeyDown={checkCapsLock}
+          <label htmlFor="avatar">프로필 이미지</label>
+          <input
+            type="file"
+            id="avatar"
+            name="avatar"
+            accept="image/*"
+            onChange={handleImageChange}
+          />
+        </div>
+        {preview && (
+          <img
+            src={preview}
+            alt="미리보기"
+            style={{ width: '100px', borderRadius: '50%', marginTop: '1rem' }}
+          />
+        )}
+
+        {/* 자기소개 */}
+        <div>
+          <label htmlFor="bio">자기소개</label>
+          <textarea
+            id="bio"
+            name="bio"
+            rows="4"
+            value={form.bio}
+            onChange={handleChange}
+            placeholder="자기소개를 입력하세요"
           />
         </div>
 
-        <button type='submit' className='btn btn--form btn-login'>
+        {/* 수정 버튼 */}
+        <button type="submit" className="btn btn--form btn-login">
           정보 수정
         </button>
+
+        {/* 탈퇴 버튼 */}
         <button
           type="button"
-          className='btn btn--form btn-login'
+          className="btn btn--form btn-login"
           onClick={() => {
             Swal.fire({
               title: '회원 탈퇴',
@@ -101,24 +253,29 @@ const navigate = useNavigate(); // 이동용 훅
               icon: 'warning',
               showCancelButton: true,
               confirmButtonText: '탈퇴',
-              cancelButtonText: '취소'
+              cancelButtonText: '취소',
             }).then((result) => {
               if (result.isConfirmed) {
-                deleteUser(userInfo.username);
+                deleteUser(form.username);
                 Swal.fire('완료!', '회원 탈퇴가 완료되었습니다.', 'success');
-                navigate("/") // 메인으로 이동
+                navigate('/');
               }
-            })
+            });
           }}
-        > 회원 탈퇴
+        >
+          회원 탈퇴
         </button>
-        {/* CapsLock 안내 */}
-        <div className="capslock-warning" style={{ display: capsLockOn ? 'block' : 'none' }}>
+
+        {/* Caps Lock 경고 */}
+        <div
+          className="capslock-warning"
+          style={{ display: capsLockOn ? 'block' : 'none' }}
+        >
           ⚠️ Caps Lock이 켜져 있습니다.
         </div>
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default UserForm
+export default UserForm;

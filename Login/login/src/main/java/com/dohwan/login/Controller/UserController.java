@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dohwan.login.domain.CustomUser;
+import com.dohwan.login.domain.UserUpdateRequest;
 import com.dohwan.login.domain.Users;
 import com.dohwan.login.service.UserService;
 
@@ -87,18 +88,30 @@ public class UserController {
   // @PreAuthorize(" hasRole('ROLE_ADMIN') ") // 👮‍♀️ 관리자 권한
   // @PreAuthorize(" hasAnyRole('ROLE_USER', 'ROLE_ADMIN') ") // 👩‍💼 사용자 OR
   // 👮‍♀️ 관리자
-  @PreAuthorize(" hasRole('ROLE_ADMIN') or #p0.username == authentication.name ") // 👮‍♀️+👩‍💻
-  @PutMapping("")
-  public ResponseEntity<?> update(@RequestBody Users user) throws Exception {
+  // @PreAuthorize(" hasRole('ROLE_ADMIN') or #p0.username == authentication.name
+  // ") // 👮‍♀️+👩‍💻
+  // @PutMapping("")
+  // public ResponseEntity<?> update(@RequestBody Users user) throws Exception {
 
-    boolean result = userService.update(user);
+  // boolean result = userService.update(user);
+
+  // if (result) {
+  // log.info("회원 수정 성공!");
+  // return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
+  // } else {
+  // log.info("회원 수정 실패!");
+  // return new ResponseEntity<>("FAIL", HttpStatus.BAD_REQUEST);
+  // }
+  // }
+  @PutMapping("")
+  @PreAuthorize("hasRole('ROLE_ADMIN') or #request.username == authentication.name")
+  public ResponseEntity<?> update(@RequestBody UserUpdateRequest request) throws Exception {
+    boolean result = userService.updateWithPassword(request);
 
     if (result) {
-      log.info("회원 수정 성공!");
-      return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
+      return ResponseEntity.ok("회원정보 수정 성공");
     } else {
-      log.info("회원 수정 실패!");
-      return new ResponseEntity<>("FAIL", HttpStatus.BAD_REQUEST);
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("회원정보 수정 실패");
     }
   }
 

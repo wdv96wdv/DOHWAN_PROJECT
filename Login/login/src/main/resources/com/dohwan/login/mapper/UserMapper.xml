@@ -57,14 +57,15 @@
     </insert>
 
     <!-- 회원 정보 수정 -->
-    <update id="update">
-        UPDATE users
-           SET password = #{password}
-              ,name = #{name}
-              ,email = #{email}
-              ,updated_at = now()
-        WHERE username = #{username}
-    </update>
+    <update id="update" parameterType="com.dohwan.login.domain.Users">
+  UPDATE users
+     SET password = COALESCE(#{password}, password),
+         name = COALESCE(#{name}, name),
+         email = COALESCE(#{email}, email),
+         updated_at = now()
+   WHERE username = #{username}
+</update>
+
 
     <!-- 회원 권한 등록 -->
     <insert id="insertAuth">
@@ -86,5 +87,53 @@
     <delete id="deleteByUserNo" parameterType="Long">
         DELETE FROM records WHERE user_no = #{userNo};
     </delete>
+
+
+      <!-- 사용자 조회 by 이메일 -->
+  <select id="findByEmail" resultType="com.dohwan.login.domain.Users">
+    SELECT *
+    FROM users
+    WHERE email = #{email}
+  </select>
+
+  <!-- 사용자 등록 -->
+  <insert id="insertUser" parameterType="com.dohwan.login.domain.Users">
+    INSERT INTO users (
+      username,
+      name,
+      email,
+      password,
+      enabled,
+      created_at,
+      updated_at
+    ) VALUES (
+      #{username},
+      #{name},
+      #{email},
+      #{password},
+      #{enabled},
+      NOW(),
+      NOW()
+    )
+  </insert>
+
+  <!-- 권한 등록 -->
+  <insert id="insertUserAuth" parameterType="com.dohwan.login.domain.UserAuth">
+    INSERT INTO user_auth (
+      username,
+      auth
+    ) VALUES (
+      #{username},
+      #{auth}
+    )
+  </insert>
+
+  <!-- 사용자 권한 목록 조회 -->
+  <select id="findAuthListByUsername" resultType="com.dohwan.login.domain.UserAuth">
+    SELECT *
+    FROM user_auth
+    WHERE username = #{username}
+  </select>
+
 
 </mapper>

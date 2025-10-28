@@ -20,8 +20,14 @@ const LoginContextProvider = ({ children }) => {
   })
   // 👩‍💼 사용자 정보
   const [userInfo, setUserInfo] = useState(() => {
-    const savedUserInfo = localStorage.getItem("userInfo")
-    return savedUserInfo ? JSON.parse(savedUserInfo) : null
+    const savedUserInfo = localStorage.getItem("userInfo");
+    if (!savedUserInfo || savedUserInfo === "undefined") return null;
+    try {
+      return JSON.parse(savedUserInfo);
+    } catch (e) {
+      console.error("userInfo JSON parse error:", e);
+      return null;
+    }
   })
   // 💎 권한 정보
   const [roles, setRoles] = useState(() => {
@@ -79,7 +85,7 @@ const LoginContextProvider = ({ children }) => {
     localStorage.setItem("isLogin", "true")
     // 사용자 정보
     setUserInfo(data)
-    localStorage.setItem("userInfo", JSON.stringify(data))
+    localStorage.setItem("userInfo", JSON.stringify(data ?? {}))
     // 권한 정보
     const updateRoles = { isUser: false, isAdmin: false }
     data.authList.forEach((obj) => {
@@ -102,7 +108,7 @@ const LoginContextProvider = ({ children }) => {
 
     if (!jwt)
       return
-    
+
     const authorization = `Bearer ${jwt}`
 
     // 💍 JWT 를 Authorization 헤더에 등록
@@ -186,10 +192,21 @@ const LoginContextProvider = ({ children }) => {
 
   }, [])
 
+  const loginWithSocial = (jwt, userData) => {
+    const authorization = `Bearer ${jwt}`;
+    Cookies.set("jwt", jwt, { expires: 5 }); // 쿠키 저장
+
+    // ✅ userData 안에 userInfo가 들어있다면 분리해서 전달
+    const userInfo = userData.userInfo ?? userData; // 백엔드가 userInfo 포함했을 경우 대응
+
+    loginSetting(authorization, userInfo);  // 기존 로그인 세팅 재사용
+    navigate("/"); // 로그인 후 메인으로 이동
+  };
+
 
   return (
     // 컨텍스트 값 지정 ➡ value{ ?, ? }
-    <LoginContext.Provider value={{ isLogin, login, userInfo, roles, isLoading, logout }}>
+    <LoginContext.Provider value={{ isLogin, login, loginWithSocial, userInfo, roles, isLoading, logout }}>
       {children}
     </LoginContext.Provider>
   )
