@@ -8,6 +8,7 @@ import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import * as format from '../../utils/format';
 import Swal from 'sweetalert2';
+import Cookies from 'js-cookie';
 
 const List = ({ list = [], pagination }) => {
   const [pageList, setPageList] = useState([]);
@@ -19,8 +20,21 @@ const List = ({ list = [], pagination }) => {
   }, [pagination]);
 
   const isLoggedIn = () => {
-    const token = localStorage.getItem('jwt');
-    return !!token;
+    // 1. localStorage의 userInfo나 isLogin 확인 (가장 확실)
+    const isLogin = localStorage.getItem('isLogin');
+    if (isLogin === 'true') {
+      return true;
+    }
+
+    // 2. 쿠키에서 JWT 가져오기
+    const cookieToken = Cookies.get('jwt');
+    if (cookieToken) {
+      return true;
+    }
+
+    // 3. localStorage에서 JWT 가져오기 (기존 방식)
+    const localToken = localStorage.getItem('jwt');
+    return !!localToken;
   };
 
   const createPageList = () => {

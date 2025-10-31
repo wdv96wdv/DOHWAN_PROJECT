@@ -14,7 +14,7 @@ const Privacy = () => {
           수집된 정보는 서비스 제공 목적 외에는 사용되지 않습니다.
         </p>
         <div className={styles.highlight}>
-          수집 항목: 이름, 이메일, 사용자 ID, 러닝 기록 및 코스 정보
+          수집 항목: 이름, 이메일, 사용자 ID, 마라톤 일정, 러닝 기록 및 코스 정보
         </div>
       </div>
 
@@ -24,6 +24,7 @@ const Privacy = () => {
         <ul className={styles.pageText}>
           <li>✅ 회원 서비스 제공 및 계정 관리</li>
           <li>✅ 코스 및 이벤트 정보 제공</li>
+          <li>✅ 마라톤 일정</li>
           <li>✅ 통계 및 서비스 개선</li>
         </ul>
       </div>

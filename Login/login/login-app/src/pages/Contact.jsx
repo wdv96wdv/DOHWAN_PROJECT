@@ -69,11 +69,11 @@ const Contact = () => {
               maxLength={500}
               onChange={handleMessageChange} // 입력값 변경 시 상태 업데이트
             />
-             <div className={styles.charCount}>
+            <div className={styles.charCount}>
               글자 수: {message.length} / 500 {/* 글자 수와 최대 글자 수 표시 */}
             </div>
             <div className={styles.btnBox}>
-              <button className={styles.btn} type="submit" disabled={loading}>
+              <button className={`${styles.btn} ${styles.contactBtn}`} type="submit" disabled={loading}>
                 {loading ? '전송 중...' : '전송'}
               </button>
             </div>

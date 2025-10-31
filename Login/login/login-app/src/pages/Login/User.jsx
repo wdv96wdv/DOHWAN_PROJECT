@@ -7,7 +7,7 @@ import * as Swal from '../../apis/alert';
 import supabase from '../../utils/supabaseClient';
 
 const User = () => {
-  const { isLoading, isLogin, roles, logout, userInfo } = useContext(LoginContext);
+  const { isLoading, isLogin, roles, logout, userInfo, updateUserInfo } = useContext(LoginContext);
   const navigate = useNavigate();
   const [profileInfo, setProfileInfo] = useState({});
 
@@ -73,6 +73,9 @@ const User = () => {
       confirmPassword
     } = form;
 
+    // 비밀번호 변경 여부 확인
+    const isPasswordChanged = !!(newPassword && confirmPassword && newPassword.trim());
+
     try {
       const response = await auth.update({
         username, name, email, currentPassword,
@@ -95,7 +98,20 @@ const User = () => {
         return;
       }
 
-      Swal.alert('회원정보 수정 성공', '로그아웃 후 다시 로그인해주세요.', 'success', () => logout(true));
+      // 비밀번호 변경 시에만 재로그인
+      if (isPasswordChanged) {
+        Swal.alert('회원정보 수정 성공', '비밀번호가 변경되어 다시 로그인해주세요.', 'success', () => logout(true));
+      } else {
+        // 비밀번호 변경 없이 정보만 변경한 경우
+        // 프로필 정보 즉시 반영
+        setProfileInfo({ avatar_url, bio });
+        
+        // 사용자 정보 갱신
+        if (updateUserInfo) {
+          await updateUserInfo();
+        }
+        Swal.alert('회원정보 수정 성공', '정보가 성공적으로 수정되었습니다.', 'success');
+      }
     } catch (error) {
       console.error('회원정보 수정 중 에러:', error);
       Swal.alert('회원정보 수정 실패', '예기치 못한 오류가 발생했습니다.', 'error');

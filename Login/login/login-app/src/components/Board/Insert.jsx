@@ -5,6 +5,7 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import Swal from 'sweetalert2';
 import * as fileApi from '../../apis/files';
+import Cookies from 'js-cookie';
 
 const Insert = ({ onInsert }) => {
   const [title, setTitle] = useState('');
@@ -38,13 +39,31 @@ const Insert = ({ onInsert }) => {
   };
 
   const getUserNoFromJWT = () => {
-    const token = localStorage.getItem("jwt");
-    console.log("jwt =" + token);
+    // 1. localStorage의 userInfo에서 no 가져오기 (가장 확실)
+    const savedUserInfo = localStorage.getItem("userInfo");
+    if (savedUserInfo) {
+      try {
+        const userInfo = JSON.parse(savedUserInfo);
+        if (userInfo && userInfo.no) {
+          return userInfo.no;
+        }
+      } catch (e) {
+        console.error("userInfo 파싱 실패:", e);
+      }
+    }
+
+    // 2. 쿠키에서 JWT 가져오기
+    let token = Cookies.get("jwt");
+    if (!token) {
+      // 3. localStorage에서 JWT 가져오기 (기존 방식)
+      token = localStorage.getItem("jwt");
+    }
+
     if (!token) return null;
 
     try {
       const payload = JSON.parse(atob(token.split(".")[1]));
-      console.log("payload:", payload); // user_no가 정상인지 확인
+      console.log("payload:", payload);
       return payload.no; // JWT payload에서 사용자 no(pk)
     } catch (err) {
       console.error("JWT 파싱 실패:", err);

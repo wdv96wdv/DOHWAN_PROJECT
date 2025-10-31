@@ -147,6 +147,12 @@ public class LoginController {
                 user.setPassword(null); // 소셜 로그인은 비밀번호 없음
                 user.setEnabled(true);
                 userMapper.insertUser(user); // INSERT 처리
+                
+                // INSERT 후 생성된 no를 다시 조회
+                Users insertedUser = userMapper.findByEmail(email);
+                if (insertedUser != null && insertedUser.getNo() != null) {
+                    user.setNo(insertedUser.getNo());
+                }
 
                 // 권한 기본값 설정
                 UserAuth auth = new UserAuth();
@@ -177,6 +183,7 @@ public class LoginController {
                     .header().add("typ", SecurityConstants.TOKEN_TYPE).and()
                     .claim("uid", user.getUsername())
                     .claim("rol", roles)
+                    .claim("no", user.getNo()) // ✅ 사용자 no 추가
                     .expiration(new Date(System.currentTimeMillis() + day5))
                     .compact();
 

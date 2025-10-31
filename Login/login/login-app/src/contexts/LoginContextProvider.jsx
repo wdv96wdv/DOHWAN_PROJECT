@@ -4,6 +4,7 @@ import * as auth from '../apis/auth'
 import * as Swal from '../apis/alert'
 import Cookies from 'js-cookie'
 import { useNavigate } from 'react-router-dom'
+import supabase from '../utils/supabaseClient'
 
 // 📦 컨텍스트 생성
 export const LoginContext = createContext()
@@ -203,10 +204,56 @@ const LoginContextProvider = ({ children }) => {
     navigate("/"); // 로그인 후 메인으로 이동
   };
 
+  // 사용자 정보 업데이트 (비밀번호 변경 없이 정보만 변경 시)
+  const updateUserInfo = async () => {
+    try {
+      const response = await auth.info();
+      if (response.data && response.status === 200) {
+        const updatedUserInfo = response.data;
+        
+        // Supabase에서 프로필 정보 가져오기
+        if (updatedUserInfo.no) {
+          try {
+            const { data: profileData, error: profileError } = await supabase
+              .from('profiles')
+              .select('avatar_url, bio')
+              .eq('no', updatedUserInfo.no)
+              .single();
+            
+            if (!profileError && profileData) {
+              // 프로필 정보 병합
+              updatedUserInfo.avatarUrl = profileData.avatar_url;
+              updatedUserInfo.bio = profileData.bio;
+            }
+          } catch (profileErr) {
+            console.warn('프로필 정보 조회 실패 (무시):', profileErr);
+          }
+        }
+        
+        setUserInfo(updatedUserInfo);
+        localStorage.setItem("userInfo", JSON.stringify(updatedUserInfo ?? {}));
+        
+        // 권한 정보도 업데이트
+        const updateRoles = { isUser: false, isAdmin: false };
+        if (updatedUserInfo.authList) {
+          updatedUserInfo.authList.forEach((obj) => {
+            if (obj.auth == 'ROLE_USER') updateRoles.isUser = true;
+            if (obj.auth == 'ROLE_ADMIN') updateRoles.isAdmin = true;
+          });
+        }
+        setRoles(updateRoles);
+        localStorage.setItem("roles", JSON.stringify(updateRoles));
+        return true;
+      }
+    } catch (error) {
+      console.error('사용자 정보 업데이트 실패:', error);
+    }
+    return false;
+  };
 
   return (
     // 컨텍스트 값 지정 ➡ value{ ?, ? }
-    <LoginContext.Provider value={{ isLogin, login, loginWithSocial, userInfo, roles, isLoading, logout }}>
+    <LoginContext.Provider value={{ isLogin, login, loginWithSocial, userInfo, roles, isLoading, logout, updateUserInfo }}>
       {children}
     </LoginContext.Provider>
   )

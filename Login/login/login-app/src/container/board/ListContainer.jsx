@@ -45,8 +45,6 @@ const ListContainer = () => {
     const query = new URLSearchParams(location.search);
     const newPage = query.get('page') ?? 1;
     const newSize = query.get('size') ?? 10;
-    console.log(`newPage: ${newPage}`);
-    console.log(`newSize: ${newSize}`);
     setPage(newPage);
     setSize(newSize);
   }

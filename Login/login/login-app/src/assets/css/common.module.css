@@ -31,9 +31,11 @@
   transition: 0.2s ease-in-out;
   font-size: 20px;
 }
+
 .btn:hover {
   background-color: #3a77d4;
 }
+
 .btn:disabled {
   background-color: #ccc;
   cursor: not-allowed;
@@ -52,8 +54,17 @@
   transition: 0.2s;
   font-size: 20px;
 }
+
 .btnGray:hover {
   background-color: #d5d8db;
+}
+
+/* common.module.css 또는 Contact.module.css */
+.contactBtn {
+  width: 100%;          /* 폼 폭에 맞춤 */
+  font-size: 18px;      /* Contact 전용 크기 */
+  padding: 12px;
+  border-radius: 10px;  /* 공통 버튼과 다르게 둥글기 */
 }
 
 /* ✅ 버튼 그룹 */
@@ -65,17 +76,22 @@
 }
 
 /* ✅ 입력폼 */
-.formInput, .formTextarea {
+.formInput,
+.formTextarea {
   width: 100%;
   display: block;
-  padding: 10px 12px;
+  padding: 12px 14px;
   border: 1px solid #ccc;
   border-radius: 8px;
   font-size: 15px;
   background-color: #fafafa;
+  margin-bottom: 16px;
+  /* 각 필드 사이 여백 추가 */
   transition: border-color 0.2s;
 }
-.formInput:focus, .formTextarea:focus {
+
+.formInput:focus,
+.formTextarea:focus {
   border-color: #4b8cf5;
   outline: none;
 }
@@ -112,8 +128,13 @@
 }
 
 /* 정렬 옵션 */
-.tdCenter { text-align: center !important; }
-.tdRight { text-align: right !important; }
+.tdCenter {
+  text-align: center !important;
+}
+
+.tdRight {
+  text-align: right !important;
+}
 
 /* Hover 효과 */
 .table tbody tr:hover {
@@ -127,17 +148,20 @@
   gap: 16px;
   margin-top: 24px;
 }
+
 .fileItem {
   background: #f8f9fa;
   border-radius: 12px;
   padding: 12px;
   text-align: center;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
   transition: transform 0.2s ease;
 }
+
 .fileItem:hover {
   transform: translateY(-2px);
 }
+
 .fileImage {
   width: 100%;
   height: auto;
@@ -152,11 +176,12 @@
   margin: 24px 0;
   position: relative;
 }
+
 .mainImage {
   max-width: 100%;
   height: auto;
   border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
 }
 
 /* ✅ 뱃지 */
@@ -170,6 +195,7 @@
   font-size: 13px;
   border-radius: 10px;
 }
+
 /* About / Privacy / Contact 전용 컨테이너 */
 
 .pageContainer {
@@ -197,10 +223,10 @@
 /* ===== 섹션 ===== */
 .section {
   margin-bottom: 30px;
-  padding: 20px;
+  padding: 24px;
   border-radius: 12px;
-  background-color: #f8f9fa;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+  background-color: #ffffff; /* 회색에서 흰색으로 변경 */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
 /* ===== 소제목 ===== */
@@ -220,13 +246,13 @@
 
 /* ===== 강조 박스 ===== */
 .highlight {
-  background-color: #eaf2ff;
-  padding: 12px 16px;
+  background-color: #d0e7ff;
+  padding: 14px 18px;
   border-left: 4px solid #4b8cf5;
-  margin-bottom: 16px;
   border-radius: 8px;
   font-weight: 500;
-  color: #333333;
+  color: #222;
+  text-align: center;
 }
 
 /* ===== 링크 ===== */
@@ -245,15 +271,15 @@
   height: auto;
   border-radius: 12px;
   margin: 15px 0;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 /* 글자 수 표시 */
 .charCount {
-  font-size: 14px;
-  color: #666;
-  margin-top: 5px;
+  font-size: 13px;
+  color: #888;
   text-align: right;
+  margin-top: 4px;
 }
 
 /* .formTextarea 스타일 (기존에 있는 스타일에 추가로 수정) */
@@ -264,7 +290,8 @@
   border: 1px solid #ccc;
   border-radius: 4px;
   resize: vertical;
-  box-sizing: border-box; /* padding을 포함한 크기 조정 */
+  box-sizing: border-box;
+  /* padding을 포함한 크기 조정 */
 }
 
 
@@ -274,23 +301,27 @@
     width: 90%;
     padding: 16px;
   }
+
   .title {
     font-size: 22px;
   }
+
   .btn {
     font-size: 13px;
     padding: 6px 12px;
   }
-   .pageContainer {
-    width: 90%;
+
+  .pageContainer {
     padding: 20px;
   }
-
   .pageTitle {
-    font-size: 22px;
+    font-size: 24px;
   }
-
   .subtitle {
     font-size: 18px;
+  }
+  .btn {
+    font-size: 16px;
+    padding: 10px;
   }
 }
