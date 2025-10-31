@@ -68,6 +68,7 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  text-align: center; /* 안전하게 중앙 정렬 보강 */
 }
 
 .mainImage {
@@ -75,6 +76,8 @@
   max-height: 300px;
   object-fit: cover;
   border-radius: 6px;
+  display: block;          /* 이미지 자체를 블록요소로 */
+  margin: 0 auto;          /* 수평 중앙 정렬 보강 */
 }
 
 /* 본문 영역 */
@@ -86,10 +89,11 @@
 
 /* 첨부파일 리스트 */
 .fileList {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
   gap: 16px;
   margin-top: 20px;
+  justify-items: center; /* 각 아이템 중앙 정렬 */
 }
 
 .fileItem {
@@ -106,6 +110,16 @@
   object-fit: cover;
   border-radius: 6px;
   background-color: #eee;
+  display: block;
+  margin: 0 auto; /* 이미지 중앙 정렬 보강 */
+}
+
+/* 파일명 길이 제한 (줄바꿈/넘침 방지) */
+.fileItem span {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* 버튼 영역 */

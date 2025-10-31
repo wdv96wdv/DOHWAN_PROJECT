@@ -24,6 +24,7 @@ import Listpage from './pages/board/Listpage';
 import Insertpage from './pages/board/Insertpage';
 import Readpage from './pages/board/Readpage';
 import Updatepage from './pages/board/Updatepage';
+import Marathon from './pages/Marathon';
 
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
@@ -40,6 +41,7 @@ import "./assets/css/footer.css";
 import "./assets/css/Course.module.css"
 import "./assets/css/Event.module.css"
 import "./assets/css/profile.css"
+import "./assets/css/Marathon.module.css"
 
 
 const App = () => {
@@ -60,6 +62,7 @@ const App = () => {
             <Route path="/profile" element={<Profile />} />
             <Route path="/admin" element={<AdminContact />} />
             <Route path="/calendar" element={<Calendar />} />
+            <Route path="/marathon" element={<Marathon />} />
             <Route path="/about" element={<About />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/contact" element={<Contact />} />

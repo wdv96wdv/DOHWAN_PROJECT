@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 import supabase from '../../utils/supabaseClient';
-
 const UserForm = ({ userInfo, updateUser, deleteUser }) => {
   const navigate = useNavigate();
 
@@ -21,6 +20,15 @@ const UserForm = ({ userInfo, updateUser, deleteUser }) => {
 
   const [preview, setPreview] = useState('');
   const [capsLockOn, setCapsLockOn] = useState(false);
+
+  // 미리보기 URL 정리 (메모리 누수 방지)
+  useEffect(() => {
+    return () => {
+      if (preview && preview.startsWith('blob:')) {
+        URL.revokeObjectURL(preview);
+      }
+    };
+  }, [preview]);
 
   // userInfo가 바뀔 때 form 상태 초기화
   useEffect(() => {
@@ -93,6 +101,17 @@ const UserForm = ({ userInfo, updateUser, deleteUser }) => {
     // 프로필 이미지 업로드
     let avatar_url = form.avatar_url;
     if (avatarFile) {
+      // 파일 검증: 이미지 타입 및 크기(최대 2MB)
+      const isImage = avatarFile.type?.startsWith('image/');
+      const isUnder2MB = avatarFile.size <= 2 * 1024 * 1024;
+      if (!isImage) {
+        Swal.fire('업로드 실패', '이미지 파일만 업로드할 수 있습니다.', 'error');
+        return;
+      }
+      if (!isUnder2MB) {
+        Swal.fire('업로드 실패', '이미지 크기는 2MB 이하여야 합니다.', 'error');
+        return;
+      }
       const fileExt = avatarFile.name.split('.').pop();
       const fileName = `${form.username}.${fileExt}`;
       const filePath = `${fileName}`;
@@ -107,7 +126,15 @@ const UserForm = ({ userInfo, updateUser, deleteUser }) => {
       if (error) {
         console.error('이미지 업로드 실패:', error);
       } else {
-        avatar_url = `https://ismclnqslxnlsfmqjytc.supabase.co/storage/v1/object/public/avatars/${filePath}`;
+        const { data: publicData } = supabase.storage
+          .from('avatars')
+          .getPublicUrl(filePath);
+        if (publicData?.publicUrl) {
+          const version = Date.now();
+          avatar_url = `${publicData.publicUrl}?v=${version}`;
+        } else {
+          avatar_url = form.avatar_url;
+        }
         setForm((prev) => ({ ...prev, avatar_url }));
       }
     }
@@ -144,7 +171,7 @@ const UserForm = ({ userInfo, updateUser, deleteUser }) => {
             placeholder="현재 비밀번호"
             autoComplete="current-password"
             value={form.currentPassword}
-            required
+            required={!!(form.newPassword || form.confirmPassword)}
             onChange={handleChange}
             onKeyUp={checkCapsLock}
             onKeyDown={checkCapsLock}
@@ -256,9 +283,9 @@ const UserForm = ({ userInfo, updateUser, deleteUser }) => {
               cancelButtonText: '취소',
             }).then((result) => {
               if (result.isConfirmed) {
+                // 실제 처리/알림/네비는 부모(deleteUser)에서 일원화 해야함 
                 deleteUser(form.username);
-                Swal.fire('완료!', '회원 탈퇴가 완료되었습니다.', 'success');
-                navigate('/');
+ 
               }
             });
           }}

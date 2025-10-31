@@ -19,26 +19,51 @@ const User = () => {
     }
   }, [isLoading]);
 
-  // Supabase 프로필 정보 불러오기
+  // Supabase 프로필 정보 불러오기 (재시도/타임아웃 포함)
   useEffect(() => {
-    const fetchProfile = async () => {
+    const fetchProfileWithRetry = async () => {
       if (!userInfo?.no) return;
 
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('avatar_url, bio')
-        .eq('no', userInfo.no)
-        .single();
+      const maxAttempts = 3;
+      const baseDelayMs = 300;
+      for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000); // 5s 타임아웃
+        try {
+          const { data, error } = await supabase
+            .from('profiles')
+            .select('avatar_url, bio')
+            .eq('no', userInfo.no)
+            .single({ head: false });
 
-      if (error) {
-        console.error('프로필 정보 불러오기 실패:', error);
-        setProfileInfo({});
-      } else {
-        setProfileInfo(data);
+          clearTimeout(timeoutId);
+
+          if (error) {
+            // 0행(406) 또는 네트워크/일시 오류 시 재시도
+            const status = error?.code || error?.status || 'unknown';
+            console.warn(`프로필 조회 실패(${attempt}/${maxAttempts}) status=${status}`, error);
+            if (attempt < maxAttempts) {
+              await new Promise((r) => setTimeout(r, baseDelayMs * Math.pow(2, attempt - 1)));
+              continue;
+            }
+            setProfileInfo({});
+          } else {
+            setProfileInfo(data || {});
+          }
+          break; // 성공 또는 최종 실패 처리 후 루프 종료
+        } catch (err) {
+          clearTimeout(timeoutId);
+          console.warn(`프로필 조회 예외(${attempt}/${maxAttempts})`, err);
+          if (attempt < maxAttempts) {
+            await new Promise((r) => setTimeout(r, baseDelayMs * Math.pow(2, attempt - 1)));
+            continue;
+          }
+          setProfileInfo({});
+        }
       }
     };
 
-    fetchProfile();
+    fetchProfileWithRetry();
   }, [userInfo]);
 
   // 회원 정보 수정

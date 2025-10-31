@@ -11,19 +11,28 @@ const ListContainer = () => {
   const [page, setPage] = useState(1);
   const [size, setSize] = useState(10);
   
-  //게시글 목록 데이터
+  //게시글 목록 데이터 (재시도 포함)
   const getList = async () => {
-    const response = await boards.list(page, size);
-    const data = await response.data;
-    const list = data.list;
-    const pagination = data.pagination;
-
-    console.dir(data);
-    console.dir(data.list);
-    console.dir(data.pagination);
-
-    setList(list);
-    setPagination(pagination);
+    const maxAttempts = 3;
+    const baseDelayMs = 300;
+    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+      try {
+        const response = await boards.list(page, size);
+        const data = await response.data;
+        const list = data.list || [];
+        const pagination = data.pagination || {};
+        setList(list);
+        setPagination(pagination);
+        break;
+      } catch (err) {
+        console.warn(`보드 목록 조회 실패(${attempt}/${maxAttempts})`, err);
+        if (attempt < maxAttempts) {
+          await new Promise((r) => setTimeout(r, baseDelayMs * Math.pow(2, attempt - 1)));
+          continue;
+        }
+        setList([]);
+      }
+    }
   }
 
   // URL 가져오는 방법

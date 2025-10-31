@@ -25,3 +25,17 @@
   padding: 10px;
   font-size: 15px;
 }
+
+/* ✅ 이미지 미리보기 썸네일 오버라이드 */
+.fileList {
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 12px;
+  max-width: 520px;
+}
+
+.fileImage {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 8px;
+}

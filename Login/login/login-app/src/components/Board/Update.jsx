@@ -8,6 +8,7 @@ import DownloadIcon from '@mui/icons-material/Download';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import Checkbox from '@mui/material/Checkbox';
 import noImage from '../../assets/img/no-image.png';
+import * as fileApi from '../../apis/files';
 
 const Update = ({
   board,
@@ -27,6 +28,72 @@ const Update = ({
   const [charCount, setCharCount] = useState(0);
   const MAX_LENGTH = 3000;
 
+  // 신규 파일 추가용 상태
+  const [newMainFile, setNewMainFile] = useState(null);
+  const [newMainPreview, setNewMainPreview] = useState(null);
+  const [newFiles, setNewFiles] = useState([]);
+  const [newFilePreviews, setNewFilePreviews] = useState([]);
+
+  // 파일 검증 설정 (Insert와 동일 정책)
+  const MAX_SIZE_BYTES = 2 * 1024 * 1024; // 2MB
+  const ALLOWED_EXTS = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+
+  const validateFile = (file) => {
+    if (!file) return false;
+    const isImage = file.type?.startsWith('image/');
+    const isUnderLimit = file.size <= MAX_SIZE_BYTES;
+    const ext = (file.name.split('.').pop() || '').toLowerCase();
+    const isAllowedExt = ALLOWED_EXTS.includes(ext);
+    if (!isImage || !isAllowedExt) {
+      Swal.fire('업로드 실패', '이미지 파일만 업로드할 수 있습니다. (jpg, jpeg, png, gif, webp)', 'error');
+      return false;
+    }
+    if (!isUnderLimit) {
+      Swal.fire('업로드 실패', '이미지 크기는 2MB 이하여야 합니다.', 'error');
+      return false;
+    }
+    return true;
+  };
+
+  const handleNewMainFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file && !validateFile(file)) {
+      e.target.value = '';
+      setNewMainFile(null);
+      setNewMainPreview(null);
+      return;
+    }
+    setNewMainFile(file || null);
+    if (file) setNewMainPreview(URL.createObjectURL(file));
+    // 기존 대표 이미지가 있으면 자동으로 삭제 대상에 추가
+    const currentMain = (fileList || []).find((f) => (f.type || '').toUpperCase() === 'MAIN');
+    if (currentMain && !fileIdList.includes(currentMain.id)) {
+      setFileIdList((prev) => [...prev, currentMain.id]);
+      // 사용자 안내: 대표 이미지 교체 시 기존 대표는 삭제됨
+      Swal.fire({
+        icon: 'info',
+        title: '대표 이미지 교체 안내',
+        text: '새 대표 이미지를 선택하면 기존 대표 이미지는 저장 시 삭제됩니다.',
+        confirmButtonText: '확인'
+      });
+    }
+  };
+
+  const handleNewFilesChange = (e) => {
+    const selectedFiles = Array.from(e.target.files || []);
+    const validFiles = [];
+    for (const f of selectedFiles) {
+      if (validateFile(f)) validFiles.push(f);
+    }
+    if (validFiles.length !== selectedFiles.length) {
+      const dt = new DataTransfer();
+      validFiles.forEach((f) => dt.items.add(f));
+      e.target.files = dt.files;
+    }
+    setNewFiles(validFiles);
+    setNewFilePreviews(validFiles.map((f) => URL.createObjectURL(f)));
+  };
+
   useEffect(() => {
     if (board) {
       setTitle(board.title ?? '');
@@ -44,20 +111,75 @@ const Update = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // 업로드 전 최종 검증(우회 방지)
+    if (newMainFile && !validateFile(newMainFile)) return;
+    for (const f of newFiles) {
+      if (!validateFile(f)) return;
+    }
+
     Swal.fire({
       title: '수정하시겠습니까?',
       icon: 'question',
       showCancelButton: true,
       confirmButtonText: '수정',
       cancelButtonText: '취소',
-    }).then((res) => {
+    }).then(async (res) => {
       if (res.isConfirmed) {
+        // 선택된 파일이 있으면 추가 확인
+        if (fileIdList.length > 0) {
+          const delConfirm = await Swal.fire({
+            title: `${fileIdList.length}개의 선택 파일을 삭제하고 수정하시겠습니까?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: '삭제 후 수정',
+            cancelButtonText: '취소',
+          });
+          if (!delConfirm.isConfirmed) {
+            return; // 사용자가 취소한 경우 수정 중단
+          }
+          try {
+            await deleteCheckedFiles(fileIdList);
+            setFileIdList([]);
+          } catch (err) {
+            console.warn('선택 파일 삭제 중 오류', err);
+            // 삭제 오류가 나면 수정 중단
+            return;
+          }
+        }
+
+        // 2) 신규 파일이 있다면 Supabase에 업로드 후 URL/메타 구성
+        let addedMainFile = null;
+        if (newMainFile) {
+          const mainUrl = await fileApi.uploadFileToSupabase(newMainFile, 'MAIN');
+          addedMainFile = {
+            url: mainUrl,
+            name: newMainFile.name,
+            originName: newMainFile.name,
+            size: newMainFile.size,
+          };
+        }
+
+        const addedFiles = [];
+        for (const f of newFiles) {
+          const url = await fileApi.uploadFileToSupabase(f, 'SUB');
+          addedFiles.push({
+            url,
+            name: f.name,
+            originName: f.name,
+            size: f.size,
+          });
+        }
+
+        // 3) 본문/파일 변경을 서버에 반영
         const data = {
           id,
           title,
           writer,
           content,
-          deleteFiles: fileIdList
+          deleteFiles: fileIdList,
+          // 서버 DTO(Boards)와 동일 키 사용: mainFile, files
+          ...(addedMainFile ? { mainFile: addedMainFile } : {}),
+          ...(addedFiles.length ? { files: addedFiles } : {}),
         };
         const headers = { 'Content-Type': 'application/json' };
         onUpdate(data, headers);
@@ -202,6 +324,33 @@ const Update = ({
                     ))}
                   </div>
                 )}
+                {/* 신규 파일 추가 */}
+                <div style={{ marginTop: '12px' }}>
+                  <div style={{ marginBottom: '8px', textAlign: 'left', fontWeight: 600 }}>메인 이미지 교체</div>
+                  <input type="file" accept="image/*" onChange={handleNewMainFileChange} />
+                  {fileList.some((f) => (f.type || '').toUpperCase() === 'MAIN') && (
+                    <div style={{ marginTop: '6px', fontSize: '12px', color: '#666', textAlign: 'left' }}>
+                      대표 이미지를 교체하면 기존 대표 이미지는 저장 시 삭제됩니다.
+                    </div>
+                  )}
+                  {newMainPreview && (
+                    <div className={styles.fileList}>
+                      <img src={newMainPreview} alt="미리보기" className={styles.fileImage} />
+                    </div>
+                  )}
+                </div>
+
+                <div style={{ marginTop: '12px' }}>
+                  <div style={{ marginBottom: '8px', textAlign: 'left', fontWeight: 600 }}>첨부 파일 추가</div>
+                  <input type="file" multiple accept="image/*" onChange={handleNewFilesChange} />
+                  {newFilePreviews.length > 0 && (
+                    <div className={styles.fileList}>
+                      {newFilePreviews.map((src, idx) => (
+                        <img key={idx} src={src} alt={`첨부${idx}`} className={styles.fileImage} />
+                      ))}
+                    </div>
+                  )}
+                </div>
               </td>
             </tr>
           </tbody>

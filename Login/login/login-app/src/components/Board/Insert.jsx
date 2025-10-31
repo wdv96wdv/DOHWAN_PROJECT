@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styles from '../../assets/css/Insert.module.css';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
@@ -15,6 +15,27 @@ const Insert = ({ onInsert }) => {
   const [files, setFiles] = useState([]);
   const [filePreviews, setFilePreviews] = useState([]);
   const [submitting, setSubmitting] = useState(false);
+
+  // 파일 검증 설정
+  const MAX_SIZE_BYTES = 2 * 1024 * 1024; // 2MB
+  const ALLOWED_EXTS = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+
+  const validateFile = (file) => {
+    if (!file) return false;
+    const isImage = file.type?.startsWith('image/');
+    const isUnderLimit = file.size <= MAX_SIZE_BYTES;
+    const ext = (file.name.split('.').pop() || '').toLowerCase();
+    const isAllowedExt = ALLOWED_EXTS.includes(ext);
+    if (!isImage || !isAllowedExt) {
+      Swal.fire('업로드 실패', '이미지 파일만 업로드할 수 있습니다. (jpg, jpeg, png, gif, webp)', 'error');
+      return false;
+    }
+    if (!isUnderLimit) {
+      Swal.fire('업로드 실패', '이미지 크기는 2MB 이하여야 합니다.', 'error');
+      return false;
+    }
+    return true;
+  };
 
   const getUserNoFromJWT = () => {
     const token = localStorage.getItem("jwt");
@@ -33,15 +54,41 @@ const Insert = ({ onInsert }) => {
 
   const handleMainFileChange = (e) => {
     const file = e.target.files[0];
-    setMainFile(file);
+    if (file && !validateFile(file)) {
+      e.target.value = '';
+      setMainFile(null);
+      setMainPreview(null);
+      return;
+    }
+    setMainFile(file || null);
     if (file) setMainPreview(URL.createObjectURL(file));
   };
 
   const handleFilesChange = (e) => {
-    const selectedFiles = Array.from(e.target.files);
-    setFiles(selectedFiles);
-    setFilePreviews(selectedFiles.map(f => URL.createObjectURL(f)));
+    const selectedFiles = Array.from(e.target.files || []);
+    const validFiles = [];
+    for (const f of selectedFiles) {
+      if (validateFile(f)) validFiles.push(f);
+    }
+    if (validFiles.length !== selectedFiles.length) {
+      // 일부가 걸러졌다면 input을 다시 세팅하여 사용자에게 인지 가능하도록
+      const dt = new DataTransfer();
+      validFiles.forEach((f) => dt.items.add(f));
+      e.target.files = dt.files;
+    }
+    setFiles(validFiles);
+    setFilePreviews(validFiles.map((f) => URL.createObjectURL(f)));
   };
+
+  // 미리보기 URL 해제
+  useEffect(() => {
+    return () => {
+      if (mainPreview && mainPreview.startsWith('blob:')) URL.revokeObjectURL(mainPreview);
+      filePreviews.forEach((src) => {
+        if (src && src.startsWith('blob:')) URL.revokeObjectURL(src);
+      });
+    };
+  }, [mainPreview, filePreviews]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -57,6 +104,18 @@ const Insert = ({ onInsert }) => {
     }
 
     setSubmitting(true);
+
+    // 업로드 전 최종 검증(우회 방지)
+    if (mainFile && !validateFile(mainFile)) {
+      setSubmitting(false);
+      return;
+    }
+    for (const f of files) {
+      if (!validateFile(f)) {
+        setSubmitting(false);
+        return;
+      }
+    }
 
     // 파일 업로드
     let mainFileInfo = null;
