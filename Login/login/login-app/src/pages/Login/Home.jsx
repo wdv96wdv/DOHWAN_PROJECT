@@ -349,17 +349,17 @@ const Home = () => {
       <Popup
         id="eventPopup"
         imageSrc={heroImage1}
-        linkUrl="https://marathon.jtbc.com/"
+        linkUrl="https://seoul-marathon.com/"
         position={{ top: "55%", left: "85%", transform: "translateX(-50%)" }}
       />
 
       <Popup
         id="noticePopup"
         imageSrc={heroImage2}
-        linkUrl="https://seoul-marathon.com/"
+        linkUrl="https://marathon.jtbc.com/"
         position={{ top: "15%", left: "85%", transform: "translateX(-50%)" }}
       />
-
+      
       <HeroSection />
       {/* <AboutSection /> */}
       <TrainingSection />
