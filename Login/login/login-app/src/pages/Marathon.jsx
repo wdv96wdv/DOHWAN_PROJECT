@@ -7,7 +7,7 @@ export default function MarathonList() {
     // 기본값 정의
     const defaultSearch = "";
     const defaultType = "전체";
-    const defaultStatus = "전체";
+    const defaultStatus = "접수중";
 
     const [search, setSearch] = useState(defaultSearch);
     const [type, setType] = useState(defaultType);
