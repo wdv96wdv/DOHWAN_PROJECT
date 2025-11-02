@@ -27,7 +27,7 @@ export const MARATHON_LIST = [
         link: "http://buyeo.run1080.com/",
         startDate: "2025-05-19",  // 접수 시작
         endDate: "2025-10-20",    // 접수 마감
-        raceDate: "2025-11-02",   // 실제 경기일
+        raceDate: "2025-11-09",   // 실제 경기일
         firstComeFirstServed: true  // 선착순 예외
 
     },
@@ -38,8 +38,8 @@ export const MARATHON_LIST = [
         type: ["Half", "10Km", "5Km"],
         link: "https://www.hongcheonrun.net/index.php",
         startDate: "2025-07-14",  // 접수 시작
-        endDate: "2025-11-02",    // 접수 마감
-        raceDate: "2025-11-02",   // 실제 경기일
+        endDate: "2025-11-09",    // 접수 마감
+        raceDate: "2025-11-09",   // 실제 경기일
     },
     {
         id: 5,
@@ -48,7 +48,7 @@ export const MARATHON_LIST = [
         type: ["Half", "10Km", "5Km"],
         link: "https://asanmarathon.co.kr/sub/intro/introduce.asp",
         startDate: "2025-08-01",  // 접수 시작
-        endDate: "2025-11-02",    // 접수 마감
-        raceDate: "2025-11-02",   // 실제 경기일
+        endDate: "2025-11-09",    // 접수 마감
+        raceDate: "2025-11-09",   // 실제 경기일
     }
 ];
