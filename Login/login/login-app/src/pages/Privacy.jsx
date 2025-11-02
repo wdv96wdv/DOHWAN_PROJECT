@@ -29,7 +29,36 @@ const Privacy = () => {
         </ul>
       </div>
 
-      {/* 섹션 3: 문의 안내 */}
+      {/* 섹션 3: 쿠키 정책 및 광고 */}
+      <div className={styles.section}>
+        <h2 className={styles.subtitle}>쿠키 및 광고 정책</h2>
+        <p className={styles.pageText}>
+          본 웹사이트는 Google AdSense를 사용하여 광고를 제공합니다. 
+          Google은 사용자의 방문 기록을 바탕으로 광고를 제공하기 위해 쿠키를 사용할 수 있습니다.
+        </p>
+        <div className={styles.highlight}>
+          <p><strong>쿠키 사용 목적:</strong></p>
+          <ul>
+            <li>광고 맞춤 설정 및 최적화</li>
+            <li>광고 효과 측정 및 분석</li>
+            <li>사용자 경험 개선</li>
+          </ul>
+          <p style={{ marginTop: '10px' }}>
+            Google의 쿠키 사용 방식을 관리하거나 거부하려면{' '}
+            <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer">
+              Google 광고 설정
+            </a>을 방문하세요.
+          </p>
+          <p style={{ marginTop: '10px' }}>
+            또한{' '}
+            <a href="https://www.google.com/privacy/ads" target="_blank" rel="noopener noreferrer">
+              Google 개인정보 보호 및 약관
+            </a>에서 Google의 데이터 사용 방식을 자세히 확인할 수 있습니다.
+          </p>
+        </div>
+      </div>
+
+      {/* 섹션 4: 문의 안내 */}
       <div className={styles.section}>
         <h2 className={styles.subtitle}>문의 및 요청</h2>
         <p className={styles.pageText}>

@@ -27,7 +27,7 @@ const Popup = ({
   width = "300px",
   height = "auto",
   position = { top: "10%", left: "85%", transform: "translateX(0)" },
-  zIndex = 1000,
+  zIndex = 9998, // AdSense 광고(9999)보다 낮게 설정하여 충돌 방지
 }) => {
   const [visible, setVisible] = useState(false);
   const [mobilePosition, setMobilePosition] = useState(position);
@@ -346,7 +346,7 @@ const Home = () => {
   return (
     <div className={styles.home}>
       {/* ================= Popup 렌더링 ================= */}
-      <Popup
+      {/* <Popup
         id="eventPopup"
         imageSrc={heroImage1}
         linkUrl="https://seoul-marathon.com/"
@@ -358,7 +358,7 @@ const Home = () => {
         imageSrc={heroImage2}
         linkUrl="https://marathon.jtbc.com/"
         position={{ top: "15%", left: "85%", transform: "translateX(-50%)" }}
-      />
+      /> */}
       
       <HeroSection />
       {/* <AboutSection /> */}
