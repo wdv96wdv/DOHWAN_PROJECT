@@ -38,7 +38,11 @@ const Header = ({ theme, toggleTheme }) => {
             </Link>
           </li>
           <li><Link to="/marathon">마라톤 일정</Link></li>
-          <li><Link to="/performance">퍼포먼스</Link></li>
+          <li>
+            <Link to={isLogin ? "/performance" : "/login"} onClick={closeMenu}>
+            퍼포먼스
+            </Link>
+          </li>
           <li><Link to="/event">이벤트</Link></li>
           <li><Link to="/boards">커뮤니티</Link></li>
 
@@ -95,7 +99,11 @@ const Header = ({ theme, toggleTheme }) => {
           </li>
           <li><Link to="/event" onClick={closeMenu}>이벤트</Link></li>
           <li><Link to="/marathon" onClick={closeMenu}>마라톤 일정</Link></li>
-          <li><Link to="/performance" onClick={closeMenu}>퍼포먼스</Link></li>
+          <li>
+            <Link to={isLogin ? "/performance" : "/login"} onClick={closeMenu}>
+            퍼포먼스
+            </Link>
+          </li>
           <li><Link to="/boards" onClick={closeMenu}>커뮤니티</Link></li>
           {isAdmin && <li><Link to="/admin" onClick={closeMenu}>관리자</Link></li>}
         </ul>
