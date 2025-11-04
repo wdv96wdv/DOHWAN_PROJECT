@@ -16,7 +16,7 @@ public interface RecordRepository extends JpaRepository<Records, Long> {
     List<Records> findAllByOrderByCreatedAtDesc();
     
     // 운동 이름으로 검색
-    List<Records> findByExerciseNameContainingIgnoreCaseOrderByCreatedAtDesc(String runningName);
+    List<Records> findByRunningNameContainingIgnoreCaseOrderByCreatedAtDesc(String runningName);
     
     // 날짜별 운동 기록 조회
     @Query("SELECT r FROM Records r WHERE r.createdAt >= :todayStart AND r.createdAt < :tomorrowStart ORDER BY r.createdAt DESC")
