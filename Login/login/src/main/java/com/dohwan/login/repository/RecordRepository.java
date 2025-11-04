@@ -16,15 +16,15 @@ public interface RecordRepository extends JpaRepository<Records, Long> {
     List<Records> findAllByOrderByCreatedAtDesc();
     
     // 운동 이름으로 검색
-    List<Records> findByExerciseNameContainingIgnoreCaseOrderByCreatedAtDesc(String exerciseName);
+    List<Records> findByExerciseNameContainingIgnoreCaseOrderByCreatedAtDesc(String runningName);
     
     // 날짜별 운동 기록 조회
     @Query("SELECT r FROM Records r WHERE r.createdAt >= :todayStart AND r.createdAt < :tomorrowStart ORDER BY r.createdAt DESC")
     List<Records> findTodayRecords();
     
     // 특정 운동의 최신 기록 조회
-    @Query("SELECT r FROM Records r WHERE r.exerciseName = :exerciseName ORDER BY r.createdAt DESC LIMIT 1")
-    Records findLatestByExerciseName(String exerciseName);
+    @Query("SELECT r FROM Records r WHERE r.runningName = :runningName ORDER BY r.createdAt DESC LIMIT 1")
+    Records findLatestByExerciseName(String runningName);
     
     // UUID로 운동 기록 조회
     Optional<Records> findById(String id);

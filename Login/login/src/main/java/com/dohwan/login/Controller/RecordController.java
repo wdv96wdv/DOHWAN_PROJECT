@@ -127,9 +127,9 @@ public class RecordController {
     
     // 운동 이름으로 검색
     @GetMapping("/search")
-    public ResponseEntity<List<Records>> searchRecords(@RequestParam("exerciseName") String exerciseName) {
+    public ResponseEntity<List<Records>> searchRecords(@RequestParam("runningName") String runningName) {
         try {
-            List<Records> records = recordRepository.findByExerciseNameContainingIgnoreCaseOrderByCreatedAtDesc(exerciseName);
+            List<Records> records = recordRepository.findByExerciseNameContainingIgnoreCaseOrderByCreatedAtDesc(runningName);
             return ResponseEntity.ok(records);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
