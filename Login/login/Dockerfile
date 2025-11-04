@@ -13,7 +13,7 @@ RUN chmod +x gradlew
 RUN ./gradlew build -x test
 
 # 2. Run stage
-FROM openjdk:17-jdk-slim
+FROM openjdk:17.0.1-jdk-slim
 WORKDIR /app
 
 # 빌드 결과 JAR 복사
