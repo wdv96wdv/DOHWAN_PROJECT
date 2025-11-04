@@ -35,7 +35,7 @@ const Update = ({
   const [newFilePreviews, setNewFilePreviews] = useState([]);
 
   // 파일 검증 설정 (Insert와 동일 정책)
-  const MAX_SIZE_BYTES = 5 * 1024 * 1024; // 5MB
+  const MAX_SIZE_BYTES = 2 * 1024 * 1024; // 2MB
   const ALLOWED_EXTS = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
 
   const validateFile = (file) => {
@@ -49,7 +49,7 @@ const Update = ({
       return false;
     }
     if (!isUnderLimit) {
-      Swal.fire('업로드 실패', '이미지 크기는 5MB 이하여야 합니다.', 'error');
+      Swal.fire('업로드 실패', '이미지 크기는 2MB 이하여야 합니다.', 'error');
       return false;
     }
     return true;

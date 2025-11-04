@@ -26,6 +26,8 @@ import Readpage from './pages/board/Readpage';
 import Updatepage from './pages/board/Updatepage';
 import Marathon from './pages/Marathon';
 
+import PerformanceTab from './pages/Performance/PerformanceTab';
+
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
 
@@ -36,7 +38,7 @@ import "./assets/css/Home.module.css";
 import "./assets/css/login.css";
 import "./assets/css/join.css";
 import "./assets/css/user.css";
-import "./assets/css/record.css";
+import "./assets/css/record.module.css";
 import "./assets/css/footer.css";
 import "./assets/css/Course.module.css"
 import "./assets/css/Event.module.css"
@@ -63,6 +65,7 @@ const App = () => {
             <Route path="/admin" element={<AdminContact />} />
             <Route path="/calendar" element={<Calendar />} />
             <Route path="/marathon" element={<Marathon />} />
+            <Route path="/performance" element={<PerformanceTab />} />
             <Route path="/about" element={<About />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/contact" element={<Contact />} />

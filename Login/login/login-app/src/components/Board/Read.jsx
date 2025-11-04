@@ -1,13 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import styles from '../../assets/css/Read.module.css';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import noImage from '../../assets/img/no-image.png';
-import Cookies from 'js-cookie';
-import Swal from 'sweetalert2';
 
-const Read = ({ board = {}, fileList = [], commentList = [], onDownload, onCreateComment, onUpdateComment, onDeleteComment }) => {
+const Read = ({ board = {}, fileList = [], onDownload }) => {
   if (!board || !board.title) {
     return <div>게시글 정보를 불러오는 중입니다...</div>;
   }
@@ -15,28 +13,8 @@ const Read = ({ board = {}, fileList = [], commentList = [], onDownload, onCreat
   const { id } = useParams();
 
   const getUserNoFromJWT = () => {
-    // 1. localStorage의 userInfo에서 no 가져오기 (가장 확실)
-    const savedUserInfo = localStorage.getItem("userInfo");
-    if (savedUserInfo) {
-      try {
-        const userInfo = JSON.parse(savedUserInfo);
-        if (userInfo && userInfo.no) {
-          return userInfo.no;
-        }
-      } catch (e) {
-        console.error("userInfo 파싱 실패:", e);
-      }
-    }
-
-    // 2. 쿠키에서 JWT 가져오기
-    let token = Cookies.get("jwt");
-    if (!token) {
-      // 3. localStorage에서 JWT 가져오기 (기존 방식)
-      token = localStorage.getItem("jwt");
-    }
-
+    const token = localStorage.getItem("jwt");
     if (!token) return null;
-
     try {
       const payload = JSON.parse(atob(token.split(".")[1]));
       return payload.no;
@@ -46,18 +24,6 @@ const Read = ({ board = {}, fileList = [], commentList = [], onDownload, onCreat
   };
 
   const user_no = getUserNoFromJWT();
-
-  const getUserInfo = () => {
-    const savedUserInfo = localStorage.getItem("userInfo");
-    if (savedUserInfo) {
-      try {
-        return JSON.parse(savedUserInfo);
-      } catch (e) {
-        return null;
-      }
-    }
-    return null;
-  };
 
   const mainFile = fileList?.find(
     (f) => f.type?.toUpperCase() === 'MAIN' || f.type?.toUpperCase() === 'THUMBNAIL'
@@ -179,188 +145,6 @@ const Read = ({ board = {}, fileList = [], commentList = [], onDownload, onCreat
           )}
         </div>
       </form>
-
-      {/* 댓글 영역 */}
-      <CommentSection
-        commentList={commentList}
-        userNo={user_no}
-        userInfo={getUserInfo()}
-        onCreateComment={onCreateComment}
-        onUpdateComment={onUpdateComment}
-        onDeleteComment={onDeleteComment}
-      />
-    </div>
-  );
-};
-
-// 댓글 섹션 컴포넌트
-const CommentSection = ({ commentList = [], userNo, userInfo, onCreateComment, onUpdateComment, onDeleteComment }) => {
-  const [commentContent, setCommentContent] = useState('');
-  const [editingId, setEditingId] = useState(null);
-  const [editContent, setEditContent] = useState('');
-
-  const getUserInfo = () => {
-    const savedUserInfo = localStorage.getItem("userInfo");
-    if (savedUserInfo) {
-      try {
-        return JSON.parse(savedUserInfo);
-      } catch (e) {
-        return null;
-      }
-    }
-    return null;
-  };
-
-  const info = userInfo || getUserInfo();
-
-  const handleSubmitComment = () => {
-    if (!commentContent.trim()) {
-      Swal.fire({ icon: 'warning', title: '댓글 내용을 입력해주세요.' });
-      return;
-    }
-    if (!userNo) {
-      Swal.fire({ icon: 'warning', title: '로그인 후 댓글을 작성할 수 있습니다.' });
-      return;
-    }
-
-    onCreateComment({
-      userNo: userNo,
-      writer: info?.name || info?.username || '익명',
-      content: commentContent
-    });
-    setCommentContent('');
-  };
-
-  const handleStartEdit = (comment) => {
-    setEditingId(comment.id);
-    setEditContent(comment.content);
-  };
-
-  const handleCancelEdit = () => {
-    setEditingId(null);
-    setEditContent('');
-  };
-
-  const handleUpdateComment = (commentId) => {
-    if (!editContent.trim()) {
-      Swal.fire({ icon: 'warning', title: '댓글 내용을 입력해주세요.' });
-      return;
-    }
-
-    onUpdateComment(commentId, {
-      userNo: userNo,
-      content: editContent
-    });
-    setEditingId(null);
-    setEditContent('');
-  };
-
-  const formatDate = (dateString) => {
-    if (!dateString) return '';
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffTime = Math.abs(now - date);
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-    if (diffDays === 1) {
-      return `오늘 ${date.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' })}`;
-    } else if (diffDays === 2) {
-      return `어제 ${date.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' })}`;
-    } else {
-      return date.toLocaleString('ko-KR', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit'
-      });
-    }
-  };
-
-  return (
-    <div className={styles.commentSection}>
-      <h2 className={styles.commentTitle}>댓글 ({commentList.length})</h2>
-
-      {/* 댓글 작성 폼 */}
-      {userNo ? (
-        <div className={styles.commentForm}>
-          <textarea
-            className={styles.commentInput}
-            placeholder="댓글을 입력하세요..."
-            value={commentContent}
-            onChange={(e) => setCommentContent(e.target.value)}
-            rows={3}
-          />
-          <button className={styles.commentSubmitBtn} onClick={handleSubmitComment}>
-            댓글 등록
-          </button>
-        </div>
-      ) : (
-        <div className={styles.commentLoginMsg}>
-          로그인 후 댓글을 작성할 수 있습니다.
-        </div>
-      )}
-
-      {/* 댓글 목록 */}
-      <div className={styles.commentList}>
-        {commentList.length === 0 ? (
-          <div className={styles.noComments}>댓글이 없습니다.</div>
-        ) : (
-          commentList.map((comment) => (
-            <div key={comment.id || comment.no} className={styles.commentItem}>
-              <div className={styles.commentHeader}>
-                <span className={styles.commentWriter}>{comment.writer}</span>
-                <span className={styles.commentDate}>{formatDate(comment.createdAt)}</span>
-              </div>
-              
-              {editingId === comment.id ? (
-                <div className={styles.commentEditBox}>
-                  <textarea
-                    className={styles.commentInput}
-                    value={editContent}
-                    onChange={(e) => setEditContent(e.target.value)}
-                    rows={2}
-                  />
-                  <div className={styles.commentEditActions}>
-                    <button
-                      className={styles.commentEditBtn}
-                      onClick={() => handleUpdateComment(comment.id)}
-                    >
-                      저장
-                    </button>
-                    <button
-                      className={styles.commentCancelBtn}
-                      onClick={handleCancelEdit}
-                    >
-                      취소
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <>
-                  <div className={styles.commentContent}>{comment.content}</div>
-                  {userNo && userNo === comment.userNo && (
-                    <div className={styles.commentActions}>
-                      <button
-                        className={styles.commentActionBtn}
-                        onClick={() => handleStartEdit(comment)}
-                      >
-                        수정
-                      </button>
-                      <button
-                        className={styles.commentActionBtn}
-                        onClick={() => onDeleteComment(comment.id, userNo)}
-                      >
-                        삭제
-                      </button>
-                    </div>
-                  )}
-                </>
-              )}
-            </div>
-          ))
-        )}
-      </div>
     </div>
   );
 };

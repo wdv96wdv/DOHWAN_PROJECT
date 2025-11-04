@@ -101,15 +101,15 @@ const UserForm = ({ userInfo, updateUser, deleteUser }) => {
     // 프로필 이미지 업로드
     let avatar_url = form.avatar_url;
     if (avatarFile) {
-      // 파일 검증: 이미지 타입 및 크기(최대 5MB)
+      // 파일 검증: 이미지 타입 및 크기(최대 2MB)
       const isImage = avatarFile.type?.startsWith('image/');
-      const isUnder5MB = avatarFile.size <= 5 * 1024 * 1024;
+      const isUnder2MB = avatarFile.size <= 2 * 1024 * 1024;
       if (!isImage) {
         Swal.fire('업로드 실패', '이미지 파일만 업로드할 수 있습니다.', 'error');
         return;
       }
-      if (!isUnder5MB) {
-        Swal.fire('업로드 실패', '이미지 크기는 5MB 이하여야 합니다.', 'error');
+      if (!isUnder2MB) {
+        Swal.fire('업로드 실패', '이미지 크기는 2MB 이하여야 합니다.', 'error');
         return;
       }
       const fileExt = avatarFile.name.split('.').pop();

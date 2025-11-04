@@ -68,12 +68,32 @@ public class RecordController {
             Optional<Records> optionalRecord = recordRepository.findById(id);
             if (optionalRecord.isPresent()) {
                 Records record = optionalRecord.get();
-                record.setExerciseName(recordDetails.getExerciseName());
-                record.setWeight(recordDetails.getWeight());
-                record.setRoundCount(recordDetails.getRoundCount());
-                record.setReps(recordDetails.getReps());
-                record.setNote(recordDetails.getNote());
-                // no는 auto increment이므로 수정하지 않음
+                // Records 엔티티에 존재하는 필드만 업데이트
+                if (recordDetails.getRunningName() != null) {
+                    record.setRunningName(recordDetails.getRunningName());
+                }
+                if (recordDetails.getDistanceKm() != null) {
+                    record.setDistanceKm(recordDetails.getDistanceKm());
+                }
+                if (recordDetails.getDurationSec() != null) {
+                    record.setDurationSec(recordDetails.getDurationSec());
+                }
+                if (recordDetails.getPaceMinPerKm() != null) {
+                    record.setPaceMinPerKm(recordDetails.getPaceMinPerKm());
+                }
+                if (recordDetails.getSpeedKmh() != null) {
+                    record.setSpeedKmh(recordDetails.getSpeedKmh());
+                }
+                if (recordDetails.getCadence() != null) {
+                    record.setCadence(recordDetails.getCadence());
+                }
+                if (recordDetails.getCalories() != null) {
+                    record.setCalories(recordDetails.getCalories());
+                }
+                if (recordDetails.getNote() != null) {
+                    record.setNote(recordDetails.getNote());
+                }
+                // no, id, userNo, createdAt은 수정하지 않음
                 
                 Records updatedRecord = recordRepository.save(record);
                 return ResponseEntity.ok(updatedRecord);

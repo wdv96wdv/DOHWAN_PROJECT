@@ -31,17 +31,29 @@ public class Records {
     @Builder.Default                                    // Builder 패턴에서 기본값 지정
     private String id = UUID.randomUUID().toString();   // 고유 식별자 (UUID)
     
-    @Column(name = "exercise_name", nullable = false, length = 100) // 필수 입력, 최대 100자
-    private String exerciseName;                        // 운동 이름
+    @Column(name = "user_no")                           // 사용자 번호
+    private Long userNo;                                // 사용자 번호 (FK)
     
-    @Column(name = "weight")                           // 선택 입력
-    private Double weight;                             // 중량 (kg)
+    @Column(name = "running_name", nullable = false, length = 100) // 필수 입력, 최대 100자
+    private String runningName;                        // 러닝 이름
     
-    @Column(name = "round_count")                      // 선택 입력
-    private Integer roundCount;                        // 회차 (세트 수)
+    @Column(name = "distance_km")                           // 선택 입력
+    private Double distanceKm;                             // 거리 (km)
     
-    @Column(name = "reps")                            // 선택 입력
-    private Integer reps;                             // 반복 횟수
+    @Column(name = "duration_sec")                         // 선택 입력
+    private Integer durationSec;                           // 운동 시간 (초)
+    
+    @Column(name = "pace_min_per_km")                      // 선택 입력
+    private Integer paceMinPerKm;                        // 평균페이스 (분/km)
+    
+    @Column(name = "speed_kmh")                            // 선택 입력
+    private Double speedKmh;                               // 속도 (km/h)
+    
+    @Column(name = "cadence")                            // 선택 입력
+    private Integer cadence;                             // 케이던스 (보/분)
+    
+    @Column(name = "calories")                            // 선택 입력
+    private Integer calories;                             // 칼로리 (kcal)
     
     @Column(name = "note", length = 500)              // 선택 입력, 최대 500자
     private String note;                              // 운동 메모

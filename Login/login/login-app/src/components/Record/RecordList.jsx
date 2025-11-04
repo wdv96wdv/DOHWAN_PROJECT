@@ -1,44 +1,25 @@
 import React from "react";
-import "../../assets/css/record.css";
+import common from "../../assets/css/common.module.css";
+import styles from "../../assets/css/record.module.css";
 import RecordCard from "./RecordCard";
 
 export default function RecordList({ records, onEdit, onDelete }) {
-  if (!records.length) {
+  if (!records || records.length === 0) {
     return (
-      <div className="empty-state">
-        <h3>러닝 기록이 없습니다.</h3>
-        <p>첫 번째 러닝 기록을 추가해보세요!</p>
+      <div className={styles.recordsGrid} style={{ padding: 16 }}>
+        <div className={styles.emptyState}>
+          <h3 className={common.title}>러닝 기록이 없습니다.</h3>
+          <p className={common.pageText}>첫 번째 러닝 기록을 추가해보세요!</p>
+        </div>
       </div>
     );
   }
 
-  // DB 숫자를 화면용 포맷으로 변환
-  const formatPace = (value) => {
-    if (!value) return "-";
-    if (isNaN(value)) return value;
-    const num = parseInt(value, 10);
-    const minutes = Math.floor(num / 100);
-    const seconds = num % 100;
-    return `${minutes}'${seconds.toString().padStart(2, "0")}''`;
-  };
-
   return (
-    <div className="records-grid">
-      {records.map(record => {
-        const formattedRecord = {
-          ...record,
-          round_count: formatPace(record.round_count), // 화면용 필드
-          created_at: new Date(record.created_at).toLocaleString(),
-        };
-        return (
-          <RecordCard
-            key={record.id}
-            record={formattedRecord}
-            onEdit={onEdit}
-            onDelete={onDelete}
-          />
-        );
-      })}
+    <div className={styles.recordsGrid}>
+      {records.map((record) => (
+        <RecordCard key={record.id} record={record} onEdit={onEdit} onDelete={onDelete} />
+      ))}
     </div>
   );
 }
