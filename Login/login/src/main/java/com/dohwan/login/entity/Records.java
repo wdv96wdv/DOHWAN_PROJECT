@@ -68,5 +68,5 @@ public class Records {
 
     // 사용자 입력용 러닝 날짜
     @Column(name = "record_date", nullable = false)
-    private LocalDate recordDate;
+    private LocalDateTime recordDate;
 }
