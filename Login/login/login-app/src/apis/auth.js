@@ -36,3 +36,10 @@ export const update = (data) => api.put(`/users`, data)
 
 // 회원 탈퇴
 export const remove = (username) => api.delete(`/users/${username}`)
+
+// 아이디 중복 체크
+export const checkUsername = async (username) => {
+  return await api.get(`/auth/check-username`, {
+    params: { username }
+  });
+};

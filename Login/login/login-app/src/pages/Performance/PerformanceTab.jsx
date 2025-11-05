@@ -6,6 +6,7 @@ import GoalTracker from '../../components/Performance/GoalTracker';
 import CsvUploader from '../../components/Performance/CsvUploader';
 import ShareCard from '../../components/Performance/ShareCard';
 import { getRunRecords } from '../../apis/performance';
+import WaterIntakeCalculator from '../../components/Performance/WaterIntakeCalculator';
 import styles from '../../assets/css/common.module.css';
 
 const PerformanceTab = () => {
@@ -50,11 +51,12 @@ const PerformanceTab = () => {
         </button>
       </div>
       <RunStatsCard refreshKey={refreshKey} />
+      <RunRecordList refreshKey={refreshKey} />
       <RunTrendChart refreshKey={refreshKey} />
       <GoalTracker />
       {/* <CsvUploader /> */}
       <ShareCard record={latestRecord} />
-      <RunRecordList refreshKey={refreshKey} />
+      <WaterIntakeCalculator />
     </div>
   );
 };

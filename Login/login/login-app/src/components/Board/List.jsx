@@ -110,6 +110,11 @@ const List = ({ list = [], pagination }) => {
                 <td>
                   <Link to={`/boards/${board.id}`} className={styles.link}>
                     {truncateText(board.title, 30)}
+                    {board.commentCount > 0 && (
+                      <span style={{ marginLeft: '4px', color: '#888' }}>
+                        ({board.commentCount})
+                      </span>
+                    )}
                   </Link>
                 </td>
                 <td>{truncateText(board.writer, 10)}</td>

@@ -1,71 +1,92 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import '../../assets/css/join.css';
+import { checkUsername } from '../../apis/auth';
+import * as Swal from '../../apis/alert';
 
 const JoinForm = ({ join }) => {
-  // Caps Lock 상태
-  const [capsLockOn, setCapsLockOn] = useState(false)
-  // 로딩 상태
-  const [loading, setLoading] = useState(false)
-  // 모바일 기기 여부
-  const [isMobile, setIsMobile] = useState(false)
-  // 비밀번호 관련 상태
-  const [password, setPassword] = useState('')
-  const [passwordConfirm, setPasswordConfirm] = useState('')
-  const [passwordMatch, setPasswordMatch] = useState(true)
+  // 상태 관리
+  const [username, setUsername] = useState('');
+  const [isAvailable, setIsAvailable] = useState(null);
+  const [password, setPassword] = useState('');
+  const [passwordConfirm, setPasswordConfirm] = useState('');
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [capsLockOn, setCapsLockOn] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [passwordMatch, setPasswordMatch] = useState(true);
 
-  // ✅ 실제 모바일 기기 여부 체크 (화면 크기와 무관)
+  // 모바일 기기 여부 확인
   useEffect(() => {
-    const checkMobileDevice = () => {
-      const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-      const isMobileDevice =
-        /android/i.test(userAgent) ||
-        /iPad|iPhone|iPod/.test(userAgent) ||
-        /windows phone/i.test(userAgent);
-      setIsMobile(isMobileDevice);
-    };
-
-    checkMobileDevice();
+    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+    const isMobileDevice =
+      /android/i.test(userAgent) ||
+      /iPad|iPhone|iPod/.test(userAgent) ||
+      /windows phone/i.test(userAgent);
+    setIsMobile(isMobileDevice);
   }, []);
 
-  // 비밀번호 일치 여부 실시간 확인
+  // 비밀번호 일치 여부 확인
   useEffect(() => {
-    if (password && passwordConfirm) {
-      setPasswordMatch(password === passwordConfirm)
-    }
-  }, [password, passwordConfirm])
+    setPasswordMatch(password === passwordConfirm);
+  }, [password, passwordConfirm]);
 
-  // CapsLock 체크
+  // CapsLock 상태 확인
   const checkCapsLock = (e) => {
-    const isOn = e.getModifierState && e.getModifierState("CapsLock");
-    setCapsLockOn(isOn)
-  }
+    const isOn = e.getModifierState && e.getModifierState('CapsLock');
+    setCapsLockOn(isOn);
+  };
 
-  // 회원가입 클릭
+  // 아이디 중복 확인
+  const handleCheckUsername = async () => {
+    if (!username) {
+      Swal.alert('아이디 입력 필요', '아이디를 먼저 입력해주세요.', 'info');
+      return;
+    }
+    try {
+      const res = await checkUsername(username);
+      if (res.data.exists) {
+        Swal.alert('중복된 아이디입니다.', '다른 아이디를 입력해주세요.', 'warning');
+        setIsAvailable(false);
+      } else {
+        Swal.alert('사용 가능한 아이디입니다!', '', 'success');
+        setIsAvailable(true);
+      }
+    } catch (err) {
+      Swal.alert('확인 실패', '서버 오류가 발생했습니다.', 'error');
+    }
+  };
+
+  // 회원가입 요청
   const onJoin = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     if (isMobile) {
-      alert('회원가입은 PC 화면에서 이용해 주세요.')
-      return
+      alert('회원가입은 PC 화면에서 이용해 주세요.');
+      return;
     }
 
-    const form = e.target
-    const username = form.username.value
-    const name = form.name.value
-    const email = form.email.value
+    if (!passwordMatch) {
+      Swal.alert('비밀번호 불일치', '비밀번호가 일치하지 않습니다.', 'error');
+      return;
+    }
 
-    setLoading(true)
+    if (isAvailable !== true) {
+      Swal.alert('아이디 중복 확인 필요', '아이디 중복 확인을 먼저 해주세요.', 'warning');
+      return;
+    }
+
+    setLoading(true);
     try {
-      await join({ username, password, name, email })
-      // 성공 시 알림, 이동 등 추가 가능
+      await join({ username, password, name, email });
     } catch (err) {
-      console.error(err)
+      console.error(err);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
-  // 실제 모바일 기기라면 경고 화면만 표시
+  // 모바일 기기일 경우 안내 메시지
   if (isMobile) {
     return (
       <div className="form">
@@ -74,37 +95,50 @@ const JoinForm = ({ join }) => {
           ⚠️ 회원가입은 PC 화면에서만 가능합니다.
         </p>
       </div>
-    )
+    );
   }
 
   return (
     <div className="form">
       <h2 className="login-title">회원가입</h2>
-      <form className='login-form' onSubmit={onJoin}>
-        {/* username */}
+      <form className="login-form" onSubmit={onJoin}>
+        {/* 아이디 */}
         <div>
           <label htmlFor="username">ID</label>
-          <input
-            type="text"
-            id="username"
-            placeholder="ID"
-            name="username"
-            autoComplete="username"
-            required
-            onKeyUp={checkCapsLock}
-            onKeyDown={checkCapsLock}
-          />
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              placeholder="ID"
+              autoComplete="username"
+              required
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              onKeyUp={checkCapsLock}
+              onKeyDown={checkCapsLock}
+            />
+            <button type="button" onClick={handleCheckUsername} className="btn btn--form btn-check">
+              중복 확인
+            </button>
+          </div>
+          {isAvailable === false && (
+            <p style={{ fontSize: '12px', color: 'red' }}>이미 사용 중인 아이디입니다.</p>
+          )}
+          {isAvailable === true && (
+            <p style={{ fontSize: '12px', color: 'green' }}>사용 가능한 아이디입니다.</p>
+          )}
         </div>
 
-        {/* password */}
+        {/* 비밀번호 */}
         <div>
-          <label htmlFor="password">password</label>
+          <label htmlFor="password">Password</label>
           <input
             type="password"
             id="password"
-            placeholder="password"
             name="password"
-            autoComplete="password"
+            placeholder="Password"
+            autoComplete="new-password"
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -113,14 +147,14 @@ const JoinForm = ({ join }) => {
           />
         </div>
 
-        {/* password confirm */}
+        {/* 비밀번호 확인 */}
         <div>
           <label htmlFor="passwordConfirm">비밀번호 확인</label>
           <input
             type="password"
             id="passwordConfirm"
-            placeholder="비밀번호 확인"
             name="passwordConfirm"
+            placeholder="비밀번호 확인"
             autoComplete="new-password"
             required
             value={passwordConfirm}
@@ -129,44 +163,41 @@ const JoinForm = ({ join }) => {
             onKeyDown={checkCapsLock}
           />
           {password && passwordConfirm && (
-            <p
-              style={{
-                fontSize: '12px',
-                color: passwordMatch ? 'green' : 'red',
-              }}
-            >
-              {passwordMatch
-                ? '비밀번호가 일치합니다.'
-                : '비밀번호가 일치하지 않습니다.'}
+            <p style={{ fontSize: '12px', color: passwordMatch ? 'green' : 'red' }}>
+              {passwordMatch ? '비밀번호가 일치합니다.' : '비밀번호가 일치하지 않습니다.'}
             </p>
           )}
         </div>
 
-        {/* name */}
+        {/* 이름 */}
         <div>
-          <label htmlFor="name">name</label>
+          <label htmlFor="name">Name</label>
           <input
             type="text"
             id="name"
-            placeholder="name"
             name="name"
+            placeholder="Name"
             autoComplete="name"
             required
+            value={name}
+            onChange={(e) => setName(e.target.value)}
             onKeyUp={checkCapsLock}
             onKeyDown={checkCapsLock}
           />
         </div>
 
-        {/* email */}
+        {/* 이메일 */}
         <div>
-          <label htmlFor="email">email</label>
+          <label htmlFor="email">Email</label>
           <input
             type="email"
             id="email"
-            placeholder="email"
             name="email"
+            placeholder="Email"
             autoComplete="email"
             required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             onKeyUp={checkCapsLock}
             onKeyDown={checkCapsLock}
           />
@@ -176,12 +207,12 @@ const JoinForm = ({ join }) => {
         <button
           type="submit"
           className="btn btn--form btn-login"
-          disabled={loading || !passwordMatch}
+          disabled={loading || !passwordMatch || isAvailable !== true}
         >
           {loading ? '가입중입니다...' : '가입하기'}
         </button>
 
-        {/* CapsLock 안내 */}
+        {/* CapsLock 경고 */}
         <div
           className="capslock-warning"
           style={{ display: capsLockOn ? 'block' : 'none' }}
@@ -190,7 +221,7 @@ const JoinForm = ({ join }) => {
         </div>
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default JoinForm
+export default JoinForm;

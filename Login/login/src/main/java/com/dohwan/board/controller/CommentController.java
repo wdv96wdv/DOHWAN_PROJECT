@@ -51,8 +51,7 @@ public class CommentController {
             Comment comment = Comment.builder()
                     .boardId(boardId)
                     .userNo(Long.valueOf(request.get("userNo").toString()))
-                    .writer(request.get("writer").toString())
-                    .content(request.get("content").toString())
+                    .writer(request.get("writer").toString())                    .content(request.get("content").toString())
                     .build();
 
             Comment savedComment = commentRepository.save(comment);

@@ -4,8 +4,17 @@ import styles from '../../assets/css/Read.module.css';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import noImage from '../../assets/img/no-image.png';
+import CommentList from './Comment';
 
-const Read = ({ board = {}, fileList = [], onDownload }) => {
+const Read = ({
+  board = {},
+  fileList = [],
+  onDownload,
+  commentList = [],
+  onCreateComment,
+  onUpdateComment,
+  onDeleteComment,
+}) => {
   if (!board || !board.title) {
     return <div>게시글 정보를 불러오는 중입니다...</div>;
   }
@@ -145,6 +154,13 @@ const Read = ({ board = {}, fileList = [], onDownload }) => {
           )}
         </div>
       </form>
+
+      <CommentList
+        comments={commentList}
+        onCreate={onCreateComment}
+        onUpdate={onUpdateComment}
+        onDelete={onDeleteComment}
+      />
     </div>
   );
 };

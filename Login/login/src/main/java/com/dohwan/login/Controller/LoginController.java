@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dohwan.login.domain.AuthenticationRequest;
@@ -43,6 +43,24 @@ public class LoginController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @GetMapping("/auth/check-username")
+    public ResponseEntity<?> checkUsername(@RequestParam String username) {
+        try {
+            log.info("아이디 중복 확인 요청: {}", username);
+
+            Users user = userMapper.findByUsername(username);
+            boolean exists = (user != null);
+
+            Map<String, Boolean> response = new HashMap<>();
+            response.put("exists", exists);
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("아이디 중복 확인 중 예외 발생", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류");
+        }
+    }
 
     /**
      * 로그인 요청 → JWT 토큰 생성
@@ -125,7 +143,7 @@ public class LoginController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("잘못된 토큰입니다.");
         }
     }
-    
+
     @PostMapping("/auth/social-login")
     public ResponseEntity<?> socialLogin(@RequestBody SocialLoginRequest request) {
         try {
@@ -147,7 +165,7 @@ public class LoginController {
                 user.setPassword(null); // 소셜 로그인은 비밀번호 없음
                 user.setEnabled(true);
                 userMapper.insertUser(user); // INSERT 처리
-                
+
                 // INSERT 후 생성된 no를 다시 조회
                 Users insertedUser = userMapper.findByEmail(email);
                 if (insertedUser != null && insertedUser.getNo() != null) {

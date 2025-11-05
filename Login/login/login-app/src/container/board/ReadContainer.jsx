@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Read from '../../components/Board/Read'
 import { useParams } from 'react-router-dom'
 import * as boards from '../../apis/boards'
 import * as files from '../../apis/files'
 import * as comments from '../../apis/comments'
 import Swal from 'sweetalert2'
+import { LoginContext } from '../../contexts/LoginContextProvider'
 
 const ReadContainer = () => {
   const { id } = useParams()
+  const { userInfo } = useContext(LoginContext)
 
   const [board, setBoard] = useState({})
   const [fileList, setFileList] = useState([])
@@ -60,7 +62,8 @@ const ReadContainer = () => {
 
   const onCreateComment = async (data) => {
     try {
-      await comments.create(id, data)
+      const newData = { ...data, userNo: userInfo.no, writer: userInfo.name };
+      await comments.create(id, newData)
       await getComments() // 댓글 목록 다시 불러오기
       Swal.fire({ icon: 'success', title: '댓글이 등록되었습니다.', timer: 1500, showConfirmButton: false })
     } catch (err) {
@@ -71,7 +74,8 @@ const ReadContainer = () => {
 
   const onUpdateComment = async (commentId, data) => {
     try {
-      await comments.update(id, commentId, data)
+      const newData = { ...data, userNo: userInfo.no };
+      await comments.update(id, commentId, newData)
       await getComments()
       Swal.fire({ icon: 'success', title: '댓글이 수정되었습니다.', timer: 1500, showConfirmButton: false })
     } catch (err) {
