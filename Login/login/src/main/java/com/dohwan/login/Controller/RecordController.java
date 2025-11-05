@@ -1,4 +1,5 @@
 package com.dohwan.login.controller;
+
 import com.dohwan.login.entity.Records;
 import com.dohwan.login.repository.RecordRepository;
 
@@ -10,19 +11,21 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
-
 
 @Slf4j
 @RestController
 @RequestMapping("/records")
 @CrossOrigin(origins = "*")
 public class RecordController {
-    
+
     @Autowired
     private RecordRepository recordRepository;
-    
+
     // 모든 운동 기록 조회
     @GetMapping
     public ResponseEntity<List<Records>> getAllRecords() {
@@ -33,33 +36,34 @@ public class RecordController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-    
-    // 특정 운동 기록 조회
+
+    // 특정 운동 기록 조회 (UUID)
     @GetMapping("/{id}")
     public ResponseEntity<Records> getRecordById(@PathVariable("id") String id) {
         try {
             Optional<Records> record = recordRepository.findById(id);
-            if (record.isPresent()) {
-                return ResponseEntity.ok(record.get());
-            } else {
-                return ResponseEntity.notFound().build();
-            }
+            return record.map(ResponseEntity::ok)
+                    .orElseGet(() -> ResponseEntity.notFound().build());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-    
+
     // 운동 기록 생성
     @PostMapping
     public ResponseEntity<Records> createRecord(@RequestBody Records record) {
         try {
+            // recordDate가 비어있으면 createdAt 기준으로 기본 설정
+            if (record.getRecordDate() == null) {
+                record.setRecordDate(LocalDateTime.now());
+            }
             Records savedRecord = recordRepository.save(record);
             return ResponseEntity.status(HttpStatus.CREATED).body(savedRecord);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
-    
+
     // 운동 기록 수정
     @PutMapping("/{id}")
     public ResponseEntity<Records> updateRecord(@PathVariable("id") String id, @RequestBody Records recordDetails) {
@@ -68,33 +72,17 @@ public class RecordController {
             Optional<Records> optionalRecord = recordRepository.findById(id);
             if (optionalRecord.isPresent()) {
                 Records record = optionalRecord.get();
-                // Records 엔티티에 존재하는 필드만 업데이트
-                if (recordDetails.getRunningName() != null) {
-                    record.setRunningName(recordDetails.getRunningName());
-                }
-                if (recordDetails.getDistanceKm() != null) {
-                    record.setDistanceKm(recordDetails.getDistanceKm());
-                }
-                if (recordDetails.getDurationSec() != null) {
-                    record.setDurationSec(recordDetails.getDurationSec());
-                }
-                if (recordDetails.getPaceMinPerKm() != null) {
-                    record.setPaceMinPerKm(recordDetails.getPaceMinPerKm());
-                }
-                if (recordDetails.getSpeedKmh() != null) {
-                    record.setSpeedKmh(recordDetails.getSpeedKmh());
-                }
-                if (recordDetails.getCadence() != null) {
-                    record.setCadence(recordDetails.getCadence());
-                }
-                if (recordDetails.getCalories() != null) {
-                    record.setCalories(recordDetails.getCalories());
-                }
-                if (recordDetails.getNote() != null) {
-                    record.setNote(recordDetails.getNote());
-                }
-                // no, id, userNo, createdAt은 수정하지 않음
-                
+
+                if (recordDetails.getRunningName() != null) record.setRunningName(recordDetails.getRunningName());
+                if (recordDetails.getDistanceKm() != null) record.setDistanceKm(recordDetails.getDistanceKm());
+                if (recordDetails.getDurationSec() != null) record.setDurationSec(recordDetails.getDurationSec());
+                if (recordDetails.getPaceMinPerKm() != null) record.setPaceMinPerKm(recordDetails.getPaceMinPerKm());
+                if (recordDetails.getSpeedKmh() != null) record.setSpeedKmh(recordDetails.getSpeedKmh());
+                if (recordDetails.getCadence() != null) record.setCadence(recordDetails.getCadence());
+                if (recordDetails.getCalories() != null) record.setCalories(recordDetails.getCalories());
+                if (recordDetails.getNote() != null) record.setNote(recordDetails.getNote());
+                if (recordDetails.getRecordDate() != null) record.setRecordDate(recordDetails.getRecordDate());
+
                 Records updatedRecord = recordRepository.save(record);
                 return ResponseEntity.ok(updatedRecord);
             } else {
@@ -104,27 +92,23 @@ public class RecordController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
-    
+
     // 운동 기록 삭제
     @DeleteMapping("/{id}")
     @Transactional
     public ResponseEntity<Void> deleteRecord(@PathVariable("id") String id) {
-        log.info("운동 삭제 : {}", id);
         try {
             if (recordRepository.existsById(id)) {
-                log.info("운동 삭제2 : {}", id);
                 recordRepository.deleteById(id);
                 return ResponseEntity.noContent().build();
             } else {
-                log.info("운동 삭제 실패 : {}", id);
                 return ResponseEntity.notFound().build();
             }
         } catch (Exception e) {
-            log.info("운동 삭제 오류 : {}", id, e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-    
+
     // 운동 이름으로 검색
     @GetMapping("/search")
     public ResponseEntity<List<Records>> searchRecords(@RequestParam("runningName") String runningName) {
@@ -135,49 +119,35 @@ public class RecordController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-    
-    // 오늘 운동 기록 조회
-    @GetMapping("/today")
-    public ResponseEntity<List<Records>> getTodayRecords() {
+
+    // 특정 날짜 운동 기록 조회
+    @GetMapping("/by-date")
+    public ResponseEntity<List<Records>> getRecordsByDate(@RequestParam("date") String dateStr) {
         try {
-            List<Records> records = recordRepository.findTodayRecords();
+            LocalDate date = LocalDate.parse(dateStr);
+            LocalDateTime start = date.atStartOfDay();
+            LocalDateTime end = date.atTime(LocalTime.MAX);
+            List<Records> records = recordRepository.findRecordsByDateRange(start, end);
             return ResponseEntity.ok(records);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-    
-    // UUID로 운동 기록 조회
-    @GetMapping("/uuid/{id}")
-    public ResponseEntity<Records> getRecordByUuid(@PathVariable("id") String id) {
+
+    // 오늘 운동 기록 조회
+    @GetMapping("/today")
+    public ResponseEntity<List<Records>> getTodayRecords() {
         try {
-            Optional<Records> record = recordRepository.findById(id);
-            if (record.isPresent()) {
-                return ResponseEntity.ok(record.get());
-            } else {
-                return ResponseEntity.notFound().build();
-            }
+            LocalDate today = LocalDate.now();
+            LocalDateTime start = today.atStartOfDay();
+            LocalDateTime end = today.atTime(LocalTime.MAX);
+            List<Records> records = recordRepository.findRecordsByDateRange(start, end);
+            return ResponseEntity.ok(records);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-    
-    // UUID로 운동 기록 삭제
-    @DeleteMapping("/uuid/{id}")
-    @Transactional
-    public ResponseEntity<Void> deleteRecordByUuid(@PathVariable("id") String id) {
-        try {
-            if (recordRepository.existsById(id)) {
-                recordRepository.deleteById(id);
-                return ResponseEntity.noContent().build();
-            } else {
-                return ResponseEntity.notFound().build();
-            }
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
-    
+
     // UUID 리스트로 여러 운동 기록 조회
     @PostMapping("/uuid/batch")
     public ResponseEntity<List<Records>> getRecordsByUuids(@RequestBody List<String> ids) {

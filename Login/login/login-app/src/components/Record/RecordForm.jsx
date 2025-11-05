@@ -62,14 +62,16 @@ export default function RecordForm({ formData, setFormData, onSubmit, submitText
       <form onSubmit={onSubmit}>
         <div className={styles.formGrid}>
           <div className={styles.formGroup}>
-            <label htmlFor="created_at">날짜 *</label>
+            <label htmlFor="record_date">날짜 *</label>
             <input
               className={common.formInput}
               type="date"
-              id="created_at"
-              name="created_at"
-              value={(formData.created_at || "").toString().slice(0, 10)}
-              onChange={handleChange}
+              id="record_date"
+              name="record_date"
+              value={formData.record_date ? formData.record_date.slice(0, 10) : ""}
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev, record_date: e.target.value }))
+              }
               required
             />
           </div>

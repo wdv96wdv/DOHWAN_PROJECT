@@ -106,12 +106,12 @@ public class UserController {
   @PutMapping("")
   @PreAuthorize("hasRole('ROLE_ADMIN') or #request.username == authentication.name")
   public ResponseEntity<?> update(@RequestBody UserUpdateRequest request) throws Exception {
-    boolean result = userService.updateWithPassword(request);
+    boolean passwordChanged = userService.updateUser(request);
 
-    if (result) {
-      return ResponseEntity.ok("회원정보 수정 성공");
+    if (passwordChanged) {
+      return ResponseEntity.ok("PASSWORD_UPDATED");
     } else {
-      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("회원정보 수정 실패");
+      return ResponseEntity.ok("INFO_UPDATED");
     }
   }
 

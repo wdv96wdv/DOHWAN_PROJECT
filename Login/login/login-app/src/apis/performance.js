@@ -24,8 +24,8 @@ export const saveRunRecord = async (runData) => {
   }
 
   // 속도 계산 (km/h) = distance_km / (duration_sec / 3600)
-  const speedKmh = runData.distanceKm && runData.durationSec 
-    ? (runData.distanceKm / (runData.durationSec / 3600)) 
+  const speedKmh = runData.distanceKm && runData.durationSec
+    ? (runData.distanceKm / (runData.durationSec / 3600))
     : null;
 
   // 페이스 계산 (분/km) = (duration_sec / 60) / distance_km
@@ -80,8 +80,8 @@ export const getRunRecords = async () => {
     distanceKm: record.distance_km || 0,
     durationSec: record.duration_sec || 0,
     paceMinPerKm: record.pace_min_per_km ? (record.pace_min_per_km / 100) : 0, // 123 -> 1.23
-    speedKmh: record.speed_kmh || (record.distance_km && record.duration_sec 
-      ? (record.distance_km / (record.duration_sec / 3600)) 
+    speedKmh: record.speed_kmh || (record.distance_km && record.duration_sec
+      ? (record.distance_km / (record.duration_sec / 3600))
       : 0),
     calories: record.calories || 0,
     cadence: record.cadence || null,
@@ -133,52 +133,60 @@ export const getRunTrend = async () => {
 
 // ✅ 목표 저장
 export const saveGoal = async (goalData, user_no) => {
-    const { data, error } = await supabase
-      .from("goal")
-      .insert([
-        {
-          title: goalData.title,
-          target_value: Number(goalData.target_value),
-          unit: goalData.unit,
-          user_no: user_no
-        },
-      ]);
-  
-    if (error) throw error;
-    return { data };
-  };
-  
-  
-  // ✅ 목표 목록 조회
-  export const getGoals = async (user_no) => {
-    const { data, error } = await supabase
-      .from("goal")
-      .select("*")
-      .eq("user_no", user_no)
-      .order("id", { ascending: false });
-  
-    if (error) throw error;
-  
-    return {
-      data: data.map((g) => ({
-        id: g.id,
-        title: g.title,
-        targetValue: g.target_value,
-        unit: g.unit,
-      })),
-    };
-  };
+  const targetValue = Number(goalData.target_value);
 
-  // ✅ ✅ 목표 삭제
-  export const deleteGoal = async (id, user_no) => {
-    const { error } = await supabase
-      .from("goal")
-      .delete()
-      .eq("id", id)
-      .eq("user_no", user_no);
-  
-    if (error) throw error;
+  // 범위 검증
+  if (targetValue < 0 || targetValue > 10000) {
+    throw new Error("목표 값은 0 이상 10000 이하로 입력해야 합니다.");
+  }
+
+  const { data, error } = await supabase
+    .from("goal")
+    .insert([
+      {
+        title: goalData.title,
+        target_value: targetValue,
+        unit: goalData.unit,
+        user_no: user_no
+      },
+    ]);
+
+  if (error) throw error;
+  return { data };
+};
+
+
+
+// ✅ 목표 목록 조회
+export const getGoals = async (user_no) => {
+  const { data, error } = await supabase
+    .from("goal")
+    .select("*")
+    .eq("user_no", user_no)
+    .order("id", { ascending: false });
+
+  if (error) throw error;
+
+  return {
+    data: data.map((g) => ({
+      id: g.id,
+      title: g.title,
+      targetValue: g.target_value,
+      unit: g.unit,
+    })),
   };
+};
+
+// ✅ ✅ 목표 삭제
+export const deleteGoal = async (id, user_no) => {
+  const { error } = await supabase
+    .from("goal")
+    .delete()
+    .eq("id", id)
+    .eq("user_no", user_no);
+
+  if (error) throw error;
+};
 
 // CSV 업로드 (추후 구현 가능)
 export const uploadCsv = async (file) => {

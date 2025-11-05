@@ -27,9 +27,27 @@ const Comment = ({ comment, onUpdate, onDelete }) => {
             value={editedContent}
             onChange={(e) => setEditedContent(e.target.value)}
             className={styles.formTextarea}
+            maxLength={200} // 글자수 제한
           />
-          <button onClick={handleUpdate} className={styles.btn}>저장</button>
-          <button onClick={() => setIsEditing(false)} className={`${styles.btn} ${styles.btnGray}`}>취소</button>
+          <div style={{ fontSize: '0.8rem', color: '#666', textAlign: 'right' }}>
+            {editedContent.length}/200
+          </div>
+          <button
+            onClick={() => {
+              if (!editedContent.trim()) return alert("댓글 내용을 입력해주세요.");
+              if (editedContent.length > 200) return alert("댓글은 200자 이하로 작성해야 합니다.");
+              handleUpdate();
+            }}
+            className={styles.btn}
+          >
+            저장
+          </button>
+          <button
+            onClick={() => setIsEditing(false)}
+            className={`${styles.btn} ${styles.btnGray}`}
+          >
+            취소
+          </button>
         </div>
       ) : (
         <p className={styles.commentContent}>{comment.content}</p>
@@ -50,8 +68,12 @@ const CommentList = ({ comments, onCreate, onUpdate, onDelete }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!newComment.trim()) return;
-    onCreate({ content: newComment });
+    const trimmed = newComment.trim();
+    if (!trimmed) return;
+    if (trimmed.length > 200) {
+      return alert("댓글은 200자 이하로 작성해야 합니다.");
+    }
+    onCreate({ content: trimmed });
     setNewComment('');
   };
 
@@ -65,7 +87,11 @@ const CommentList = ({ comments, onCreate, onUpdate, onDelete }) => {
             onChange={(e) => setNewComment(e.target.value)}
             placeholder="댓글을 입력하세요"
             className={styles.formTextarea}
+            maxLength={200}
           />
+          <div style={{ fontSize: '0.8rem', color: '#666', textAlign: 'right' }}>
+            {newComment.length}/200
+          </div>
           <button type="submit" className={styles.btn}>등록</button>
         </form>
       )}

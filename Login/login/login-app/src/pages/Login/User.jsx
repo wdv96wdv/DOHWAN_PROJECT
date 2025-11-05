@@ -68,16 +68,15 @@ const User = () => {
 
   // 회원 정보 수정
   const updateUser = async (form) => {
-    const { username, name, email, avatar_url, bio, currentPassword,
-      newPassword,
-      confirmPassword
-    } = form;
+    const { username, name, email, avatar_url, bio,
+      currentPassword, newPassword, confirmPassword } = form;
+
+    const isPasswordChange = !!(newPassword && confirmPassword);
 
     try {
       const response = await auth.update({
         username, name, email, currentPassword,
-        newPassword,
-        confirmPassword
+        newPassword, confirmPassword
       });
       if (response.status !== 200) {
         Swal.alert('회원정보 수정 실패', '기본 정보 수정에 실패했습니다.', 'error');
@@ -95,7 +94,13 @@ const User = () => {
         return;
       }
 
-      Swal.alert('회원정보 수정 성공', '로그아웃 후 다시 로그인해주세요.', 'success', () => logout(true));
+      if (isPasswordChange) {
+        Swal.alert('회원정보 수정 성공', '비밀번호가 변경되어 로그아웃 후 다시 로그인해주세요.', 'success', () => logout(true));
+      } else {
+        Swal.alert('회원정보 수정 성공', '정보가 정상적으로 수정되었습니다.', 'success');
+        // 화면은 그대로 유지
+      }
+
     } catch (error) {
       console.error('회원정보 수정 중 에러:', error);
       Swal.alert('회원정보 수정 실패', '예기치 못한 오류가 발생했습니다.', 'error');

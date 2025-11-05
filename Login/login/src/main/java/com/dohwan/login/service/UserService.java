@@ -22,6 +22,8 @@ public interface UserService {
 
     // 회원 비밀번호 수정
     boolean updateWithPassword(UserUpdateRequest request) throws Exception;
+    // 회원 정보 수정 (비밀번호 변경 여부 반환)
+    boolean updateUser(UserUpdateRequest request) throws Exception;
     Users findByUsername(String username) throws Exception;
 
     // 회원 삭제

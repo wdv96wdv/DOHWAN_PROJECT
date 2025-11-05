@@ -24,12 +24,33 @@ const GoalTracker = () => {
 
 
   const handleChange = (e) => {
-    setGoal({ ...goal, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+
+    if (name === "target_value") {
+      let num = Number(value);
+      if (isNaN(num)) num = 0;
+      if (num > 10000) num = 10000;
+      if (num < 0) num = 0;
+      setGoal(prev => ({ ...prev, [name]: num }));
+    } else {
+      setGoal(prev => ({ ...prev, [name]: value }));
+    }
   };
 
   const handleSubmit = async (e) => {
-    console.log("저장 직전 goal 데이터:", goal);
     e.preventDefault();
+
+    const targetValue = Number(goal.target_value);
+
+    // 클라이언트 검증
+    if (isNaN(targetValue) || targetValue < 0 || targetValue > 10000) {
+      return Swal.fire({
+        icon: "error",
+        title: "저장 실패",
+        text: "목표 값은 0 이상 10000 이하의 숫자여야 합니다."
+      });
+    }
+
     try {
       await saveGoal(goal, user_no);
 
@@ -46,7 +67,7 @@ const GoalTracker = () => {
       await Swal.fire({
         icon: "error",
         title: "저장 실패",
-        text: "목표 저장 중 오류가 발생했습니다."
+        text: err.message || "목표 저장 중 오류가 발생했습니다."
       });
       console.error(err);
     }
@@ -100,6 +121,7 @@ const GoalTracker = () => {
           value={goal.title}
           onChange={handleChange}
           className={styles.formInput}
+          maxLength={30}
           required
         />
         <input
@@ -109,6 +131,9 @@ const GoalTracker = () => {
           value={goal.target_value}
           onChange={handleChange}
           className={styles.formInput}
+          max="10000"
+          min="0"
+          step="1"
           required
         />
         <select name="unit" value={goal.unit} onChange={handleChange} className={styles.formInput}>

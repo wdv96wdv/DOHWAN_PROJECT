@@ -25,14 +25,24 @@ const formatDuration = (seconds) => {
 };
 
 export default function RecordCard({ record, onEdit, onDelete }) {
-  const formattedDate = dayjs(record.created_at).format("YYYY-MM-DD HH:mm");
+  // 기록 날짜(record_date) 우선 표시, 시간은 updated_at 기준
+  const recordDate = record.record_date
+    ? dayjs(record.record_date).format("YYYY-MM-DD")
+    : "-";
+  const updatedTime = record.updated_at
+    ? dayjs(record.updated_at).format("HH:mm")
+    : record.created_at
+    ? dayjs(record.created_at).format("HH:mm")
+    : "-";
 
   return (
     <div className={styles.recordCard}>
       <div className={styles.recordHeader}>
         <div>
           <div className={common.subtitle}>{record.running_name}</div>
-          <div className={styles.recordDate}>{formattedDate}</div>
+          <div className={styles.recordDate}>
+            {recordDate} {updatedTime !== "-" ? `(${updatedTime})` : ""}
+          </div>
         </div>
 
         <div className={styles.recordActions}>
@@ -84,7 +94,11 @@ export default function RecordCard({ record, onEdit, onDelete }) {
         )}
       </div>
 
-      {record.note && <div className={common.pageText} style={{ marginTop: 10 }}>{record.note}</div>}
+      {record.note && (
+        <div className={common.pageText} style={{ marginTop: 10 }}>
+          {record.note}
+        </div>
+      )}
     </div>
   );
 }

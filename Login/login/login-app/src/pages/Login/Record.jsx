@@ -4,13 +4,9 @@ import Swal from "sweetalert2";
 import supabase from "../../utils/supabaseClient";
 import RecordForm from "../../components/Record/RecordForm";
 import RecordList from "../../components/Record/RecordList";
-
-import common from "../../assets/css/common.module.css";     // ✅ 공통 UI
-import record from "../../assets/css/record.module.css";     // ✅ Record 전용 UI
-
+import common from "../../assets/css/common.module.css";
 import { v4 as uuidv4 } from "uuid";
 
-/** JWT에서 user_no(pk) 추출 */
 const getUserNoFromJWT = () => {
   const token = localStorage.getItem("jwt");
   if (!token) return null;
@@ -23,11 +19,6 @@ const getUserNoFromJWT = () => {
   }
 };
 
-/** 페이스 포맷 */
-const formatPace = (value) => {
-  return value;
-};
-
 export default function RecordPage() {
   const [records, setRecords] = useState([]);
   const [formData, setFormData] = useState({
@@ -38,12 +29,11 @@ export default function RecordPage() {
     cadence: "",
     calories: "",
     note: "",
+    record_date: "", // ← 추가
   });
   const [editingId, setEditingId] = useState(null);
-
   const user_no = getUserNoFromJWT();
 
-  /** 로그인 사용자 기록 불러오기 */
   useEffect(() => {
     if (user_no) fetchRecords();
   }, [user_no]);
@@ -53,7 +43,7 @@ export default function RecordPage() {
       .from("records")
       .select("*")
       .eq("user_no", user_no)
-      .order("created_at", { ascending: false });
+      .order("record_date", { ascending: false }); // ← record_date 기준 정렬
 
     if (error) {
       console.error("불러오기 오류:", error);
@@ -63,7 +53,6 @@ export default function RecordPage() {
     }
   };
 
-  /** 등록 / 수정 */
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.running_name.trim()) {
@@ -78,73 +67,62 @@ export default function RecordPage() {
     try {
       const submitData = { ...formData };
 
-      if (submitData.pace_min_per_km) {
-        const pace = submitData.pace_min_per_km.replace(/[^0-9]/g, "");
-        submitData.pace_min_per_km = pace ? parseInt(pace, 10) : null;
+      // record_date가 없으면 오늘 날짜 기본값
+      if (!submitData.record_date) {
+        submitData.record_date = new Date().toISOString();
       }
 
-      if (submitData.distance_km)
-        submitData.distance_km = parseFloat(submitData.distance_km);
-
-      if (submitData.duration_sec)
-        submitData.duration_sec = parseInt(submitData.duration_sec, 10);
-
-      if (submitData.cadence)
-        submitData.cadence = parseInt(submitData.cadence, 10);
-
-      if (submitData.calories)
-        submitData.calories = parseInt(submitData.calories, 10);
+      submitData.pace_min_per_km = submitData.pace_min_per_km
+        ? parseInt(String(submitData.pace_min_per_km).replace(/[^0-9]/g, ""), 10)
+        : null;
+      submitData.distance_km = submitData.distance_km ? parseFloat(submitData.distance_km) : null;
+      submitData.duration_sec = submitData.duration_sec ? parseInt(submitData.duration_sec, 10) : null;
+      submitData.cadence = submitData.cadence ? parseInt(submitData.cadence, 10) : null;
+      submitData.calories = submitData.calories ? parseInt(submitData.calories, 10) : null;
 
       if (submitData.distance_km && submitData.duration_sec) {
-        submitData.speed_kmh =
-          submitData.distance_km / (submitData.duration_sec / 3600);
+        submitData.speed_kmh = submitData.distance_km / (submitData.duration_sec / 3600);
       }
 
-      if (
-        !submitData.pace_min_per_km &&
-        submitData.distance_km &&
-        submitData.duration_sec
-      ) {
-        const paceInMinutes =
-          submitData.duration_sec / 60 / submitData.distance_km;
+      if (!submitData.pace_min_per_km && submitData.distance_km && submitData.duration_sec) {
+        const paceInMinutes = submitData.duration_sec / 60 / submitData.distance_km;
         const minutes = Math.floor(paceInMinutes);
         const seconds = Math.round((paceInMinutes - minutes) * 60);
-
-        submitData.pace_min_per_km = parseInt(
-          `${minutes}${seconds.toString().padStart(2, "0")}`,
-          10
-        );
+        submitData.pace_min_per_km = parseInt(`${minutes}${seconds.toString().padStart(2, "0")}`, 10);
       }
 
       if (editingId) {
-        delete submitData.created_at;
-        submitData.updated_at = new Date().toISOString();
-
-        const { error } = await supabase
+        const { data, error } = await supabase
           .from("records")
           .update(submitData)
           .eq("id", editingId)
-          .eq("user_no", user_no);
+          .eq("user_no", parseInt(user_no, 10))
+          .select();
 
         if (error) throw error;
-
         Swal.fire("성공", "기록이 수정되었습니다!", "success");
+
+        setRecords((prev) =>
+          prev.map((r) => (r.id === editingId ? { ...r, ...data[0] } : r))
+        );
       } else {
-        const { error } = await supabase.from("records").insert([
-          {
-            ...submitData,
-            id: uuidv4(),
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
-            user_no,
-          },
-        ]);
+        const { data: inserted, error } = await supabase
+          .from("records")
+          .insert([
+            {
+              ...submitData,
+              id: uuidv4(),
+              user_no: parseInt(user_no, 10),
+            },
+          ])
+          .select();
 
         if (error) throw error;
-
         Swal.fire("성공", "새 러닝 기록이 추가되었습니다!", "success");
+        setRecords((prev) => [inserted[0], ...prev]);
       }
 
+      // form 초기화 (record_date는 기본값 유지)
       setFormData({
         running_name: "",
         distance_km: "",
@@ -153,16 +131,15 @@ export default function RecordPage() {
         cadence: "",
         calories: "",
         note: "",
+        record_date: new Date().toISOString().slice(0, 10),
       });
       setEditingId(null);
-      fetchRecords();
     } catch (err) {
       console.error(err);
       Swal.fire("오류", "저장 중 문제가 발생했습니다.", "error");
     }
   };
 
-  /** 수정 버튼 */
   const handleEdit = (record) => {
     setFormData({
       running_name: record.running_name || "",
@@ -172,11 +149,11 @@ export default function RecordPage() {
       cadence: record.cadence || "",
       calories: record.calories || "",
       note: record.note || "",
+      record_date: record.record_date?.slice(0, 10) || "",
     });
     setEditingId(record.id);
   };
 
-  /** 삭제 */
   const handleDelete = async (id) => {
     const result = await Swal.fire({
       title: "삭제하시겠습니까?",
@@ -193,18 +170,18 @@ export default function RecordPage() {
       .from("records")
       .delete()
       .eq("id", id)
-      .eq("user_no", user_no);
+      .eq("user_no", parseInt(user_no, 10));
 
     if (error) {
       Swal.fire("오류", "삭제에 실패했습니다.", "error");
     } else {
       Swal.fire("삭제 완료", "기록이 삭제되었습니다!", "success");
-      fetchRecords();
+      setRecords((prev) => prev.filter((r) => r.id !== id));
     }
   };
 
   return (
-    <div className={common.container}>  {/* ✅ 페이지 전체 공통 레이아웃 */}
+    <div className={common.container}>
       <h1 className={common.title}>기록</h1>
 
       <RecordForm
@@ -214,7 +191,7 @@ export default function RecordPage() {
         submitText={editingId ? "수정 완료" : "등록"}
       />
 
-      <div className={common.section}>   {/* ✅ 공통 섹션 스타일 */}
+      <div className={common.section}>
         <RecordList
           records={records}
           onEdit={handleEdit}
