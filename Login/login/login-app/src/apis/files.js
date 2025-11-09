@@ -22,7 +22,9 @@ export const fileByType = (pTable, pNo, type) => axios.get(`/api/files/${pTable}
 // 운영
 // 파일 업로드 함수
 export const uploadFileToSupabase = async (file, folder) => {
-  const fileName = `${folder}/${Date.now()}-${file.name}`; // 파일 이름에 타임스탬프 추가
+  // Sanitize the file name to handle special characters, including Korean
+  const sanitizedName = file.name.replace(/[^a-zA-Z0-9._\-\u3131-\u314e\u314f-\u3163\uac00-\ud7a3]/g, '_');
+  const fileName = `${folder}/${Date.now()}-${sanitizedName}`; // 파일 이름에 타임스탬프 추가
 
 
   // Supabase Storage에 파일 업로드
@@ -36,7 +38,7 @@ export const uploadFileToSupabase = async (file, folder) => {
   }
   // 업로드 성공 후 파일의 URL 반환
   const fileUrl = `https://ismclnqslxnlsfmqjytc.supabase.co/storage/v1/object/public/upload/${fileName}`;
-  return fileUrl;  // 파일 URL 반환
+  return { fileUrl, sanitizedName };  // 파일 URL과 sanitizedName 반환
 };
 
 // 파일 다운로드 함수

@@ -14,17 +14,19 @@ export default function MarathonList() {
     const [statusFilter, setStatusFilter] = useState(defaultStatus);
 
     const getMarathonStatus = (marathon) => {
-        if (marathon.firstComeFirstServed) return "선착순 접수중";
         const today = new Date();
         const start = new Date(marathon.startDate);
         const end = new Date(marathon.endDate);
         const race = new Date(marathon.raceDate);
-
+    
         if (today < start) return "접수대기";
-        if (today >= start && today <= end) return "접수중";
+        if (today >= start && today <= end) {
+            return marathon.firstComeFirstServed ? "선착순 접수중" : "접수중";
+        }
         if (today > end && today < race) return "접수마감";
         if (today >= race) return "종료";
     };
+    
 
     // 상태별 색상 맵
     const statusClassMap = {

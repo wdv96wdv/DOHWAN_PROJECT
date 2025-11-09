@@ -15,6 +15,7 @@
         <result property="createdAt" column="created_at"/>
         <result property="updatedAt" column="updated_at"/>
         <result property="userNo" column="user_no"/>
+        <result property="commentCount" column="comment_count"/>
         
         <!-- 메인 파일 연관 매핑 (JOIN 방식) -->
         <association property="file" javaType="com.dohwan.board.domain.Files">
@@ -44,6 +45,7 @@
             b.created_at,
             b.updated_at,
             b.user_no,
+            COUNT(c.no) as comment_count,
             f.no AS file_no,
             f.id AS file_id,
             f.p_table AS file_p_table,
@@ -60,6 +62,8 @@
         LEFT JOIN files f ON b.no = f.p_no 
             AND f.p_table = 'boards' 
             AND f.type = 'MAIN'
+        LEFT JOIN comments c ON b.id = c.board_id
+        GROUP BY b.no, b.id, b.title, b.writer, b.content, b.created_at, b.updated_at, b.user_no, f.no, f.id, f.p_table, f.p_no, f.file_name, f.origin_name, f.file_path, f.file_size, f.seq, f.type, f.created_at, f.updated_at
         ORDER BY b.created_at DESC
     </select>
 

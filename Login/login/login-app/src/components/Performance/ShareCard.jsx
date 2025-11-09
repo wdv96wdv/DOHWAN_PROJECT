@@ -37,7 +37,7 @@ const ShareCard = ({ record }) => {
       </div>
 
       <div className={styles.btnBox}>
-        <button onClick={handleDownload} className={styles.btn}>이미지 저장</button>
+        <button onClick={handleDownload} className={styles.btn}>저장</button>
       </div>
     </div>
   );

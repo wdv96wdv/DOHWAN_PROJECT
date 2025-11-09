@@ -188,6 +188,29 @@ export const deleteGoal = async (id, user_no) => {
   if (error) throw error;
 };
 
+// ✅ 목표 수정
+export const updateGoal = async (goalData, user_no) => {
+  const targetValue = Number(goalData.target_value);
+
+  // 범위 검증
+  if (targetValue < 0 || targetValue > 10000) {
+    throw new Error("목표 값은 0 이상 10000 이하로 입력해야 합니다.");
+  }
+
+  const { data, error } = await supabase
+    .from("goal")
+    .update({
+      title: goalData.title,
+      target_value: targetValue,
+      unit: goalData.unit,
+    })
+    .eq("id", goalData.id)
+    .eq("user_no", user_no);
+
+  if (error) throw error;
+  return { data };
+};
+
 // CSV 업로드 (추후 구현 가능)
 export const uploadCsv = async (file) => {
   // TODO: CSV 파싱 후 records에 저장

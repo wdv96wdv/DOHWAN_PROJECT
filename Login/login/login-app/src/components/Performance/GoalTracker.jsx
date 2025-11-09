@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { saveGoal, getGoals, deleteGoal } from '../../apis/performance';
+import { saveGoal, getGoals, deleteGoal, updateGoal } from '../../apis/performance';
 import styles from '../../assets/css/common.module.css';
 import Swal from "sweetalert2";
 
@@ -19,6 +19,7 @@ const getUserNoFromJWT = () => {
 const GoalTracker = () => {
   const [goal, setGoal] = useState({ title: '', target_value: '', unit: 'km' });
   const [goals, setGoals] = useState([]);
+  const [editingGoalId, setEditingGoalId] = useState(null);
 
   const user_no = getUserNoFromJWT();
 
@@ -52,25 +53,39 @@ const GoalTracker = () => {
     }
 
     try {
-      await saveGoal(goal, user_no);
-
-      await Swal.fire({
-        icon: "success",
-        title: "저장 완료!",
-        text: "목표가 성공적으로 저장되었습니다."
-      });
+      if (editingGoalId) {
+        await updateGoal({ ...goal, id: editingGoalId }, user_no);
+        await Swal.fire({
+          icon: "success",
+          title: "수정 완료!",
+          text: "목표가 성공적으로 수정되었습니다."
+        });
+      } else {
+        await saveGoal(goal, user_no);
+        await Swal.fire({
+          icon: "success",
+          title: "저장 완료!",
+          text: "목표가 성공적으로 저장되었습니다."
+        });
+      }
 
       setGoal({ title: '', target_value: '', unit: 'km' });
+      setEditingGoalId(null);
       const res = await getGoals(user_no);
       setGoals(res.data);
     } catch (err) {
       await Swal.fire({
         icon: "error",
-        title: "저장 실패",
-        text: err.message || "목표 저장 중 오류가 발생했습니다."
+        title: editingGoalId ? "수정 실패" : "저장 실패",
+        text: err.message || "목표 처리 중 오류가 발생했습니다."
       });
       console.error(err);
     }
+  };
+
+  const handleEdit = (g) => {
+    setEditingGoalId(g.id);
+    setGoal({ title: g.title, target_value: g.targetValue, unit: g.unit });
   };
 
   const handleDelete = async (id) => {
@@ -141,7 +156,10 @@ const GoalTracker = () => {
           <option value="min/km">min/km</option>
         </select>
         <div className={styles.btnBox}>
-          <button type="submit" className={styles.btn}>목표 저장</button>
+          <button type="submit" className={styles.btn}>{editingGoalId ? '수정' : '저장'}</button>
+          {editingGoalId && (
+            <button type="button" className={styles.btn} onClick={() => { setEditingGoalId(null); setGoal({ title: '', target_value: '', unit: 'km' }); }}>취소</button>
+          )}
         </div>
       </form>
 
@@ -150,6 +168,12 @@ const GoalTracker = () => {
         {goals.map((g) => (
           <li key={g.id}>
             {g.title} - {g.targetValue} {g.unit}
+            <button
+              onClick={() => handleEdit(g)}
+              style={{ marginLeft: "10px" }}
+            >
+              수정
+            </button>
             <button
               onClick={() => handleDelete(g.id)}
               style={{ marginLeft: "10px", color: "red" }}

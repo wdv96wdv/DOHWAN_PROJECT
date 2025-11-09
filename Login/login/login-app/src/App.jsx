@@ -1,32 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, Suspense, lazy } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
 import LoginContextProvider from './contexts/LoginContextProvider';
 
-import Home from './pages/Login/Home';
-import Login from './pages/Login/Login';
-import Join from './pages/Login/Join';
-import User from './pages/Login/User';
-import Record from './pages/Login/Record';
+const Home = lazy(() => import('./pages/Login/Home'));
+const Login = lazy(() => import('./pages/Login/Login'));
+const Join = lazy(() => import('./pages/Login/Join'));
+const User = lazy(() => import('./pages/Login/User'));
+const Record = lazy(() => import('./pages/Login/Record'));
 
-import Course from './pages/Course';
-import Event from './pages/Event';
+const Course = lazy(() => import('./pages/Course'));
+const Event = lazy(() => import('./pages/Event'));
 
-import About from './pages/About';
-import Privacy from './pages/Privacy';
-import Contact from './pages/Contact';
+const About = lazy(() => import('./pages/About'));
+const Privacy = lazy(() => import('./pages/Privacy'));
+const Contact = lazy(() => import('./pages/Contact'));
 
-import AdminContact from "./pages/admin/AdminContact";
-import Calendar from './pages/Calendar';  
-import Profile from './pages/Profile';
+const AdminContact = lazy(() => import("./pages/admin/AdminContact"));
+const Calendar = lazy(() => import('./pages/Calendar'));
+const Profile = lazy(() => import('./pages/Profile'));
 
-import Listpage from './pages/board/Listpage';
-import Insertpage from './pages/board/Insertpage';
-import Readpage from './pages/board/Readpage';
-import Updatepage from './pages/board/Updatepage';
-import Marathon from './pages/Marathon';
+const Listpage = lazy(() => import('./pages/board/Listpage'));
+const Insertpage = lazy(() => import('./pages/board/Insertpage'));
+const Readpage = lazy(() => import('./pages/board/Readpage'));
+const Updatepage = lazy(() => import('./pages/board/Updatepage'));
+const Marathon = lazy(() => import('./pages/Marathon'));
 
-import PerformanceTab from './pages/Performance/PerformanceTab';
+const PerformanceTab = lazy(() => import('./pages/Performance/PerformanceTab'));
 
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
@@ -56,27 +56,29 @@ const App = () => {
       <LoginContextProvider>
         <div className={`app ${theme}`}>
           <Header theme={theme} toggleTheme={toggleTheme} />
-          <Routes>
-            <Route path="/" element={<Home theme={theme} />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/join" element={<Join />} />
-            <Route path="/user" element={<User />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/admin" element={<AdminContact />} />
-            <Route path="/calendar" element={<Calendar />} />
-            <Route path="/marathon" element={<Marathon />} />
-            <Route path="/performance" element={<PerformanceTab />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/privacy" element={<Privacy />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/record" element={<Record />} />
-            <Route path="/course" element={<Course />} />
-            <Route path="/event" element={<Event />} />
-            <Route path="/boards" element={<Listpage />} />
-            <Route path="/boards/insert" element={<Insertpage />} />
-            <Route path="/boards/:id" element={<Readpage />} />
-            <Route path="/boards/update/:id" element={<Updatepage />} />
-          </Routes>
+          <Suspense fallback={<div>Loading...</div>}>
+            <Routes>
+              <Route path="/" element={<Home theme={theme} />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/join" element={<Join />} />
+              <Route path="/user" element={<User />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/admin" element={<AdminContact />} />
+              <Route path="/calendar" element={<Calendar />} />
+              <Route path="/marathon" element={<Marathon />} />
+              <Route path="/performance" element={<PerformanceTab />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/privacy" element={<Privacy />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/record" element={<Record />} />
+              <Route path="/course" element={<Course />} />
+              <Route path="/event" element={<Event />} />
+              <Route path="/boards" element={<Listpage />} />
+              <Route path="/boards/insert" element={<Insertpage />} />
+              <Route path="/boards/:id" element={<Readpage />} />
+              <Route path="/boards/update/:id" element={<Updatepage />} />
+            </Routes>
+          </Suspense>
           <Footer />
         </div>
       </LoginContextProvider>

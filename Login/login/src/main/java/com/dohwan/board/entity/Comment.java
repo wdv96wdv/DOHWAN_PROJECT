@@ -14,7 +14,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "comments")
+@Table(name = "comments", indexes = {
+    @Index(name = "idx_comment_board_id_created_at", columnList = "board_id, createdAt")
+})
 @EntityListeners(AuditingEntityListener.class)
 @Data
 @NoArgsConstructor

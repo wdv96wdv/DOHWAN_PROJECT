@@ -120,10 +120,10 @@ const Insert = ({ onInsert }) => {
     // 파일 업로드
     let mainFileInfo = null;
     if (mainFile) {
-      const mainFileUrl = await fileApi.uploadFileToSupabase(mainFile, 'MAIN');
+      const { fileUrl, sanitizedName } = await fileApi.uploadFileToSupabase(mainFile, 'MAIN');
       mainFileInfo = {
-        url: mainFileUrl,
-        name: mainFile.name,
+        url: fileUrl,
+        name: sanitizedName,
         originName: mainFile.name,
         size: mainFile.size,
       };
@@ -131,10 +131,10 @@ const Insert = ({ onInsert }) => {
 
     let filesInfo = [];
     for (let file of files) {
-      const fileUrl = await fileApi.uploadFileToSupabase(file, 'SUB');
+      const { fileUrl, sanitizedName } = await fileApi.uploadFileToSupabase(file, 'SUB');
       filesInfo.push({
         url: fileUrl,
-        name: file.name,
+        name: sanitizedName,
         originName: file.name,
         size: file.size,
       });

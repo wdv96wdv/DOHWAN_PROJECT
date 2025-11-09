@@ -17,6 +17,7 @@ public class Boards {
     private Date createdAt; // 등록일자
     private Date updatedAt; // 수정일자
     private Long userNo; //user(FK)
+    private int commentCount; // 댓글 개수
 
     // 🗒️ 파일
     // private MultipartFile mainFile;
