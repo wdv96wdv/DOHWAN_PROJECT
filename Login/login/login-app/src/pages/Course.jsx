@@ -23,7 +23,11 @@ const Course = () => {
 
   return (
     <div className={styles.container}>
+      <div>
+        <h2 className={styles.title}>코스</h2>
+      </div>
       <section className={styles.hero}>
+
         <h1>나에게 맞는 코스를 찾아보세요!</h1>
         <p>초보자부터 전문가까지, 다양한 코스를 제공합니다.</p>
       </section>

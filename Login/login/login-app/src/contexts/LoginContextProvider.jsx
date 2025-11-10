@@ -84,9 +84,17 @@ const LoginContextProvider = ({ children }) => {
     // 로그인 여부
     setIsLogin(true)
     localStorage.setItem("isLogin", "true")
-    // 사용자 정보
-    setUserInfo(data)
-    localStorage.setItem("userInfo", JSON.stringify(data ?? {}))
+
+    // 사용자 정보에 loginType 추가
+    const updatedUserInfo = { ...data };
+    // Check for provider first, then try to infer if it's a Google login
+    if (updatedUserInfo.provider === 'GOOGLE' || (updatedUserInfo.email && updatedUserInfo.email.endsWith('@gmail.com'))) {
+      updatedUserInfo.loginType = 'google';
+    } else {
+      updatedUserInfo.loginType = 'traditional';
+    }
+    setUserInfo(updatedUserInfo);
+    localStorage.setItem("userInfo", JSON.stringify(updatedUserInfo ?? {}))
     // 권한 정보
     const updateRoles = { isUser: false, isAdmin: false }
     data.authList.forEach((obj) => {

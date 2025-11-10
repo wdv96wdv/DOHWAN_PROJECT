@@ -53,7 +53,7 @@ const RunTrendChart = ({ refreshKey = 0 }) => {
       <h2 className={styles.title}>러닝 트렌드 분석</h2>
       <div style={{ width: '100%', overflowX: 'auto' }}>
         <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', minWidth: 0 }}>
-          <div style={{ flex: '1 1 360px', minWidth: 320 }}>
+          <div style={{ flex: '1 1 360px' }}>
           <h3 className={styles.subtitle}>일별 거리 변화</h3>
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={chartData} margin={{ left: 16, right: 16 }}>
@@ -67,7 +67,7 @@ const RunTrendChart = ({ refreshKey = 0 }) => {
           </ResponsiveContainer>
           </div>
 
-          <div style={{ flex: '1 1 360px', minWidth: 320 }}>
+          <div style={{ flex: '1 1 360px' }}>
           <h3 className={styles.subtitle}>일별 평균 페이스</h3>
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={chartData} margin={{ left: 16, right: 16 }}>

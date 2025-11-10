@@ -52,7 +52,7 @@ const List = ({ list = [], pagination }) => {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>🏃‍♀️ 러닝 커뮤니티</h1>
+      <h1 className={styles.title}>커뮤니티</h1>
 
       {isLoggedIn() ? (
         <Link to="/boards/insert" className={styles.btn}>글쓰기</Link>

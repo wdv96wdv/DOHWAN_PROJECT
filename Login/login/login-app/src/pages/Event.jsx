@@ -14,7 +14,7 @@ const EventPage = () => {
 
   return (
     <div className={styles.container}>
-      <h1>이벤트 안내</h1>
+      <h2 className={styles.title}>이벤트</h2>
 
       <div className={styles.eventList}>
         {events.map((event) => (
