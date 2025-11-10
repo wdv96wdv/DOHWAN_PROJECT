@@ -56,6 +56,7 @@ const LoginContextProvider = ({ children }) => {
       if (status == 200) {
         // 💍 JWT 를 쿠키에 등록
         Cookies.set("jwt", jwt, { expires: 5 })   // 만료기간 : 5일
+        localStorage.setItem("jwt", jwt); // localStorage에도 JWT 저장
 
         // 로그인 세팅 - loginSetting(🎫💍, 👩‍💼)
         loginSetting(authorization, data)
@@ -204,6 +205,7 @@ const LoginContextProvider = ({ children }) => {
   const loginWithSocial = (jwt, userData) => {
     const authorization = `Bearer ${jwt}`;
     Cookies.set("jwt", jwt, { expires: 5 }); // 쿠키 저장
+    localStorage.setItem("jwt", jwt); // localStorage에도 JWT 저장
 
     // ✅ userData 안에 userInfo가 들어있다면 분리해서 전달
     const userInfo = userData.userInfo ?? userData; // 백엔드가 userInfo 포함했을 경우 대응

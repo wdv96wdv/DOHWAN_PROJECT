@@ -78,7 +78,8 @@ public class SecurityConfig {
 						.requestMatchers("/manifest.json").permitAll()
 						.requestMatchers("/auth/check-username").permitAll()
 						.requestMatchers(HttpMethod.POST, "/auth/social-login").permitAll()
-						.anyRequest().authenticated());
+						.anyRequest().authenticated()
+						);
 
 		// JWT 필터 추가
 		http.addFilterAt(new JwtAuthenticationFilter(authenticationManager, jwtProvider),
