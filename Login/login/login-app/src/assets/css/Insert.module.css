@@ -6,6 +6,8 @@
 .fileList { composes: fileList from './common.module.css'; }
 .fileItem { composes: fileItem from './common.module.css'; }
 .fileImage { composes: fileImage from './common.module.css'; }
+.thumbnailBox { composes: thumbnailBox from './common.module.css'; }
+.mainImage { composes: mainImage from './common.module.css'; }
 
 /* ✅ 등록 전용 버튼 */
 .btnBlue {
@@ -31,11 +33,26 @@
   grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
   gap: 12px;
   max-width: 520px;
+  justify-items: center; /* Centers each item within its cell */
+  justify-content: center; /* Centers the entire row of items */
+  margin: 0 auto; /* Centers the fileList container itself */
 }
 
 .fileImage {
   width: 100%;
-  aspect-ratio: 4 / 3;
+  /* aspect-ratio: 4 / 3; */ /* Removed to inherit height: auto from common.module.css */
   object-fit: cover;
   border-radius: 8px;
+}
+.fileItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* 수직 방향 가운데 정렬 */
+  text-align: center;
+  /* 텍스트 가운데 정렬 */
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background-color: #f9f9f9;
 }

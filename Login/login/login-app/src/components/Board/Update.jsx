@@ -289,7 +289,7 @@ const Update = ({
                         <img
                           src={file?.filePath ? file.filePath : noImage}
                           alt={file?.originName}
-                          className={styles.fileImage}
+                          className={file.type === 'MAIN' ? styles.mainImage : styles.fileImage}
                         />
                         <div style={{ marginTop: '6px', fontSize: '13px' }}>
                           {file.originName}
@@ -332,7 +332,7 @@ const Update = ({
                   )}
                   {newMainPreview && (
                     <div className={styles.fileList}>
-                      <img src={newMainPreview} alt="미리보기" className={styles.fileImage} />
+                      <img src={newMainPreview} alt="미리보기" className={styles.mainImage} />
                     </div>
                   )}
                 </div>
