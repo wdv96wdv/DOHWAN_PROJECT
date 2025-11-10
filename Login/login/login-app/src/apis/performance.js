@@ -1,27 +1,14 @@
 // src/services/performance.js
 import supabase from '../utils/supabaseClient';
 
-/**
- * JWT에서 user_no(pk)를 추출
- */
-const getUserNoFromJWT = () => {
-  const token = localStorage.getItem("jwt");
-  if (!token) return null;
-  try {
-    const payload = JSON.parse(atob(token.split(".")[1]));
-    return payload.no; // JWT payload에서 사용자 no(pk)
-  } catch (err) {
-    console.error("JWT 파싱 실패:", err);
-    return null;
-  }
-};
+
 
 // 러닝 기록 저장
-export const saveRunRecord = async (runData) => {
-  const user_no = getUserNoFromJWT();
-  if (!user_no) {
-    throw new Error("로그인이 필요합니다.");
-  }
+export const saveRunRecord = async (runData, user_no) => {
+  // user_no는 이제 호출하는 곳에서 유효성 검사를 거쳐 전달된다고 가정
+  // if (!user_no) {
+  //   throw new Error("로그인이 필요합니다.");
+  // }
 
   // 속도 계산 (km/h) = distance_km / (duration_sec / 3600)
   const speedKmh = runData.distanceKm && runData.durationSec
@@ -59,8 +46,7 @@ export const saveRunRecord = async (runData) => {
 };
 
 // 러닝 기록 전체 조회
-export const getRunRecords = async () => {
-  const user_no = getUserNoFromJWT();
+export const getRunRecords = async (user_no) => {
   if (!user_no) {
     return { data: [] };
   }
@@ -93,8 +79,8 @@ export const getRunRecords = async () => {
 };
 
 // 러닝 통계 조회
-export const getRunStats = async () => {
-  const records = await getRunRecords();
+export const getRunStats = async (user_no) => {
+  const records = await getRunRecords(user_no);
   const data = records.data || [];
 
   if (data.length === 0) {
@@ -127,8 +113,8 @@ export const getRunStats = async () => {
 };
 
 // 러닝 트렌드 조회
-export const getRunTrend = async () => {
-  return getRunRecords();
+export const getRunTrend = async (user_no) => {
+  return getRunRecords(user_no);
 };
 
 // ✅ 목표 저장

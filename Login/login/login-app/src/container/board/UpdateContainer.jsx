@@ -65,26 +65,6 @@ const UpdateContainer = () => {
     }
   }
 
-  const onDelete = async (boardId) => {
-    const result = await Swal.fire({
-      title: '정말로 삭제하시겠습니까?',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: '삭제',
-      cancelButtonText: '취소'
-    })
-    if (!result.isConfirmed) return
-
-    try {
-      await boards.remove(boardId)
-      Swal.fire({ icon: 'success', title: '게시물이 삭제되었습니다.', timer: 1500, showConfirmButton: false })
-      navigate('/boards')
-    } catch (error) {
-      console.error(error)
-      Swal.fire({ icon: 'error', title: '게시물 삭제 중 오류가 발생했습니다.' })
-    }
-  }
-
   const onDeleteFile = async (fileId) => {
     const file = fileList.find(f => f.id === fileId)
     if (!file) return Swal.fire({ icon: 'info', title: '파일 정보가 없습니다.' })
@@ -124,15 +104,6 @@ const UpdateContainer = () => {
   const deleteCheckedFiles = async (idList) => {
     if (!idList || idList.length === 0) return Swal.fire({ icon: 'info', title: '선택된 파일이 없습니다.' })
 
-    const result = await Swal.fire({
-      title: `선택한 ${idList.length}개의 파일을 삭제하시겠습니까?`,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: '삭제',
-      cancelButtonText: '취소'
-    })
-    if (!result.isConfirmed) return
-
     try {
       const deletePromises = fileList
         .filter(f => idList.includes(f.id))
@@ -155,7 +126,6 @@ const UpdateContainer = () => {
       board={board}
       fileList={fileList}
       onUpdate={onUpdate}
-      onDelete={onDelete}
       onDownload={onDownload}
       onDeleteFile={onDeleteFile}
       deleteCheckedFiles={deleteCheckedFiles}

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import Read from '../../components/Board/Read'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom' // useNavigate 추가
 import * as boards from '../../apis/boards'
 import * as files from '../../apis/files'
 import * as comments from '../../apis/comments'
@@ -9,6 +9,7 @@ import { LoginContext } from '../../contexts/LoginContextProvider'
 
 const ReadContainer = () => {
   const { id } = useParams()
+  const navigate = useNavigate() // useNavigate 인스턴스 생성
   const { userInfo } = useContext(LoginContext)
 
   const [board, setBoard] = useState({})
@@ -100,9 +101,25 @@ const ReadContainer = () => {
       Swal.fire({ icon: 'success', title: '댓글이 삭제되었습니다.', timer: 1500, showConfirmButton: false })
     } catch (err) {
       console.error('댓글 삭제 실패:', err)
-      Swal.fire({ icon: 'error', title: '댓글 삭제에 실패했습니다.' })
+      Swal.fire({ icon: 'error', title: '댓글 삭제 중 오류 발생:', text: err.message })
     }
   }
+
+  // 게시글 삭제
+  const onDelete = async (boardId) => {
+    try {
+      const response = await boards.remove(boardId);
+      if (response.status >= 200 && response.status < 300) { // 2xx 상태 코드 확인
+        Swal.fire({ icon: 'success', title: '게시글이 삭제되었습니다.', timer: 1500, showConfirmButton: false });
+        navigate('/boards'); // 목록으로 이동
+      } else {
+        Swal.fire({ icon: 'error', title: `게시글 삭제에 실패했습니다. (상태 코드: ${response.status})` });
+      }
+    } catch (error) {
+      console.error('게시글 삭제 중 오류 발생:', error);
+      Swal.fire({ icon: 'error', title: '게시글 삭제 중 오류가 발생했습니다.', text: error.message });
+    }
+  };
 
   useEffect(() => {
     getBoard()
@@ -118,6 +135,7 @@ const ReadContainer = () => {
       onCreateComment={onCreateComment}
       onUpdateComment={onUpdateComment}
       onDeleteComment={onDeleteComment}
+      onDelete={onDelete} // onDelete prop 추가
     />
   )
 }

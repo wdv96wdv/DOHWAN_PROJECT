@@ -72,7 +72,6 @@ public class JwtProvider {
                 .claim("no", no) // no : 사용자 no(pk)
                 .compact();
 
-        log.info("jwt : " + jwt);
         return jwt;
     }
 
@@ -90,7 +89,6 @@ public class JwtProvider {
         try {
             // jwt 추출
             String jwt = authorization.replace(SecurityConstants.TOKEN_PREFIX, "");
-            log.info("jwt : " + jwt);
 
             SecretKey shaKey = getShaKey();
 
@@ -99,40 +97,62 @@ public class JwtProvider {
                     .verifyWith(shaKey)
                     .build()
                     .parseSignedClaims(jwt);
-            log.info("parsedToken : " + parsedToken);
 
             // 사용자 식별키(id)
-            String id = parsedToken.getPayload().get("id").toString();
+            String id = parsedToken.getPayload().get("id") != null ? parsedToken.getPayload().get("id").toString() : null;
             // 사용자 아이디
-            String username = parsedToken.getPayload().get("username").toString();
+            String username = parsedToken.getPayload().get("username") != null ? parsedToken.getPayload().get("username").toString() : null;
             // 회원 권한
             Object roles = parsedToken.getPayload().get("rol");
             // 회원 no
             Object noObj = parsedToken.getPayload().get("no");
-            Long no = null;
-            if (noObj instanceof Number) {
-                no = ((Number) noObj).longValue();
-            } else if (noObj instanceof String) {
-                no = Long.parseLong((String) noObj);
+
+            // 필수 클레임(id 또는 username)이 누락된 경우 처리
+            if (id == null || username == null) {
+                log.warn("JWT에 필수 클레임(id 또는 username)이 누락되었습니다.");
+                return null;
             }
+            Long no = null;
+            if (noObj != null) { // noObj에 대한 null 체크 추가
+                if (noObj instanceof Number) {
+                    no = ((Number) noObj).longValue();
+                } else if (noObj instanceof String) {
+                    try {
+                        no = Long.parseLong((String) noObj);
+                    } catch (NumberFormatException e) {
+                        log.warn("JWT 'no' claim is not a valid number string: {}", noObj);
+                    }
+                }
+            }
+            
             Users user = new Users();
             user.setId(id);
             user.setUsername(username);
             user.setNo(no); // pk 세팅
-            List<UserAuth> authList = ((List<?>) roles)
-                    .stream()
-                    .map(auth -> UserAuth.builder()
-                            .username(username)
-                            .auth(auth.toString())
-                            .build())
-                    .collect(Collectors.toList());
-            user.setAuthList(authList);
 
-            // 시큐리티 권한 목록
-            List<SimpleGrantedAuthority> authorities = ((List<?>) roles)
-                    .stream()
-                    .map(auth -> new SimpleGrantedAuthority(auth.toString()))
-                    .collect(Collectors.toList());
+            List<UserAuth> authList = null;
+            List<SimpleGrantedAuthority> authorities = null;
+
+            if (roles instanceof List) { // roles가 List인지 확인
+                authList = ((List<?>) roles)
+                        .stream()
+                        .map(auth -> UserAuth.builder()
+                                .username(username)
+                                .auth(auth != null ? auth.toString() : null) // auth 요소에 대한 null 체크
+                                .build())
+                        .collect(Collectors.toList());
+                user.setAuthList(authList);
+
+                // 시큐리티 권한 목록
+                authorities = ((List<?>) roles)
+                        .stream()
+                        .map(auth -> new SimpleGrantedAuthority(auth != null ? auth.toString() : null)) // auth 요소에 대한 null 체크
+                        .collect(Collectors.toList());
+            } else {
+                log.warn("JWT 'rol' claim is null or not a List: {}", roles);
+                authList = List.of(); // 빈 리스트로 초기화
+                authorities = List.of(); // 빈 리스트로 초기화
+            }
 
             // 추가 유저정보 가져오기
             try {
@@ -140,6 +160,9 @@ public class JwtProvider {
                 if (userInfo != null) {
                     user.setName(userInfo.getName());
                     user.setEmail(userInfo.getEmail());
+                    user.setProvider(userInfo.getProvider());
+                    user.setBio(userInfo.getBio()); // 이 줄 추가
+                    user.setAvatarUrl(userInfo.getAvatarUrl()); // 이 줄 추가
                 }
             } catch (Exception e) {
                 log.error(e.getMessage());
@@ -180,7 +203,6 @@ public class JwtProvider {
                     .parseSignedClaims(jwt);
             // 만료기한 추출
             Date expiration = claims.getPayload().getExpiration();
-            log.info("만료기간 : " + expiration.toString());
 
             // 날짜A.after( 날짜B )
             // : 날짜A가 날짜B 보다 더 뒤에 있으면 true

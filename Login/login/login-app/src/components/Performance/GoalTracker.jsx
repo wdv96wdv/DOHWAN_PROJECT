@@ -1,28 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { saveGoal, getGoals, deleteGoal, updateGoal } from '../../apis/performance';
 import styles from '../../assets/css/common.module.css';
 import Swal from "sweetalert2";
-
-const getUserNoFromJWT = () => {
-  const token = localStorage.getItem("jwt");
-  if (!token) return null;
-  try {
-    const payload = JSON.parse(atob(token.split(".")[1]));
-    return payload.no;
-  } catch (err) {
-    console.error("JWT 파싱 실패:", err);
-    return null;
-  }
-};
-
+import { LoginContext } from '../../contexts/LoginContextProvider'; // LoginContext import
 
 const GoalTracker = () => {
   const [goal, setGoal] = useState({ title: '', target_value: '', unit: 'km' });
   const [goals, setGoals] = useState([]);
   const [editingGoalId, setEditingGoalId] = useState(null);
 
-  const user_no = getUserNoFromJWT();
-
+  const { userInfo } = useContext(LoginContext); // userInfo 가져오기
+  const user_no = userInfo?.no; // userInfo.no를 user_no 변수에 할당
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -40,6 +28,16 @@ const GoalTracker = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!user_no) {
+      Swal.fire({
+        title: '오류',
+        text: '로그인 정보가 없습니다. 다시 로그인해주세요.',
+        icon: 'error',
+        confirmButtonText: '확인'
+      });
+      return;
+    }
 
     const targetValue = Number(goal.target_value);
 
@@ -89,6 +87,16 @@ const GoalTracker = () => {
   };
 
   const handleDelete = async (id) => {
+    if (!user_no) {
+      Swal.fire({
+        title: '오류',
+        text: '로그인 정보가 없습니다. 다시 로그인해주세요.',
+        icon: 'error',
+        confirmButtonText: '확인'
+      });
+      return;
+    }
+
     const result = await Swal.fire({
       title: "삭제하시겠습니까?",
       text: "삭제 후 복구할 수 없습니다.",
@@ -122,8 +130,12 @@ const GoalTracker = () => {
   };
 
   useEffect(() => {
-    getGoals(user_no).then((res) => setGoals(res.data));
-  }, []);
+    if (user_no) {
+      getGoals(user_no).then((res) => setGoals(res.data));
+    } else {
+      setGoals([]);
+    }
+  }, [user_no]);
 
   return (
     <div className={styles.container}>

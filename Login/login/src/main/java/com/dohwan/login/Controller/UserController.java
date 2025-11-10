@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication; // 이 줄 추가
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,14 +40,12 @@ public class UserController {
   public ResponseEntity<?> userInfo(
       @AuthenticationPrincipal CustomUser customUser) {
     log.info("::::: 사용자 정보 조회 :::::");
-    log.info("customUser : " + customUser);
 
     if (customUser == null) {
       return new ResponseEntity<>("UNAUTHORIZED", HttpStatus.UNAUTHORIZED);
     }
 
     Users user = customUser.getUser();
-    log.info("user : " + user);
 
     // 인증된 사용자 정보
     if (user != null) {
@@ -105,7 +104,7 @@ public class UserController {
   // }
   @PutMapping("")
   @PreAuthorize("hasRole('ROLE_ADMIN') or #request.username == authentication.name")
-  public ResponseEntity<?> update(@RequestBody UserUpdateRequest request) throws Exception {
+  public ResponseEntity<?> update(@RequestBody UserUpdateRequest request, Authentication authentication) throws Exception {
     boolean passwordChanged = userService.updateUser(request);
 
     if (passwordChanged) {

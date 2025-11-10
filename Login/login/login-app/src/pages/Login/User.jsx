@@ -128,6 +128,7 @@ const User = () => {
         userInfo={{ ...userInfo, ...profileInfo }}
         updateUser={updateUser}
         deleteUser={deleteUser}
+        loginType={userInfo?.loginType}
       />
     </div>
   );

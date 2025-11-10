@@ -14,7 +14,6 @@ const Update = ({
   board,
   fileList,
   onUpdate,
-  onDelete,
   onDownload,
   onDeleteFile,
   deleteCheckedFiles
@@ -150,9 +149,9 @@ const Update = ({
         // 2) 신규 파일이 있다면 Supabase에 업로드 후 URL/메타 구성
         let addedMainFile = null;
         if (newMainFile) {
-          const mainUrl = await fileApi.uploadFileToSupabase(newMainFile, 'MAIN');
+          const uploadedMainFile = await fileApi.uploadFileToSupabase(newMainFile, 'MAIN');
           addedMainFile = {
-            url: mainUrl,
+            url: uploadedMainFile.fileUrl,
             name: newMainFile.name,
             originName: newMainFile.name,
             size: newMainFile.size,
@@ -161,9 +160,9 @@ const Update = ({
 
         const addedFiles = [];
         for (const f of newFiles) {
-          const url = await fileApi.uploadFileToSupabase(f, 'SUB');
+          const uploadedFile = await fileApi.uploadFileToSupabase(f, 'SUB');
           addedFiles.push({
-            url,
+            url: uploadedFile.fileUrl,
             name: f.name,
             originName: f.name,
             size: f.size,
@@ -187,9 +186,7 @@ const Update = ({
     });
   };
 
-  const handleDelete = () => {
-    onDelete(id);
-  };
+
 
   const handleCheckedFileDelete = () => {
     if (fileIdList.length === 0) {
@@ -362,7 +359,6 @@ const Update = ({
             선택 삭제
           </button>
           <button type="submit" className={styles.btnBlue}>수정</button>
-          <button type="button" className={styles.btnGray} onClick={handleDelete}>삭제</button>
         </div>
       </form>
     </div>

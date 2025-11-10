@@ -1,18 +1,26 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { getRunRecords } from '../../apis/performance';
 import styles from '../../assets/css/common.module.css';
+import { LoginContext } from '../../contexts/LoginContextProvider'; // LoginContext import
 
 const RunRecordList = ({ refreshKey = 0 }) => {
+  const { userInfo } = useContext(LoginContext); // userInfo 가져오기
   const [records, setRecords] = useState([]);
 
   useEffect(() => {
-    getRunRecords()
+    if (!userInfo || !userInfo.no) {
+      console.warn('로그인 정보가 없어 러닝 기록을 불러올 수 없습니다.');
+      setRecords([]);
+      return;
+    }
+
+    getRunRecords(userInfo.no)
       .then((res) => setRecords(res.data || []))
       .catch((err) => {
         console.error('조회 실패:', err);
         setRecords([]);
       });
-  }, [refreshKey]);
+  }, [refreshKey, userInfo]);
 
   if (records.length === 0) {
     return (

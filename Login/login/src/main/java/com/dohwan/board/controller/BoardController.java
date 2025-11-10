@@ -26,6 +26,7 @@ import com.dohwan.board.service.BoardService;
 import com.dohwan.board.service.FileService;
 import com.github.pagehelper.PageInfo;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;     
 
@@ -42,6 +43,8 @@ public class BoardController {
     private BoardService boardService;
     @Autowired
     private FileService fileService;
+    @Autowired
+    private ObjectMapper objectMapper; // ObjectMapper 주입
 
     // 전체 목록 조회
     @GetMapping
@@ -120,20 +123,6 @@ public class BoardController {
         }
     }
 // 수정
-@PutMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-public ResponseEntity<?> updateForm(Boards dto) {
-    try {
-        boolean result = boardService.updateById(dto);
-        if(result){
-            return new ResponseEntity<>("SUCCESS", HttpStatus.CREATED);
-        }else{
-            return new ResponseEntity<>("FAIL",HttpStatus.BAD_REQUEST);
-        }
-    } catch (Exception e) {
-        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-}
-
 @PutMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE)
 public ResponseEntity<?> updateJSON(@RequestBody Boards dto) {
     try {

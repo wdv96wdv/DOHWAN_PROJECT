@@ -3,8 +3,7 @@ package com.dohwan.board.domain;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.web.multipart.MultipartFile;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
@@ -20,10 +19,14 @@ public class Boards {
     private int commentCount; // 댓글 개수
 
     // 🗒️ 파일
-    // private MultipartFile mainFile;
-    // private List<MultipartFile> files;
     private FileInfo mainFile; // 파일 정보 객체
     private List<FileInfo> files; // 파일 정보 객체 리스트
+
+    private List<String> deleteFiles; // 삭제할 파일 ID 목록
+
+    // 파일
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY) // JSON 역직렬화 시 이 필드를 무시하고 직렬화 시에만 사용
+    private Files File;
 
     @Data
     public static class FileInfo {
@@ -32,9 +35,6 @@ public class Boards {
         private String originName;
         private Long size;
     }
-
-    // 파일
-    private Files File;
 
     public Boards() {
         this.id = java.util.UUID.randomUUID().toString();
@@ -47,5 +47,4 @@ public class Boards {
     public void setUserNo(Long userNo) {
         this.userNo = userNo;
     }
-
 }

@@ -35,6 +35,7 @@ public class UserServiceImpl implements UserService {
   public boolean insert(Users user) throws Exception {
     String encodedPassword = passwordEncoder.encode(user.getPassword());
     user.setPassword(encodedPassword);
+    user.setProvider("traditional"); // 기본값으로 "traditional" 설정
 
     int result = userMapper.join(user);
 
@@ -72,28 +73,33 @@ public class UserServiceImpl implements UserService {
       throw new IllegalArgumentException("사용자를 찾을 수 없습니다.");
     }
 
-    boolean passwordChanged = false;
-
-    // ✅ 비밀번호 변경 요청 처리
-    if (request.getNewPassword() != null && !request.getNewPassword().isEmpty()) {
-
-      if (request.getCurrentPassword() == null ||
-          !passwordEncoder.matches(request.getCurrentPassword(), existingUser.getPassword())) {
-        throw new IllegalArgumentException("현재 비밀번호가 일치하지 않습니다.");
-      }
-
-      if (!request.getNewPassword().equals(request.getConfirmPassword())) {
-        throw new IllegalArgumentException("새 비밀번호가 일치하지 않습니다.");
-      }
-
-      String encoded = passwordEncoder.encode(request.getNewPassword());
-      existingUser.setPassword(encoded);
-      passwordChanged = true;
-
-    } else {
-      // ✅ 비밀번호 변경 없음 → 기존 값 그대로 유지
-    }
-
+        boolean passwordChanged = false;
+    
+        // ✅ 비밀번호 변경 요청 처리 (traditional 로그인 사용자만 해당)
+        // 소셜 로그인 사용자는 비밀번호가 없으므로 이 로직을 건너뛴다.
+        if (existingUser.getProvider() != null && existingUser.getProvider().equals("traditional")) {
+          if (request.getNewPassword() != null && !request.getNewPassword().isEmpty()) {
+    
+            if (request.getCurrentPassword() == null ||
+                !passwordEncoder.matches(request.getCurrentPassword(), existingUser.getPassword())) {
+              throw new IllegalArgumentException("현재 비밀번호가 일치하지 않습니다.");
+            }
+    
+            if (!request.getNewPassword().equals(request.getConfirmPassword())) {
+              throw new IllegalArgumentException("새 비밀번호가 일치하지 않습니다.");
+            }
+    
+            String encoded = passwordEncoder.encode(request.getNewPassword());
+            existingUser.setPassword(encoded);
+            passwordChanged = true;
+    
+          } else {
+            // ✅ 비밀번호 변경 없음 → 기존 값 그대로 유지
+          }
+        } else {
+          // 소셜 로그인 사용자: 비밀번호 변경 요청이 있어도 무시
+          log.info("소셜 로그인 사용자이므로 비밀번호 변경 요청을 무시합니다.");
+        }
     // ✅ 일반 정보 업데이트
     existingUser.setName(request.getName());
     existingUser.setEmail(request.getEmail());

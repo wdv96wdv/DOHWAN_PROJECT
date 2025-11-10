@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { getRunRecords } from '../../apis/performance';
 import styles from '../../assets/css/common.module.css';
+import { LoginContext } from '../../contexts/LoginContextProvider'; // LoginContext import
 
 const RunStatsCard = ({ refreshKey = 0 }) => {
+  const { userInfo } = useContext(LoginContext); // userInfo 가져오기
   const [stats, setStats] = useState({
     totalDistance: 0,
     totalDuration: 0,
@@ -12,7 +14,19 @@ const RunStatsCard = ({ refreshKey = 0 }) => {
   });
 
   useEffect(() => {
-    getRunRecords()
+    if (!userInfo || !userInfo.no) {
+      console.warn('로그인 정보가 없어 러닝 통계를 불러올 수 없습니다.');
+      setStats({
+        totalDistance: 0,
+        totalDuration: 0,
+        totalCalories: 0,
+        avgPace: 0,
+        avgSpeed: 0
+      });
+      return;
+    }
+
+    getRunRecords(userInfo.no)
       .then((res) => {
         const records = res.data || [];
         if (records.length === 0) {
@@ -50,7 +64,7 @@ const RunStatsCard = ({ refreshKey = 0 }) => {
           avgSpeed: 0
         });
       });
-  }, [refreshKey]);
+  }, [refreshKey, userInfo]);
 
   return (
     <div className={styles.container}>

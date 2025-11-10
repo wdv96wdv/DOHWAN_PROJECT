@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import styles from '../../assets/css/common.module.css'; // CSS 모듈 import    
 import { saveRunRecord } from '../../apis/performance';
 import Swal from 'sweetalert2';
+import { LoginContext } from '../../contexts/LoginContextProvider'; // LoginContext import
 
 const RunInputForm = ({ onRecordSaved }) => {
+  const { userInfo } = useContext(LoginContext); // userInfo 가져오기
   const [form, setForm] = useState({
     date: new Date().toISOString().split('T')[0], // 오늘 날짜 기본값
     distanceKm: '',
@@ -17,8 +19,17 @@ const RunInputForm = ({ onRecordSaved }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!userInfo || !userInfo.no) {
+      Swal.fire({
+        title: '오류',
+        text: '로그인 정보가 없습니다. 다시 로그인해주세요.',
+        icon: 'error',
+        confirmButtonText: '확인'
+      });
+      return;
+    }
     try {
-      const res = await saveRunRecord(form);
+      const res = await saveRunRecord(form, userInfo.no); // userInfo.no 전달
       Swal.fire({
         title: '성공!',
         text: '러닝 기록이 저장되었습니다!',

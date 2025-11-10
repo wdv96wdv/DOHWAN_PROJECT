@@ -1,15 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
 } from 'recharts';
 import { getRunRecords } from '../../apis/performance';
 import styles from '../../assets/css/common.module.css';
+import { LoginContext } from '../../contexts/LoginContextProvider'; // LoginContext import
 
 const RunTrendChart = ({ refreshKey = 0 }) => {
+  const { userInfo } = useContext(LoginContext); // userInfo 가져오기
   const [chartData, setChartData] = useState([]);
 
   useEffect(() => {
-    getRunRecords()
+    if (!userInfo || !userInfo.no) {
+      console.warn('로그인 정보가 없어 러닝 트렌드 차트를 불러올 수 없습니다.');
+      setChartData([]);
+      return;
+    }
+
+    getRunRecords(userInfo.no)
       .then((res) => {
         const records = res.data || [];
         // 날짜순으로 정렬하고 최근 20개만 표시
@@ -29,7 +37,7 @@ const RunTrendChart = ({ refreshKey = 0 }) => {
         console.error('차트 데이터 조회 실패:', err);
         setChartData([]);
       });
-  }, [refreshKey]);
+  }, [refreshKey, userInfo]);
 
   if (chartData.length === 0) {
     return (

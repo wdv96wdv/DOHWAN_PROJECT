@@ -1,3 +1,4 @@
+```javascript
 import React from 'react'
 import { Link, useParams } from 'react-router-dom'
 import styles from './css/Read.module.css'
@@ -6,7 +7,7 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 
-const Read = ({board, fileList, onDownload }) => {
+const Read = ({board, fileList, onDownload, onDelete }) => {
 
 
   // 파일리스트 샘플
@@ -20,6 +21,12 @@ const Read = ({board, fileList, onDownload }) => {
 
   // console.log('board:', board);
   // console.log('fileList:', fileList);
+
+  const handleDelete = () => {
+    const check = window.confirm('정말로 삭제하시겠습니까?')
+    if(check)
+      onDelete(id);
+  }
 
   return (
     <div className='container'>
@@ -91,9 +98,11 @@ const Read = ({board, fileList, onDownload }) => {
       <div className='btn-box'>
         <Link to="/boards" className='btn'>목록</Link>
         <Link to={`/boards/update/${id}`} className='btn'>수정</Link>
+        <button className='btn' onClick={handleDelete}>삭제</button>
       </div>
     </div> 
   )
 }
 
 export default Read
+```

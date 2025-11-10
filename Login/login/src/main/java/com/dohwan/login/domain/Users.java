@@ -20,6 +20,7 @@ public class Users {
     private Boolean enabled;
     private String bio;
     private String avatarUrl;
+    private String provider; // "traditional", "google" 등 로그인 제공자
 
     private List<UserAuth> authList;
 

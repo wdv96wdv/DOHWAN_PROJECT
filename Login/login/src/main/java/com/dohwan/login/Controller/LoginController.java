@@ -71,9 +71,6 @@ public class LoginController {
             String username = authReq.getUsername();
             String rawPassword = authReq.getPassword();
 
-            log.info("username : {}", username);
-            log.info("password : {}", rawPassword);
-
             // 사용자 조회
             Users user = userMapper.findByUsername(username);
             if (user == null) {
@@ -99,12 +96,12 @@ public class LoginController {
             String jwt = Jwts.builder()
                     .signWith(Keys.hmacShaKeyFor(signingKey), Jwts.SIG.HS512)
                     .header().add("typ", SecurityConstants.TOKEN_TYPE).and()
-                    .claim("uid", username)
+                    .claim("username", username)
+                    .claim("id", user.getId()) // id 클레임 추가
                     .claim("rol", roles)
                     .expiration(new Date(System.currentTimeMillis() + day5))
                     .compact();
 
-            log.info("JWT 생성 완료 : {}", jwt);
             return ResponseEntity.ok(jwt);
 
         } catch (Exception e) {
@@ -119,8 +116,6 @@ public class LoginController {
     @GetMapping("/user")
     public ResponseEntity<?> user(@RequestHeader(name = "Authorization") String authorization) {
         try {
-            log.info("Authorization 헤더 : {}", authorization);
-
             String jwt = authorization.substring(7);
             String secretKey = jwtProps.getSecretKey();
             byte[] signingKey = secretKey.getBytes();
@@ -132,9 +127,6 @@ public class LoginController {
 
             String username = parsedToken.getPayload().get("uid").toString();
             List<String> roleList = (List<String>) parsedToken.getPayload().get("rol");
-
-            log.info("username : {}", username);
-            log.info("roles : {}", roleList);
 
             return ResponseEntity.ok(parsedToken.toString());
 
@@ -164,27 +156,23 @@ public class LoginController {
                 user.setEmail(email);
                 user.setPassword(null); // 소셜 로그인은 비밀번호 없음
                 user.setEnabled(true);
+                user.setProvider("google"); // ✅ 소셜 로그인 사용자 provider 설정
                 userMapper.insertUser(user); // INSERT 처리
 
-                // INSERT 후 생성된 no를 다시 조회
-                Users insertedUser = userMapper.findByEmail(email);
-                if (insertedUser != null && insertedUser.getNo() != null) {
-                    user.setNo(insertedUser.getNo());
-                }
-
-                // 권한 기본값 설정
-                UserAuth auth = new UserAuth();
-                auth.setUsername(username);
-                auth.setAuth("ROLE_USER");
-                userMapper.insertUserAuth(auth); // 권한 INSERT
-                List<UserAuth> authList = new ArrayList<>();
-                authList.add(auth);
-                user.setAuthList(authList);
+                // INSERT 후 생성된 no와 provider를 포함한 전체 사용자 정보를 다시 조회
+                user = userMapper.findByEmail(email); // ✅ user 객체를 완전히 업데이트
             } else {
                 // 기존 사용자 권한 조회
                 List<UserAuth> authList = userMapper.findAuthListByUsername(user.getUsername());
                 user.setAuthList(authList);
+                // 기존 사용자의 provider가 'traditional'일 경우 'google'로 업데이트
+                if (!"google".equals(user.getProvider())) {
+                    user.setProvider("google");
+                    userMapper.update(user); // DB에 provider 업데이트
+                }
             }
+            // 사용자 객체를 다시 가져와 최신 provider 값을 반영
+            user = userMapper.findByEmail(email);
 
             // JWT 생성
             List<String> roles = new ArrayList<>();
@@ -199,13 +187,12 @@ public class LoginController {
             String jwt = Jwts.builder()
                     .signWith(Keys.hmacShaKeyFor(signingKey), Jwts.SIG.HS512)
                     .header().add("typ", SecurityConstants.TOKEN_TYPE).and()
-                    .claim("uid", user.getUsername())
+                    .claim("username", user.getUsername())
+                    .claim("id", user.getId()) // id 클레임 추가
                     .claim("rol", roles)
                     .claim("no", user.getNo()) // ✅ 사용자 no 추가
                     .expiration(new Date(System.currentTimeMillis() + day5))
                     .compact();
-
-            log.info("소셜 로그인 JWT 생성 완료 : {}", jwt);
 
             // 응답 구성
             Map<String, Object> response = new HashMap<>();

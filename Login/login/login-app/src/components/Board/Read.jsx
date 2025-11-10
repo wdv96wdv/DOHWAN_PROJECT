@@ -5,6 +5,7 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import noImage from '../../assets/img/no-image.png';
 import CommentList from './Comment';
+import Swal from 'sweetalert2';
 
 const Read = ({
   board = {},
@@ -14,6 +15,7 @@ const Read = ({
   onCreateComment,
   onUpdateComment,
   onDeleteComment,
+  onDelete, // onDelete prop 추가
 }) => {
   if (!board || !board.title) {
     return <div>게시글 정보를 불러오는 중입니다...</div>;
@@ -37,6 +39,19 @@ const Read = ({
   const mainFile = fileList?.find(
     (f) => f.type?.toUpperCase() === 'MAIN' || f.type?.toUpperCase() === 'THUMBNAIL'
   );
+
+  const handleDelete = async () => {
+    const result = await Swal.fire({
+      title: '게시글을 삭제하시겠습니까?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: '삭제',
+      cancelButtonText: '취소'
+    })
+    if (result.isConfirmed) {
+      onDelete(id);
+    }
+  }
 
   return (
     <div className={styles.container}>
@@ -150,7 +165,10 @@ const Read = ({
         <div className={styles.btnBox}>
           <Link to="/boards" className={styles.btn}>목록</Link>
           {user_no && user_no === board.userNo && (
-            <Link to={`/boards/update/${id}`} className={styles.btn}>수정</Link>
+            <>
+              <Link to={`/boards/update/${id}`} className={styles.btn}>수정</Link>
+              <button type="button" className={styles.btn} onClick={handleDelete}>삭제</button>
+            </>
           )}
         </div>
       </form>

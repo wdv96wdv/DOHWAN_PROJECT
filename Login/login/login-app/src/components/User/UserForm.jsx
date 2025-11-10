@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 import supabase from '../../utils/supabaseClient';
-const UserForm = ({ userInfo, updateUser, deleteUser }) => {
+const UserForm = ({ userInfo, updateUser, deleteUser, loginType }) => {
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
@@ -72,9 +72,10 @@ const UserForm = ({ userInfo, updateUser, deleteUser }) => {
     e.preventDefault();
 
     const formEl = e.target;
-    const currentPassword = formEl.currentPassword.value;
-    const newPassword = formEl.newPassword.value;
-    const confirmPassword = formEl.confirmPassword.value;
+    // Conditionally get password fields only if loginType is traditional
+    const currentPassword = loginType === "traditional" ? formEl.currentPassword?.value : '';
+    const newPassword = loginType === "traditional" ? formEl.newPassword?.value : '';
+    const confirmPassword = loginType === "traditional" ? formEl.confirmPassword?.value : '';
     const avatarFile = formEl.avatar.files[0];
 
     // 비밀번호 변경 조건 확인
@@ -156,55 +157,61 @@ const UserForm = ({ userInfo, updateUser, deleteUser }) => {
       <h2 className="login-title">회원 정보</h2>
       <form className="login-form" onSubmit={onUpdate}>
         {/* 안내 메세지 */}
-        <p style={{ fontSize: '0.9rem', color: '#666', marginBottom: '1rem' }}>
-          회원정보를 수정하려면 <strong>현재 비밀번호</strong>를 입력해주세요.<br />
-          비밀번호를 변경하려면 <strong>새 비밀번호</strong>와 <strong>확인</strong>까지 입력해주세요.
-        </p>
+        {loginType === "traditional" && (
+          <p style={{ fontSize: '0.9rem', color: '#666', marginBottom: '1rem' }}>
+            회원정보를 수정하려면 <strong>현재 비밀번호</strong>를 입력해주세요.<br />
+            비밀번호를 변경하려면 <strong>새 비밀번호</strong>와 <strong>확인</strong>까지 입력해주세요.
+          </p>
+        )}
         {/* 비밀번호 변경 섹션 */}
-        <h3>비밀번호 변경</h3>
-        <div>
-          <label htmlFor="currentPassword">현재 비밀번호</label>
-          <input
-            type="password"
-            id="currentPassword"
-            name="currentPassword"
-            placeholder="현재 비밀번호"
-            autoComplete="current-password"
-            value={form.currentPassword}
-            required={!!(form.newPassword || form.confirmPassword)}
-            onChange={handleChange}
-            onKeyUp={checkCapsLock}
-            onKeyDown={checkCapsLock}
-          />
-        </div>
-        <div>
-          <label htmlFor="newPassword">새 비밀번호</label>
-          <input
-            type="password"
-            id="newPassword"
-            name="newPassword"
-            placeholder="새 비밀번호"
-            autoComplete="new-password"
-            value={form.newPassword}
-            onKeyUp={checkCapsLock}
-            onKeyDown={checkCapsLock}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label htmlFor="confirmPassword">새 비밀번호 확인</label>
-          <input
-            type="password"
-            id="confirmPassword"
-            name="confirmPassword"
-            placeholder="새 비밀번호 확인"
-            autoComplete="new-password"
-            value={form.confirmPassword}
-            onChange={handleChange}
-            onKeyUp={checkCapsLock}
-            onKeyDown={checkCapsLock}
-          />
-        </div>
+        {loginType === "traditional" && (
+          <>
+            <h3>비밀번호 변경</h3>
+            <div>
+              <label htmlFor="currentPassword">현재 비밀번호</label>
+              <input
+                type="password"
+                id="currentPassword"
+                name="currentPassword"
+                placeholder="현재 비밀번호"
+                autoComplete="current-password"
+                value={form.currentPassword}
+                required={!!(form.newPassword || form.confirmPassword)}
+                onChange={handleChange}
+                onKeyUp={checkCapsLock}
+                onKeyDown={checkCapsLock}
+              />
+            </div>
+            <div>
+              <label htmlFor="newPassword">새 비밀번호</label>
+              <input
+                type="password"
+                id="newPassword"
+                name="newPassword"
+                placeholder="새 비밀번호"
+                autoComplete="new-password"
+                value={form.newPassword}
+                onKeyUp={checkCapsLock}
+                onKeyDown={checkCapsLock}
+                onChange={handleChange}
+              />
+            </div>
+            <div>
+              <label htmlFor="confirmPassword">새 비밀번호 확인</label>
+              <input
+                type="password"
+                id="confirmPassword"
+                name="confirmPassword"
+                placeholder="새 비밀번호 확인"
+                autoComplete="new-password"
+                value={form.confirmPassword}
+                onChange={handleChange}
+                onKeyUp={checkCapsLock}
+                onKeyDown={checkCapsLock}
+              />
+            </div>
+          </>
+        )}
 
         {/* 이름 */}
         <div>
@@ -215,6 +222,7 @@ const UserForm = ({ userInfo, updateUser, deleteUser }) => {
             name="name"
             value={form.name}
             onChange={handleChange}
+            maxLength="10"
             required
           />
         </div>
@@ -228,6 +236,7 @@ const UserForm = ({ userInfo, updateUser, deleteUser }) => {
             name="email"
             value={form.email}
             onChange={handleChange}
+            maxLength="40"
             required
           />
         </div>
@@ -261,7 +270,12 @@ const UserForm = ({ userInfo, updateUser, deleteUser }) => {
             value={form.bio}
             onChange={handleChange}
             placeholder="자기소개를 입력하세요"
+            style={{ resize: 'none' }}
+            maxLength="300" // maxLength를 300으로 변경
           />
+          <div style={{ fontSize: '0.8rem', color: '#666', textAlign: 'right' }}>
+            {form.bio.length} / 300
+          </div>
         </div>
 
         {/* 수정 버튼 */}
