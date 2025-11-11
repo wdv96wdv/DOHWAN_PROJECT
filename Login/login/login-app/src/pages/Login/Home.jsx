@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "../../assets/css/Home.module.css";
-import RecommendRh from "../../assets/img/RecommendRh.jpg";
+import recommendRh from "../../assets/img/recommendRh.jpg";
 import marathon from "../../assets/video/marathon.mp4";
 import banner1 from "../../assets/img/banner1.jpg";
 import banner2 from "../../assets/img/banner2.jpg";
@@ -196,23 +196,23 @@ const Home = () => {
       <div className={styles.trainingText}>
         <h2>러닝화 추천</h2>
         <p>
-  러닝화는 단순한 운동화가 아닙니다. 당신의 러닝 목적, 발 모양, 착용감까지 고려해<br />
-  가장 잘 맞는 러닝화를 정교하게 추천해드립니다. 지금 당신의 러닝을 더 편안하고, 더 강력하게 만들어보세요.
-</p>
+          러닝화는 단순한 운동화가 아닙니다. 당신의 러닝 목적, 발 모양, 착용감까지 고려해<br />
+          가장 잘 맞는 러닝화를 정교하게 추천해드립니다. 지금 당신의 러닝을 더 편안하고, 더 강력하게 만들어보세요.
+        </p>
         <button className={styles.ctaBtn} onClick={() => navigate("/recommend")}>러닝화 추천받기</button>
       </div>
-      <div className={styles.recommendRh}>
-  <img src={RecommendRh} alt="RecommendRh" className={styles.recommendRhImg} />
-  <p className={styles.imageCredit}>
-    <a
-      href="https://kr.freepik.com/free-photo/sporty-man-training-outdoors-london_12750620.htm"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      작가 wirestock 출처 Freepik
-    </a>
-  </p>
-</div>
+      <div className={styles.recommendRH}>
+        <img src={recommendRh} alt="recommendRh" className={styles.recommendRHImg} />
+        <p className={styles.imageCredit}>
+          <a
+            href="https://kr.freepik.com/free-photo/sporty-man-training-outdoors-london_12750620.htm"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            작가 wirestock 출처 Freepik
+          </a>
+        </p>
+      </div>
     </section>
   );
 
