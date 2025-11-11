@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "../../assets/css/Home.module.css";
-import RecommendRH from "../../assets/img/RecommendRH.jpg";
+import RecommendRh from "../../assets/img/RecommendRh.jpg";
 import marathon from "../../assets/video/marathon.mp4";
 import banner1 from "../../assets/img/banner1.jpg";
 import banner2 from "../../assets/img/banner2.jpg";
@@ -201,8 +201,8 @@ const Home = () => {
 </p>
         <button className={styles.ctaBtn} onClick={() => navigate("/recommend")}>러닝화 추천받기</button>
       </div>
-      <div className={styles.recommendRH}>
-  <img src={RecommendRH} alt="RecommendRH" className={styles.recommendRHImg} />
+      <div className={styles.recommendRh}>
+  <img src={RecommendRh} alt="RecommendRh" className={styles.recommendRhImg} />
   <p className={styles.imageCredit}>
     <a
       href="https://kr.freepik.com/free-photo/sporty-man-training-outdoors-london_12750620.htm"
