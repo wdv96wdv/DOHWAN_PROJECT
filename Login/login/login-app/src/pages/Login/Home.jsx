@@ -201,8 +201,8 @@ const Home = () => {
         </p>
         <button className={styles.ctaBtn} onClick={() => navigate("/recommend")}>러닝화 추천받기</button>
       </div>
-      <div className={styles.recommendRH}>
-        <img src={recommendRh} alt="recommendRh" className={styles.recommendRHImg} />
+      <div className={styles.recommendRh}>
+        <img src={recommendRh} alt="recommendRh" className={styles.recommendRhImg} />
         <p className={styles.imageCredit}>
           <a
             href="https://kr.freepik.com/free-photo/sporty-man-training-outdoors-london_12750620.htm"
