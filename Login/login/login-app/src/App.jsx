@@ -25,7 +25,8 @@ const Insertpage = lazy(() => import('./pages/board/Insertpage'));
 const Readpage = lazy(() => import('./pages/board/Readpage'));
 const Updatepage = lazy(() => import('./pages/board/Updatepage'));
 const Marathon = lazy(() => import('./pages/Marathon'));
-
+const Recommend = lazy(() => import('./pages/Recommend/Recommend'));
+const RecommendResult = lazy(() => import('./pages/Recommend/RecommendResult'));
 const PerformanceTab = lazy(() => import('./pages/Performance/PerformanceTab'));
 
 import Header from './components/Header/Header';
@@ -67,6 +68,8 @@ const App = () => {
               <Route path="/calendar" element={<Calendar />} />
               <Route path="/marathon" element={<Marathon />} />
               <Route path="/performance" element={<PerformanceTab />} />
+              <Route path="/recommend" element={<Recommend />} />
+              <Route path="/recommend/result" element={<RecommendResult />} />
               <Route path="/about" element={<About />} />
               <Route path="/privacy" element={<Privacy />} />
               <Route path="/contact" element={<Contact />} />

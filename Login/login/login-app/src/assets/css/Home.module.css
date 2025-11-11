@@ -132,21 +132,34 @@ p {
   margin-bottom: 30px;
 }
 
-.trainingVideo {
+.recommendRH {
   flex: 1 1 45%;
   display: flex;
+  flex-direction: column; /* 세로 방향으로 배치 */
   justify-content: center;
   align-items: center;
   animation: fadeInRight 1s ease both;
 }
 
-.video {
+.recommendRHImg {
   width: 100%;
   max-width: 600px;
   border-radius: 12px;
   object-fit: cover;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
 }
+
+.imageCredit {
+  font-size: 0.75rem;
+  color: #666;
+  margin-top: 8px;
+  text-align: center;
+}
+.imageCredit a {
+  text-decoration: none;
+  color: inherit;
+}
+
 
 /* =========================
    About 섹션
@@ -453,7 +466,7 @@ p {
   }
 
   .trainingText,
-  .trainingVideo,
+  .recommendRH,
   .coaching {
     flex-direction: column;
   }
