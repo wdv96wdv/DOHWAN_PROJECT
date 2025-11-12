@@ -4,7 +4,7 @@ import axios from 'axios';
 //const API_BASE_URL = "http://localhost:8080";
 //const API_BASE_URL = "https://dohwan-project.onrender.com";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const API_BASE_URL = "https://dohwan-project.onrender.com";
 
 // axios 객체 생성
 const api = axios.create({
