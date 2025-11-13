@@ -33,7 +33,6 @@ import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
 
 
-import "./assets/css/common.css";
 import "./assets/css/header.css";
 import "./assets/css/Home.module.css";
 import "./assets/css/login.css";
@@ -45,6 +44,7 @@ import "./assets/css/Course.module.css"
 import "./assets/css/Event.module.css"
 import "./assets/css/profile.css"
 import "./assets/css/Marathon.module.css"
+import "./assets/css/common.css";
 
 
 const App = () => {

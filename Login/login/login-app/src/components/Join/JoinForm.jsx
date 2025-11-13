@@ -13,18 +13,7 @@ const JoinForm = ({ join }) => {
   const [email, setEmail] = useState('');
   const [capsLockOn, setCapsLockOn] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
   const [passwordMatch, setPasswordMatch] = useState(true);
-
-  // 모바일 기기 여부 확인
-  useEffect(() => {
-    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-    const isMobileDevice =
-      /android/i.test(userAgent) ||
-      /iPad|iPhone|iPod/.test(userAgent) ||
-      /windows phone/i.test(userAgent);
-    setIsMobile(isMobileDevice);
-  }, []);
 
   // 비밀번호 일치 여부 확인
   useEffect(() => {
@@ -61,11 +50,6 @@ const JoinForm = ({ join }) => {
   const onJoin = async (e) => {
     e.preventDefault();
 
-    if (isMobile) {
-      alert('회원가입은 PC 화면에서 이용해 주세요.');
-      return;
-    }
-
     if (!passwordMatch) {
       Swal.alert('비밀번호 불일치', '비밀번호가 일치하지 않습니다.', 'error');
       return;
@@ -86,17 +70,7 @@ const JoinForm = ({ join }) => {
     }
   };
 
-  // 모바일 기기일 경우 안내 메시지
-  if (isMobile) {
-    return (
-      <div className="form">
-        <h2 className="login-title">회원가입</h2>
-        <p style={{ color: 'red', textAlign: 'center' }}>
-          ⚠️ 회원가입은 PC 화면에서만 가능합니다.
-        </p>
-      </div>
-    );
-  }
+
 
   return (
     <div className="form">
