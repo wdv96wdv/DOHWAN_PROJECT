@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import UserForm from '../../components/User/UserForm';
 import { LoginContext } from '../../contexts/LoginContextProvider';
-import { useNavigate } from 'react-router-dom';
 import * as auth from '../../apis/auth';
 import * as Swal from '../../apis/alert';
 import supabase from '../../utils/supabaseClient';
@@ -17,7 +17,7 @@ const User = () => {
     if (!isLogin || !roles.isUser) {
       navigate('/login');
     }
-  }, [isLoading]);
+  }, [isLoading, isLogin, roles, navigate]);
 
   // Supabase 프로필 정보 불러오기 (재시도/타임아웃 포함)
   useEffect(() => {
@@ -39,7 +39,6 @@ const User = () => {
           clearTimeout(timeoutId);
 
           if (error) {
-            // 0행(406) 또는 네트워크/일시 오류 시 재시도
             const status = error?.code || error?.status || 'unknown';
             console.warn(`프로필 조회 실패(${attempt}/${maxAttempts}) status=${status}`, error);
             if (attempt < maxAttempts) {
@@ -50,7 +49,7 @@ const User = () => {
           } else {
             setProfileInfo(data || {});
           }
-          break; // 성공 또는 최종 실패 처리 후 루프 종료
+          break; 
         } catch (err) {
           clearTimeout(timeoutId);
           console.warn(`프로필 조회 예외(${attempt}/${maxAttempts})`, err);
@@ -98,7 +97,6 @@ const User = () => {
         Swal.alert('회원정보 수정 성공', '비밀번호가 변경되어 로그아웃 후 다시 로그인해주세요.', 'success', () => logout(true));
       } else {
         Swal.alert('회원정보 수정 성공', '정보가 정상적으로 수정되었습니다.', 'success');
-        // 화면은 그대로 유지
       }
 
     } catch (error) {

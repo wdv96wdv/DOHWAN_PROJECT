@@ -6,20 +6,20 @@ import Cookies from 'js-cookie'
 import { useNavigate } from 'react-router-dom'
 import supabase from '../utils/supabaseClient'
 
-// 📦 컨텍스트 생성
+// 로그인 컨텍스트 생성
 export const LoginContext = createContext()
 
 const LoginContextProvider = ({ children }) => {
 
-  // 🧊 state
-  // 🔄 로딩 중
+  // 로그인 state
+  // 로그인 로딩 여부
   const [isLoading, setIsLoading] = useState(true)
-  // 🔐 로그인 여부
+  // 로그인 여부
   const [isLogin, setIsLogin] = useState(() => {
     const savedIsLogin = localStorage.getItem("isLogin")
     return savedIsLogin ?? false
   })
-  // 👩‍💼 사용자 정보
+  // 로그인한 사용자 정보
   const [userInfo, setUserInfo] = useState(() => {
     const savedUserInfo = localStorage.getItem("userInfo");
     if (!savedUserInfo || savedUserInfo === "undefined") return null;
@@ -30,7 +30,7 @@ const LoginContextProvider = ({ children }) => {
       return null;
     }
   })
-  // 💎 권한 정보
+  // 로그인 권한 정보
   const [roles, setRoles] = useState(() => {
     const savedRoles = localStorage.getItem("roles")
     return savedRoles ? JSON.parse(savedRoles) : { isUser: false, isAdmin: false }
@@ -39,7 +39,7 @@ const LoginContextProvider = ({ children }) => {
   // 페이지 이동
   const navigate = useNavigate()
 
-  // 🔐 로그인 함수
+  // 로그인 함수
   const login = async (username, password) => {
     console.log(`username : ${username}`);
     console.log(`password : ${password}`);
@@ -52,17 +52,17 @@ const LoginContextProvider = ({ children }) => {
       const authorization = headers.authorization
       const jwt = authorization.replace("Bearer ", "")
 
-      // 로그인 성공 ✅
+      // 로그인 성공 시
       if (status == 200) {
-        // 💍 JWT 를 쿠키에 등록
+        // 서버 JWT 토큰 쿠키에 등록
         Cookies.set("jwt", jwt, { expires: 5 })   // 만료기간 : 5일
         localStorage.setItem("jwt", jwt); // localStorage에도 JWT 저장
 
-        // 로그인 세팅 - loginSetting(🎫💍, 👩‍💼)
+        // 로그인 세팅 - loginSetting(헤더, 데이터)
         loginSetting(authorization, data)
 
         // 로그인 성공 alert
-        // Swal.alert(`로그인 성공`, `메인 화면으로 이동합니다.`, `success`,
+        // Swal.alert(`로그인 성공`, `메인 화면으로 이동합니다`, `success`,
         //   () => navigate("/")
         // )
         navigate("/")
@@ -77,10 +77,10 @@ const LoginContextProvider = ({ children }) => {
   /**
    * 로그인 세팅
    * @param {*} authorization : Bearer {jwt}
-   * @param {*} data          : 👩‍💼 {user}
+   * @param {*} data          : 데이터:{user}
    */
   const loginSetting = (authorization, data) => {
-    // 💍 JWT 를 Authorization 헤더에 등록
+    // 서버 JWT 토큰 Authorization 헤더에 등록
     api.defaults.headers.common.Authorization = authorization
     // 로그인 여부
     setIsLogin(true)
@@ -109,9 +109,9 @@ const LoginContextProvider = ({ children }) => {
 
   // 자동 로그인
   // 1️⃣ 쿠키에서 jwt 가져오기
-  // 2️⃣ jwt 있으면, 사용자 정보 요청
-  // 3️⃣ 로그인 세팅 ( 📦 로그인 여부, 사용자 정보, 권한 )
-  // 🍪 쿠키에 저장된 💍 JWT 를 읽어와서 로그인 처리
+  // 2️⃣ jwt 기반으로 사용자 정보 요청
+  // 3️⃣ 로그인 세팅 ( 로그인 여부, 사용자 정보, 권한 )
+  // 서버 쿠키에 저장된 서버 JWT 토큰을 이용하여 로그인 처리
   const autoLogin = async () => {
     // 쿠키에서 jwt 가져오기
     const jwt = Cookies.get("jwt")
@@ -121,10 +121,10 @@ const LoginContextProvider = ({ children }) => {
 
     const authorization = `Bearer ${jwt}`
 
-    // 💍 JWT 를 Authorization 헤더에 등록
+    // 서버 JWT 토큰 Authorization 헤더에 등록
     api.defaults.headers.common.Authorization = authorization
 
-    // 👩‍💼 사용자 정보 요청
+    // 서버에 사용자 정보 요청
     let response
     let data
 
@@ -137,29 +137,29 @@ const LoginContextProvider = ({ children }) => {
     }
 
     if (response.data == 'UNAUTHORIZED' || response.status == 401) {
-      console.error(`jwt 가 만료되었거나 인증에 실패하였습니다.`);
+      console.error(`jwt가 만료되었거나 인증에 실패하였습니다`);
       return
     }
 
     // 인증 성공
-    console.log(`jwt 로 자동 로그인 성공`);
+    console.log(`jwt 자동 로그인 성공`);
 
     data = response.data
 
-    // 로그인 세팅 - loginSetting( 🎫💍, 👩‍💼 )
+    // 로그인 세팅 - loginSetting( 헤더, 데이터)
     loginSetting(authorization, data)
 
   }
 
-  // 🌞 로그아웃 함수
+  // 로그아웃 함수
   const logout = (force = false) => {
     // 강제 로그아웃
     if (force) {
-      // 로딩 중
+      // 로딩 여부
       setIsLoading(true)
       // 로그아웃 세팅
       logoutSetting()
-      // 페이지 이동 ➡ "/" (메인)
+      // 페이지 이동 : "/" (메인)
       navigate("/")
       // 로딩 끝
       setIsLoading(false)
@@ -168,7 +168,7 @@ const LoginContextProvider = ({ children }) => {
     {
       // 로그아웃 세팅
       logoutSetting()
-      // 페이지 이동 ➡ "/" (메인)
+      // 페이지 이동 : "/" (메인)
       navigate("/")
       return
     }
@@ -177,20 +177,20 @@ const LoginContextProvider = ({ children }) => {
 
   // 로그아웃 세팅
   const logoutSetting = () => {
-    // 🎫❌ Authorization 헤더 초기화
+    // axios Authorization 헤더 초기화
     api.defaults.headers.common.Authorization = undefined
-    // 🔐❌ 로그인 여부  false
+    // axios 로그인 여부 false
     setIsLogin(false)
     localStorage.removeItem("isLogin")
-    // 👩‍💼❌ 유저 정보 초기화
+    // 로그인한 사용자 정보 초기화
     setUserInfo(null)
     localStorage.removeItem("userInfo")
-    // 💎❌ 권한 정보 초기화
+    // 로그인한 권한 정보 초기화
     setRoles({ isUser: false, isAdmin: false })
     localStorage.removeItem("roles")
-    // 🍪❌ 쿠키 제거
+    // axios 쿠키 제거
     Cookies.remove("jwt")
-    // 🗑❌ localStorage JWT 제거
+    // axios localStorage JWT 제거
     localStorage.removeItem("jwt");
   }
 
@@ -207,14 +207,14 @@ const LoginContextProvider = ({ children }) => {
     Cookies.set("jwt", jwt, { expires: 5 }); // 쿠키 저장
     localStorage.setItem("jwt", jwt); // localStorage에도 JWT 저장
 
-    // ✅ userData 안에 userInfo가 들어있다면 분리해서 전달
-    const userInfo = userData.userInfo ?? userData; // 백엔드가 userInfo 포함했을 경우 대응
+    // 만약 userData 안에 userInfo가 들어있다면 분리해서 전달
+    const userInfo = userData.userInfo ?? userData; // 백엔드에서 userInfo 포함했을 경우 대비
 
-    loginSetting(authorization, userInfo);  // 기존 로그인 세팅 재사용
+    loginSetting(authorization, userInfo);  // 기존 로그인 세팅 사용
     navigate("/"); // 로그인 후 메인으로 이동
   };
 
-  // 사용자 정보 업데이트 (비밀번호 변경 없이 정보만 변경 시)
+  // 사용자 정보 업데이트 (비밀번호 변경 외 정보 변경 시)
   const updateUserInfo = async () => {
     try {
       const response = await auth.info();
@@ -262,7 +262,7 @@ const LoginContextProvider = ({ children }) => {
   };
 
   return (
-    // 컨텍스트 값 지정 ➡ value{ ?, ? }
+    // 컨텍스트 값 지정 : value{ ?, ? }
     <LoginContext.Provider value={{ isLogin, login, loginWithSocial, userInfo, roles, isLoading, logout, updateUserInfo }}>
       {children}
     </LoginContext.Provider>

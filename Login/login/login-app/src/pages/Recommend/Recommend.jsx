@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "../../assets/css/Recommend.module.css";
+import Swal from "sweetalert2";
 
 const Recommend = () => {
   const navigate = useNavigate();
@@ -13,10 +14,16 @@ const Recommend = () => {
     e.preventDefault();
 
     // 필수 입력값 확인
-    if (!gender || !purpose ) {
-      alert("모든 항목을 선택해주세요.");
+    if (!gender || !purpose) {
+      Swal.fire({
+        icon: "warning",
+        title: "입력값 부족",
+        text: "모든 항목을 선택해주세요.",
+        confirmButtonText: "확인",
+      });
       return;
     }
+
 
     // 결과 페이지로 이동하며 입력값 전달
     navigate("/recommend/result", {

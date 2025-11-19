@@ -17,7 +17,7 @@ const Join = () => {
       response = await auth.join(form)
     } catch (error) {
       console.log(error);
-      console.error(`회원가입 중 에러가 발생하였습니다.`);
+      console.error(`회원가입 중 에러가 발생하였습니다`);
       return
     }
 

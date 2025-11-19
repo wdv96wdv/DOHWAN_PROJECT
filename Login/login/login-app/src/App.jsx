@@ -18,7 +18,6 @@ const Contact = lazy(() => import('./pages/Contact'));
 
 const AdminContact = lazy(() => import("./pages/admin/AdminContact"));
 const Calendar = lazy(() => import('./pages/Calendar'));
-const Profile = lazy(() => import('./pages/Profile'));
 
 const Listpage = lazy(() => import('./pages/board/Listpage'));
 const Insertpage = lazy(() => import('./pages/board/Insertpage'));
@@ -28,6 +27,7 @@ const Marathon = lazy(() => import('./pages/Marathon'));
 const Recommend = lazy(() => import('./pages/Recommend/Recommend'));
 const RecommendResult = lazy(() => import('./pages/Recommend/RecommendResult'));
 const PerformanceTab = lazy(() => import('./pages/Performance/PerformanceTab'));
+const WishlistPage = lazy(() => import('./pages/WishlistPage'));
 
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
@@ -63,7 +63,7 @@ const App = () => {
               <Route path="/login" element={<Login />} />
               <Route path="/join" element={<Join />} />
               <Route path="/user" element={<User />} />
-              <Route path="/profile" element={<Profile />} />
+              <Route path="/wishlist" element={<WishlistPage />} />
               <Route path="/admin" element={<AdminContact />} />
               <Route path="/calendar" element={<Calendar />} />
               <Route path="/marathon" element={<Marathon />} />

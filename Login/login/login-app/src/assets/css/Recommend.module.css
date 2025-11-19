@@ -1,25 +1,58 @@
 @import './common.module.css';
 
 .recommend {
-    composes: container from './common.module.css';
+  composes: container from './common.module.css';
 }
-  
-  .form {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-  
-  input,
-  select {
-    padding: 0.5rem;
-    font-size: 1rem;
-  }
-  
-  button {
-    background-color: #007bff;
-    color: white;
-    padding: 0.75rem;
-    border: none;
-    cursor: pointer;
-  }
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+input,
+select {
+  padding: 0.5rem;
+  font-size: 1rem;
+}
+
+button {
+  background-color: #007bff;
+  color: white;
+  padding: 0.75rem;
+  border: none;
+  cursor: pointer;
+}
+
+.reviewSection {
+  margin-top: 40px;
+  padding: 20px;
+  background-color: #f4f4f4;
+  border-radius: 8px;
+}
+
+.reviewSection h2 {
+  margin-bottom: 16px;
+  font-size: 1.4rem;
+  color: #1e88e5;
+}
+
+.reviewCard {
+  margin-bottom: 12px;
+  padding: 12px;
+  background: white;
+  border-left: 4px solid #1e88e5;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.reviewCard h4 {
+  margin: 0;
+  font-size: 1rem;
+  color: #333;
+}
+
+.reviewCard p {
+  margin: 6px 0 0;
+  font-size: 0.9rem;
+  color: #666;
+}

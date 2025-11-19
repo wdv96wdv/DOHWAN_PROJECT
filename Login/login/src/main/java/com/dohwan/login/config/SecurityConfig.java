@@ -74,6 +74,7 @@ public class SecurityConfig {
 						// 운영
 						.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // ✅ preflight 허용
 						.requestMatchers("/login", "/users", "/join", "/contact", "/", "/boards/**").permitAll()
+						.requestMatchers("/api/wishlist/**").authenticated() // ✅ 찜하기 API는 인증 필요
 						.requestMatchers("/admin/**").hasRole("ADMIN") // ✅ 관리자 전용
 						.requestMatchers("/manifest.json").permitAll()
 						.requestMatchers("/auth/check-username").permitAll()

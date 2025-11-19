@@ -26,3 +26,30 @@
   height: auto;
   border-radius: 6px;
 }
+
+.cardActions {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.wishlistButton {
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s;
+}
+
+.wishlistButton:hover {
+  background-color: #e0e0e0;
+}
+
+.wishlisted {
+  background-color: #ffe0e0;
+  border-color: #ffb0b0;
+  color: #d00000;
+}

@@ -1,12 +1,17 @@
-import React, { useEffect, useState, useRef, useCallback } from "react";
-import { useLocation } from "react-router-dom";
+import React, { useEffect, useState, useRef, useCallback, useContext } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { fetchRunningShoes } from "../../apis/naverShopping";
+import { getWishlist, addWishlist, deleteWishlist } from "../../apis/wishlist"; // 찜하기 API import
+import { LoginContext } from "../../contexts/LoginContextProvider"; // 로그인 컨텍스트 import
 import styles from "../../assets/css/RecommendResult.module.css";
+import Swal from 'sweetalert2';
 
 const RecommendResult = () => {
   const location = useLocation();
-  const { gender, purpose, budget } =
-    location.state || {};
+  const navigate = useNavigate(); // 로그인 페이지로 이동하기 위해 추가
+  const { userInfo } = useContext(LoginContext); // 로그인 상태와 사용자 정보 가져오기
+
+  const { gender, purpose, budget } = location.state || {};
   const [products, setProducts] = useState([]);
   const [start, setStart] = useState(1);
   const [total, setTotal] = useState(0);
@@ -14,13 +19,71 @@ const RecommendResult = () => {
   const observerRef = useRef();
   const display = 9;
 
+  // 찜 목록 상태 관리 (Set을 사용하여 빠른 조회를 위함)
+  const [wishlist, setWishlist] = useState(new Set());
+
+  // 로그인한 사용자의 찜 목록을 불러오는 useEffect
+  useEffect(() => {
+    if (userInfo) {
+      getWishlist()
+        .then((data) => {
+          const wishlistedProductIds = new Set(data.map((item) => item.productId));
+          setWishlist(wishlistedProductIds);
+        })
+        .catch((error) => console.error("찜 목록 초기화 실패:", error));
+    }
+  }, [userInfo]);
+
+  // 찜하기 버튼 클릭 핸들러
+  const handleWishlistClick = async (product) => {
+    if (!userInfo) {
+      Swal.fire({
+        icon: 'warning',
+        title: '로그인이 필요합니다',
+        text: '찜하기 기능을 사용하려면 로그인해주세요.',
+        confirmButtonText: '확인',
+      }).then(() => {
+        navigate("/login");
+      });
+      return;
+    }
+
+    const isWishlisted = wishlist.has(product.productId);
+    const productData = {
+      productId: product.productId,
+      title: product.title,
+      link: product.link,
+      image: product.image,
+      lprice: Number(product.lprice),
+    };
+
+    try {
+      if (isWishlisted) {
+        await deleteWishlist(product.productId);
+        setWishlist((prev) => {
+          const newWishlist = new Set(prev);
+          newWishlist.delete(product.productId);
+          return newWishlist;
+        });
+      } else {
+        await addWishlist(productData);
+        setWishlist((prev) => new Set(prev).add(product.productId));
+      }
+    } catch (error) {
+      console.error("찜하기 기능 처리 중 오류 발생:", error);
+      Swal.fire({
+        icon: 'error',
+        title: '오류 발생',
+        text: '요청을 처리하는 중 문제가 발생했습니다.',
+      });
+    }
+  };
+
   const handleLoadMore = useCallback(() => {
     if (loading || products.length >= total) return;
 
     setLoading(true);
-    const keyword = [gender, purpose, "러닝화"]
-      .filter(Boolean)
-      .join(" ");
+    const keyword = [gender, purpose, "러닝화"].filter(Boolean).join(" ");
     fetchRunningShoes(keyword, { start, display }).then((data) => {
       let newProducts = data.items || [];
       if (budget) {
@@ -32,15 +95,7 @@ const RecommendResult = () => {
       setStart((prevStart) => prevStart + display);
       setLoading(false);
     });
-  }, [
-    loading,
-    products.length,
-    total,
-    start,
-    gender,
-    purpose,
-    budget,
-  ]);
+  }, [loading, products.length, total, start, gender, purpose, budget]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -64,15 +119,12 @@ const RecommendResult = () => {
   }, [handleLoadMore]);
 
   useEffect(() => {
-    // Reset and fetch initial data when conditions change
     setProducts([]);
     setStart(1);
     setTotal(0);
     setLoading(true);
 
-    const keyword = [gender, purpose,  "러닝화"]
-      .filter(Boolean)
-      .join(" ");
+    const keyword = [gender, purpose, "러닝화"].filter(Boolean).join(" ");
     console.log("Searching with keyword:", keyword);
 
     fetchRunningShoes(keyword, { start: 1, display }).then((data) => {
@@ -104,9 +156,20 @@ const RecommendResult = () => {
             <img src={item.image} alt={item.title} />
             <h3 dangerouslySetInnerHTML={{ __html: item.title }} />
             <p>{Number(item.lprice).toLocaleString()}원</p>
-            <a href={item.link} target="_blank" rel="noopener noreferrer">
-              구매하러 가기
-            </a>
+            <div className={styles.cardActions}>
+              <a href={item.link} target="_blank" rel="noopener noreferrer">
+                구매하러 가기
+              </a>
+              {/* 찜하기 버튼 추가 */}
+              <button
+                onClick={() => handleWishlistClick(item)}
+                className={`${styles.wishlistButton} ${
+                  wishlist.has(item.productId) ? styles.wishlisted : ""
+                }`}
+              >
+                {wishlist.has(item.productId) ? "❤️ 찜 해제" : "🤍 찜하기"}
+              </button>
+            </div>
           </div>
         ))}
       </div>

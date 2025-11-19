@@ -1,7 +1,7 @@
 import '../../assets/css/user.css';
 import React, { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import supabase from '../../utils/supabaseClient';
 const UserForm = ({ userInfo, updateUser, deleteUser, loginType }) => {
   const navigate = useNavigate();
@@ -278,6 +278,14 @@ const UserForm = ({ userInfo, updateUser, deleteUser, loginType }) => {
           </div>
         </div>
 
+        {/* 찜 목록 페이지로 이동하는 링크 추가 */}
+        <div className="center-wrapper">
+          <Link to="/wishlist" className="btn btn--form btn-login">
+            찜 목록 보러가기
+          </Link>
+        </div>
+
+
         {/* 수정 버튼 */}
         <button type="submit" className="btn btn--form btn-login">
           정보 수정
@@ -299,7 +307,7 @@ const UserForm = ({ userInfo, updateUser, deleteUser, loginType }) => {
               if (result.isConfirmed) {
                 // 실제 처리/알림/네비는 부모(deleteUser)에서 일원화 해야함 
                 deleteUser(form.username);
- 
+
               }
             });
           }}

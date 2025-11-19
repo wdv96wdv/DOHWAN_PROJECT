@@ -43,6 +43,7 @@
   background-color: #f48982;
   color: #fdf2e9;
   padding: 8px;
+  width: 100%;
 }
 
 .btn-login:hover {
@@ -51,4 +52,8 @@
 .btn--form:hover {
   background-color: #fdf2e9;
   color: #f48982;
+}
+
+.center-wrapper {
+  text-align: center;
 }

@@ -65,6 +65,8 @@ public class CustomUser implements UserDetails {
     return user.getEnabled();
   }
 
-  
+  public Long getUserNo() {
+    return this.user.getNo();
+  }
   
 }

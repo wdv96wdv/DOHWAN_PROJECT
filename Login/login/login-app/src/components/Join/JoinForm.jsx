@@ -4,7 +4,6 @@ import { checkUsername } from '../../apis/auth';
 import * as Swal from '../../apis/alert';
 
 const JoinForm = ({ join }) => {
-  // 상태 관리
   const [username, setUsername] = useState('');
   const [isAvailable, setIsAvailable] = useState(null);
   const [password, setPassword] = useState('');
@@ -15,18 +14,15 @@ const JoinForm = ({ join }) => {
   const [loading, setLoading] = useState(false);
   const [passwordMatch, setPasswordMatch] = useState(true);
 
-  // 비밀번호 일치 여부 확인
   useEffect(() => {
     setPasswordMatch(password === passwordConfirm);
   }, [password, passwordConfirm]);
 
-  // CapsLock 상태 확인
   const checkCapsLock = (e) => {
     const isOn = e.getModifierState && e.getModifierState('CapsLock');
     setCapsLockOn(isOn);
   };
 
-  // 아이디 중복 확인
   const handleCheckUsername = async () => {
     if (!username) {
       Swal.alert('아이디 입력 필요', '아이디를 먼저 입력해주세요.', 'info');
@@ -46,7 +42,6 @@ const JoinForm = ({ join }) => {
     }
   };
 
-  // 회원가입 요청
   const onJoin = async (e) => {
     e.preventDefault();
 
@@ -70,13 +65,10 @@ const JoinForm = ({ join }) => {
     }
   };
 
-
-
   return (
     <div className="form">
       <h2 className="login-title">회원가입</h2>
       <form className="login-form" onSubmit={onJoin}>
-        {/* 아이디 */}
         <div>
           <label htmlFor="username">ID</label>
           <div style={{ display: 'flex', gap: '8px' }}>
@@ -104,7 +96,6 @@ const JoinForm = ({ join }) => {
           )}
         </div>
 
-        {/* 비밀번호 */}
         <div>
           <label htmlFor="password">Password</label>
           <input
@@ -121,7 +112,6 @@ const JoinForm = ({ join }) => {
           />
         </div>
 
-        {/* 비밀번호 확인 */}
         <div>
           <label htmlFor="passwordConfirm">비밀번호 확인</label>
           <input
@@ -143,7 +133,6 @@ const JoinForm = ({ join }) => {
           )}
         </div>
 
-        {/* 이름 */}
         <div>
           <label htmlFor="name">Name</label>
           <input
@@ -160,7 +149,6 @@ const JoinForm = ({ join }) => {
           />
         </div>
 
-        {/* 이메일 */}
         <div>
           <label htmlFor="email">Email</label>
           <input
@@ -177,7 +165,6 @@ const JoinForm = ({ join }) => {
           />
         </div>
 
-        {/* 가입 버튼 */}
         <button
           type="submit"
           className="btn btn--form btn-login"
@@ -186,7 +173,6 @@ const JoinForm = ({ join }) => {
           {loading ? '가입중입니다...' : '가입하기'}
         </button>
 
-        {/* CapsLock 경고 */}
         <div
           className="capslock-warning"
           style={{ display: capsLockOn ? 'block' : 'none' }}
