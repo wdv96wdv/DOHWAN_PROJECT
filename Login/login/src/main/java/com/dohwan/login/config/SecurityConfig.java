@@ -67,9 +67,9 @@ public class SecurityConfig {
 				.cors(cors -> cors.configurationSource(corsConfigurationSource())) // ✅ 명확히 지정
 				.authorizeHttpRequests(auth -> auth
 						// 로컬
-						// .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // preflight 허용
-						// .requestMatchers("/**").permitAll() // 로컬용 전체 허용
-						// .requestMatchers("/admin/**").hasRole("ADMIN") // ✅ 관리자 전용
+						//  .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // preflight 허용
+						//  .requestMatchers("/**").permitAll() // 로컬용 전체 허용
+						//  .requestMatchers("/admin/**").hasRole("ADMIN") // ✅ 관리자 전용
 
 						// 운영
 						.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // ✅ preflight 허용
