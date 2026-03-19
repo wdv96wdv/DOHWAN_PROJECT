@@ -86,11 +86,6 @@ public class SecurityConfig {
 		return http.build();
 	}
 
-	// 비밀번호 암호화 빈 등록
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
 
 	// ✅ Security에서 사용할 CORS 설정
 	@Bean

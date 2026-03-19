@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.dohwan.board.entity.Comment;
@@ -21,7 +23,8 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     long countByBoardId(String boardId);
     
     // ID로 댓글 조회
-    Optional<Comment> findByIdentifier(String id);
+    @Query("SELECT c FROM Comment c WHERE c.id = :id")
+    Optional<Comment> findByIdentifier(@Param("id") String id);
     
     // 게시글 ID로 모든 댓글 삭제
     void deleteByBoardId(String boardId);

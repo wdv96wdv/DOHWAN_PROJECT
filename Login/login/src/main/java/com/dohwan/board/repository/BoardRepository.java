@@ -4,14 +4,21 @@ import com.dohwan.board.entity.BoardEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
 public interface BoardRepository extends JpaRepository<BoardEntity, Long> {
-    Optional<BoardEntity> findByIdentifier(String id);
-    void deleteByIdentifier(String id);
+    @Query("SELECT b FROM BoardEntity b WHERE b.id = :id")
+    Optional<BoardEntity> findByIdentifier(@Param("id") String id);
+
+    @Modifying
+    @Query("DELETE FROM BoardEntity b WHERE b.id = :id")
+    void deleteByIdentifier(@Param("id") String id);
 
     Page<BoardEntity> findAllByOrderByCreatedAtDesc(Pageable pageable);
 }

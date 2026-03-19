@@ -96,7 +96,9 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public Files selectById(String id) {
-        return fileRepository.findById(id).map(this::toDomain).orElse(null);
+        return fileRepository.findByIdentifier(id)
+                .map(this::toDomain)
+                .orElse(null);
     }
 
     @Override
@@ -127,7 +129,7 @@ public class FileServiceImpl implements FileService {
     @Override
     @Transactional
     public boolean updateById(Files file) {
-        return fileRepository.findById(file.getId()).map(entity -> {
+        return fileRepository.findByIdentifier(file.getId()).map(entity -> {
             if (file.getType() != null) entity.setType(file.getType());
             if (file.getSeq() != null) entity.setSeq(file.getSeq());
             if (file.getPTable() != null) entity.setPTable(file.getPTable());
@@ -178,7 +180,7 @@ public class FileServiceImpl implements FileService {
         Files file = selectById(id);
         if (file != null) {
             delete(file);
-            fileRepository.deleteById(id);
+            fileRepository.deleteByIdentifier(id);
             return true;
         }
         return false;
@@ -255,7 +257,7 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public List<Files> listByParent(Files file) {
-        return fileRepository.findByPTableAndPNo(file.getPTable(), file.getPNo()).stream()
+        return fileRepository.findByParent(file.getPTable(), file.getPNo()).stream()
                 .map(this::toDomain).collect(Collectors.toList());
     }
 
@@ -266,7 +268,7 @@ public class FileServiceImpl implements FileService {
         for (Files deleteFile : fileList) {
             delete(deleteFile);
         }
-        fileRepository.deleteByPTableAndPNo(file.getPTable(), file.getPNo());
+        fileRepository.deleteByParent(file.getPTable(), file.getPNo());
         return fileList.size();
     }
 
@@ -319,7 +321,7 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public Files selectByType(Files file) {
-        List<FileEntity> res = fileRepository.findByPTableAndPNoAndType(file.getPTable(), file.getPNo(), file.getType());
+        List<FileEntity> res = fileRepository.findByParentAndType(file.getPTable(), file.getPNo(), file.getType());
         if (!res.isEmpty()) {
             return toDomain(res.get(0));
         }
@@ -328,7 +330,7 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public List<Files> listByType(Files file) {
-        return fileRepository.findByPTableAndPNoAndType(file.getPTable(), file.getPNo(), file.getType()).stream()
+        return fileRepository.findByParentAndType(file.getPTable(), file.getPNo(), file.getType()).stream()
                 .map(this::toDomain).collect(Collectors.toList());
     }
 }
