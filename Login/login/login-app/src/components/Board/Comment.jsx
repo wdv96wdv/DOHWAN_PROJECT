@@ -1,14 +1,17 @@
-
-import React, { useState, useContext } from 'react';
-import styles from '../../assets/css/common.module.css';
-import { LoginContext } from '../../contexts/LoginContextProvider';
+import React, { useState } from 'react';
+import "../../assets/css/board.css";
+import "../../assets/css/auth.css";
+import useAuthStore from '../../store/useAuthStore';
+import { Send, Edit2, Trash2, MessageSquare } from 'lucide-react';
+import Swal from 'sweetalert2';
 
 const Comment = ({ comment, onUpdate, onDelete }) => {
-  const { userInfo } = useContext(LoginContext);
+  const userInfo = useAuthStore(state => state.userInfo);
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState(comment.content);
 
   const handleUpdate = () => {
+    if (!editedContent.trim()) return;
     onUpdate(comment.id, { content: editedContent });
     setIsEditing(false);
   };
@@ -16,46 +19,34 @@ const Comment = ({ comment, onUpdate, onDelete }) => {
   const isOwner = userInfo && userInfo.no === comment.userNo;
 
   return (
-    <div className={styles.commentItem}>
-      <div className={styles.commentHeader}>
-        <strong>{comment.writer}</strong>
-        <span>{new Date(comment.createdAt).toLocaleString()}</span>
+    <div className="comment-item">
+      <div className="comment-header">
+        <span className="comment-writer">{comment.writer}</span>
+        <span className="comment-date">{new Date(comment.createdAt).toLocaleString()}</span>
       </div>
+      
       {isEditing ? (
-        <div className={styles.commentEdit}>
+        <div style={{ marginTop: '12px' }}>
           <textarea
             value={editedContent}
             onChange={(e) => setEditedContent(e.target.value)}
-            className={styles.formTextarea}
-            maxLength={200} // 글자수 제한
+            className="form-control"
+            style={{ minHeight: '80px', marginBottom: '8px' }}
+            maxLength={200}
           />
-          <div style={{ fontSize: '0.8rem', color: '#666', textAlign: 'right' }}>
-            {editedContent.length}/200
+          <div className="comment-actions">
+            <button onClick={handleUpdate} className="btn-auth" style={{ padding: '6px 16px', fontSize: '0.8rem' }}>SAVE</button>
+            <button onClick={() => setIsEditing(false)} className="btn-auth secondary" style={{ padding: '6px 16px', fontSize: '0.8rem' }}>CANCEL</button>
           </div>
-          <button
-            onClick={() => {
-              if (!editedContent.trim()) return alert("댓글 내용을 입력해주세요.");
-              if (editedContent.length > 200) return alert("댓글은 200자 이하로 작성해야 합니다.");
-              handleUpdate();
-            }}
-            className={styles.btn}
-          >
-            저장
-          </button>
-          <button
-            onClick={() => setIsEditing(false)}
-            className={`${styles.btn} ${styles.btnGray}`}
-          >
-            취소
-          </button>
         </div>
       ) : (
-        <p className={styles.commentContent}>{comment.content}</p>
+        <p className="comment-content">{comment.content}</p>
       )}
+
       {isOwner && !isEditing && (
-        <div className={styles.commentActions}>
-          <button onClick={() => setIsEditing(true)} className={styles.btn}>수정</button>
-          <button onClick={() => onDelete(comment.id, comment.userNo)} className={`${styles.btn} ${styles.btnGray}`}>삭제</button>
+        <div className="comment-actions">
+          <button onClick={() => setIsEditing(true)} className="btn-icon"><Edit2 size={14} /></button>
+          <button onClick={() => onDelete(comment.id, comment.userNo)} className="btn-icon delete"><Trash2 size={14} /></button>
         </div>
       )}
     </div>
@@ -64,44 +55,48 @@ const Comment = ({ comment, onUpdate, onDelete }) => {
 
 const CommentList = ({ comments, onCreate, onUpdate, onDelete }) => {
   const [newComment, setNewComment] = useState('');
-  const { isLogin } = useContext(LoginContext);
+  const isLogin = useAuthStore(state => state.isLogin);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const trimmed = newComment.trim();
-    if (!trimmed) return;
-    if (trimmed.length > 200) {
-      return alert("댓글은 200자 이하로 작성해야 합니다.");
-    }
-    onCreate({ content: trimmed });
+    if (!newComment.trim()) return;
+    onCreate({ content: newComment.trim() });
     setNewComment('');
   };
 
   return (
-    <div className={styles.section}>
-      <h2 className={styles.subtitle}>댓글</h2>
-      {isLogin && (
-        <form onSubmit={handleSubmit} className={styles.commentForm}>
+    <div>
+      <h3 style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '24px', fontFamily: 'Orbitron', fontSize: '1.1rem' }}>
+        <MessageSquare size={20} /> COMMENTS ({comments?.length || 0})
+      </h3>
+
+      {isLogin ? (
+        <form onSubmit={handleSubmit} style={{ marginBottom: '40px', position: 'relative' }}>
           <textarea
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
-            placeholder="댓글을 입력하세요"
-            className={styles.formTextarea}
+            placeholder="Write a comment..."
+            className="form-control"
+            style={{ paddingRight: '60px', minHeight: '100px' }}
             maxLength={200}
           />
-          <div style={{ fontSize: '0.8rem', color: '#666', textAlign: 'right' }}>
-            {newComment.length}/200
-          </div>
-          <button type="submit" className={styles.btn}>등록</button>
+          <button type="submit" className="btn-auth" style={{ position: 'absolute', bottom: '12px', right: '12px', width: '40px', height: '40px', padding: 0, borderRadius: '50%' }}>
+            <Send size={18} />
+          </button>
         </form>
+      ) : (
+        <div style={{ padding: '24px', textAlign: 'center', background: 'hsla(0,0%,50%,0.03)', borderRadius: '12px', marginBottom: '40px', border: '1px dashed var(--glass-border)' }}>
+          Please login to leave a comment.
+        </div>
       )}
-      <div className={styles.commentList}>
+
+      <div className="comment-list">
         {comments && comments.length > 0 ? (
           comments.map(comment => (
             <Comment key={comment.id} comment={comment} onUpdate={onUpdate} onDelete={onDelete} />
           ))
         ) : (
-          <p>작성된 댓글이 없습니다.</p>
+          <div style={{ textAlign: 'center', opacity: 0.5, padding: '40px' }}>No comments yet.</div>
         )}
       </div>
     </div>

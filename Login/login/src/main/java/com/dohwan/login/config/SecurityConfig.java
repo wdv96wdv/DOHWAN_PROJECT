@@ -66,12 +66,6 @@ public class SecurityConfig {
 				// CORS 활성화 (Spring Security 6.1 기준)
 				.cors(cors -> cors.configurationSource(corsConfigurationSource())) // ✅ 명확히 지정
 				.authorizeHttpRequests(auth -> auth
-						// 로컬
-						//  .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // preflight 허용
-						//  .requestMatchers("/**").permitAll() // 로컬용 전체 허용
-						//  .requestMatchers("/admin/**").hasRole("ADMIN") // ✅ 관리자 전용
-
-						// 운영
 						.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // ✅ preflight 허용
 						.requestMatchers("/login", "/users", "/join", "/contact", "/", "/boards/**").permitAll()
 						.requestMatchers("/api/wishlist/**").authenticated() // ✅ 찜하기 API는 인증 필요

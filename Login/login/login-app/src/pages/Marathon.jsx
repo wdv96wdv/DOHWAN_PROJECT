@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { MARATHON_LIST } from "../utils/marathon";
-import styles from '../assets/css/Marathon.module.css';
-import reset from '../assets/img/reset.png'
+import "../assets/css/marathon.css";
+import "../assets/css/auth.css"; // Reuse form-control
+import { Search, MapPin, Calendar, Footprints, RotateCcw, Award } from 'lucide-react';
 
 export default function MarathonList() {
-    // 기본값 정의
     const defaultSearch = "";
     const defaultType = "전체";
     const defaultStatus = "접수중";
@@ -26,29 +26,26 @@ export default function MarathonList() {
         if (today > end && today < race) return "접수마감";
         if (today >= race) return "종료";
     };
-    
 
-    // 상태별 색상 맵
     const statusClassMap = {
-        "접수대기": styles.badgeWait,
-        "접수중": styles.badgeOpen,
-        "선착순 접수중": styles.badgeFirstCome,
-        "접수마감": styles.badgeClosed,
-        "종료": styles.badgeFinished,
+        "접수대기": "m-wait",
+        "접수중": "m-open",
+        "선착순 접수중": "m-firstcome",
+        "접수마감": "m-closed",
+        "종료": "m-finished",
     };
 
     const typeOptions = ["전체", "Full", "Half", "10Km", "5Km"];
     const statusOptions = ["전체", "접수대기", "접수중", "접수마감", "종료"];
 
-    // 상태 그룹 정의 (접수중 필터 시 "선착순 접수중" 포함)
     const statusGroups = {
+        "전체": [],
         "접수중": ["접수중", "선착순 접수중"],
         "접수대기": ["접수대기"],
         "접수마감": ["접수마감"],
         "종료": ["종료"],
     };
 
-    // 필터 초기화 함수
     const resetFilters = () => {
         setSearch(defaultSearch);
         setType(defaultType);
@@ -58,84 +55,97 @@ export default function MarathonList() {
     const filtered = MARATHON_LIST
         .map(m => ({ ...m, status: getMarathonStatus(m) }))
         .filter(m => {
-            const matchText = m.title.includes(search) || m.location.includes(search);
-            const matchType = type === "전체" ? true : m.type.includes(type);
-
-            const matchStatus = statusFilter === "전체"
-                ? true
-                : statusGroups[statusFilter].includes(m.status);
-
+            const matchText = (m.title + m.location).toLowerCase().includes(search.toLowerCase());
+            const matchType = type === "전체" ? true : m.type.some(t => t.includes(type));
+            const matchStatus = statusFilter === "전체" ? true : statusGroups[statusFilter].includes(m.status);
             return matchText && matchType && matchStatus;
         });
 
     return (
-        <div className={styles.marathonContainer}>
-            <h1 className={styles.marathonTitle}>마라톤 일정</h1>
+        <div className="marathon-page">
+            <header className="marathon-header">
+                <h1><Award size={40} style={{verticalAlign: 'middle', marginRight: '16px', color: 'var(--primary)'}} /> MARATHON EVENTS</h1>
+            </header>
 
-            {/* 검색 + 종목 필터 + 초기화 버튼 */}
-            <div className={styles.filterBox}>
-                <input
-                    className={styles.searchInput}
-                    placeholder="검색 (대회명/지역)"
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                />
-                <select
-                    className={styles.selectBox}
-                    value={type}
-                    onChange={(e) => setType(e.target.value)}
-                >
-                    {typeOptions.map(opt => (
-                        <option key={opt} value={opt}>{opt}</option>
-                    ))}
-                </select>
-            </div>
-
-            {/* 상태 버튼 필터 */}
-            <div className={styles.buttonFilter} style={{ marginTop: "10px" }}>
-                {statusOptions.map(s => (
-                    <button
-                        key={s}
-                        className={`${styles.typeBtn} ${statusFilter === s ? styles.active : ""}`}
-                        onClick={() => setStatusFilter(s)}
+            <div className="marathon-filters">
+                <div className="search-row">
+                    <div className="search-input-wrapper">
+                        <Search className="search-icon" size={18} />
+                        <input
+                            className="form-control"
+                            placeholder="Search by event name or location..."
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                        />
+                    </div>
+                    <select
+                        className="form-control"
+                        style={{ width: '180px' }}
+                        value={type}
+                        onChange={(e) => setType(e.target.value)}
                     >
-                        {s}
+                        {typeOptions.map(opt => (
+                            <option key={opt} value={opt}>{opt === '전체' ? 'All Types' : opt}</option>
+                        ))}
+                    </select>
+                </div>
+
+                <div className="status-row">
+                    {statusOptions.map(s => (
+                        <button
+                            key={s}
+                            className={`status-btn ${statusFilter === s ? "active" : ""}`}
+                            onClick={() => setStatusFilter(s)}
+                        >
+                            {s === '전체' ? 'ALL' : s.toUpperCase()}
+                        </button>
+                    ))}
+                    <button className="btn-reset" onClick={resetFilters}>
+                        <RotateCcw size={14} /> RESET
                     </button>
-                ))}
-                <button className={styles.resetBtn} onClick={resetFilters}>
-                    <img src={reset} alt="초기화" className={styles.resetIcon} />
-                    초기화
-                </button>
+                </div>
             </div>
 
-            {/* 마라톤 카드 */}
-            <div className={styles.marathonList}>
+            <div className="marathon-grid">
                 {filtered.map(m => (
                     <a
                         key={m.id}
                         href={m.link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className={styles.card}
+                        className="marathon-card"
                     >
-                        <div className={styles.cardTitle}>{m.title}</div>
+                        <div className={`m-badge ${statusClassMap[m.status]}`}>
+                            {m.status}
+                        </div>
+                        
+                        <div className="m-title">{m.title}</div>
 
-                        <div className={styles.cardContent}>
-                            <div className={styles.cardInfo}>
-                                📍 {m.location} · 📅 {m.raceDate}
+                        <div className="m-info-group">
+                            <div className="m-info-item">
+                                <MapPin size={16} color="var(--primary)" />
+                                <span>{m.location}</span>
                             </div>
-
-                            <div className={styles.cardType}>
-                                🏃 {m.type.join(" / ")}
+                            <div className="m-info-item">
+                                <Calendar size={16} color="var(--primary)" />
+                                <span>{m.raceDate}</span>
                             </div>
-
-                            <div className={`${styles.cardStatus} ${statusClassMap[m.status]}`}>
-                                {m.status}
+                            <div className="m-info-item" style={{ marginTop: '8px' }}>
+                                <Footprints size={16} color="var(--text-muted)" />
+                                <span style={{ fontWeight: 600 }}>{m.type.join(" / ")}</span>
                             </div>
                         </div>
                     </a>
                 ))}
             </div>
+            
+            {filtered.length === 0 && (
+                <div style={{ textAlign: 'center', padding: '100px 0', opacity: 0.5 }}>
+                    <Search size={48} style={{ margin: '0 auto 16px' }} />
+                    <h3>No events match your search.</h3>
+                    <p>Try adjusting your filters or search terms.</p>
+                </div>
+            )}
         </div>
     );
 }

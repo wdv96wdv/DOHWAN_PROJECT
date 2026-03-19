@@ -1,6 +1,6 @@
 package com.dohwan.login.service;
 
-import com.dohwan.login.domain.RunRecordDto;
+import com.dohwan.login.dto.RunRecordDto;
 import com.dohwan.login.entity.RunRecord;
 import com.dohwan.login.repository.RunRecordRepository;
 import org.springframework.stereotype.Service;

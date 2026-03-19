@@ -1,88 +1,84 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
+  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, AreaChart, Area
 } from 'recharts';
 import { getRunRecords } from '../../apis/performance';
-import styles from '../../assets/css/common.module.css';
-import { LoginContext } from '../../contexts/LoginContextProvider'; // LoginContext import
+import "../../assets/css/performance.css";
+import useAuthStore from '../../store/useAuthStore';
+import { TrendingUp, Timer } from 'lucide-react';
 
 const RunTrendChart = ({ refreshKey = 0 }) => {
-  const { userInfo } = useContext(LoginContext); // userInfo 가져오기
+  const userInfo = useAuthStore(state => state.userInfo);
   const [chartData, setChartData] = useState([]);
 
   useEffect(() => {
-    if (!userInfo || !userInfo.no) {
-      console.warn('로그인 정보가 없어 러닝 트렌드 차트를 불러올 수 없습니다.');
-      setChartData([]);
-      return;
-    }
+    if (!userInfo?.no) return;
 
-    getRunRecords(userInfo.no)
+    getRunRecords()
       .then((res) => {
         const records = res.data || [];
-        // 날짜순으로 정렬하고 최근 20개만 표시
         const sorted = [...records]
           .sort((a, b) => new Date(a.date || 0) - new Date(b.date || 0))
-          .slice(-20);
+          .slice(-10);
         
         const formatted = sorted.map(r => ({
-          date: r.date ? new Date(r.date).toLocaleDateString('ko-KR', { month: 'short', day: 'numeric' }) : '',
+          date: r.date ? new Date(r.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '',
           distance: r.distanceKm || 0,
           pace: r.paceMinPerKm || 0
         }));
-        
         setChartData(formatted);
       })
-      .catch((err) => {
-        console.error('차트 데이터 조회 실패:', err);
-        setChartData([]);
-      });
+      .catch(console.error);
   }, [refreshKey, userInfo]);
 
-  if (chartData.length === 0) {
-    return (
-      <div className={styles.container}>
-        <h2 className={styles.title}>러닝 트렌드 분석</h2>
-        <p>차트를 표시할 데이터가 없습니다.</p>
-      </div>
-    );
-  }
+  if (chartData.length === 0) return null;
+
+  const CustomTooltip = ({ active, payload, label }) => {
+    if (active && payload && payload.length) {
+      return (
+        <div style={{ background: 'var(--glass-bg)', backdropFilter: 'blur(10px)', border: '1px solid var(--glass-border)', padding: '12px', borderRadius: '8px', color: 'var(--text-primary)' }}>
+          <p style={{ margin: 0, fontWeight: 'bold' }}>{label}</p>
+          <p style={{ margin: 0, color: payload[0].color }}>{payload[0].name}: {payload[0].value}</p>
+        </div>
+      );
+    }
+    return null;
+  };
 
   return (
-    <div className={styles.container}>
-      <h2 className={styles.title}>러닝 트렌드 분석</h2>
-      <div style={{ width: '100%', overflowX: 'auto' }}>
-        <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', minWidth: 0 }}>
-          <div style={{ flex: '1 1 360px' }}>
-          <h3 className={styles.subtitle}>일별 거리 변화</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={chartData} margin={{ left: 16, right: 16 }}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="date" />
-              <YAxis unit="km" width={60} />
-              <Tooltip />
-              <Legend />
-              <Line type="monotone" dataKey="distance" stroke="#4b8cf5" name="거리 (km)" />      
-            </LineChart>
-          </ResponsiveContainer>
-          </div>
-
-          <div style={{ flex: '1 1 360px' }}>
-          <h3 className={styles.subtitle}>일별 평균 페이스</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={chartData} margin={{ left: 16, right: 16 }}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="date" />
-              <YAxis unit="min/km" width={80} />
-              <Tooltip />
-              <Legend />
-              <Line type="monotone" dataKey="pace" stroke="#ff5b5b" name="페이스 (min/km)" />
-            </LineChart>
-          </ResponsiveContainer>
-          </div>
-        </div>
+    <>
+      <div className="chart-container">
+        <h3><TrendingUp size={18} /> DISTANCE TREND (KM)</h3>
+        <ResponsiveContainer width="100%" height={300}>
+          <AreaChart data={chartData}>
+            <defs>
+              <linearGradient id="colorDist" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="var(--primary)" stopOpacity={0.3}/>
+                <stop offset="95%" stopColor="var(--primary)" stopOpacity={0}/>
+              </linearGradient>
+            </defs>
+            <CartesianGrid strokeDasharray="3 3" stroke="var(--glass-border)" vertical={false} />
+            <XAxis dataKey="date" stroke="var(--text-muted)" fontSize={12} />
+            <YAxis stroke="var(--text-muted)" fontSize={12} width={40} />
+            <Tooltip content={<CustomTooltip />} />
+            <Area type="monotone" dataKey="distance" stroke="var(--primary)" fillOpacity={1} fill="url(#colorDist)" name="Distance" strokeWidth={3} />
+          </AreaChart>
+        </ResponsiveContainer>
       </div>
-    </div>
+
+      <div className="chart-container">
+        <h3><Timer size={18} /> PACE TREND (MIN/KM)</h3>
+        <ResponsiveContainer width="100%" height={300}>
+          <LineChart data={chartData}>
+            <CartesianGrid strokeDasharray="3 3" stroke="var(--glass-border)" vertical={false} />
+            <XAxis dataKey="date" stroke="var(--text-muted)" fontSize={12} />
+            <YAxis stroke="var(--text-muted)" fontSize={12} width={40} />
+            <Tooltip content={<CustomTooltip />} />
+            <Line type="monotone" dataKey="pace" stroke="#ff5b5b" name="Pace" strokeWidth={3} dot={{ r: 4, fill: '#ff5b5b' }} activeDot={{ r: 6 }} />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+    </>
   );
 };
 

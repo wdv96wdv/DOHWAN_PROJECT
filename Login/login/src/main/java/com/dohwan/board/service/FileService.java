@@ -2,9 +2,8 @@ package com.dohwan.board.service;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Param;
 
-import com.dohwan.board.domain.Files;
+import com.dohwan.board.dto.Files;
 
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -31,10 +30,10 @@ public interface FileService extends BaseService<Files> {
     public int deleteFilesById(String IDList);
 
     // 선택 삭제(list) - no
-    public int deleteFileList(@Param("noList") List<Long> noList);
+    public int deleteFileList(List<Long> noList);
 
     // 선택 삭제(list) - id
-    public int deleteFileListById(@Param("idList") List<String> idList);
+    public int deleteFileListById(List<String> idList);
 
     // 타입별 파일 조회
     public Files selectByType(Files file);

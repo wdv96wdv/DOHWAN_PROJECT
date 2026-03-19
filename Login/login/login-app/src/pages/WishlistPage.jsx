@@ -1,12 +1,14 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import { getWishlist, deleteWishlist } from '../apis/wishlist';
-import { LoginContext } from '../contexts/LoginContextProvider';
+import useAuthStore from '../store/useAuthStore';
 import { useNavigate } from 'react-router-dom';
-import cardStyles from '../assets/css/RecommendResult.module.css'; // 카드 스타일 재사용
+import "../assets/css/wishlist.css";
+import "../assets/css/auth.css";
 import Swal from 'sweetalert2';
+import { Heart, ShoppingCart, Trash2, PackageSearch } from 'lucide-react';
 
 const WishlistPage = () => {
-  const { userInfo } = useContext(LoginContext);
+  const userInfo = useAuthStore(state => state.userInfo);
   const navigate = useNavigate();
   const [wishlistItems, setWishlistItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -15,9 +17,9 @@ const WishlistPage = () => {
     if (!userInfo) {
       Swal.fire({
         icon: 'warning',
-        title: '로그인이 필요합니다',
-        text: '찜하기 기능을 사용하려면 로그인해주세요.',
-        confirmButtonText: '확인',
+        title: 'Login Required',
+        text: 'Please login to use the wishlist.',
+        confirmButtonColor: 'var(--primary)',
       }).then(() => {
         navigate("/login");
       });
@@ -31,7 +33,7 @@ const WishlistPage = () => {
         setLoading(false);
       })
       .catch(error => {
-        console.error("찜 목록을 불러오는 데 실패했습니다.", error);
+        console.error("Failed to fetch wishlist:", error);
         setLoading(false);
       });
   }, [userInfo, navigate]);
@@ -41,46 +43,58 @@ const WishlistPage = () => {
       await deleteWishlist(productId);
       setWishlistItems(prevItems => prevItems.filter(item => item.productId !== productId));
     } catch (error) {
-      console.error("찜하기 기능 처리 중 오류 발생:", error);
+      console.error("Error deleting from wishlist:", error);
       Swal.fire({
         icon: 'error',
-        title: '오류 발생',
-        text: '요청을 처리하는 중 문제가 발생했습니다.',
+        title: 'Error',
+        text: 'Failed to update wishlist.',
       });
     }
   };
 
   return (
-    <div className={cardStyles.resultContainer}>
-      <h1>찜 목록</h1>
-      <p>찜한 러닝화들을 확인하고 관리할 수 있습니다.</p>
+    <div className="wishlist-page">
+      <header className="wishlist-header">
+        <h1><Heart size={40} fill="var(--primary)" color="var(--primary)" style={{verticalAlign: 'middle', marginRight: '16px'}} /> MY WISHLIST</h1>
+        <p>Manage your favorite running shoes and get ready for your next run.</p>
+      </header>
       
       <div>
         {loading ? (
-          <p>찜 목록을 불러오는 중...</p>
+          <div className="empty-state">Loading your wishlist...</div>
         ) : wishlistItems.length > 0 ? (
-          <div className={cardStyles.cardList}>
+          <div className="product-grid">
             {wishlistItems.map((item) => (
-              <div key={item.productId} className={cardStyles.card}>
-                <img src={item.image} alt={item.title} />
-                <h3 dangerouslySetInnerHTML={{ __html: item.title }} />
-                <p>{Number(item.lprice).toLocaleString()}원</p>
-                <div className={cardStyles.cardActions}>
-                  <a href={item.link} target="_blank" rel="noopener noreferrer">
-                    구매하기
-                  </a>
-                  <button
-                    onClick={() => handleDeleteWishlistItem(item.productId)}
-                    className={`${cardStyles.wishlistButton} ${cardStyles.wishlisted}`}
-                  >
-                    ❤️ 찜 해제
-                  </button>
+              <div key={item.productId} className="product-card">
+                <div className="product-img-wrapper">
+                   <img src={item.image} alt={item.title} className="product-img" />
+                </div>
+                <div className="product-info">
+                  <h3 className="product-title" dangerouslySetInnerHTML={{ __html: item.title }} />
+                  <p className="product-price">{Number(item.lprice).toLocaleString()} KRW</p>
+                  
+                  <div className="product-actions">
+                    <a href={item.link} target="_blank" rel="noopener noreferrer" className="product-btn btn-buy">
+                      <ShoppingCart size={18} /> BUY NOW
+                    </a>
+                    <button
+                      onClick={() => handleDeleteWishlistItem(item.productId)}
+                      className="product-btn btn-wish active"
+                      title="Remove from wishlist"
+                    >
+                      <Trash2 size={18} />
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}
           </div>
         ) : (
-          <p>찜한 상품이 없습니다.</p>
+          <div className="empty-state">
+            <PackageSearch size={64} style={{margin: '0 auto 24px', display: 'block'}} />
+            <p>Your wishlist is empty.</p>
+            <button className="btn-auth" onClick={() => navigate('/recommend')} style={{marginTop: '24px'}}>FIND SHOES</button>
+          </div>
         )}
       </div>
     </div>

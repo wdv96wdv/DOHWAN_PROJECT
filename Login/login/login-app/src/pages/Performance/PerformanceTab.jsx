@@ -3,11 +3,11 @@ import RunRecordList from '../../components/Performance/RunRecordList';
 import RunStatsCard from '../../components/Performance/RunStatsCard';
 import RunTrendChart from '../../components/Performance/RunTrendChart';
 import GoalTracker from '../../components/Performance/GoalTracker';
-// import CsvUploader from '../../components/Performance/CsvUploader';
 import ShareCard from '../../components/Performance/ShareCard';
 import { getRunRecords } from '../../apis/performance';
 import WaterIntakeCalculator from '../../components/Performance/WaterIntakeCalculator';
-import styles from '../../assets/css/common.module.css';
+import "../../assets/css/performance.css";
+import { BarChart3 } from 'lucide-react';
 
 const PerformanceTab = () => {
   const [latestRecord, setLatestRecord] = useState(null);
@@ -24,25 +24,33 @@ const PerformanceTab = () => {
         setLatestRecord(sorted[0] || null);
       })
       .catch((err) => {
-        console.error('기록 불러오기 실패:', err);
+        console.error('Failed to fetch records:', err);
       });
   }, [refreshKey]);
 
   return (
-    <div className={styles.container}>
-      <div className={styles.headerContainer}>
-        <div>
-          <h2 className={styles.title}>퍼포먼스 분석</h2>
-        </div>
+    <div className="performance-page">
+      <header className="performance-header">
+        <h1><BarChart3 size={40} style={{verticalAlign: 'middle', marginRight: '16px', color: 'var(--primary)'}} /> PERFORMANCE</h1>
+      </header>
+
+      <section>
+        <RunStatsCard refreshKey={refreshKey} />
+      </section>
+
+      <div className="charts-grid">
+        <RunTrendChart refreshKey={refreshKey} />
       </div>
 
-      <RunStatsCard refreshKey={refreshKey} />
-      <RunRecordList refreshKey={refreshKey} />
-      <RunTrendChart refreshKey={refreshKey} />
-      <GoalTracker />
-      {/* <CsvUploader /> */}
-      <ShareCard record={latestRecord} />
-      <WaterIntakeCalculator />
+      <div className="widgets-grid">
+        <GoalTracker />
+        <WaterIntakeCalculator />
+        <ShareCard record={latestRecord} />
+      </div>
+
+      <section style={{marginTop: '48px'}}>
+        <RunRecordList refreshKey={refreshKey} />
+      </section>
     </div>
   );
 };

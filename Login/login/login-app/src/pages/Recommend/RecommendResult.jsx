@@ -1,15 +1,17 @@
-import React, { useEffect, useState, useRef, useCallback, useContext } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { fetchRunningShoes } from "../../apis/naverShopping";
-import { getWishlist, addWishlist, deleteWishlist } from "../../apis/wishlist"; // 찜하기 API import
-import { LoginContext } from "../../contexts/LoginContextProvider"; // 로그인 컨텍스트 import
-import styles from "../../assets/css/RecommendResult.module.css";
+import { getWishlist, addWishlist, deleteWishlist } from "../../apis/wishlist";
+import useAuthStore from "../../store/useAuthStore";
+import "../../assets/css/wishlist.css";
+import "../../assets/css/auth.css";
 import Swal from 'sweetalert2';
+import { Heart, ShoppingCart, Sparkles, Loader2, Info } from 'lucide-react';
 
 const RecommendResult = () => {
   const location = useLocation();
-  const navigate = useNavigate(); // 로그인 페이지로 이동하기 위해 추가
-  const { userInfo } = useContext(LoginContext); // 로그인 상태와 사용자 정보 가져오기
+  const navigate = useNavigate();
+  const userInfo = useAuthStore(state => state.userInfo);
 
   const { gender, purpose, budget } = location.state || {};
   const [products, setProducts] = useState([]);
@@ -19,10 +21,8 @@ const RecommendResult = () => {
   const observerRef = useRef();
   const display = 9;
 
-  // 찜 목록 상태 관리 (Set을 사용하여 빠른 조회를 위함)
   const [wishlist, setWishlist] = useState(new Set());
 
-  // 로그인한 사용자의 찜 목록을 불러오는 useEffect
   useEffect(() => {
     if (userInfo) {
       getWishlist()
@@ -30,18 +30,17 @@ const RecommendResult = () => {
           const wishlistedProductIds = new Set(data.map((item) => item.productId));
           setWishlist(wishlistedProductIds);
         })
-        .catch((error) => console.error("찜 목록 초기화 실패:", error));
+        .catch((error) => console.error("Wishlist initialization failed:", error));
     }
   }, [userInfo]);
 
-  // 찜하기 버튼 클릭 핸들러
   const handleWishlistClick = async (product) => {
     if (!userInfo) {
       Swal.fire({
         icon: 'warning',
-        title: '로그인이 필요합니다',
-        text: '찜하기 기능을 사용하려면 로그인해주세요.',
-        confirmButtonText: '확인',
+        title: 'Login Required',
+        text: 'Please login to save products.',
+        confirmButtonColor: 'var(--primary)',
       }).then(() => {
         navigate("/login");
       });
@@ -70,11 +69,11 @@ const RecommendResult = () => {
         setWishlist((prev) => new Set(prev).add(product.productId));
       }
     } catch (error) {
-      console.error("찜하기 기능 처리 중 오류 발생:", error);
+      console.error("Wishlist toggle failed:", error);
       Swal.fire({
         icon: 'error',
-        title: '오류 발생',
-        text: '요청을 처리하는 중 문제가 발생했습니다.',
+        title: 'Error',
+        text: 'Something went wrong.',
       });
     }
   };
@@ -125,17 +124,12 @@ const RecommendResult = () => {
     setLoading(true);
 
     const keyword = [gender, purpose, "러닝화"].filter(Boolean).join(" ");
-    console.log("Searching with keyword:", keyword);
-
     fetchRunningShoes(keyword, { start: 1, display }).then((data) => {
-      console.log("Received data:", data);
-
       let fetchedProducts = data.items || [];
       if (budget) {
         fetchedProducts = fetchedProducts.filter(
           (item) => Number(item.lprice) <= Number(budget)
         );
-        console.log("Filtered products by budget:", fetchedProducts);
       }
 
       setProducts(fetchedProducts);
@@ -146,36 +140,44 @@ const RecommendResult = () => {
   }, [gender, purpose, budget]);
 
   return (
-    <div className={styles.resultContainer}>
-      <h1>추천 러닝화</h1>
-      <p>당신의 조건에 맞는 러닝화를 네이버 쇼핑에서 찾아드렸어요.</p>
+    <div className="wishlist-page">
+      <header className="wishlist-header">
+        <h1><Sparkles size={40} color="var(--primary)" style={{verticalAlign: 'middle', marginRight: '16px'}} /> RECOMMENDATIONS</h1>
+        <p>We found these running shoes matching your criteria.</p>
+      </header>
 
-      <div className={styles.cardList}>
+      <div className="product-grid">
         {products.map((item, index) => (
-          <div key={index} className={styles.card}>
-            <img src={item.image} alt={item.title} />
-            <h3 dangerouslySetInnerHTML={{ __html: item.title }} />
-            <p>{Number(item.lprice).toLocaleString()}원</p>
-            <div className={styles.cardActions}>
-              <a href={item.link} target="_blank" rel="noopener noreferrer">
-                구매하러 가기
-              </a>
-              {/* 찜하기 버튼 추가 */}
-              <button
-                onClick={() => handleWishlistClick(item)}
-                className={`${styles.wishlistButton} ${
-                  wishlist.has(item.productId) ? styles.wishlisted : ""
-                }`}
-              >
-                {wishlist.has(item.productId) ? "❤️ 찜 해제" : "🤍 찜하기"}
-              </button>
+          <div key={index} className="product-card">
+            <div className="product-img-wrapper">
+              <img src={item.image} alt={item.title} className="product-img" />
+            </div>
+            <div className="product-info">
+              <h3 className="product-title" dangerouslySetInnerHTML={{ __html: item.title }} />
+              <p className="product-price">{Number(item.lprice).toLocaleString()} KRW</p>
+              
+              <div className="product-actions">
+                <a href={item.link} target="_blank" rel="noopener noreferrer" className="product-btn btn-buy">
+                  <ShoppingCart size={18} /> BUY NOW
+                </a>
+                <button
+                  onClick={() => handleWishlistClick(item)}
+                  className={`product-btn btn-wish ${wishlist.has(item.productId) ? 'active' : ''}`}
+                >
+                  <Heart size={18} fill={wishlist.has(item.productId) ? "currentColor" : "none"} />
+                </button>
+              </div>
             </div>
           </div>
         ))}
       </div>
 
-      <div ref={observerRef} style={{ height: "20px" }} />
-      {loading && <p>Loading...</p>}
+      <div ref={observerRef} style={{ height: "60px", display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        {loading && <Loader2 size={32} className="rotate" color="var(--primary)" />}
+        {!loading && products.length >= total && products.length > 0 && (
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>You've reached the end of personalized recommendations.</p>
+        )}
+      </div>
     </div>
   );
 };

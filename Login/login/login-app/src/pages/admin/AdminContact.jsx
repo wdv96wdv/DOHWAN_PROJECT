@@ -1,48 +1,46 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import styles from "../../assets/css/common.module.css";
+import "../../assets/css/board.css";
+import "../../assets/css/auth.css";
 import Swal from "sweetalert2"; 
-
+import { ShieldAlert, Trash2, Mail, User, MessageSquare, Loader2 } from 'lucide-react';
 
 const AdminContact = () => {
   const [contacts, setContacts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // ✅ 관리자 JWT 토큰 가져오기
   const token = localStorage.getItem("jwt");
 
-  // ✅ 문의 목록 불러오기
   const fetchContacts = async () => {
     try {
       setLoading(true);
-     const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/admin/contact`, { 
+      const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/admin/contact`, { 
         headers: {
           Authorization: `Bearer ${token}`,
           'Accept': 'application/json',
         },
       });
-
-      console.log("res.data =", res.data); // ✅ 여기서 찍기!
-
       setContacts(res.data);
     } catch (err) {
       console.error(err);
-      setError("문의 데이터를 불러오지 못했습니다.");
+      setError("Failed to fetch contact inquiries.");
     } finally {
       setLoading(false);
     }
   };
 
-  // ✅ 문의 삭제
   const handleDelete = async (id) => {
     const result = await Swal.fire({
-      title: "정말 이 문의를 삭제하시겠습니까?",
-      text: "삭제한 내용은 복구할 수 없습니다.",
+      title: "Delete this inquiry?",
+      text: "This action cannot be undone.",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonText: "삭제",
-      cancelButtonText: "취소",
+      confirmButtonText: "DELETE",
+      cancelButtonText: "CANCEL",
+      confirmButtonColor: '#f44336',
+      background: 'var(--glass-bg)',
+      color: 'var(--text-primary)'
     });
 
     if (result.isConfirmed) {
@@ -51,10 +49,10 @@ const AdminContact = () => {
           headers: { Authorization: `Bearer ${token}` },
         });
         setContacts(contacts.filter((c) => c.id !== id));
-        Swal.fire("삭제 완료", "문의가 삭제되었습니다.", "success");
+        Swal.fire("Deleted", "Inquiry has been removed.", "success");
       } catch (err) {
         console.error(err);
-        Swal.fire("삭제 실패", "삭제 중 오류가 발생했습니다.", "error");
+        Swal.fire("Error", "Deletion failed.", "error");
       }
     }
   };
@@ -63,46 +61,67 @@ const AdminContact = () => {
     fetchContacts();
   }, []);
 
-  if (loading) return <div className={styles.container}>로딩 중...</div>;
-  if (error) return <div className={styles.container}>{error}</div>;
+  if (loading) return (
+    <div style={{ padding: '100px', textAlign: 'center' }}>
+      <Loader2 size={48} className="rotate" color="var(--primary)" style={{ margin: '0 auto' }} />
+    </div>
+  );
+  
+  if (error) return (
+    <div className="board-page">
+       <div className="info-highlight" style={{ textAlign: 'center', borderColor: 'red' }}>{error}</div>
+    </div>
+  );
 
   return (
-    <div className={styles.container}>
-      <h2 className={styles.title}>📬 문의 관리</h2>
+    <div className="board-page">
+      <header className="board-header">
+        <h1><ShieldAlert size={32} style={{verticalAlign: 'middle', marginRight: '16px', color: 'var(--primary)'}} /> ADMIN DASHBOARD</h1>
+        <div style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
+          CONTACT MANAGEMENT
+        </div>
+      </header>
 
-      {contacts.length === 0 ? (
-        <p>등록된 문의가 없습니다.</p>
-      ) : (
-        <table className={styles.table}>
+      <div className="board-table-container">
+        <table className="board-table">
           <thead>
             <tr>
-              <th>ID</th>
-              <th>이름</th>
-              <th>이메일</th>
-              <th>메시지</th>
-              <th>관리</th>
+              <th style={{ width: '80px', textAlign: 'center' }}>ID</th>
+              <th style={{ width: '150px' }}><User size={14} style={{marginRight: '6px'}} /> NAME</th>
+              <th style={{ width: '200px' }}><Mail size={14} style={{marginRight: '6px'}} /> EMAIL</th>
+              <th><MessageSquare size={14} style={{marginRight: '6px'}} /> MESSAGE</th>
+              <th style={{ width: '100px', textAlign: 'center' }}>ACTION</th>
             </tr>
           </thead>
           <tbody>
-            {contacts.map((c) => (
-              <tr key={c.id}>
-                <td>{c.id}</td>
-                <td>{c.name}</td>
-                <td>{c.email}</td>
-                <td style={{ textAlign: "left" }}>{c.message}</td>
-                <td>
-                  <button
-                    className={styles.btnGray}
-                    onClick={() => handleDelete(c.id)}
-                  >
-                    삭제
-                  </button>
+            {contacts.length === 0 ? (
+              <tr>
+                <td colSpan={5} style={{ padding: '100px 0', textAlign: 'center', opacity: 0.5 }}>
+                  No ongoing inquiries.
                 </td>
               </tr>
-            ))}
+            ) : (
+              contacts.map((c) => (
+                <tr key={c.id}>
+                  <td style={{ textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.85rem' }}>{c.id}</td>
+                  <td style={{ fontWeight: 600 }}>{c.name}</td>
+                  <td style={{ color: 'var(--text-secondary)' }}>{c.email}</td>
+                  <td style={{ textAlign: "left", fontSize: '0.9rem', lineHeight: 1.6, color: 'var(--text-secondary)' }}>{c.message}</td>
+                  <td style={{ textAlign: 'center' }}>
+                    <button
+                      className="btn-icon delete"
+                      onClick={() => handleDelete(c.id)}
+                      title="Delete inquiry"
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
-      )}
+      </div>
     </div>
   );
 };

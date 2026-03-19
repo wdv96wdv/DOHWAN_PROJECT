@@ -1,13 +1,17 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import UserForm from '../../components/User/UserForm';
-import { LoginContext } from '../../contexts/LoginContextProvider';
+import useAuthStore from '../../store/useAuthStore';
 import * as auth from '../../apis/auth';
 import * as Swal from '../../apis/alert';
 import supabase from '../../utils/supabaseClient';
 
 const User = () => {
-  const { isLoading, isLogin, roles, logout, userInfo } = useContext(LoginContext);
+  const isLoading = useAuthStore(state => state.isLoading);
+  const isLogin = useAuthStore(state => state.isLogin);
+  const roles = useAuthStore(state => state.roles);
+  const logout = useAuthStore(state => state.logout);
+  const userInfo = useAuthStore(state => state.userInfo);
   const navigate = useNavigate();
   const [profileInfo, setProfileInfo] = useState({});
 

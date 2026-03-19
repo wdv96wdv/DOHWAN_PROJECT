@@ -1,4 +1,3 @@
-// 로컬
 package com.dohwan.board.service;
 
 import java.io.File;
@@ -6,17 +5,22 @@ import java.io.FileInputStream;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.FileCopyUtils;
 
-import com.dohwan.board.domain.Files;
-import com.dohwan.board.mapper.FileMapper;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
+import com.dohwan.board.dto.Files;
+import com.dohwan.board.entity.FileEntity;
+import com.dohwan.board.repository.FileRepository;
 
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
@@ -27,53 +31,119 @@ import lombok.extern.slf4j.Slf4j;
 public class FileServiceImpl implements FileService {
 
     @Autowired
-    FileMapper fileMapper;
+    private FileRepository fileRepository;
 
-    @Value("${upload.path}")
-    private String uploadPath; // 업로드 경로
+    @Value("${upload.path:}")
+    private String uploadPath;
 
-    @Override
-    public List<Files> list() {
-        return fileMapper.list();
+    private Files toDomain(FileEntity entity) {
+        if (entity == null) return null;
+        Files dto = new Files();
+        dto.setNo(entity.getNo());
+        dto.setId(entity.getId());
+        dto.setPTable(entity.getPTable());
+        dto.setPNo(entity.getPNo());
+        dto.setFileName(entity.getFileName());
+        dto.setOriginName(entity.getOriginName());
+        dto.setFilePath(entity.getFilePath());
+        dto.setFileSize(entity.getFileSize());
+        dto.setSeq(entity.getSeq());
+        dto.setType(entity.getType());
+        if (entity.getCreatedAt() != null) {
+            dto.setCreatedAt(java.sql.Timestamp.valueOf(entity.getCreatedAt()));
+        }
+        if (entity.getUpdatedAt() != null) {
+            dto.setUpdatedAt(java.sql.Timestamp.valueOf(entity.getUpdatedAt()));
+        }
+        dto.setData(entity.getFilePath(), entity.getFileName(), entity.getOriginName(), entity.getFileSize());
+        return dto;
+    }
+
+    private FileEntity toEntity(Files dto) {
+        if (dto == null) return null;
+        FileEntity entity = new FileEntity();
+        entity.setNo(dto.getNo());
+        if (dto.getId() != null) entity.setId(dto.getId());
+        entity.setPTable(dto.getPTable());
+        entity.setPNo(dto.getPNo());
+        entity.setFileName(dto.getFileName());
+        entity.setOriginName(dto.getOriginName());
+        entity.setFilePath(dto.getFilePath());
+        entity.setFileSize(dto.getFileSize());
+        entity.setSeq(dto.getSeq());
+        entity.setType(dto.getType());
+        return entity;
     }
 
     @Override
-    public PageInfo<Files> page(int page, int size) {
-        PageHelper.startPage(page, size);
-        List<Files> list = fileMapper.list();
-        PageInfo<Files> pageInfo = new PageInfo<>(list);
-        return pageInfo;
+    public List<Files> list() {
+        return fileRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt")).stream()
+                .map(this::toDomain)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public Page<Files> page(int page, int size) {
+        int zeroBasedPage = Math.max(0, page - 1);
+        Pageable pageable = PageRequest.of(zeroBasedPage, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+        return fileRepository.findAll(pageable).map(this::toDomain);
     }
 
     @Override
     public Files select(int no) {
-        return fileMapper.select(no);
+        return fileRepository.findById((long) no).map(this::toDomain).orElse(null);
     }
 
     @Override
     public Files selectById(String id) {
-        return fileMapper.selectById(id);
+        return fileRepository.findById(id).map(this::toDomain).orElse(null);
     }
 
     @Override
+    @Transactional
     public boolean insert(Files file) {
-        return fileMapper.insert(file) > 0;
+        if (file == null) return false;
+        fileRepository.save(toEntity(file));
+        return true;
     }
 
     @Override
+    @Transactional
     public boolean update(Files file) {
-        return fileMapper.update(file) > 0;
+        return fileRepository.findById(file.getNo()).map(entity -> {
+            if (file.getType() != null) entity.setType(file.getType());
+            if (file.getSeq() != null) entity.setSeq(file.getSeq());
+            if (file.getPTable() != null) entity.setPTable(file.getPTable());
+            if (file.getPNo() != null) entity.setPNo(file.getPNo());
+            if (file.getFileName() != null) entity.setFileName(file.getFileName());
+            if (file.getOriginName() != null) entity.setOriginName(file.getOriginName());
+            if (file.getFilePath() != null) entity.setFilePath(file.getFilePath());
+            if (file.getFileSize() != null) entity.setFileSize(file.getFileSize());
+            fileRepository.save(entity);
+            return true;
+        }).orElse(false);
     }
 
     @Override
+    @Transactional
     public boolean updateById(Files file) {
-        return fileMapper.updateById(file) > 0;
+        return fileRepository.findById(file.getId()).map(entity -> {
+            if (file.getType() != null) entity.setType(file.getType());
+            if (file.getSeq() != null) entity.setSeq(file.getSeq());
+            if (file.getPTable() != null) entity.setPTable(file.getPTable());
+            if (file.getPNo() != null) entity.setPNo(file.getPNo());
+            if (file.getFileName() != null) entity.setFileName(file.getFileName());
+            if (file.getOriginName() != null) entity.setOriginName(file.getOriginName());
+            if (file.getFilePath() != null) entity.setFilePath(file.getFilePath());
+            if (file.getFileSize() != null) entity.setFileSize(file.getFileSize());
+            fileRepository.save(entity);
+            return true;
+        }).orElse(false);
     }
 
-    // 파일 시스템의 파일 삭제
     public boolean delete(Files file) {
-        if (file == null) {
-            log.info("파일이 없습니다.");
+        if (file == null || file.getFilePath() == null) {
+            log.info("파일이 없거나 파일 경로가 없습니다.");
             return false;
         }
 
@@ -85,7 +155,6 @@ public class FileServiceImpl implements FileService {
             return false;
         }
 
-        // 파일 삭제
         boolean deleted = deleteFile.delete();
         if (deleted) {
             log.info("파일이 삭제 되었습니다.");
@@ -95,135 +164,87 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
+    @Transactional
     public boolean delete(int no) {
-        Files file = fileMapper.select(no); // 파일정보 조회
-        delete(file); // 1 파일 삭제
-        return fileMapper.delete(no) > 0; // 2 db 데이터 삭제
+        Files file = select(no);
+        if(file != null) delete(file);
+        fileRepository.deleteById((long) no);
+        return true;
     }
 
     @Override
+    @Transactional
     public boolean deleteById(String id) {
-        Files file = fileMapper.selectById(id); // 파일정보 조회
-        delete(file); // 1 파일 삭제
-        return fileMapper.deleteById(id) > 0; // 2 db 데이터 삭제
+        Files file = selectById(id);
+        if (file != null) {
+            delete(file);
+            fileRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 
     @Override
+    @Transactional
     public boolean upload(Files file) throws Exception {
-        boolean result = false;
-        String fileUrl = file.getData(); // 파일 URL
+        if (file == null) return false;
+        String fileUrl = file.getData();
 
         if (fileUrl == null || fileUrl.isEmpty()) {
-            return false; // 파일 URL이 없다면 처리하지 않음
+            return false;
         }
 
-        // 파일 정보 처리
-        String fileName = file.getFileName(); // 파일명
-        String originName = file.getOriginName(); // 원본 파일명
-        Long fileSize = file.getFileSize(); // 파일 크기
-
-        // 파일 경로는 URL로 설정
         file.setFilePath(fileUrl);
+        file.setFileName(file.getFileName());
+        file.setOriginName(file.getOriginName());
+        file.setFileSize(file.getFileSize());
 
-        // 추가적인 정보 설정
-        file.setFileName(fileName);
-        file.setOriginName(originName);
-        file.setFileSize(fileSize);
-
-        // DB에 파일 정보 등록
-        result = fileMapper.insert(file) > 0;
-        return result;
+        fileRepository.save(toEntity(file));
+        return true;
     }
 
-    // // 업로드 경로 확인 및 폴더 자동 생성
-    // File uploadDir = new File(uploadPath);
-    // if (!uploadDir.exists()) {
-    // boolean created = uploadDir.mkdirs(); // 여러 경로 한 번에 생성
-    // if (!created) {
-    // log.error("업로드 폴더 생성 실패: {}", uploadPath);
-    // throw new RuntimeException("업로드 폴더 생성 실패");
-    // } else {
-    // log.info("업로드 폴더 생성 완료: {}", uploadPath);
-    // }
-    // }
-
-    // // 1 파일 시스템 등록 (파일 복사)
-    // // - 파일 정보 : 원본파일명, 파일 용량 파일 데이터
-    // // 파일명, 파일경로
-
-    // String originName = multipartFile.getOriginalFilename();
-    // long fileSize = multipartFile.getSize();
-    // byte[] fileDate = multipartFile.getBytes();
-    // String fileName = UUID.randomUUID().toString() + "_" + originName;
-    // String filePath = uploadPath + "/" + fileName;
-    // File uploadFile = new File(filePath);
-    // FileCopyUtils.copy(fileDate, uploadFile); // 파일 복사(업로드)
-
-    // // 2 db에 등록
-    // file.setOriginName(originName);
-    // file.setFileName(fileName);
-    // file.setFilePath(filePath);
-    // file.setFileSize(fileSize);
-
-    // result = fileMapper.insert(file) > 0;
-    // return result;
-    // }
-
     @Override
+    @Transactional
     public int upload(List<Files> fileList) throws Exception {
         int result = 0;
-        if (fileList == null || fileList.isEmpty())
-            return result;
+        if (fileList == null || fileList.isEmpty()) return result;
 
-        for (Files files : fileList) {
-            result += (upload(files) ? 1 : 0);
+        for (Files f : fileList) {
+            result += (upload(f) ? 1 : 0);
         }
         return result;
     }
 
     @Override
     public boolean download(String id, HttpServletResponse response) throws Exception {
-        System.out.println("Download method called for ID: " + id);
-        Files file = fileMapper.selectById(id);
-
-        // 파일이 없으면
+        Files file = selectById(id);
         if (file == null) {
-            System.out.println("Service: file not found");
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return false;
         }
 
-        String fileName = file.getOriginName(); // 다운로드 시 원본 파일명
-        String filePath = file.getFilePath(); // 파일 경로
+        String fileName = file.getOriginName();
+        String filePath = file.getFilePath();
         File downloadFile = new File(filePath);
 
         if (!downloadFile.exists()) {
-            System.out.println("Service: file does not exist on disk");
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return false;
         }
 
-        // MIME 타입 자동 감지
         String contentType = java.nio.file.Files.probeContentType(downloadFile.toPath());
         if (contentType == null) {
             contentType = MediaType.APPLICATION_OCTET_STREAM_VALUE;
         }
-        System.out.println("Detected MIME type: " + contentType);
 
-        // UTF-8 파일명 인코딩
-        fileName = URLEncoder.encode(fileName, StandardCharsets.UTF_8)
-                .replaceAll("\\+", "%20"); // 공백 깨짐 방지
-
-        // 응답 헤더 설정
+        fileName = URLEncoder.encode(fileName, StandardCharsets.UTF_8).replaceAll("\\+", "%20");
         response.setContentType(contentType);
         response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
 
-        // 파일 스트림 처리
         try (FileInputStream fis = new FileInputStream(downloadFile);
-                ServletOutputStream sos = response.getOutputStream()) {
+             ServletOutputStream sos = response.getOutputStream()) {
             FileCopyUtils.copy(fis, sos);
             sos.flush();
-            System.out.println("Service: file sent successfully");
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -232,130 +253,82 @@ public class FileServiceImpl implements FileService {
         }
     }
 
-    // 로컬
-    // @Override
-    // public boolean download(String id, HttpServletResponse response) throws
-    // Exception {
-    // Files file = fileMapper.selectById(id);
-
-    // // 파일이 없으면
-    // if (file == null) {
-    // response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-    // return false;
-    // }
-
-    // // 파일 입력
-    // String fileName = file.getOriginName(); // 파일명 (다운로드시-원본파일명)
-    // String filePath = file.getFilePath(); // 파일 경로
-    // File downloadFile = new File(filePath);
-    // FileInputStream fis = new FileInputStream(downloadFile);
-
-    // // 파일 출력
-    // ServletOutputStream sos = response.getOutputStream();
-
-    // // 파일 다운로드를 위한 응답 헤더 세팅
-    // // - Content-Type : application/octet-stream
-    // // - Content-Disposition : attachment, filename="파일명.확장자"
-    // fileName = URLEncoder.encode(fileName, "UTF-8");
-    // response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
-    // response.setHeader("Content-Disposition",
-    // "attachment; filename=\"" + fileName + " \"");
-
-    // // 다운로드
-    // boolean result = FileCopyUtils.copy(fis, sos) > 0;
-    // fis.close();
-    // sos.close();
-    // return result;
-
-    // }
-
     @Override
     public List<Files> listByParent(Files file) {
-        return fileMapper.listByParent(file);
+        return fileRepository.findByPTableAndPNo(file.getPTable(), file.getPNo()).stream()
+                .map(this::toDomain).collect(Collectors.toList());
     }
 
     @Override
+    @Transactional
     public int deleteByParent(Files file) {
-        List<Files> fileList = fileMapper.listByParent(file);
-
-        // 파일 삭제
+        List<Files> fileList = listByParent(file);
         for (Files deleteFile : fileList) {
             delete(deleteFile);
         }
-        // db 삭제
-        return fileMapper.deleteByParent(file);
+        fileRepository.deleteByPTableAndPNo(file.getPTable(), file.getPNo());
+        return fileList.size();
     }
 
-    // noList : "1,2,3"
     @Override
+    @Transactional
     public int deleteFiles(String noList) {
-        if (noList == null || noList.isEmpty())
-            return 0;
-
-        // 파일 삭제
+        if (noList == null || noList.isEmpty()) return 0;
         int count = 0;
         String[] nos = noList.split(",");
         for (String noStr : nos) {
             int no = Integer.parseInt(noStr);
             count += (delete(no) ? 1 : 0);
         }
-        log.info("파일" + count + "개를 삭제 하였습니다.");
         return count;
-
     }
 
     @Override
+    @Transactional
     public int deleteFilesById(String IDList) {
-        if (IDList == null || IDList.isEmpty())
-            return 0;
-
-        // 파일 삭제
+        if (IDList == null || IDList.isEmpty()) return 0;
         int count = 0;
         String[] ids = IDList.split(",");
         for (String id : ids) {
             count += (deleteById(id) ? 1 : 0);
         }
-        log.info("파일" + count + "개를 삭제 하였습니다.");
         return count;
-
     }
 
     @Override
+    @Transactional
     public int deleteFileList(List<Long> noList) {
-        if (noList == null || noList.isEmpty())
-            return 0;
-
-        // 파일 삭제
+        if (noList == null || noList.isEmpty()) return 0;
         int count = 0;
         for (Long no : noList) {
             count += (delete(no.intValue()) ? 1 : 0);
         }
-        log.info("파일" + count + "개를 삭제 하였습니다.");
         return count;
     }
 
     @Override
+    @Transactional
     public int deleteFileListById(List<String> idList) {
-        if (idList == null || idList.isEmpty())
-            return 0;
-
-        // 파일 삭제
+        if (idList == null || idList.isEmpty()) return 0;
         int count = 0;
         for (String id : idList) {
             count += (deleteById(id) ? 1 : 0);
         }
-        log.info("파일" + count + "개를 삭제 하였습니다.");
         return count;
     }
 
     @Override
     public Files selectByType(Files file) {
-        return fileMapper.selectByType(file);
+        List<FileEntity> res = fileRepository.findByPTableAndPNoAndType(file.getPTable(), file.getPNo(), file.getType());
+        if (!res.isEmpty()) {
+            return toDomain(res.get(0));
+        }
+        return null;
     }
 
     @Override
     public List<Files> listByType(Files file) {
-        return fileMapper.listByType(file);
+        return fileRepository.findByPTableAndPNoAndType(file.getPTable(), file.getPNo(), file.getType()).stream()
+                .map(this::toDomain).collect(Collectors.toList());
     }
 }
-// 운영

@@ -12,9 +12,9 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.dohwan.login.domain.AuthenticationRequest;
-import com.dohwan.login.domain.CustomUser;
-import com.dohwan.login.domain.Users;
+import com.dohwan.login.dto.AuthenticationRequest;
+import com.dohwan.login.dto.CustomUser;
+import com.dohwan.login.dto.Users;
 import com.dohwan.login.security.constants.SecurityConstants;
 import com.dohwan.login.security.provider.JwtProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;

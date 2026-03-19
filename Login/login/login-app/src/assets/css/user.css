@@ -1,59 +1,106 @@
-.form {
-  width: 400px;
-  margin: auto;
-  padding: 36px 48px 48px 48px;
-  background-color: #f2efee;
-  border-radius: 11px;
-  box-shadow: 0 2.4rem 4.8rem rgba(0, 0, 0, 0.15);
+.profile-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 20px;
 }
 
-.login-title {
-  padding: 15px;
-  font-size: 22px;
-  font-weight: 600;
-  text-align: center;
-}
-
-.login-form {
+.profile-grid {
   display: grid;
-  grid-template-columns: 1fr;
-  row-gap: 16px;
+  grid-template-columns: 300px 1fr;
+  gap: 32px;
+  align-items: start;
 }
 
-.login-form label {
-  display: block;
-  margin-bottom: 8px;
-}
-
-.login-form input,
-.login-form textarea {
-  width: 100%;
-  padding: 1.2rem;
-  border-radius: 9px;
-  border: none;
-}
-
-.login-form input:focus,
-.login-form textarea:focus {
-  outline: none;
-  box-shadow: 0 0 0 4px rgba(253, 242, 233, 0.9);
-}
-
-.btn--form {
-  background-color: #f48982;
-  color: #fdf2e9;
-  padding: 8px;
-  width: 100%;
-}
-
-.btn-login:hover {
-  outline: 1px solid #f48982;
-}
-.btn--form:hover {
-  background-color: #fdf2e9;
-  color: #f48982;
-}
-
-.center-wrapper {
+.profile-card {
+  composes: glass-card from global;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
   text-align: center;
+}
+
+.avatar-wrapper {
+  position: relative;
+  width: 150px;
+  height: 150px;
+}
+
+.avatar-preview {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid var(--primary);
+  box-shadow: 0 0 20px rgba(0,0,0,0.1);
+}
+
+.avatar-upload-btn {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border: 2px solid var(--bg);
+}
+
+.avatar-upload-btn:hover {
+  transform: scale(1.1);
+}
+
+.profile-form-section {
+  composes: glass-card from global;
+  padding: 40px;
+}
+
+.profile-form-section h3 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.25rem;
+  margin-bottom: 24px;
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 12px;
+}
+
+/* Reusing auth styles if linked, or defining locally */
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.profile-actions {
+  display: flex;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.btn-update {
+  flex: 1;
+}
+
+.btn-delete {
+  background: hsla(0, 80%, 50%, 0.1);
+  color: #f44336;
+  border: 1px solid hsla(0, 80%, 50%, 0.2);
+}
+
+.btn-delete:hover {
+  background: #f44336;
+  color: white;
+}
+
+@media (max-width: 900px) {
+  .profile-grid {
+    grid-template-columns: 1fr;
+  }
 }

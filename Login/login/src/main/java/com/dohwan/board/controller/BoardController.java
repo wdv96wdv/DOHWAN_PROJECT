@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,136 +20,172 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dohwan.board.domain.Boards;
-import com.dohwan.board.domain.Files;
-import com.dohwan.board.domain.Pagination;
+import com.dohwan.board.dto.Boards;
+import com.dohwan.board.dto.Files;
+import com.dohwan.board.dto.Pagination;
 import com.dohwan.board.service.BoardService;
 import com.dohwan.board.service.FileService;
-import com.github.pagehelper.PageInfo;
+import com.dohwan.login.common.ApiResponse;
+import com.dohwan.login.dto.CustomUser;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.data.domain.Page;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.extern.slf4j.Slf4j;     
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @CrossOrigin("*")
-@Tag(name="게시판", description="두환이 게시판입니다.") // 태그 설정
+@Tag(name="게시판", description="두환이 게시판입니다.")
 @RestController 
 @RequestMapping("/boards")
-
-
 public class BoardController {
 
     @Autowired
     private BoardService boardService;
     @Autowired
     private FileService fileService;
-    @Autowired
-    private ObjectMapper objectMapper; // ObjectMapper 주입
 
     // 전체 목록 조회
     @GetMapping
-    public ResponseEntity<?> findAll(
+    public ResponseEntity<ApiResponse<Map<String, Object>>> findAll(
         @RequestParam(value = "page", required = false, defaultValue = "1") int page,
         @RequestParam(value = "size", required = false, defaultValue = "10") int size
         ){
         try {
-            PageInfo<Boards> pageInfo = boardService.page(page, size);
+            Page<Boards> pageInfo = boardService.page(page, size);
             Pagination pagination = new Pagination();
             pagination.setPage(page);
             pagination.setSize(size);
-            pagination.setTotal(pageInfo.getTotal());
-            Map<String, Object> response = new HashMap<>();
-            response.put("list", pageInfo.getList());
-            response.put("pagination", pagination);
-            return new ResponseEntity<>(response, HttpStatus.OK);
+            pagination.setTotal(pageInfo.getTotalElements());
+            Map<String, Object> responseData = new HashMap<>();
+            responseData.put("list", pageInfo.getContent());
+            responseData.put("pagination", pagination);
+            return ResponseEntity.ok(ApiResponse.success(responseData));
         } catch (Exception e) {
-        e.printStackTrace(); // 추가
-        log.error("findAll error", e); // 추가
-        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            log.error("findAll error", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponse.error(500, "서버 에러가 발생했습니다."));
+        }
     }
-}
 
     // 단건 조회 (PK)
     @GetMapping("/{id}")
-    public ResponseEntity<?> find(@PathVariable("id") String id) {
+    public ResponseEntity<ApiResponse<Map<String, Object>>> find(@PathVariable("id") String id) {
         try {
             Boards board = boardService.selectById(id);
-            Map<String, Object> response = new HashMap<>();
-            // 게시글
-            response.put("board", board);
-            // 파일 목록
+            if (board == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(ApiResponse.error(404, "게시글을 찾을 수 없습니다."));
+            }
+            Map<String, Object> responseData = new HashMap<>();
+            responseData.put("board", board);
+            
             Files file = new Files();
             file.setPTable("boards");
             file.setPNo(board.getNo());
             List<Files> fileList = fileService.listByParent(file);
-            response.put("fileList", fileList);
-            return new ResponseEntity<>(response, HttpStatus.OK);
+            responseData.put("fileList", fileList);
+            
+            return ResponseEntity.ok(ApiResponse.success(responseData));
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            log.error("find error", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponse.error(500, "서버 에러가 발생했습니다."));
         }
     }
 
-    /**
-     * @RequsetBody 붙일 떄 안 붙일 때 차이
-     * - @ RequestBody ⭕ : application/jason, application/x-www-form-urlencoded
-     * - @ RequestBody ❌ : multipart/form-data, application/x-www-form-urlencoded
-     */
-    // 등록
+    // 등록 (FormData)
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> createFormData(Boards dto) {
+    public ResponseEntity<ApiResponse<String>> createFormData(
+            @AuthenticationPrincipal CustomUser user,
+            Boards dto) {
         try {
+            if (user != null) {
+                dto.setUserNo(user.getUserNo());
+                dto.setWriter(user.getNickname());
+            }
             boolean result = boardService.insert(dto);
             if(result){
-                return new ResponseEntity<>("SUCCESS", HttpStatus.CREATED);
+                return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success("SUCCESS"));
             }else{
-                return new ResponseEntity<>("FAIL",HttpStatus.BAD_REQUEST);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.error(400, "FAIL"));
             }
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            log.error("create error", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponse.error(500, "서버 에러가 발생했습니다."));
         }
     }
 
+    // 등록 (JSON)
     @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> createJSON(@RequestBody Boards dto) {
+    public ResponseEntity<ApiResponse<String>> createJSON(
+            @AuthenticationPrincipal CustomUser user,
+            @RequestBody Boards dto) {
         try {
+            if (user != null) {
+                dto.setUserNo(user.getUserNo());
+                dto.setWriter(user.getNickname());
+            }
             boolean result = boardService.insert(dto);
             if(result){
-                return new ResponseEntity<>("SUCCESS", HttpStatus.CREATED);
+                return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success("SUCCESS"));
             }else{
-                return new ResponseEntity<>("FAIL",HttpStatus.BAD_REQUEST);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.error(400, "FAIL"));
             }
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            log.error("create error", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponse.error(500, "서버 에러가 발생했습니다."));
         }
     }
-// 수정
-@PutMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE)
-public ResponseEntity<?> updateJSON(@RequestBody Boards dto) {
-    try {
-        boolean result = boardService.updateById(dto);
-        if(result){
-            return new ResponseEntity<>("SUCCESS", HttpStatus.CREATED);
-        }else{
-            return new ResponseEntity<>("FAIL",HttpStatus.BAD_REQUEST);
+
+    // 수정
+    @PutMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ApiResponse<String>> updateJSON(
+            @AuthenticationPrincipal CustomUser user,
+            @RequestBody Boards dto) {
+        try {
+            Boards origin = boardService.selectById(dto.getId());
+            if (origin != null && user != null && !origin.getUserNo().equals(user.getUserNo())) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                        .body(ApiResponse.error(403, "권한이 없습니다."));
+            }
+            
+            boolean result = boardService.updateById(dto);
+            if(result){
+                return ResponseEntity.ok(ApiResponse.success("SUCCESS"));
+            }else{
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.error(400, "FAIL"));
+            }
+        } catch (Exception e) {
+            log.error("update error", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponse.error(500, "서버 에러가 발생했습니다."));
         }
-    } catch (Exception e) {
-        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
-}
 
     // 삭제 (PK)
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable("id") String id) {
+    public ResponseEntity<ApiResponse<String>> delete(
+            @AuthenticationPrincipal CustomUser user,
+            @PathVariable("id") String id) {
         try {
+            Boards origin = boardService.selectById(id);
+            if (origin != null && user != null && !origin.getUserNo().equals(user.getUserNo())) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                        .body(ApiResponse.error(403, "권한이 없습니다."));
+            }
+
             boolean result = boardService.deleteById(id);
             if(result){
-                return new ResponseEntity<>("SUCCESS", HttpStatus.CREATED);
+                return ResponseEntity.ok(ApiResponse.success("SUCCESS"));
             }else{
-                return new ResponseEntity<>("FAIL",HttpStatus.BAD_REQUEST);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.error(400, "FAIL"));
             }
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            log.error("delete error", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponse.error(500, "서버 에러가 발생했습니다."));
         }
     }
 }

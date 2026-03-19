@@ -1,44 +1,57 @@
 import React from 'react';
-import styles from '../assets/css/common.module.css';
 import runningImg from '../assets/img/aboutrunning.jpg'; 
+import "../assets/css/info.css";
+import "../assets/css/auth.css";
+import { Info, Target, MessageCircle, ChevronRight, CheckCircle2 } from 'lucide-react';
 
 const About = () => {
   return (
-    <div className={styles.pageContainer}>
-      <h1 className={styles.pageTitle}>About DORunning</h1>
+    <div className="info-page">
+      <header className="info-header">
+        <h1>ABOUT <span style={{color: 'var(--primary)'}}>DORUNNING</span></h1>
+        <p>Empowering runners to track, connect, and thrive.</p>
+      </header>
 
-      {/* 섹션 1: 서비스 소개 */}
-      <div className={styles.section}>
-        <h2 className={styles.subtitle}>서비스 소개</h2>
-        <p className={styles.pageText}>
-          DORunning은 러닝을 사랑하는 사람들을 위한 커뮤니티입니다. 
-          회원가입을 통해 코스 정보, 이벤트, 러닝 기록 등을 관리하고 공유할 수 있습니다.
+      <div className="info-section">
+        <h2><Info size={24} /> OUR MISSION</h2>
+        <p className="info-text">
+          DORunning is more than just a tracking app; it's a dedicated ecosystem for enthusiasts who live to run. 
+          We provide a unified platform to manage your records, discover events, and connect with a community that shares your passion.
         </p>
-        <div className={styles.highlight}>
-          누구나 쉽게 러닝 기록을 관리하고, 다양한 코스와 이벤트 정보를 한 눈에 확인할 수 있습니다.
+        <div className="info-highlight">
+          "Join thousands of runners in a journey towards better health and stronger connections."
         </div>
-        <img src={runningImg} alt="Running" className={styles.pageImage} />
+        <img src={runningImg} alt="Runners on track" className="info-image" />
       </div>
 
-      {/* 섹션 2: 특징 */}
-      <div className={styles.section}>
-        <h2 className={styles.subtitle}>주요 특징</h2>
-        <ul className={styles.pageText}>
-          <li>✅ 다양한 러닝 코스 정보 제공</li>
-          <li>✅ 러닝 이벤트 참여 및 기록 공유</li>
-          <li>✅ PC 환경에서 편리하게 회원가입 및 기록 관리</li>
+      <div className="info-section">
+        <h2><Target size={24} /> CORE FEATURES</h2>
+        <ul className="info-list">
+          <li>
+            <CheckCircle2 size={18} color="var(--primary)" />
+            <span><strong>Smart Route Discovery:</strong> Explore curated courses optimized for your skill level.</span>
+          </li>
+          <li>
+            <CheckCircle2 size={18} color="var(--primary)" />
+            <span><strong>Event Integration:</strong> Stay updated with global and local marathons and community runs.</span>
+          </li>
+          <li>
+            <CheckCircle2 size={18} color="var(--primary)" />
+            <span><strong>Personalized Analytics:</strong> Visualize your progress with advanced performance tracking tools.</span>
+          </li>
+          <li>
+            <CheckCircle2 size={18} color="var(--primary)" />
+            <span><strong>Premium Experience:</strong> Enjoy a focus-driven interface designed for the modern runner.</span>
+          </li>
         </ul>
       </div>
 
-      {/* 섹션 3: 문의 안내 */}
-      <div className={styles.section}>
-        <h2 className={styles.subtitle}>문의 안내</h2>
-        <p className={styles.pageText}>
-          사이트 관련 문의나 개선 요청은 언제든지 아래 페이지를 통해 연락주세요.
-        </p>
-        <p className={styles.pageText}>
-          <a className={styles.pageLink} href="/contact">문의 페이지로 이동</a>
-        </p>
+      <div className="info-section" style={{textAlign: 'center'}}>
+        <h2><MessageCircle size={24} style={{margin: '0 auto'}} /> CONNECT WITH US</h2>
+        <p className="info-text">Have suggestions or need support? Our team is always here to listen and evolve with you.</p>
+        <a href="/contact" className="btn-auth" style={{display: 'inline-flex', padding: '12px 32px', marginTop: '16px'}}>
+          GET IN TOUCH <ChevronRight size={18} style={{marginLeft: '8px'}} />
+        </a>
       </div>
     </div>
   );

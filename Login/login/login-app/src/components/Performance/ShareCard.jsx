@@ -1,44 +1,58 @@
 import React, { useRef } from 'react';
 import html2canvas from 'html2canvas';
-import styles from '../../assets/css/common.module.css';
+import "../../assets/css/performance.css";
+import { Share2, Download, Trophy } from 'lucide-react';
 
 const ShareCard = ({ record }) => {
   const cardRef = useRef();
 
   const handleDownload = async () => {
     if (!cardRef.current) return;
-    const canvas = await html2canvas(cardRef.current);
+    const canvas = await html2canvas(cardRef.current, { backgroundColor: null });
     const link = document.createElement('a');
-    link.download = `run-card-${record.date}.png`;
+    link.download = `dorunning-${record?.date || 'share'}.png`;
     link.href = canvas.toDataURL();
     link.click();
   };
 
-
-  if (!record || !record.date) {
-    return <p style={{ textAlign: 'center' }}>📭 공유 카드가 표시되지 않습니다. 데이터 확인 필요!</p>;
-  }
+  if (!record) return null;
 
   return (
-    <div className={styles.container}>
-      <h2 className={styles.title}>📤 러닝 공유 카드</h2>
+    <div className="widget-card">
+      <h3><Share2 size={18} /> STATUS CARD</h3>
+      
       <div ref={cardRef} style={{
-        background: '#f0f4ff',
-        borderRadius: '16px',
         padding: '24px',
+        background: 'linear-gradient(135deg, var(--primary), var(--primary-dark))',
+        borderRadius: '16px',
+        color: 'white',
         textAlign: 'center',
-        boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+        boxShadow: '0 8px 32px rgba(0,0,0,0.2)',
+        position: 'relative',
+        overflow: 'hidden'
       }}>
-        <h3 style={{ fontSize: '24px', marginBottom: '12px' }}>🏃‍♂️ 러닝 요약</h3>
-        <p>📅 날짜: {record.date}</p>
-        <p>📏 거리: {record.distanceKm} km</p>
-        <p>⏱️ 페이스: {record.paceMinPerKm.toFixed(2)} min/km</p>
-        <p>🔥 칼로리: {record.calories} kcal</p>
+        <div style={{ position: 'absolute', top: '-20px', right: '-20px', opacity: 0.1 }}>
+          <Trophy size={120} />
+        </div>
+        <div style={{ fontFamily: 'Orbitron', fontSize: '0.7rem', opacity: 0.8, letterSpacing: '0.2em' }}>DORUNNING PRO</div>
+        <h4 style={{ margin: '12px 0', fontSize: '1.2rem' }}>LAST ACTIVITY</h4>
+        
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', margin: '16px 0' }}>
+          <div>
+            <div style={{ fontSize: '0.7rem', opacity: 0.8 }}>DISTANCE</div>
+            <div style={{ fontFamily: 'Orbitron', fontSize: '1.1rem' }}>{record.distanceKm || '0'} KM</div>
+          </div>
+          <div>
+            <div style={{ fontSize: '0.7rem', opacity: 0.8 }}>PACE</div>
+            <div style={{ fontFamily: 'Orbitron', fontSize: '1.1rem' }}>{record.paceMinPerKm?.toFixed(2) || '-'}</div>
+          </div>
+        </div>
+        <div style={{ fontSize: '0.75rem', opacity: 0.6 }}>{record.date}</div>
       </div>
 
-      <div className={styles.btnBox}>
-        <button onClick={handleDownload} className={styles.btn}>저장</button>
-      </div>
+      <button onClick={handleDownload} className="btn-auth" style={{ marginTop: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '10px' }}>
+        <Download size={16} /> EXPORT IMAGE
+      </button>
     </div>
   );
 };

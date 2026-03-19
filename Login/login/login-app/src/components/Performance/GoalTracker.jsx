@@ -1,200 +1,97 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { saveGoal, getGoals, deleteGoal, updateGoal } from '../../apis/performance';
-import styles from '../../assets/css/common.module.css';
+import "../../assets/css/performance.css";
+import "../../assets/css/auth.css";
 import Swal from "sweetalert2";
-import { LoginContext } from '../../contexts/LoginContextProvider'; // LoginContext import
+import useAuthStore from '../../store/useAuthStore';
+import { Target, Plus, Trash2, Edit3 } from 'lucide-react';
 
 const GoalTracker = () => {
-  const [goal, setGoal] = useState({ title: '', target_value: '', unit: 'km' });
+  const [goal, setGoal] = useState({ title: '', targetValue: '', unit: 'km' });
   const [goals, setGoals] = useState([]);
   const [editingGoalId, setEditingGoalId] = useState(null);
 
-  const { userInfo } = useContext(LoginContext); // userInfo 가져오기
-  const user_no = userInfo?.no; // userInfo.no를 user_no 변수에 할당
+  const userInfo = useAuthStore(state => state.userInfo);
+  const user_no = userInfo?.no;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
-    if (name === "target_value") {
-      let num = Number(value);
-      if (isNaN(num)) num = 0;
-      if (num > 10000) num = 10000;
-      if (num < 0) num = 0;
-      setGoal(prev => ({ ...prev, [name]: num }));
-    } else {
-      setGoal(prev => ({ ...prev, [name]: value }));
-    }
+    setGoal(prev => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!user_no) {
-      Swal.fire({
-        title: '오류',
-        text: '로그인 정보가 없습니다. 다시 로그인해주세요.',
-        icon: 'error',
-        confirmButtonText: '확인'
-      });
-      return;
-    }
-
-    const targetValue = Number(goal.target_value);
-
-    // 클라이언트 검증
-    if (isNaN(targetValue) || targetValue < 0 || targetValue > 10000) {
-      return Swal.fire({
-        icon: "error",
-        title: "저장 실패",
-        text: "목표 값은 0 이상 10000 이하의 숫자여야 합니다."
-      });
-    }
+    if (!user_no) return;
 
     try {
       if (editingGoalId) {
-        await updateGoal({ ...goal, id: editingGoalId }, user_no);
-        await Swal.fire({
-          icon: "success",
-          title: "수정 완료!",
-          text: "목표가 성공적으로 수정되었습니다."
-        });
+        await updateGoal({ ...goal, id: editingGoalId });
+        Swal.fire("Updated", "Goal modified", "success");
       } else {
-        await saveGoal(goal, user_no);
-        await Swal.fire({
-          icon: "success",
-          title: "저장 완료!",
-          text: "목표가 성공적으로 저장되었습니다."
-        });
+        await saveGoal(goal);
+        Swal.fire("Saved", "New goal added", "success");
       }
-
-      setGoal({ title: '', target_value: '', unit: 'km' });
+      setGoal({ title: '', targetValue: '', unit: 'km' });
       setEditingGoalId(null);
-      const res = await getGoals(user_no);
+      const res = await getGoals();
       setGoals(res.data);
     } catch (err) {
-      await Swal.fire({
-        icon: "error",
-        title: editingGoalId ? "수정 실패" : "저장 실패",
-        text: err.message || "목표 처리 중 오류가 발생했습니다."
-      });
-      console.error(err);
-    }
-  };
-
-  const handleEdit = (g) => {
-    setEditingGoalId(g.id);
-    setGoal({ title: g.title, target_value: g.targetValue, unit: g.unit });
-  };
-
-  const handleDelete = async (id) => {
-    if (!user_no) {
-      Swal.fire({
-        title: '오류',
-        text: '로그인 정보가 없습니다. 다시 로그인해주세요.',
-        icon: 'error',
-        confirmButtonText: '확인'
-      });
-      return;
-    }
-
-    const result = await Swal.fire({
-      title: "삭제하시겠습니까?",
-      text: "삭제 후 복구할 수 없습니다.",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "삭제",
-      cancelButtonText: "취소",
-    });
-
-    if (!result.isConfirmed) return;
-
-    try {
-      await deleteGoal(id, user_no);
-
-      await Swal.fire({
-        icon: "success",
-        title: "삭제 완료",
-        text: "목표가 삭제되었습니다."
-      });
-
-      const res = await getGoals(user_no);
-      setGoals(res.data);
-    } catch (err) {
-      await Swal.fire({
-        icon: "error",
-        title: "삭제 실패",
-        text: "목표 삭제 중 오류가 발생했습니다."
-      });
-      console.error(err);
+      Swal.fire("Error", "Action failed", "error");
     }
   };
 
   useEffect(() => {
-    if (user_no) {
-      getGoals(user_no).then((res) => setGoals(res.data));
-    } else {
-      setGoals([]);
-    }
+    if (user_no) getGoals().then((res) => setGoals(res.data));
   }, [user_no]);
 
   return (
-    <div className={styles.container}>
-      <h2 className={styles.title}>🎯 러닝 목표 설정</h2>
-      <form onSubmit={handleSubmit}>
+    <div className="widget-card">
+      <h3><Target size={18} /> GOAL TRACKER</h3>
+      <form onSubmit={handleSubmit} className="auth-form" style={{ gap: '12px' }}>
         <input
           type="text"
           name="title"
-          placeholder="목표 제목"
+          placeholder="Goal Title"
           value={goal.title}
           onChange={handleChange}
-          className={styles.formInput}
-          maxLength={30}
+          className="form-control"
           required
         />
-        <input
-          type="number"
-          name="target_value"
-          placeholder="목표 값"
-          value={goal.target_value}
-          onChange={handleChange}
-          className={styles.formInput}
-          max="10000"
-          min="0"
-          step="1"
-          required
-        />
-        <select name="unit" value={goal.unit} onChange={handleChange} className={styles.formInput}>
-          <option value="km">km</option>
-          <option value="min/km">min/km</option>
-        </select>
-        <div className={styles.btnBox}>
-          <button type="submit" className={styles.btn}>{editingGoalId ? '수정' : '저장'}</button>
-          {editingGoalId && (
-            <button type="button" className={styles.btn} onClick={() => { setEditingGoalId(null); setGoal({ title: '', target_value: '', unit: 'km' }); }}>취소</button>
-          )}
+        <div style={{ display: 'flex', gap: '8px' }}>
+          <input
+            type="number"
+            name="targetValue"
+            placeholder="Target"
+            value={goal.targetValue}
+            onChange={handleChange}
+            className="form-control"
+            style={{ flex: 2 }}
+            required
+          />
+          <select name="unit" value={goal.unit} onChange={handleChange} className="form-control" style={{ flex: 1 }}>
+            <option value="km">km</option>
+            <option value="min/km">m/k</option>
+          </select>
         </div>
+        <button type="submit" className="btn-auth" style={{ padding: '10px' }}>
+          {editingGoalId ? 'UPDATE' : 'ADD GOAL'}
+        </button>
       </form>
 
-      <h3 className={styles.subtitle}>📌 저장된 목표</h3>
-      <ul>
+      <div style={{ marginTop: '24px' }}>
         {goals.map((g) => (
-          <li key={g.id}>
-            {g.title} - {g.targetValue} {g.unit}
-            <button
-              onClick={() => handleEdit(g)}
-              style={{ marginLeft: "10px" }}
-            >
-              수정
-            </button>
-            <button
-              onClick={() => handleDelete(g.id)}
-              style={{ marginLeft: "10px", color: "red" }}
-            >
-              삭제
-            </button>
-          </li>
+          <div key={g.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px', background: 'hsla(0,0%,50%,0.05)', borderRadius: '8px', marginBottom: '8px' }}>
+            <div>
+              <div style={{ fontWeight: '600', fontSize: '0.9rem' }}>{g.title}</div>
+              <div style={{ fontSize: '0.8rem', color: 'var(--primary)' }}>{g.targetValue} {g.unit}</div>
+            </div>
+            <div style={{ display: 'flex', gap: '4px' }}>
+              <button className="btn-icon" onClick={() => { setEditingGoalId(g.id); setGoal({ title: g.title, targetValue: g.targetValue, unit: g.unit }); }}><Edit3 size={14} /></button>
+              <button className="btn-icon delete" onClick={() => deleteGoal(g.id).then(() => getGoals().then(r => setGoals(r.data)))}><Trash2 size={14} /></button>
+            </div>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 };

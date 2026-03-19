@@ -21,7 +21,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     long countByBoardId(String boardId);
     
     // ID로 댓글 조회
-    Optional<Comment> findById(String id);
+    Optional<Comment> findByIdentifier(String id);
     
     // 게시글 ID로 모든 댓글 삭제
     void deleteByBoardId(String boardId);

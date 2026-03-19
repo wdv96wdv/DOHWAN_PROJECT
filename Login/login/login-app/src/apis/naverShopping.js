@@ -1,8 +1,8 @@
-import axios from "axios";
+import api from './api';
 
 export const fetchRunningShoes = async (keyword, { start = 1, display = 10 } = {}) => {
     try {
-        const response = await axios.get(`/api/naver-shopping`, {
+        const response = await api.get(`/api/naver-shopping`, {
             params: { query: keyword, start, display },
         });
         console.log("Full response from proxy:", response.data); // Log the full response

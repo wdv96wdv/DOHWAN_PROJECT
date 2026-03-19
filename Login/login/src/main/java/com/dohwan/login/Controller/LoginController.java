@@ -1,209 +1,171 @@
-package com.dohwan.login.controller;
+package com.dohwan.login.Controller;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.dohwan.login.domain.AuthenticationRequest;
-import com.dohwan.login.domain.SocialLoginRequest;
-import com.dohwan.login.domain.UserAuth;
-import com.dohwan.login.domain.Users;
-import com.dohwan.login.mapper.UserMapper;
+import com.dohwan.login.common.ApiResponse;
+import com.dohwan.login.dto.AuthenticationRequest;
+import com.dohwan.login.dto.SocialLoginRequest;
+import com.dohwan.login.dto.UserAuth;
+import com.dohwan.login.dto.Users;
+import com.dohwan.login.entity.UserAuthEntity;
+import com.dohwan.login.entity.UserEntity;
+import com.dohwan.login.repository.UserAuthRepository;
+import com.dohwan.login.repository.UserRepository;
 import com.dohwan.login.security.constants.SecurityConstants;
 import com.dohwan.login.security.props.JwtProps;
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
+@RequiredArgsConstructor
 public class LoginController {
 
-    @Autowired
-    private JwtProps jwtProps;
+    private final JwtProps jwtProps;
+    private final UserRepository userRepository;
+    private final UserAuthRepository userAuthRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private UserMapper userMapper;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    // ─── 아이디 중복 확인 ──────────────────────────────────────────────
 
     @GetMapping("/auth/check-username")
-    public ResponseEntity<?> checkUsername(@RequestParam String username) {
-        try {
-            log.info("아이디 중복 확인 요청: {}", username);
-
-            Users user = userMapper.findByUsername(username);
-            boolean exists = (user != null);
-
-            Map<String, Boolean> response = new HashMap<>();
-            response.put("exists", exists);
-
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            log.error("아이디 중복 확인 중 예외 발생", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류");
-        }
+    public ResponseEntity<ApiResponse<Map<String, Boolean>>> checkUsername(@RequestParam String username) {
+        log.info("아이디 중복 확인 요청: {}", username);
+        boolean exists = userRepository.existsByUsername(username);
+        return ResponseEntity.ok(ApiResponse.success(Map.of("exists", exists)));
     }
 
-    /**
-     * 로그인 요청 → JWT 토큰 생성
-     */
+    // ─── 일반 로그인 ───────────────────────────────────────────────────
+
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody AuthenticationRequest authReq) {
-        try {
-            String username = authReq.getUsername();
-            String rawPassword = authReq.getPassword();
+    public ResponseEntity<ApiResponse<?>> login(@RequestBody AuthenticationRequest authReq) {
+        String username = authReq.getUsername();
 
-            // 사용자 조회
-            Users user = userMapper.findByUsername(username);
-            if (user == null) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("존재하지 않는 사용자입니다.");
-            }
+        UserEntity user = userRepository.findByUsernameWithAuth(username)
+                .orElse(null);
 
-            // 비밀번호 검증
-            if (!passwordEncoder.matches(rawPassword, user.getPassword())) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("비밀번호가 일치하지 않습니다.");
-            }
-
-            // 권한 정보 추출
-            List<String> roles = new ArrayList<>();
-            for (UserAuth auth : user.getAuthList()) {
-                roles.add(auth.getAuth());
-            }
-
-            // JWT 생성
-            String secretKey = jwtProps.getSecretKey();
-            byte[] signingKey = secretKey.getBytes();
-            int day5 = 1000 * 60 * 60 * 24 * 5;
-
-            String jwt = Jwts.builder()
-                    .signWith(Keys.hmacShaKeyFor(signingKey), Jwts.SIG.HS512)
-                    .header().add("typ", SecurityConstants.TOKEN_TYPE).and()
-                    .claim("username", username)
-                    .claim("id", user.getId()) // id 클레임 추가
-                    .claim("rol", roles)
-                    .expiration(new Date(System.currentTimeMillis() + day5))
-                    .compact();
-
-            return ResponseEntity.ok(jwt);
-
-        } catch (Exception e) {
-            log.error("로그인 중 예외 발생", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류");
+        if (user == null) {
+            return ResponseEntity.status(401)
+                    .body(ApiResponse.error(401, "존재하지 않는 사용자입니다."));
         }
+
+        if (!passwordEncoder.matches(authReq.getPassword(), user.getPassword())) {
+            return ResponseEntity.status(401)
+                    .body(ApiResponse.error(401, "비밀번호가 일치하지 않습니다."));
+        }
+
+        String jwt = buildJwt(user);
+        return ResponseEntity.ok(ApiResponse.success("로그인 성공", jwt));
     }
 
-    /**
-     * JWT 토큰 해석
-     */
-    @GetMapping("/user")
-    public ResponseEntity<?> user(@RequestHeader(name = "Authorization") String authorization) {
-        try {
-            String jwt = authorization.substring(7);
-            String secretKey = jwtProps.getSecretKey();
-            byte[] signingKey = secretKey.getBytes();
-
-            Jws<Claims> parsedToken = Jwts.parser()
-                    .verifyWith(Keys.hmacShaKeyFor(signingKey))
-                    .build()
-                    .parseSignedClaims(jwt);
-
-            String username = parsedToken.getPayload().get("uid").toString();
-            List<String> roleList = (List<String>) parsedToken.getPayload().get("rol");
-
-            return ResponseEntity.ok(parsedToken.toString());
-
-        } catch (Exception e) {
-            log.error("토큰 해석 중 예외 발생", e);
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("잘못된 토큰입니다.");
-        }
-    }
+    // ─── 소셜 로그인 ───────────────────────────────────────────────────
 
     @PostMapping("/auth/social-login")
-    public ResponseEntity<?> socialLogin(@RequestBody SocialLoginRequest request) {
-        try {
-            String username = request.getUsername();
-            String email = request.getEmail();
-            String name = request.getName();
+    public ResponseEntity<ApiResponse<?>> socialLogin(@RequestBody SocialLoginRequest request) {
+        log.info("소셜 로그인 요청 - email: {}", request.getEmail());
 
-            log.info("소셜 로그인 요청 - username: {}, email: {}, name: {}", username, email, name);
+        UserEntity user = userRepository.findByEmailWithAuth(request.getEmail())
+                .orElse(null);
 
-            // 사용자 조회 (이메일 기준)
-            Users user = userMapper.findByEmail(email);
+        if (user == null) {
+            // 신규 소셜 회원 등록
+            user = new UserEntity();
+            user.setUsername(request.getUsername());
+            user.setName(request.getName());
+            user.setEmail(request.getEmail());
+            user.setPassword("SOCIAL_LOGIN_NO_PASSWORD");
+            user.setProvider("google");
+            UserEntity saved = userRepository.save(user);
 
-            // 없으면 회원가입 처리
-            if (user == null) {
-                user = new Users();
-                user.setUsername(username);
-                user.setName(name);
-                user.setEmail(email);
-                user.setPassword(null); // 소셜 로그인은 비밀번호 없음
-                user.setEnabled(true);
-                user.setProvider("google"); // ✅ 소셜 로그인 사용자 provider 설정
-                userMapper.insertUser(user); // INSERT 처리
+            UserAuthEntity authEntity = UserAuthEntity.builder()
+                    .username(saved.getUsername())
+                    .auth("ROLE_USER")
+                    .build();
+            userAuthRepository.save(authEntity);
 
-                // INSERT 후 생성된 no와 provider를 포함한 전체 사용자 정보를 다시 조회
-                user = userMapper.findByEmail(email); // ✅ user 객체를 완전히 업데이트
-            } else {
-                // 기존 사용자 권한 조회
-                List<UserAuth> authList = userMapper.findAuthListByUsername(user.getUsername());
-                user.setAuthList(authList);
-                // 기존 사용자의 provider가 'traditional'일 경우 'google'로 업데이트
-                if (!"google".equals(user.getProvider())) {
-                    user.setProvider("google");
-                    userMapper.update(user); // DB에 provider 업데이트
-                }
+            // 권한 포함 재조회
+            user = userRepository.findByEmailWithAuth(request.getEmail()).orElse(saved);
+        } else {
+            // 기존 사용자 provider 업데이트
+            if (!"google".equals(user.getProvider())) {
+                user.setProvider("google");
+                userRepository.save(user);
+                user = userRepository.findByEmailWithAuth(request.getEmail()).orElse(user);
             }
-            // 사용자 객체를 다시 가져와 최신 provider 값을 반영
-            user = userMapper.findByEmail(email);
-
-            // JWT 생성
-            List<String> roles = new ArrayList<>();
-            for (UserAuth auth : user.getAuthList()) {
-                roles.add(auth.getAuth());
-            }
-
-            String secretKey = jwtProps.getSecretKey();
-            byte[] signingKey = secretKey.getBytes();
-            int day5 = 1000 * 60 * 60 * 24 * 5;
-
-            String jwt = Jwts.builder()
-                    .signWith(Keys.hmacShaKeyFor(signingKey), Jwts.SIG.HS512)
-                    .header().add("typ", SecurityConstants.TOKEN_TYPE).and()
-                    .claim("username", user.getUsername())
-                    .claim("id", user.getId()) // id 클레임 추가
-                    .claim("rol", roles)
-                    .claim("no", user.getNo()) // ✅ 사용자 no 추가
-                    .expiration(new Date(System.currentTimeMillis() + day5))
-                    .compact();
-
-            // 응답 구성
-            Map<String, Object> response = new HashMap<>();
-            response.put("token", jwt);
-            response.put("userInfo", user);
-
-            return ResponseEntity.ok(response); // ✅ 여기!
-
-        } catch (Exception e) {
-            log.error("소셜 로그인 중 예외 발생", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류");
         }
+
+        String jwt = buildJwt(user);
+
+        // Users DTO 변환 (프론트 호환)
+        Users userDto = entityToDto(user);
+
+        return ResponseEntity.ok(ApiResponse.success(Map.of("token", jwt, "userInfo", userDto)));
+    }
+
+    // ─── JWT 파싱 (내부 디버깅용) ──────────────────────────────────────
+
+    @GetMapping("/user")
+    public ResponseEntity<ApiResponse<?>> user(@RequestHeader("Authorization") String authorization) {
+        try {
+            String jwt = authorization.substring(7);
+            byte[] key = jwtProps.getSecretKey().getBytes();
+            Jws<Claims> parsed = Jwts.parser()
+                    .verifyWith(Keys.hmacShaKeyFor(key))
+                    .build()
+                    .parseSignedClaims(jwt);
+            return ResponseEntity.ok(ApiResponse.success(parsed.getPayload()));
+        } catch (Exception e) {
+            return ResponseEntity.status(401).body(ApiResponse.error(401, "잘못된 토큰입니다."));
+        }
+    }
+
+    // ─── JWT 생성 헬퍼 ─────────────────────────────────────────────────
+
+    private String buildJwt(UserEntity user) {
+        List<String> roles = user.getAuthList().stream()
+                .map(UserAuthEntity::getAuth)
+                .collect(Collectors.toList());
+
+        byte[] signingKey = jwtProps.getSecretKey().getBytes();
+        long day5Ms = 1000L * 60 * 60 * 24 * 5;
+
+        return Jwts.builder()
+                .signWith(Keys.hmacShaKeyFor(signingKey), Jwts.SIG.HS512)
+                .header().add("typ", SecurityConstants.TOKEN_TYPE).and()
+                .claim("username", user.getUsername())
+                .claim("id", user.getId())
+                .claim("rol", roles)
+                .claim("no", user.getNo())
+                .expiration(new Date(System.currentTimeMillis() + day5Ms))
+                .compact();
+    }
+
+    // ─── Entity → DTO 변환 ─────────────────────────────────────────────
+
+    private Users entityToDto(UserEntity entity) {
+        Users dto = new Users();
+        dto.setNo(entity.getNo());
+        dto.setId(entity.getId());
+        dto.setUsername(entity.getUsername());
+        dto.setName(entity.getName());
+        dto.setEmail(entity.getEmail());
+        dto.setEnabled(true);
+        dto.setProvider(entity.getProvider());
+        List<UserAuth> authList = entity.getAuthList().stream()
+                .map(a -> UserAuth.builder().username(a.getUsername()).auth(a.getAuth()).build())
+                .collect(Collectors.toList());
+        dto.setAuthList(authList);
+        return dto;
     }
 }

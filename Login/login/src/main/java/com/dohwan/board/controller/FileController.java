@@ -22,8 +22,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dohwan.board.domain.Files;
+import com.dohwan.board.dto.Files;
 import com.dohwan.board.service.FileService;
+import com.dohwan.login.common.ApiResponse;
 
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
@@ -38,111 +39,129 @@ public class FileController {
     private FileService fileService;
 
     @Autowired
-    ResourceLoader resourceLoader; // resources 자원 가져오는 객체
-
-    // sp-crud
+    ResourceLoader resourceLoader;
 
     @GetMapping()
-    public ResponseEntity<?> getAll() {
+    public ResponseEntity<ApiResponse<List<Files>>> getAll() {
         try {
             List<Files> list = fileService.list();
-            return new ResponseEntity<>(list, HttpStatus.OK);
+            return ResponseEntity.ok(ApiResponse.success(list));
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            log.error("getAll error", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponse.error(500, "서버 에러가 발생했습니다."));
         }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getOne(@PathVariable("id") String id) {
+    public ResponseEntity<ApiResponse<Files>> getOne(@PathVariable("id") String id) {
         try {
             Files file = fileService.selectById(id);
-            return new ResponseEntity<>(file, HttpStatus.OK);
+            if (file == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(ApiResponse.error(404, "파일을 찾을 수 없습니다."));
+            }
+            return ResponseEntity.ok(ApiResponse.success(file));
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            log.error("getOne error", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponse.error(500, "서버 에러가 발생했습니다."));
         }
     }
 
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> createForm(Files files) {
+    public ResponseEntity<ApiResponse<Files>> createForm(Files files) {
         try {
             boolean result = fileService.upload(files);
             if (result) {
-                String fileUrl = files.getFilePath(); // 업로드된 파일의 URL을 얻음
-                return new ResponseEntity<>(files, HttpStatus.OK);
-            } else
-                return new ResponseEntity<>("FAILE", HttpStatus.BAD_REQUEST);
+                return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(files));
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.error(400, "FAIL"));
+            }
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            log.error("upload error", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponse.error(500, "서버 에러가 발생했습니다."));
         }
     }
 
     @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> createJSON(@RequestBody Files files) {
+    public ResponseEntity<ApiResponse<Files>> createJSON(@RequestBody Files files) {
         try {
             boolean result = fileService.upload(files);
-            if (result)
-                return new ResponseEntity<>(files, HttpStatus.OK);
-            else
-                return new ResponseEntity<>("FAILE", HttpStatus.BAD_REQUEST);
+            if (result) {
+                return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(files));
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.error(400, "FAIL"));
+            }
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            log.error("upload error", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponse.error(500, "서버 에러가 발생했습니다."));
         }
     }
 
     @PutMapping()
-    public ResponseEntity<?> update(@RequestBody Files file) {
+    public ResponseEntity<ApiResponse<Files>> update(@RequestBody Files file) {
         try {
             boolean result = fileService.update(file);
-            if (result)
-                return new ResponseEntity<>(file, HttpStatus.OK);
-            else
-                return new ResponseEntity<>("FAILE", HttpStatus.BAD_REQUEST);
+            if (result) {
+                return ResponseEntity.ok(ApiResponse.success(file));
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.error(400, "FAIL"));
+            }
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            log.error("update error", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponse.error(500, "서버 에러가 발생했습니다."));
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> destroy(@PathVariable("id") String id) {
+    public ResponseEntity<ApiResponse<String>> destroy(@PathVariable("id") String id) {
         try {
             boolean result = fileService.deleteById(id);
-            if (result)
-                return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
-            else
-                return new ResponseEntity<>("FAILE", HttpStatus.BAD_REQUEST);
+            if (result) {
+                return ResponseEntity.ok(ApiResponse.success("SUCCESS"));
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.error(400, "FAIL"));
+            }
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            log.error("delete error", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponse.error(500, "서버 에러가 발생했습니다."));
         }
     }
 
-    // 파일 선택 삭제
     @DeleteMapping("")
-    public ResponseEntity<?> deleteFiles(
+    public ResponseEntity<ApiResponse<String>> deleteFiles(
             @RequestParam(value = "noList", required = false) List<Long> noList,
             @RequestParam(value = "idList", required = false) List<String> idList) {
-        log.info("noList[] : " + noList);
-        log.info("idList : " + idList);
-        int result = 0;
-        if (noList != null) {
-            result = fileService.deleteFileList(noList);
+        try {
+            int result = 0;
+            if (noList != null) {
+                result = fileService.deleteFileList(noList);
+            }
+            if (idList != null) {
+                result = fileService.deleteFileListById(idList);
+            }
+            if (result > 0) {
+                return ResponseEntity.ok(ApiResponse.success("SUCCESS"));
+            }
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.error(400, "FAIL"));
+        } catch (Exception e) {
+            log.error("delete list error", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponse.error(500, "서버 에러가 발생했습니다."));
         }
-        if (idList != null) {
-            result = fileService.deleteFileListById(idList);
-        }
-        if (result > 0)
-            return new ResponseEntity<>(HttpStatus.OK);
-
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    // 파일 다운로드
+    // 파일 다운로드 (바이너리 스트리밍은 ApiResponse를 사용하지 않음)
     @GetMapping("/download/{id}")
     public void fileDownload(
             @PathVariable("id") String id,
             HttpServletResponse response) throws Exception {
-        System.out.println("Controller: download called for ID = " + id);
-        boolean result = fileService.download(id, response);
-        System.out.println("Controller: download result = " + result);
+        fileService.download(id, response);
     }
 
     @GetMapping("/img/{id}")
@@ -154,34 +173,29 @@ public class FileController {
         File imgFile;
         Resource resource = resourceLoader.getResource("classpath:static/img/no-image.png");
 
-        // 파일이 없거나 경로가 잘못된 경우 → no-image
         if (filePath == null || !(imgFile = new File(filePath)).exists()) {
             imgFile = resource.getFile();
             filePath = imgFile.getPath();
         }
 
-        // 확장자 기반 MIME 결정
         String ext = filePath.substring(filePath.lastIndexOf(".") + 1);
         String mimeType = "image/" + ext;
         try {
             MediaType mType = MediaType.valueOf(mimeType);
             response.setContentType(mType.toString());
         } catch (Exception e) {
-            // 잘못된 MIME → no-image 강제 적용
             imgFile = resource.getFile();
             response.setContentType(MediaType.IMAGE_PNG_VALUE);
         }
 
-        // 파일 복사 (try-with-resources로 자동 닫기)
         try (FileInputStream fis = new FileInputStream(imgFile);
                 ServletOutputStream sos = response.getOutputStream()) {
             FileCopyUtils.copy(fis, sos);
         }
     }
 
-    // 파일 타입별 조회
     @GetMapping("/{pTable}/{pNo}")
-    public ResponseEntity<?> getAllFile(
+    public ResponseEntity<ApiResponse<?>> getAllFile(
             @PathVariable("pTable") String pTable,
             @PathVariable("pNo") Long pNo,
             @RequestParam(value = "type", required = false) String typeParam) {
@@ -190,38 +204,32 @@ public class FileController {
             file.setPTable(pTable);
             file.setPNo(pNo);
 
-            // 문자열 → Enum 변환
             Files.FileType fileType = null;
             if (typeParam != null) {
                 try {
                     fileType = Files.FileType.valueOf(typeParam.toUpperCase());
                 } catch (IllegalArgumentException e) {
-                    return new ResponseEntity<>("Invalid file type", HttpStatus.BAD_REQUEST);
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.error(400, "Invalid file type"));
                 }
             }
             file.setType(fileType);
 
-            // type이 없을때 ➡️ 부모 기준 모든 파일
             if (fileType == null) {
                 List<Files> list = fileService.listByParent(file);
-                return new ResponseEntity<>(list, HttpStatus.OK);
+                return ResponseEntity.ok(ApiResponse.success(list));
             }
 
-            // MAIN 파일 1개 조회
             if (fileType == Files.FileType.MAIN) {
                 Files mainFile = fileService.selectByType(file);
-                return new ResponseEntity<>(mainFile, HttpStatus.OK);
-            }
-
-            // SUB 파일 목록 조회
-            else {
+                return ResponseEntity.ok(ApiResponse.success(mainFile));
+            } else {
                 List<Files> list = fileService.listByType(file);
-                return new ResponseEntity<>(list, HttpStatus.OK);
+                return ResponseEntity.ok(ApiResponse.success(list));
             }
-
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            log.error("getAllFile error", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponse.error(500, "서버 에러가 발생했습니다."));
         }
     }
-
 }

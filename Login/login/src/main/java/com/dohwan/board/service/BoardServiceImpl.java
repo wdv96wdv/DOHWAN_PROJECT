@@ -2,16 +2,21 @@ package com.dohwan.board.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.dohwan.board.domain.Boards;
-import com.dohwan.board.domain.Boards.FileInfo;
-import com.dohwan.board.domain.Files;
-import com.dohwan.board.mapper.BoardMapper;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
+import com.dohwan.board.dto.Boards;
+import com.dohwan.board.dto.Boards.FileInfo;
+import com.dohwan.board.dto.Files;
+import com.dohwan.board.entity.BoardEntity;
+import com.dohwan.board.repository.BoardRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -20,37 +25,79 @@ import lombok.extern.slf4j.Slf4j;
 public class BoardServiceImpl implements BoardService {
 
     @Autowired
-    private BoardMapper boardMapper;
+    private BoardRepository boardRepository;
     @Autowired
     private FileService fileService;
 
+    // Helper to map Entity to Domain
+    private Boards toDomain(BoardEntity entity) {
+        if (entity == null) return null;
+        Boards dto = new Boards();
+        dto.setNo(entity.getNo());
+        dto.setId(entity.getId());
+        dto.setTitle(entity.getTitle());
+        dto.setWriter(entity.getWriter());
+        dto.setContent(entity.getContent());
+        if (entity.getCreatedAt() != null) {
+            dto.setCreatedAt(java.sql.Timestamp.valueOf(entity.getCreatedAt()));
+        }
+        if (entity.getUpdatedAt() != null) {
+            dto.setUpdatedAt(java.sql.Timestamp.valueOf(entity.getUpdatedAt()));
+        }
+        dto.setUserNo(entity.getUserNo());
+        return dto;
+    }
+
+    private BoardEntity toEntity(Boards dto) {
+        if (dto == null) return null;
+        BoardEntity entity = new BoardEntity();
+        entity.setNo(dto.getNo());
+        if (dto.getId() != null) {
+            entity.setId(dto.getId());
+        }
+        entity.setTitle(dto.getTitle());
+        entity.setWriter(dto.getWriter());
+        entity.setContent(dto.getContent());
+        entity.setUserNo(dto.getUserNo());
+        return entity;
+    }
+
     @Override
     public List<Boards> list() {
-        return boardMapper.list();
+        return boardRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt")).stream()
+                .map(this::toDomain)
+                .collect(Collectors.toList());
     }
 
     @Override
     public Boards select(int no) {
-        return boardMapper.select(no);
+        return boardRepository.findById((long) no)
+                .map(this::toDomain)
+                .orElse(null);
     }
 
     @Override
     public Boards selectById(String id) {
-        return boardMapper.selectById(id);
+        return boardRepository.findByIdentifier(id)
+                .map(this::toDomain)
+                .orElse(null);
     }
 
     @Override
+    @Transactional
     public boolean insert(Boards boards) {
         int result = 0;
         try {
-            // 게시글 등록
-            result = boardMapper.insert(boards);
+            BoardEntity entity = toEntity(boards);
+            BoardEntity saved = boardRepository.save(entity);
+            boards.setNo(saved.getNo());
+            boards.setId(saved.getId());
             log.info("게시글 등록 성공, no={}", boards.getNo());
 
             // 파일 업로드
             int uploadResult = upload(boards);
             log.info("파일 업로드 결과: {}", uploadResult);
-            result += uploadResult;
+            result = 1 + uploadResult;
 
         } catch (Exception e) {
             log.error("게시글 등록 실패", e);
@@ -58,13 +105,6 @@ public class BoardServiceImpl implements BoardService {
         return result > 0;
     }
 
-
-    /**
-     * 파일 업로드 (파일 URL만 저장)
-     * 
-     * @param boards
-     * @return
-     */
     public int upload(Boards board) {
         int result = 0;
         String pTable = "boards";
@@ -132,64 +172,69 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    @Transactional
     public boolean update(Boards boards) {
-        // 게시글 수정
-        int result = boardMapper.update(boards);
-        // 파입 업로드
-        result += upload(boards);
-        return result > 0;
+        return boardRepository.findById(boards.getNo()).map(entity -> {
+            if (boards.getTitle() != null) entity.setTitle(boards.getTitle());
+            if (boards.getWriter() != null) entity.setWriter(boards.getWriter());
+            if (boards.getContent() != null) entity.setContent(boards.getContent());
+            boardRepository.save(entity);
+            upload(boards);
+            return true;
+        }).orElse(false);
     }
 
     @Override
+    @Transactional
     public boolean updateById(Boards boards) {
-        // 게시글 수정
-        int result = boardMapper.updateById(boards);
-        // 파일 업로드
-        Boards oldBoards = boardMapper.selectById(boards.getId());
-        boards.setNo(oldBoards.getNo());
-        result += upload(boards);
-        return result > 0;
+        return boardRepository.findByIdentifier(boards.getId()).map(entity -> {
+            if (boards.getTitle() != null) entity.setTitle(boards.getTitle());
+            if (boards.getWriter() != null) entity.setWriter(boards.getWriter());
+            if (boards.getContent() != null) entity.setContent(boards.getContent());
+            boardRepository.save(entity);
+            boards.setNo(entity.getNo());
+            upload(boards);
+            return true;
+        }).orElse(false);
     }
 
     @Override
+    @Transactional
     public boolean delete(int no) {
-        // 게시글 삭제
-        int result = boardMapper.delete(no);
-        // 종속된 첨부파일 삭제
-        Files file = new Files();
-        file.setPTable("boards");
-        file.setPNo(Long.valueOf(no));
-        int deleteCount = fileService.deleteByParent(file);
-        log.info(deleteCount + "개의 파일이 삭제 되었습니다.");
-        return result > 0;
-    }
-
-    @Override
-    public boolean deleteById(String id) {
-        // 1.삭제 전에 게시글 조회
-        Boards board = boardMapper.selectById(id);
-        if (board == null) {
-            // 게시글이 없으면 false 반환
+        try {
+            boardRepository.deleteById((long) no);
+            
+            Files file = new Files();
+            file.setPTable("boards");
+            file.setPNo((long) no);
+            int deleteCount = fileService.deleteByParent(file);
+            log.info(deleteCount + "개의 파일이 삭제 되었습니다.");
+            return true;
+        } catch (Exception e) {
             return false;
         }
-        Long no = board.getNo();
-        // 2. 종속된 첨부파일 삭제
-        Files file = new Files();
-        file.setPTable("boards");
-        file.setPNo(Long.valueOf(no));
-        int deleteCount = fileService.deleteByParent(file);
-        log.info(deleteCount + "개의 파일이 삭제 되었습니다.");
-
-        // 게시글 삭제
-        int result = boardMapper.deleteById(id);
-
-        return result > 0;
     }
 
     @Override
-    public PageInfo<Boards> page(int page, int size) {
-        PageHelper.startPage(page, size);
-        List<Boards> list = boardMapper.list();
-        return new PageInfo<>(list);
+    @Transactional
+    public boolean deleteById(String id) {
+        return boardRepository.findByIdentifier(id).map(board -> {
+            Long no = board.getNo();
+            Files file = new Files();
+            file.setPTable("boards");
+            file.setPNo(no);
+            int deleteCount = fileService.deleteByParent(file);
+            log.info(deleteCount + "개의 파일이 삭제 되었습니다.");
+            boardRepository.deleteByIdentifier(id);
+            return true;
+        }).orElse(false);
+    }
+
+    @Override
+    public Page<Boards> page(int page, int size) {
+        // Spring Data JPA pagination is 0-indexed, while PageHelper was 1-indexed.
+        int zeroBasedPage = Math.max(0, page - 1);
+        Pageable pageable = PageRequest.of(zeroBasedPage, size);
+        return boardRepository.findAllByOrderByCreatedAtDesc(pageable).map(this::toDomain);
     }
 }

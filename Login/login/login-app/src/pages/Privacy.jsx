@@ -1,72 +1,74 @@
 import React from 'react';
-import styles from '../assets/css/common.module.css';
+import "../assets/css/info.css";
+import "../assets/css/auth.css";
+import { ShieldCheck, Eye, Lock, Mail, ExternalLink } from 'lucide-react';
 
 const Privacy = () => {
   return (
-    <div className={styles.pageContainer}>
-      <h1 className={styles.pageTitle}>Privacy Policy</h1>
+    <div className="info-page">
+      <header className="info-header">
+        <h1>PRIVACY <span style={{color: 'var(--primary)'}}>POLICY</span></h1>
+        <p>Your trust is our most valuable asset.</p>
+      </header>
 
-      {/* 섹션 1: 개인정보 수집 안내 */}
-      <div className={styles.section}>
-        <h2 className={styles.subtitle}>개인정보 수집 안내</h2>
-        <p className={styles.pageText}>
-          DORunning은 회원 가입 시 최소한의 개인정보만 수집하며, 
-          수집된 정보는 서비스 제공 목적 외에는 사용되지 않습니다.
+      <div className="info-section">
+        <h2><ShieldCheck size={24} /> DATA COLLECTION</h2>
+        <p className="info-text">
+          DORunning values your privacy. We collect only the essential information required to provide a personalized running experience. 
+          Your data is never shared with third parties for marketing purposes without your explicit consent.
         </p>
-        <div className={styles.highlight}>
-          수집 항목: 이름, 이메일, 사용자 ID, 마라톤 일정, 러닝 기록 및 코스 정보
+        <div className="info-highlight">
+          <strong>Information we collect:</strong> Name, Email, Username, Running Records, Marathon Schedules, and Course Preferences.
         </div>
       </div>
 
-      {/* 섹션 2: 개인정보 이용 */}
-      <div className={styles.section}>
-        <h2 className={styles.subtitle}>개인정보 이용 목적</h2>
-        <ul className={styles.pageText}>
-          <li>✅ 회원 서비스 제공 및 계정 관리</li>
-          <li>✅ 코스 및 이벤트 정보 제공</li>
-          <li>✅ 마라톤 일정</li>
-          <li>✅ 통계 및 서비스 개선</li>
+      <div className="info-section">
+        <h2><Eye size={24} /> HOW WE USE YOUR DATA</h2>
+        <ul className="info-list">
+          <li style={{marginBottom: '20px'}}>
+            <Lock size={18} color="var(--primary)" style={{marginTop: '4px'}} />
+            <div>
+              <strong>Account Management:</strong> Ensuring secure access to your profile and records.
+            </div>
+          </li>
+          <li style={{marginBottom: '20px'}}>
+            <ShieldCheck size={18} color="var(--primary)" style={{marginTop: '4px'}} />
+            <div>
+              <strong>Service Optimization:</strong> Tailoring route recommendations and event notifications to your performance.
+            </div>
+          </li>
+          <li style={{marginBottom: '20px'}}>
+            <Activity size={18} color="var(--primary)" style={{marginTop: '4px'}} />
+            <div>
+              <strong>Performance Analytics:</strong> Aggregating data to help you visualize your growth as a runner.
+            </div>
+          </li>
         </ul>
       </div>
 
-      {/* 섹션 3: 쿠키 정책 및 광고 */}
-      <div className={styles.section}>
-        <h2 className={styles.subtitle}>쿠키 및 광고 정책</h2>
-        <p className={styles.pageText}>
-          본 웹사이트는 Google AdSense를 사용하여 광고를 제공합니다. 
-          Google은 사용자의 방문 기록을 바탕으로 광고를 제공하기 위해 쿠키를 사용할 수 있습니다.
+      <div className="info-section">
+        <h2><ExternalLink size={24} /> COOKIES & ADVERTISING</h2>
+        <p className="info-text">
+          Our website utilizes Google AdSense to serve relevant advertisements. 
+          Google may use cookies to serve ads based on your visits to this and other websites on the Internet.
         </p>
-        <div className={styles.highlight}>
-          <p><strong>쿠키 사용 목적:</strong></p>
-          <ul>
-            <li>광고 맞춤 설정 및 최적화</li>
-            <li>광고 효과 측정 및 분석</li>
-            <li>사용자 경험 개선</li>
-          </ul>
-          <p style={{ marginTop: '10px' }}>
-            Google의 쿠키 사용 방식을 관리하거나 거부하려면{' '}
-            <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer">
-              Google 광고 설정
-            </a>을 방문하세요.
-          </p>
-          <p style={{ marginTop: '10px' }}>
-            또한{' '}
-            <a href="https://www.google.com/privacy/ads" target="_blank" rel="noopener noreferrer">
-              Google 개인정보 보호 및 약관
-            </a>에서 Google의 데이터 사용 방식을 자세히 확인할 수 있습니다.
-          </p>
+        <div className="info-highlight" style={{background: 'rgba(255,255,255,0.03)', borderLeftColor: 'var(--text-muted)'}}>
+          <p style={{marginBottom: '10px'}}><strong>Manage Preferences:</strong></p>
+          <div style={{display: 'flex', gap: '20px', flexWrap: 'wrap'}}>
+            <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer" className="btn-auth secondary" style={{padding: '8px 16px', fontSize: '0.8rem'}}>
+              GOOGLE AD SETTINGS
+            </a>
+            <a href="https://www.google.com/privacy/ads" target="_blank" rel="noopener noreferrer" className="btn-auth secondary" style={{padding: '8px 16px', fontSize: '0.8rem'}}>
+              GOOGLE PRIVACY & TERMS
+            </a>
+          </div>
         </div>
       </div>
 
-      {/* 섹션 4: 문의 안내 */}
-      <div className={styles.section}>
-        <h2 className={styles.subtitle}>문의 및 요청</h2>
-        <p className={styles.pageText}>
-          개인정보 관련 문의, 삭제 요청, 수정 요청 등은 아래 페이지를 통해 연락주세요.
-        </p>
-        <p className={styles.pageText}>
-          <a className={styles.pageLink} href="/contact">문의 페이지로 이동</a>
-        </p>
+      <div className="info-section" style={{textAlign: 'center'}}>
+        <h2><Mail size={24} style={{margin: '0 auto'}} /> INQUIRIES</h2>
+        <p className="info-text">If you have any questions about this policy or want to request data deletion, please contact us.</p>
+        <a href="/contact" className="btn-auth" style={{display: 'inline-flex', padding: '12px 32px'}}>CONTACT SUPPORT</a>
       </div>
     </div>
   );

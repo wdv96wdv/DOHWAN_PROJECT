@@ -1,101 +1,69 @@
 import React from "react";
-import common from "../../assets/css/common.module.css";
-import styles from "../../assets/css/record.module.css";
+import "../../assets/css/record.css";
 import dayjs from "dayjs";
+import { Edit2, Trash2, MapPin, Watch, Zap, Flame, MoveRight } from "lucide-react";
 
-// 페이스 포맷 함수: 547 -> "5'47''"
 const formatPace = (value) => {
   if (!value) return "-";
-  if (isNaN(value)) return value;
   const num = parseInt(value, 10);
   const minutes = Math.floor(num / 100);
   const seconds = num % 100;
   return `${minutes}'${seconds.toString().padStart(2, "0")}''`;
 };
 
-// 시간 포맷 함수: 1800초 -> "30분"
 const formatDuration = (seconds) => {
   if (!seconds) return "-";
   const minutes = Math.floor(seconds / 60);
   const hours = Math.floor(minutes / 60);
-  if (hours > 0) {
-    return `${hours}시간 ${minutes % 60}분`;
-  }
-  return `${minutes}분`;
+  if (hours > 0) return `${hours}h ${minutes % 60}m`;
+  return `${minutes}m ${seconds % 60}s`;
 };
 
 export default function RecordCard({ record, onEdit, onDelete }) {
-  // 기록 날짜(record_date) 우선 표시, 시간은 updated_at 기준
-  const recordDate = record.record_date
-    ? dayjs(record.record_date).format("YYYY-MM-DD")
-    : "-";
-  const updatedTime = record.updated_at
-    ? dayjs(record.updated_at).format("HH:mm")
-    : record.created_at
-    ? dayjs(record.created_at).format("HH:mm")
-    : "-";
+  const recordDate = record.record_date ? dayjs(record.record_date).format("MMM D, YYYY") : "-";
+  const updatedTime = record.record_date ? dayjs(record.record_date).format("HH:mm") : "";
 
   return (
-    <div className={styles.recordCard}>
-      <div className={styles.recordHeader}>
-        <div>
-          <div className={common.subtitle}>{record.running_name}</div>
-          <div className={styles.recordDate}>
-            {recordDate} {updatedTime !== "-" ? `(${updatedTime})` : ""}
+    <div className="record-card">
+      <div className="record-card-header">
+        <div className="record-title-group">
+          <h3>{record.running_name}</h3>
+          <div className="record-meta">
+            {recordDate} {updatedTime && `• ${updatedTime}`}
           </div>
         </div>
 
-        <div className={styles.recordActions}>
-          <button className={`${common.btnGray}`} onClick={() => onEdit(record)}>
-            수정
+        <div className="record-actions">
+          <button className="btn-icon" onClick={() => onEdit(record)} title="Edit">
+            <Edit2 size={16} />
           </button>
-          <button className={`${common.btnGray}`} onClick={() => onDelete(record.id)}>
-            삭제
+          <button className="btn-icon delete" onClick={() => onDelete(record.id)} title="Delete">
+            <Trash2 size={16} />
           </button>
         </div>
       </div>
 
-      <div className={styles.recordStats}>
-        {record.distance_km && (
-          <div className={styles.statItem}>
-            <div className={styles.statValue}>{record.distance_km} km</div>
-            <div className={styles.statLabel}>거리</div>
-          </div>
-        )}
-        {record.duration_sec && (
-          <div className={styles.statItem}>
-            <div className={styles.statValue}>{formatDuration(record.duration_sec)}</div>
-            <div className={styles.statLabel}>시간</div>
-          </div>
-        )}
-        {record.pace_min_per_km && (
-          <div className={styles.statItem}>
-            <div className={styles.statValue}>{formatPace(record.pace_min_per_km)}</div>
-            <div className={styles.statLabel}>평균 페이스</div>
-          </div>
-        )}
-        {record.speed_kmh && (
-          <div className={styles.statItem}>
-            <div className={styles.statValue}>{record.speed_kmh.toFixed(2)} km/h</div>
-            <div className={styles.statLabel}>속도</div>
-          </div>
-        )}
-        {record.cadence && (
-          <div className={styles.statItem}>
-            <div className={styles.statValue}>{record.cadence}</div>
-            <div className={styles.statLabel}>케이던스</div>
-          </div>
-        )}
-        {record.calories && (
-          <div className={styles.statItem}>
-            <div className={styles.statValue}>{record.calories} kcal</div>
-            <div className={styles.statLabel}>칼로리</div>
-          </div>
-        )}
+      <div className="record-stats-grid">
+        <div className="stat-box">
+          <div className="stat-label">Distance</div>
+          <div className="stat-value">{record.distance_km || "0.00"} <small>km</small></div>
+        </div>
+        <div className="stat-box">
+          <div className="stat-label">Duration</div>
+          <div className="stat-value">{formatDuration(record.duration_sec)}</div>
+        </div>
+        <div className="stat-box">
+          <div className="stat-label">Pace</div>
+          <div className="stat-value">{formatPace(record.pace_min_per_km)}</div>
+        </div>
+        <div className="stat-box">
+          <div className="stat-label">Energy</div>
+          <div className="stat-value">{record.calories || "0"} <small>kcal</small></div>
+        </div>
       </div>
 
       {record.note && (
-        <div className={common.pageText} style={{ marginTop: 10 }}>
+        <div className="record-note">
           {record.note}
         </div>
       )}

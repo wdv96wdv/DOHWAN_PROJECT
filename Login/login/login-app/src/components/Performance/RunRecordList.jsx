@@ -1,63 +1,50 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import { getRunRecords } from '../../apis/performance';
-import styles from '../../assets/css/common.module.css';
-import { LoginContext } from '../../contexts/LoginContextProvider'; // LoginContext import
+import "../../assets/css/performance.css";
+import useAuthStore from '../../store/useAuthStore';
+import { List } from 'lucide-react';
 
 const RunRecordList = ({ refreshKey = 0 }) => {
-  const { userInfo } = useContext(LoginContext); // userInfo 가져오기
+  const userInfo = useAuthStore(state => state.userInfo);
   const [records, setRecords] = useState([]);
 
   useEffect(() => {
-    if (!userInfo || !userInfo.no) {
-      console.warn('로그인 정보가 없어 러닝 기록을 불러올 수 없습니다.');
-      setRecords([]);
-      return;
-    }
+    if (!userInfo?.no) return;
 
-    getRunRecords(userInfo.no)
+    getRunRecords()
       .then((res) => setRecords(res.data || []))
-      .catch((err) => {
-        console.error('조회 실패:', err);
-        setRecords([]);
-      });
+      .catch(console.error);
   }, [refreshKey, userInfo]);
 
-  if (records.length === 0) {
-    return (
-      <div className={styles.container}>
-        <h2 className={styles.title}>전체 저장된 러닝 기록</h2>
-        <p>아직 기록이 없습니다. 첫 번째 러닝 기록을 추가해보세요!</p>
-      </div>
-    );
-  }
+  if (records.length === 0) return null;
 
   return (
-    <div className={styles.container}>
-      <h2 className={styles.title}>전체 저장된 러닝 기록</h2>
-      <table className={styles.table}>
-        <thead>
-          <tr>
-            <th>날짜</th>
-            <th>거리 (km)</th>
-            <th>시간 (분)</th>
-            <th>페이스 (min/km)</th>
-            <th>속도 (km/h)</th>
-            <th>칼로리</th>
-          </tr>
-        </thead>
-        <tbody>
-          {records.map((r) => (
-            <tr key={r.id}>
-              <td>{r.date || '-'}</td>
-              <td>{r.distanceKm ? r.distanceKm.toFixed(2) : '-'}</td>
-              <td>{r.durationSec ? (r.durationSec / 60).toFixed(1) : '-'}</td>
-              <td>{r.paceMinPerKm ? r.paceMinPerKm.toFixed(2) : '-'}</td>
-              <td>{r.speedKmh ? r.speedKmh.toFixed(2) : '-'}</td>
-              <td>{r.calories || '-'}</td>
+    <div className="widget-card">
+      <h3><List size={18} /> RECENT ACTIVITIES</h3>
+      <div style={{ overflowX: 'auto' }}>
+        <table className="board-table" style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <thead>
+            <tr style={{ borderBottom: '1px solid var(--border-color)', color: 'var(--text-muted)', fontSize: '0.85rem' }}>
+              <th style={{ padding: '12px', textAlign: 'left' }}>DATE</th>
+              <th style={{ padding: '12px', textAlign: 'right' }}>DIST (KM)</th>
+              <th style={{ padding: '12px', textAlign: 'right' }}>TIME (M)</th>
+              <th style={{ padding: '12px', textAlign: 'right' }}>PACE</th>
+              <th style={{ padding: '12px', textAlign: 'right' }}>KCAL</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {records.map((r) => (
+              <tr key={r.id} style={{ borderBottom: '1px solid var(--glass-border)', fontSize: '0.9rem' }}>
+                <td style={{ padding: '12px' }}>{r.date || '-'}</td>
+                <td style={{ padding: '12px', textAlign: 'right', fontWeight: 'bold' }}>{r.distanceKm?.toFixed(2) || '-'}</td>
+                <td style={{ padding: '12px', textAlign: 'right' }}>{r.durationSec ? (r.durationSec / 60).toFixed(1) : '-'}</td>
+                <td style={{ padding: '12px', textAlign: 'right' }}>{r.paceMinPerKm?.toFixed(2) || '-'}</td>
+                <td style={{ padding: '12px', textAlign: 'right' }}>{r.calories || '-'}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

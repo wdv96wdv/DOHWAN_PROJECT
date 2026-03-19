@@ -1,130 +1,151 @@
 package com.dohwan.login.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
+import com.dohwan.login.dto.UserAuth;
+import com.dohwan.login.dto.UserUpdateRequest;
+import com.dohwan.login.dto.Users;
+import com.dohwan.login.entity.UserAuthEntity;
+import com.dohwan.login.entity.UserEntity;
+import com.dohwan.login.repository.UserAuthRepository;
+import com.dohwan.login.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.dohwan.login.domain.UserAuth;
-import com.dohwan.login.domain.UserUpdateRequest;
-import com.dohwan.login.domain.Users;
-import com.dohwan.login.mapper.UserMapper;
-
-import jakarta.servlet.http.HttpServletRequest;
-import lombok.extern.slf4j.Slf4j;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-  @Autowired
-  private UserMapper userMapper;
+    private final UserRepository userRepository;
+    private final UserAuthRepository userAuthRepository;
+    private final PasswordEncoder passwordEncoder;
 
-  @Autowired
-  private PasswordEncoder passwordEncoder;
+    // ─── Users 도메인 ↔ UserEntity 변환 헬퍼 ──────────────────────────
 
-  @Autowired
-  private AuthenticationManager authenticationManager;
+    private Users toDto(UserEntity entity) {
+        if (entity == null) return null;
+        Users dto = new Users();
+        dto.setNo(entity.getNo());
+        dto.setId(entity.getId());
+        dto.setUsername(entity.getUsername());
+        dto.setPassword(entity.getPassword());
+        dto.setName(entity.getName());
+        dto.setEmail(entity.getEmail());
+        dto.setEnabled(true);
+        dto.setProvider(entity.getProvider());
+        dto.setBio(entity.getBio());
+        dto.setAvatarUrl(entity.getAvatarUrl());
 
-  @Override
-  public void login(Users user, HttpServletRequest request) throws Exception {
-    // 현재 사용하지 않는 기능이라면 빈 구현만 둬도 됨
-  }
-
-  @Override
-  public boolean insert(Users user) throws Exception {
-    String encodedPassword = passwordEncoder.encode(user.getPassword());
-    user.setPassword(encodedPassword);
-    user.setProvider("traditional"); // 기본값으로 "traditional" 설정
-
-    int result = userMapper.join(user);
-
-    if (result > 0) {
-      UserAuth userAuth = UserAuth.builder()
-          .username(user.getUsername())
-          .auth("ROLE_USER")
-          .build();
-      result += userMapper.insertAuth(userAuth);
+        List<UserAuth> authList = entity.getAuthList().stream()
+                .map(a -> UserAuth.builder().username(a.getUsername()).auth(a.getAuth()).build())
+                .collect(Collectors.toList());
+        dto.setAuthList(authList);
+        return dto;
     }
 
-    return result > 0;
-  }
+    // ─── 회원 등록 ─────────────────────────────────────────────────────
 
-  @Override
-  public Users select(String username) throws Exception {
-    return userMapper.select(username);
-  }
+    @Override
+    @Transactional
+    public boolean insert(Users user) throws Exception {
+        UserEntity entity = new UserEntity();
+        entity.setUsername(user.getUsername());
+        entity.setPassword(passwordEncoder.encode(user.getPassword()));
+        entity.setName(user.getName());
+        entity.setEmail(user.getEmail());
+        entity.setProvider("traditional");
+        UserEntity saved = userRepository.save(entity);
 
-  @Override
-  public boolean update(Users user) throws Exception {
-    String encodedPassword = passwordEncoder.encode(user.getPassword());
-    user.setPassword(encodedPassword);
-    return userMapper.update(user) > 0;
-  }
-
-  /**
-   * ✅ 회원 정보 + 비밀번호 변경까지 처리하는 최종 버전
-   */
-  @Override
-  public boolean updateUser(UserUpdateRequest request) throws Exception {
-
-    Users existingUser = userMapper.findByUsername(request.getUsername());
-    if (existingUser == null) {
-      throw new IllegalArgumentException("사용자를 찾을 수 없습니다.");
+        UserAuthEntity authEntity = UserAuthEntity.builder()
+                .username(saved.getUsername())
+                .auth("ROLE_USER")
+                .build();
+        userAuthRepository.save(authEntity);
+        return true;
     }
+
+    // ─── 회원 조회 ─────────────────────────────────────────────────────
+
+    @Override
+    public Users select(String username) throws Exception {
+        return userRepository.findByUsernameWithAuth(username)
+                .map(this::toDto)
+                .orElse(null);
+    }
+
+    @Override
+    public UserEntity findEntityByUsername(String username) {
+        return userRepository.findByUsernameWithAuth(username).orElse(null);
+    }
+
+    @Override
+    public Users findByUsername(String username) throws Exception {
+        return select(username);
+    }
+
+    // ─── 회원 수정 ─────────────────────────────────────────────────────
+
+    @Override
+    @Transactional
+    public boolean update(Users user) throws Exception {
+        UserEntity entity = userRepository.findByUsername(user.getUsername())
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+        if (user.getPassword() != null && !user.getPassword().isEmpty()) {
+            entity.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
+        entity.setName(user.getName());
+        entity.setEmail(user.getEmail());
+        userRepository.save(entity);
+        return true;
+    }
+
+    @Override
+    @Transactional
+    public boolean updateUser(UserUpdateRequest request) throws Exception {
+        UserEntity entity = userRepository.findByUsernameWithAuth(request.getUsername())
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
         boolean passwordChanged = false;
-    
-        // ✅ 비밀번호 변경 요청 처리 (traditional 로그인 사용자만 해당)
-        // 소셜 로그인 사용자는 비밀번호가 없으므로 이 로직을 건너뛴다.
-        if (existingUser.getProvider() != null && existingUser.getProvider().equals("traditional")) {
-          if (request.getNewPassword() != null && !request.getNewPassword().isEmpty()) {
-    
-            if (request.getCurrentPassword() == null ||
-                !passwordEncoder.matches(request.getCurrentPassword(), existingUser.getPassword())) {
-              throw new IllegalArgumentException("현재 비밀번호가 일치하지 않습니다.");
+
+        // 비밀번호 변경 (일반 로그인 사용자만)
+        if ("traditional".equals(entity.getProvider())) {
+            if (request.getNewPassword() != null && !request.getNewPassword().isEmpty()) {
+                if (request.getCurrentPassword() == null ||
+                        !passwordEncoder.matches(request.getCurrentPassword(), entity.getPassword())) {
+                    throw new IllegalArgumentException("현재 비밀번호가 일치하지 않습니다.");
+                }
+                if (!request.getNewPassword().equals(request.getConfirmPassword())) {
+                    throw new IllegalArgumentException("새 비밀번호가 일치하지 않습니다.");
+                }
+                entity.setPassword(passwordEncoder.encode(request.getNewPassword()));
+                passwordChanged = true;
             }
-    
-            if (!request.getNewPassword().equals(request.getConfirmPassword())) {
-              throw new IllegalArgumentException("새 비밀번호가 일치하지 않습니다.");
-            }
-    
-            String encoded = passwordEncoder.encode(request.getNewPassword());
-            existingUser.setPassword(encoded);
-            passwordChanged = true;
-    
-          } else {
-            // ✅ 비밀번호 변경 없음 → 기존 값 그대로 유지
-          }
         } else {
-          // 소셜 로그인 사용자: 비밀번호 변경 요청이 있어도 무시
-          log.info("소셜 로그인 사용자이므로 비밀번호 변경 요청을 무시합니다.");
+            log.info("소셜 로그인 사용자이므로 비밀번호 변경 요청을 무시합니다.");
         }
-    // ✅ 일반 정보 업데이트
-    existingUser.setName(request.getName());
-    existingUser.setEmail(request.getEmail());
 
-    userMapper.update(existingUser);
+        entity.setName(request.getName());
+        entity.setEmail(request.getEmail());
+        userRepository.save(entity);
+        return passwordChanged;
+    }
 
-    return passwordChanged;
-  }
+    // ─── 회원 삭제 ─────────────────────────────────────────────────────
 
-  @Override
-  public boolean delete(String username) throws Exception {
-    UserAuth userAuth = UserAuth.builder().username(username).build();
-    userMapper.deleteAuth(userAuth);
+    @Override
+    @Transactional
+    public boolean delete(String username) throws Exception {
+        UserEntity entity = userRepository.findByUsername(username)
+                .orElse(null);
+        if (entity == null) return false;
 
-    int userResult = userMapper.delete(username);
-    return userResult > 0;
-  }
-
-  @Override
-  public boolean updateWithPassword(UserUpdateRequest request) throws Exception {
-    return updateUser(request);
-  }
-
-  @Override
-  public Users findByUsername(String username) throws Exception {
-    return userMapper.findByUsername(username);
-  }
+        userAuthRepository.deleteByUsername(username);
+        userRepository.delete(entity);
+        return true;
+    }
 }

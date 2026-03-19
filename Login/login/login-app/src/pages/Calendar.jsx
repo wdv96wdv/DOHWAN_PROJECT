@@ -1,14 +1,22 @@
 import React, { useState } from 'react';
-import '../assets/css/Calendar.css';  // 스타일을 따로 분리
+import '../assets/css/Calendar.css';
+import "../assets/css/auth.css";
+import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, Save, X, Activity } from 'lucide-react';
 
-const daysOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
+const daysOfWeek = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 
 const generateCalendar = (year, month) => {
   const startDate = new Date(year, month, 1);
   const endDate = new Date(year, month + 1, 0);
   const calendar = [];
-  let currentDay = startDate;
+  
+  // Fill leading empty days
+  const startDay = startDate.getDay();
+  for (let i = 0; i < startDay; i++) {
+    calendar.push(null);
+  }
 
+  let currentDay = new Date(startDate);
   while (currentDay <= endDate) {
     calendar.push(new Date(currentDay));
     currentDay.setDate(currentDay.getDate() + 1);
@@ -25,8 +33,10 @@ const ExerciseCalendar = () => {
   const [selectedDate, setSelectedDate] = useState(null);
 
   const calendarDays = generateCalendar(date.getFullYear(), date.getMonth());
+  const today = new Date();
 
   const handleDateClick = (clickedDate) => {
+    if (!clickedDate) return;
     const dateString = clickedDate.toDateString();
     setSelectedDate(clickedDate);
     setInput(exercise[dateString] || '');
@@ -40,43 +50,76 @@ const ExerciseCalendar = () => {
       [dateString]: input,
     });
     setShowModal(false);
-    setInput('');
   };
 
   return (
-    <div className="calendar-container">
-      <div className="calendar-header">
-        <button onClick={() => setDate(new Date(date.getFullYear(), date.getMonth() - 1))}>◁</button>
-        <h3>{date.toLocaleString('default', { month: 'long' })} {date.getFullYear()}</h3>
-        <button onClick={() => setDate(new Date(date.getFullYear(), date.getMonth() + 1))}>▷</button>
-      </div>
-      <div className="calendar-days">
+    <div className="calendar-page">
+      <header className="calendar-header">
+        <h3 style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <CalendarIcon color="var(--primary)" />
+          {date.toLocaleString('default', { month: 'long' }).toUpperCase()} {date.getFullYear()}
+        </h3>
+        <div style={{ display: 'flex', gap: '8px' }}>
+          <button className="calendar-nav-btn" onClick={() => setDate(new Date(date.getFullYear(), date.getMonth() - 1))}>
+            <ChevronLeft size={20} />
+          </button>
+          <button className="calendar-nav-btn" onClick={() => setDate(new Date(date.getFullYear(), date.getMonth() + 1))}>
+            <ChevronRight size={20} />
+          </button>
+        </div>
+      </header>
+
+      <div className="calendar-grid">
         {daysOfWeek.map((day) => (
-          <div key={day} className="calendar-day header">{day}</div>
+          <div key={day} className="calendar-day-label">{day}</div>
         ))}
-        {calendarDays.map((day) => (
-          <div
-            key={day}
-            className="calendar-day"
-            onClick={() => handleDateClick(day)}
-          >
-            <span>{day.getDate()}</span>
-            {exercise[day.toDateString()] && <div className="exercise-record">✅</div>}
-          </div>
-        ))}
+        {calendarDays.map((day, idx) => {
+          const isToday = day && day.toDateString() === today.toDateString();
+          const hasRecord = day && exercise[day.toDateString()];
+
+          return (
+            <div
+              key={idx}
+              className={`calendar-cell ${isToday ? 'today' : ''}`}
+              onClick={() => handleDateClick(day)}
+              style={{ visibility: day ? 'visible' : 'hidden' }}
+            >
+              {day && (
+                <>
+                  <span className="day-num">{day.getDate()}</span>
+                  {hasRecord && <div className="exercise-indicator"></div>}
+                </>
+              )}
+            </div>
+          );
+        })}
       </div>
 
       {showModal && (
-        <div className="modal">
-          <div className="modal-content">
-            <h4>{selectedDate.toDateString()}</h4>
+        <div className="modal-overlay" onClick={() => setShowModal(false)}>
+          <div className="calendar-modal" onClick={e => e.stopPropagation()}>
+            <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <h4 style={{ margin: 0, color: 'var(--text-primary)', fontFamily: 'Orbitron', fontSize: '1rem' }}>
+                {selectedDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+              </h4>
+              <button onClick={() => setShowModal(false)} className="btn-icon"><X size={20}/></button>
+            </header>
+            
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: 'var(--text-muted)', fontSize: '0.85rem' }}>
+              <Activity size={14} /> EXERCISE LOG
+            </div>
+
             <textarea
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="운동 기록을 입력하세요."
+              placeholder="How was your run today? Enter your record here..."
+              className="form-control"
+              style={{ minHeight: '150px' }}
             />
-            <button onClick={handleSaveRecord}>저장</button>
-            <button onClick={() => setShowModal(false)}>닫기</button>
+            
+            <button className="btn-auth" onClick={handleSaveRecord} style={{ padding: '12px' }}>
+              <Save size={18} style={{marginRight: '8px'}} /> SAVE RECORD
+            </button>
           </div>
         </div>
       )}

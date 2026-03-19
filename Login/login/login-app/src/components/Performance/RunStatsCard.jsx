@@ -1,10 +1,11 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import { getRunRecords } from '../../apis/performance';
-import styles from '../../assets/css/common.module.css';
-import { LoginContext } from '../../contexts/LoginContextProvider'; // LoginContext import
+import "../../assets/css/performance.css";
+import useAuthStore from '../../store/useAuthStore';
+import { Route, Clock, Flame, Zap, Activity } from 'lucide-react';
 
 const RunStatsCard = ({ refreshKey = 0 }) => {
-  const { userInfo } = useContext(LoginContext); // userInfo 가져오기
+  const userInfo = useAuthStore(state => state.userInfo);
   const [stats, setStats] = useState({
     totalDistance: 0,
     totalDuration: 0,
@@ -14,31 +15,12 @@ const RunStatsCard = ({ refreshKey = 0 }) => {
   });
 
   useEffect(() => {
-    if (!userInfo || !userInfo.no) {
-      console.warn('로그인 정보가 없어 러닝 통계를 불러올 수 없습니다.');
-      setStats({
-        totalDistance: 0,
-        totalDuration: 0,
-        totalCalories: 0,
-        avgPace: 0,
-        avgSpeed: 0
-      });
-      return;
-    }
+    if (!userInfo?.no) return;
 
-    getRunRecords(userInfo.no)
+    getRunRecords()
       .then((res) => {
         const records = res.data || [];
-        if (records.length === 0) {
-          setStats({
-            totalDistance: 0,
-            totalDuration: 0,
-            totalCalories: 0,
-            avgPace: 0,
-            avgSpeed: 0
-          });
-          return;
-        }
+        if (records.length === 0) return;
 
         const totalDistance = records.reduce((sum, r) => sum + (r.distanceKm || 0), 0);
         const totalDuration = records.reduce((sum, r) => sum + (r.durationSec || 0), 0);
@@ -46,36 +28,28 @@ const RunStatsCard = ({ refreshKey = 0 }) => {
         const avgPace = totalDistance > 0 ? (totalDuration / 60) / totalDistance : 0;
         const avgSpeed = totalDuration > 0 ? totalDistance / (totalDuration / 3600) : 0;
 
-        setStats({
-          totalDistance,
-          totalDuration,
-          totalCalories,
-          avgPace,
-          avgSpeed
-        });
+        setStats({ totalDistance, totalDuration, totalCalories, avgPace, avgSpeed });
       })
-      .catch((err) => {
-        console.error('통계 조회 실패:', err);
-        setStats({
-          totalDistance: 0,
-          totalDuration: 0,
-          totalCalories: 0,
-          avgPace: 0,
-          avgSpeed: 0
-        });
-      });
+      .catch(console.error);
   }, [refreshKey, userInfo]);
 
+  const statItems = [
+    { label: "Total Distance", value: `${stats.totalDistance.toFixed(2)} km`, icon: <Route /> },
+    { label: "Total Time", value: `${(stats.totalDuration / 60).toFixed(1)} m`, icon: <Clock /> },
+    { label: "Total Calories", value: `${stats.totalCalories} kcal`, icon: <Flame /> },
+    { label: "Avg Pace", value: `${stats.avgPace.toFixed(2)} m/k`, icon: <Zap /> },
+    { label: "Avg Speed", value: `${stats.avgSpeed.toFixed(2)} k/h`, icon: <Activity /> },
+  ];
+
   return (
-    <div className={styles.container}>
-      <h2 className={styles.title}>전체 러닝 통계 요약</h2>
-      <div className={styles.section}>
-        <p className={styles.pageText}>총 거리: {stats.totalDistance.toFixed(2)} km</p>
-        <p className={styles.pageText}>총 시간: {(stats.totalDuration / 60).toFixed(1)} 분</p>
-        <p className={styles.pageText}>총 칼로리: {stats.totalCalories} kcal</p>
-        <p className={styles.pageText}>평균 페이스: {stats.avgPace.toFixed(2)} 분/km</p>
-        <p className={styles.pageText}>평균 속도: {stats.avgSpeed.toFixed(2)} km/h</p>
-      </div>
+    <div className="stats-grid">
+      {statItems.map((item, idx) => (
+        <div key={idx} className="stat-card">
+          <div className="stat-card-icon">{item.icon}</div>
+          <div className="stat-card-value">{item.value}</div>
+          <div className="stat-card-label">{item.label}</div>
+        </div>
+      ))}
     </div>
   );
 };

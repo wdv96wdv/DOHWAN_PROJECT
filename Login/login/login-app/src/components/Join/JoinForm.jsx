@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import '../../assets/css/join.css';
+import '../../assets/css/auth.css';
 import { checkUsername } from '../../apis/auth';
 import * as Swal from '../../apis/alert';
+import { Link } from 'react-router-dom';
 
 const JoinForm = ({ join }) => {
   const [username, setUsername] = useState('');
@@ -66,44 +67,38 @@ const JoinForm = ({ join }) => {
   };
 
   return (
-    <div className="form">
-      <h2 className="login-title">회원가입</h2>
-      <form className="login-form" onSubmit={onJoin}>
-        <div>
-          <label htmlFor="username">ID</label>
-          <div style={{ display: 'flex', gap: '8px' }}>
+    <div className="auth-card">
+      <h2 className="auth-title">CREATE ACCOUNT</h2>
+      <form className="auth-form" onSubmit={onJoin}>
+        <div className="form-group">
+          <label htmlFor="username">Username</label>
+          <div className="input-with-button">
             <input
               type="text"
               id="username"
-              name="username"
-              placeholder="ID"
-              autoComplete="username"
+              className="form-control"
+              placeholder="Username"
               required
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               onKeyUp={checkCapsLock}
               onKeyDown={checkCapsLock}
             />
-            <button type="button" onClick={handleCheckUsername} className="btn btn--form btn-check">
-              중복 확인
+            <button type="button" onClick={handleCheckUsername} className="btn-outline">
+              Check
             </button>
           </div>
-          {isAvailable === false && (
-            <p style={{ fontSize: '12px', color: 'red' }}>이미 사용 중인 아이디입니다.</p>
-          )}
-          {isAvailable === true && (
-            <p style={{ fontSize: '12px', color: 'green' }}>사용 가능한 아이디입니다.</p>
-          )}
+          {isAvailable === false && <p className="validation-msg error">Already in use</p>}
+          {isAvailable === true && <p className="validation-msg success">Available</p>}
         </div>
 
-        <div>
+        <div className="form-group">
           <label htmlFor="password">Password</label>
           <input
             type="password"
             id="password"
-            name="password"
-            placeholder="Password"
-            autoComplete="new-password"
+            className="form-control"
+            placeholder="Min 8 characters"
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -112,14 +107,13 @@ const JoinForm = ({ join }) => {
           />
         </div>
 
-        <div>
-          <label htmlFor="passwordConfirm">비밀번호 확인</label>
+        <div className="form-group">
+          <label htmlFor="passwordConfirm">Confirm Password</label>
           <input
             type="password"
             id="passwordConfirm"
-            name="passwordConfirm"
-            placeholder="비밀번호 확인"
-            autoComplete="new-password"
+            className="form-control"
+            placeholder="Confirm Password"
             required
             value={passwordConfirm}
             onChange={(e) => setPasswordConfirm(e.target.value)}
@@ -127,57 +121,54 @@ const JoinForm = ({ join }) => {
             onKeyDown={checkCapsLock}
           />
           {password && passwordConfirm && (
-            <p style={{ fontSize: '12px', color: passwordMatch ? 'green' : 'red' }}>
-              {passwordMatch ? '비밀번호가 일치합니다.' : '비밀번호가 일치하지 않습니다.'}
+            <p className={`validation-msg ${passwordMatch ? 'success' : 'error'}`}>
+              {passwordMatch ? 'Passwords match' : 'Passwords do not match'}
             </p>
           )}
         </div>
 
-        <div>
-          <label htmlFor="name">Name</label>
+        <div className="form-group">
+          <label htmlFor="name">Full Name</label>
           <input
             type="text"
             id="name"
-            name="name"
-            placeholder="Name"
-            autoComplete="name"
+            className="form-control"
+            placeholder="Full Name"
             required
             value={name}
             onChange={(e) => setName(e.target.value)}
-            onKeyUp={checkCapsLock}
-            onKeyDown={checkCapsLock}
           />
         </div>
 
-        <div>
-          <label htmlFor="email">Email</label>
+        <div className="form-group">
+          <label htmlFor="email">Email Address</label>
           <input
             type="email"
             id="email"
-            name="email"
-            placeholder="Email"
-            autoComplete="email"
+            className="form-control"
+            placeholder="Email Address"
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            onKeyUp={checkCapsLock}
-            onKeyDown={checkCapsLock}
           />
         </div>
 
+        {capsLockOn && (
+          <div className="capslock-warning">
+            <span>⚠️</span> Caps Lock is ON
+          </div>
+        )}
+
         <button
           type="submit"
-          className="btn btn--form btn-login"
+          className="btn-auth"
           disabled={loading || !passwordMatch || isAvailable !== true}
         >
-          {loading ? '가입중입니다...' : '가입하기'}
+          {loading ? 'Creating...' : 'Create Account'}
         </button>
 
-        <div
-          className="capslock-warning"
-          style={{ display: capsLockOn ? 'block' : 'none' }}
-        >
-          ⚠️ Caps Lock이 켜져 있습니다.
+        <div className="auth-footer">
+          Already have an account? <Link to="/login">Log In</Link>
         </div>
       </form>
     </div>

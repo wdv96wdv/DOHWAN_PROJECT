@@ -1,25 +1,24 @@
-import axios from "axios";
 import supabase from "../utils/supabaseClient";
 import api from './api';
 
 // 로컬
 // 업로드
-export const upload = (data, headers) => axios.post(`/api/files`, data, headers)
+export const upload = (data, headers) => api.post(`/files`, data, headers)
 
 // 다운로드
-export const download = (id) => axios.get(`/api/files/download/${id}`, { responseType: 'blob' })
+export const download = (id) => api.get(`/files/download/${id}`, { responseType: 'blob' })
 
 // 파일 삭제
-export const remove = (id) => axios.delete(`/api/files/${id}`)
+export const remove = (id) => api.delete(`/files/${id}`)
 
 // 파일 선택 삭제
-export const removeFiles = (idList) => axios.delete(`/api/files?idList=${idList}`)
+export const removeFiles = (idList) => api.delete(`/files`, { params: { idList } })
 
 // 타입별 파일 목록
-export const fileByType = (pTable, pNo, type) => axios.get(`/api/files/${pTable}/${pNo}/?type=${type}`)
+export const fileByType = (pTable, pNo, type) => api.get(`/files/${pTable}/${pNo}`, { params: { type } })
 
 
-// 운영
+// 운영 (Supabase Storage 직접 연동)
 // 파일 업로드 함수
 export const uploadFileToSupabase = async (file, folder) => {
   // Sanitize the file name to handle special characters, including Korean
@@ -100,5 +99,5 @@ export const deleteMultipleFilesFromSupabase = async (filePaths) => {
   }
 };
 
-// 파일 삭제
-export const removeFromSupabase = (id) => api.delete(`/files/${id}`)
+// 백엔드 DB 연동 파일 삭제
+export const removeFromSupabase = (id) => api.delete(`/files/${id}`)

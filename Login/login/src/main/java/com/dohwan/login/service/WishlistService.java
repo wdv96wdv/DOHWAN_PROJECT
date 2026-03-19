@@ -1,6 +1,6 @@
 package com.dohwan.login.service;
 
-import com.dohwan.login.domain.WishlistDto;
+import com.dohwan.login.dto.WishlistDto;
 import com.dohwan.login.entity.Wishlist;
 import com.dohwan.login.repository.WishlistRepository;
 import org.springframework.beans.factory.annotation.Autowired;

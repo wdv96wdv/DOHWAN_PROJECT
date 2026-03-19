@@ -14,24 +14,21 @@ import com.dohwan.login.entity.Records;
 @Repository
 public interface RecordRepository extends JpaRepository<Records, Long> {
 
-    // 생성일 기준 내림차순 정렬
-    List<Records> findAllByOrderByCreatedAtDesc();
+    // 사용자별 생성일 기준 내림차순 정렬
+    List<Records> findByUserNoOrderByCreatedAtDesc(Long userNo);
 
-    // 운동 이름으로 검색
-    List<Records> findByRunningNameContainingIgnoreCaseOrderByCreatedAtDesc(String runningName);
+    // 사용자별 운동 이름으로 검색
+    List<Records> findByUserNoAndRunningNameContainingIgnoreCaseOrderByCreatedAtDesc(Long userNo, String runningName);
 
-    // recordDate 기준 특정 날짜 운동 기록 조회
-    @Query("SELECT r FROM Records r WHERE r.recordDate >= :start AND r.recordDate < :end ORDER BY r.createdAt DESC")
+    // 사용자별 recordDate 기준 특정 날짜 운동 기록 조회
+    @Query("SELECT r FROM Records r WHERE r.userNo = :userNo AND r.recordDate >= :start AND r.recordDate < :end ORDER BY r.createdAt DESC")
     List<Records> findRecordsByDateRange(
-            @Param("start") LocalDateTime start, 
+            @Param("userNo") Long userNo,
+            @Param("start") LocalDateTime start,
             @Param("end") LocalDateTime end
     );
 
-    // 특정 운동의 최신 기록 조회
-    @Query("SELECT r FROM Records r WHERE r.runningName = :runningName ORDER BY r.createdAt DESC")
-    List<Records> findLatestByRunningName(@Param("runningName") String runningName);
-
-    // UUID로 운동 기록 조회
+    // UUID로 운동 기록 조회 (사용자 검증 포함 권장)
     Optional<Records> findById(String id);
 
     // UUID로 운동 기록 존재 여부 확인

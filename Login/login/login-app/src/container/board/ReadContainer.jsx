@@ -5,12 +5,12 @@ import * as boards from '../../apis/boards'
 import * as files from '../../apis/files'
 import * as comments from '../../apis/comments'
 import Swal from 'sweetalert2'
-import { LoginContext } from '../../contexts/LoginContextProvider'
+import useAuthStore from '../../store/useAuthStore'
 
 const ReadContainer = () => {
   const { id } = useParams()
   const navigate = useNavigate() // useNavigate 인스턴스 생성
-  const { userInfo } = useContext(LoginContext)
+  const userInfo = useAuthStore(state => state.userInfo)
 
   const [board, setBoard] = useState({})
   const [fileList, setFileList] = useState([])

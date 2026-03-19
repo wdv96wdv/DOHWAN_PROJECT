@@ -18,4 +18,7 @@ public class Goal {
     private String title;
     private double targetValue;
     private String unit;
+
+    @Column(name = "user_no")
+    private Long userNo;
 }

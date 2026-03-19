@@ -3,12 +3,12 @@ import { auth, googleProvider } from '../../utils/firebase';
 import { signInWithPopup } from 'firebase/auth';
 import axios from 'axios';
 import { useContext } from 'react';
-import { LoginContext } from '../../contexts/LoginContextProvider';
+import useAuthStore from '../../store/useAuthStore';
 import googleIcon from '../../assets/img/google-icon.svg';
 
 
 const GoogleLoginButton = () => {
-    const { loginWithSocial } = useContext(LoginContext);
+    const loginWithSocial = useAuthStore(state => state.loginWithSocial);
 
     const handleLogin = async () => {
         try {

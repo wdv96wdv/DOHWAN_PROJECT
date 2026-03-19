@@ -1,41 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import styles from '../../assets/css/List.module.css';
+import "../../assets/css/board.css";
+import "../../assets/css/auth.css";
 import noImage from '../../assets/img/no-image.png';
-import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
-import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
-import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
-import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+import { 
+  ChevronLeft, 
+  ChevronRight, 
+  ChevronsLeft, 
+  ChevronsRight, 
+  Pencil, 
+  MessageSquare,
+  Search
+} from 'lucide-react';
 import * as format from '../../utils/format';
 import Swal from 'sweetalert2';
-import Cookies from 'js-cookie';
+import useAuthStore from '../../store/useAuthStore';
 
 const List = ({ list = [], pagination }) => {
+  const isLogin = useAuthStore(state => state.isLogin);
   const [pageList, setPageList] = useState([]);
-  const [isWide, setIsWide] = useState(false);
 
   useEffect(() => {
-    setIsWide(window.innerWidth > 768);
     createPageList();
   }, [pagination]);
-
-  const isLoggedIn = () => {
-    // 1. localStorage의 userInfo나 isLogin 확인 (가장 확실)
-    const isLogin = localStorage.getItem('isLogin');
-    if (isLogin === 'true') {
-      return true;
-    }
-
-    // 2. 쿠키에서 JWT 가져오기
-    const cookieToken = Cookies.get('jwt');
-    if (cookieToken) {
-      return true;
-    }
-
-    // 3. localStorage에서 JWT 가져오기 (기존 방식)
-    const localToken = localStorage.getItem('jwt');
-    return !!localToken;
-  };
 
   const createPageList = () => {
     const newPageList = [];
@@ -45,109 +32,106 @@ const List = ({ list = [], pagination }) => {
     setPageList(newPageList);
   };
 
-  const truncateText = (text, maxLength) => {
-    if (!text) return '';
-    return text.length > maxLength ? text.slice(0, maxLength) + '...' : text;
+  const handleWriteClick = (e) => {
+    if (!isLogin) {
+      e.preventDefault();
+      Swal.fire({
+        icon: 'info',
+        title: 'Login Required',
+        text: 'Please login to write a post.',
+        confirmButtonColor: 'var(--primary)'
+      });
+    }
   };
 
   return (
-    <div className={styles.container}>
-      <h1 className={styles.title}>커뮤니티</h1>
-
-      {isLoggedIn() ? (
-        <Link to="/boards/insert" className={styles.btn}>글쓰기</Link>
-      ) : (
-        <button
-          className={styles.btn}
-          onClick={() => {
-            Swal.fire({
-              icon: 'info',
-              title: '로그인 필요',
-              text: '글쓰기는 로그인 후 이용 가능합니다.',
-              confirmButtonText: '확인',
-            });
-          }}
-        >
-          글쓰기
-        </button>
-      )}
-
-      <table className={styles.table}>
-        {isWide && (
-          <colgroup>
-            <col style={{ width: '3%' }} />
-            <col style={{ width: '30%' }} />
-            <col style={{ width: '40%' }} />
-            <col style={{ width: '12%' }} />
-            <col style={{ width: '15%' }} />
-          </colgroup>
-        )}
-        <thead>
-          <tr>
-            <th>번호</th>
-            <th>썸네일</th>
-            <th>제목</th>
-            <th>작성자</th>
-            <th>등록일자</th>
-          </tr>
-        </thead>
-        <tbody>
-          {list.length === 0 ? (
-            <tr>
-              <td colSpan={5} align="center">조회된 게시글이 없습니다.</td>
-            </tr>
-          ) : (
-            list.map((board, index) => (
-              <tr key={board.id}>
-                <td>{index + 1}</td>
-                <td>
-                  <img
-                    src={board.file?.filePath || noImage}
-                    alt={board.file?.originName || 'no-image'}
-                    className={styles.boardImg}
-                  />
-                </td>
-                <td>
-                  <Link to={`/boards/${board.id}`} className={styles.link}>
-                    {truncateText(board.title, 30)}
-                    {board.commentCount > 0 && (
-                      <span style={{ marginLeft: '4px', color: '#888' }}>
-                        ({board.commentCount})
-                      </span>
-                    )}
-                  </Link>
-                </td>
-                <td>{truncateText(board.writer, 10)}</td>
-                <td>{format.formatDate(board.createdAt)}</td>
-              </tr>
-            ))
-          )}
-        </tbody>
-      </table>
-
-      <div className={styles.pagination}>
-        <Link to={`/boards?page=${pagination.first}`} className={styles['btn-page']}>
-          <KeyboardDoubleArrowLeftIcon />
+    <div className="board-page">
+      <header className="board-header">
+        <h1>COMMUNITY</h1>
+        <Link to="/boards/insert" className="btn-auth" onClick={handleWriteClick} style={{ padding: '10px 24px', fontSize: '0.9rem' }}>
+          <Pencil size={16} style={{marginRight: '8px'}} /> WRITE
         </Link>
-        <Link to={`/boards?page=${pagination.prev}`} className={styles['btn-page']}>
-          <KeyboardArrowLeftIcon />
+      </header>
+
+      <div className="board-table-container">
+        <table className="board-table">
+          <thead>
+            <tr>
+              <th style={{ width: '80px', textAlign: 'center' }}>NO</th>
+              <th style={{ width: '100px' }}>THUMB</th>
+              <th>SUBJECT</th>
+              <th style={{ width: '150px' }}>WRITER</th>
+              <th style={{ width: '150px', textAlign: 'right' }}>DATE</th>
+            </tr>
+          </thead>
+          <tbody>
+            {list.length === 0 ? (
+              <tr>
+                <td colSpan={5} style={{ padding: '100px 0', textAlign: 'center', opacity: 0.5 }}>
+                  <Search size={48} style={{margin: '0 auto 16px', display: 'block'}} />
+                  No posts found.
+                </td>
+              </tr>
+            ) : (
+              list.map((board, index) => (
+                <tr key={board.id}>
+                  <td style={{ textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.85rem' }}>
+                    {index + 1 + (pagination.page - 1) * pagination.size}
+                  </td>
+                  <td>
+                    <img
+                      src={board.file?.filePath || noImage}
+                      alt="thumb"
+                      className="board-thumb"
+                    />
+                  </td>
+                  <td>
+                    <Link to={`/boards/${board.id}`} className="board-link">
+                      {board.title}
+                      {board.commentCount > 0 && (
+                        <span className="comment-count">
+                          <MessageSquare size={12} style={{marginRight: '4px', verticalAlign: 'middle'}} />
+                          {board.commentCount}
+                        </span>
+                      )}
+                    </Link>
+                  </td>
+                  <td>
+                    <div style={{ fontWeight: 600 }}>{board.writer}</div>
+                  </td>
+                  <td style={{ textAlign: 'right', color: 'var(--text-muted)', fontSize: '0.85rem' }}>
+                    {format.formatDate(board.createdAt)}
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="pagination">
+        <Link to={`/boards?page=${pagination.first}`} className="page-btn">
+          <ChevronsLeft size={18} />
+        </Link>
+        <Link to={`/boards?page=${pagination.prev}`} className="page-btn">
+          <ChevronLeft size={18} />
         </Link>
 
         {pageList.map((page) => (
           <Link
             key={page}
             to={`/boards?page=${page}&size=${pagination.size}`}
-            className={`${styles['btn-page']} ${page === Number(pagination.page) ? styles.active : ''}`}
+            className={`page-btn ${page === Number(pagination.page) ? 'active' : ''}`}
           >
             {page}
           </Link>
         ))}
 
-        <Link to={`/boards?page=${pagination.next}`} className={styles['btn-page']}>
-          <KeyboardArrowRightIcon />
+        <Link to={`/boards?page=${pagination.next}`} className="page-btn">
+          <ChevronRight size={18} />
         </Link>
-        <Link to={`/boards?page=${pagination.last}`} className={styles['btn-page']}>
-          <KeyboardDoubleArrowRightIcon />
+        <Link to={`/boards?page=${pagination.last}`} className="page-btn">
+          <ChevronsRight size={18} />
         </Link>
       </div>
     </div>

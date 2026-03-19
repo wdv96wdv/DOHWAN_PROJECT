@@ -1,11 +1,13 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
-import styles from '../../assets/css/Read.module.css';
+import "../../assets/css/board.css";
+import "../../assets/css/auth.css";
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import noImage from '../../assets/img/no-image.png';
 import CommentList from './Comment';
 import Swal from 'sweetalert2';
+import useAuthStore from '../../store/useAuthStore';
+import { ArrowLeft, Edit3, Trash2, Download, User, Calendar, FileText } from 'lucide-react';
 
 const Read = ({
   board = {},
@@ -15,38 +17,24 @@ const Read = ({
   onCreateComment,
   onUpdateComment,
   onDeleteComment,
-  onDelete, // onDelete prop 추가
+  onDelete,
 }) => {
-  if (!board || !board.title) {
-    return <div>게시글 정보를 불러오는 중입니다...</div>;
-  }
-
   const { id } = useParams();
+  const userInfo = useAuthStore(state => state.userInfo);
+  const user_no = userInfo?.no;
 
-  const getUserNoFromJWT = () => {
-    const token = localStorage.getItem("jwt");
-    if (!token) return null;
-    try {
-      const payload = JSON.parse(atob(token.split(".")[1]));
-      return payload.no;
-    } catch {
-      return null;
-    }
-  };
-
-  const user_no = getUserNoFromJWT();
-
-  const mainFile = fileList?.find(
-    (f) => f.type?.toUpperCase() === 'MAIN' || f.type?.toUpperCase() === 'THUMBNAIL'
-  );
+  if (!board || !board.title) {
+    return <div style={{padding: '100px', textAlign: 'center'}}>Loading post...</div>;
+  }
 
   const handleDelete = async () => {
     const result = await Swal.fire({
-      title: '게시글을 삭제하시겠습니까?',
+      title: 'Delete this post?',
+      text: "You won't be able to revert this!",
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: '삭제',
-      cancelButtonText: '취소'
+      confirmButtonColor: '#f44336',
+      confirmButtonText: 'Yes, delete it!'
     })
     if (result.isConfirmed) {
       onDelete(id);
@@ -54,131 +42,74 @@ const Read = ({
   }
 
   return (
-    <div className={styles.container}>
-      <h1 className={styles.title}>게시글 조회</h1>
+    <div className="board-page">
+      <div className="read-container">
+        <header className="read-header">
+          <h1 className="read-title">{board.title}</h1>
+          <div className="read-meta">
+            <span style={{display: 'flex', alignItems: 'center', gap: '6px'}}><User size={16} /> {board.writer}</span>
+            <span style={{display: 'flex', alignItems: 'center', gap: '6px'}}><Calendar size={16} /> {new Date(board.createdAt).toLocaleDateString()}</span>
+          </div>
+        </header>
 
-      <form>
-        <table className={styles.table}>
-          <tbody>
-            <tr>
-              <th>제목</th>
-              <td>
-                <input
-                  type="text"
-                  value={board.title ?? ''}
-                  className={styles.formInput}
-                  readOnly
-                />
-              </td>
-            </tr>
+        <div className="read-content">
+          <CKEditor
+            editor={ClassicEditor}
+            data={board.content ?? ''}
+            disabled={true}
+            config={{ toolbar: [] }}
+          />
+        </div>
 
-            <tr>
-              <th>작성자</th>
-              <td>
-                <input
-                  type="text"
-                  value={board.writer ?? ''}
-                  className={styles.formInput}
-                  readOnly
-                />
-              </td>
-            </tr>
-
-            <tr>
-              <th colSpan={2}>대표 이미지</th>
-            </tr>
-            <tr>
-              <td colSpan={2}>
-                <div className={styles.thumbnailBox}>
-                  {mainFile ? (
-                    <>
-                      <span className={styles.badge}>대표 이미지</span>
-                      <img
-                        src={mainFile.filePath}
-                        alt={mainFile.originName}
-                        className={styles.mainImage}
-                      />
-                    </>
-                  ) : (
-                    <div style={{ height: '200px', background: '#f5f5f5', textAlign: 'center', lineHeight: '200px', color: '#aaa' }}>
-                      이미지 없음
-                    </div>
-                  )}
+        {fileList.length > 0 && (
+          <div style={{ marginTop: '48px', borderTop: '1px solid var(--glass-border)', paddingTop: '24px' }}>
+            <h4 style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px', color: 'var(--text-muted)' }}>
+              <FileText size={18} /> ATTACHMENTS
+            </h4>
+            <div className="file-preview-grid">
+              {fileList.map((file) => (
+                <div key={file.id} className="preview-item" style={{ height: 'auto', display: 'flex', flexDirection: 'column', background: 'hsla(0,0%,50%,0.05)', padding: '12px' }}>
+                  <img src={file.filePath} alt="file" className="preview-img" style={{ height: '100px', borderRadius: '4px', marginBottom: '8px' }} />
+                  <div style={{ fontSize: '0.75rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', marginBottom: '8px' }}>{file.originName}</div>
+                  <button
+                    className="btn-auth"
+                    style={{ padding: '6px', fontSize: '0.7rem' }}
+                    onClick={() => onDownload(file.id, file.originName)}
+                  >
+                    <Download size={12} style={{marginRight: '4px'}} /> DOWNLOAD
+                  </button>
                 </div>
-              </td>
-            </tr>
+              ))}
+            </div>
+          </div>
+        )}
 
-            <tr>
-              <th colSpan={2}>내용</th>
-            </tr>
-            <tr>
-              <td colSpan={2}>
-                <div className={styles.contentBox}>
-                  <CKEditor
-                    editor={ClassicEditor}
-                    data={board.content ?? ''}
-                    disabled={true}
-                    config={{ toolbar: [] }}
-                  />
-                </div>
-              </td>
-            </tr>
-
-            {fileList.length > 0 && (
-              <>
-                <tr>
-                  <th colSpan={2}>첨부파일</th>
-                </tr>
-                <tr>
-                  <td colSpan={2}>
-                    <div className={styles.fileList}>
-                      {fileList.map((file) => (
-                        <div key={file.id} className={styles.fileItem}>
-                          <div style={{ position: 'relative', width: '100%' }}>
-                            {file.type?.toUpperCase() === 'MAIN' && (
-                              <span className={styles.badge}>대표</span>
-                            )}
-                            <img
-                              src={file?.filePath ? file.filePath : noImage}
-                              alt={file?.originName}
-                              className={styles.fileImage}
-                            />
-                          </div>
-                          <span>{file.originName} ({file.fileSize})</span>
-                          <button
-                            type="button"
-                            className={styles.btn}
-                            onClick={() => onDownload(file.id, file.originName)}
-                          >
-                            다운로드
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  </td>
-                </tr>
-              </>
-            )}
-          </tbody>
-        </table>
-
-        <div className={styles.btnBox}>
-          <Link to="/boards" className={styles.btn}>목록</Link>
+        <div className="board-header" style={{ marginTop: '48px', borderTop: '1px solid var(--glass-border)', paddingTop: '32px' }}>
+          <Link to="/boards" className="btn-auth secondary" style={{ padding: '10px 20px', fontSize: '0.85rem' }}>
+            <ArrowLeft size={16} style={{marginRight: '8px'}} /> BACK TO LIST
+          </Link>
+          
           {user_no && user_no === board.userNo && (
-            <>
-              <Link to={`/boards/update/${id}`} className={styles.btn}>수정</Link>
-              <button type="button" className={styles.btn} onClick={handleDelete}>삭제</button>
-            </>
+            <div style={{ display: 'flex', gap: '12px' }}>
+              <Link to={`/boards/update/${id}`} className="btn-auth" style={{ padding: '10px 20px', fontSize: '0.85rem' }}>
+                <Edit3 size={16} style={{marginRight: '8px'}} /> EDIT
+              </Link>
+              <button type="button" className="btn-auth danger" onClick={handleDelete} style={{ padding: '10px 20px', fontSize: '0.85rem' }}>
+                <Trash2 size={16} style={{marginRight: '8px'}} /> DELETE
+              </button>
+            </div>
           )}
         </div>
-      </form>
 
-      <CommentList
-        comments={commentList}
-        onCreate={onCreateComment}
-        onUpdate={onUpdateComment}
-        onDelete={onDeleteComment}
-      />
+        <div className="comment-section">
+          <CommentList
+            comments={commentList}
+            onCreate={onCreateComment}
+            onUpdate={onUpdateComment}
+            onDelete={onDeleteComment}
+          />
+        </div>
+      </div>
     </div>
   );
 };
