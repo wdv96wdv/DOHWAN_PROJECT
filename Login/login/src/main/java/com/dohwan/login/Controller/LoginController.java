@@ -1,7 +1,6 @@
 package com.dohwan.login.Controller;
 
 import com.dohwan.login.common.ApiResponse;
-import com.dohwan.login.dto.AuthenticationRequest;
 import com.dohwan.login.dto.SocialLoginRequest;
 import com.dohwan.login.dto.UserAuth;
 import com.dohwan.login.dto.Users;
@@ -18,10 +17,8 @@ import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +32,6 @@ public class LoginController {
     private final JwtProps jwtProps;
     private final UserRepository userRepository;
     private final UserAuthRepository userAuthRepository;
-    private final PasswordEncoder passwordEncoder;
 
     // ─── 아이디 중복 확인 ──────────────────────────────────────────────
 
@@ -47,27 +43,8 @@ public class LoginController {
     }
 
     // ─── 일반 로그인 ───────────────────────────────────────────────────
+    // (Spring Security Filter에서 처리 중)
 
-    @PostMapping("/login")
-    public ResponseEntity<ApiResponse<?>> login(@RequestBody AuthenticationRequest authReq) {
-        String username = authReq.getUsername();
-
-        UserEntity user = userRepository.findByUsernameWithAuth(username)
-                .orElse(null);
-
-        if (user == null) {
-            return ResponseEntity.status(401)
-                    .body(ApiResponse.error(401, "존재하지 않는 사용자입니다."));
-        }
-
-        if (!passwordEncoder.matches(authReq.getPassword(), user.getPassword())) {
-            return ResponseEntity.status(401)
-                    .body(ApiResponse.error(401, "비밀번호가 일치하지 않습니다."));
-        }
-
-        String jwt = buildJwt(user);
-        return ResponseEntity.ok(ApiResponse.success("로그인 성공", jwt));
-    }
 
     // ─── 소셜 로그인 ───────────────────────────────────────────────────
 
@@ -86,6 +63,7 @@ public class LoginController {
             user.setEmail(request.getEmail());
             user.setPassword("SOCIAL_LOGIN_NO_PASSWORD");
             user.setProvider("google");
+            user.setAvatarUrl(request.getAvatar_url());
             UserEntity saved = userRepository.save(user);
 
             UserAuthEntity authEntity = UserAuthEntity.builder()

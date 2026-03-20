@@ -18,16 +18,16 @@ const ReadContainer = () => {
 
   const getBoard = async () => {
     const response = await boards.select(id)
-    const data = await response.data
-    setBoard(data.board)
-    setFileList(data.fileList)
+    const resData = response.data.data
+    setBoard(resData.board)
+    setFileList(resData.fileList)
   }
 
   const getComments = async () => {
     try {
       const response = await comments.list(id)
-      const data = await response.data
-      setCommentList(data || [])
+      const resData = response.data.data
+      setCommentList(resData || [])
     } catch (err) {
       console.error('댓글 목록 조회 실패:', err)
       setCommentList([])

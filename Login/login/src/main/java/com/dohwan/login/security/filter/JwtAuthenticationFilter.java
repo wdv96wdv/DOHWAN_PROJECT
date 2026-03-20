@@ -12,6 +12,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.dohwan.login.common.ApiResponse;
 import com.dohwan.login.dto.AuthenticationRequest;
 import com.dohwan.login.dto.CustomUser;
 import com.dohwan.login.dto.Users;
@@ -118,10 +119,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     // 👩‍💼 사용자 정보 body 세팅
     ObjectMapper objectMapper = new ObjectMapper();
-    String jsonString = objectMapper.writeValueAsString(user);
+    // ApiResponse<Users> 형태로 래핑하여 프론트엔드와 규격 맞춤
+    ApiResponse<Users> apiResponse = ApiResponse.success(user);
+    String jsonString = objectMapper.writeValueAsString(apiResponse);
+    
     response.setContentType("application/json");
     response.setCharacterEncoding("UTF-8");
-    // jsonString : "{ 'username' : 'dohwan', 'name' : '사용자', ... }"
+    // jsonString : "{ 'status': 200, 'message': 'SUCCESS', 'data': { 'username' : 'dohwan', ... } }"
     PrintWriter printWriter = response.getWriter();
     printWriter.write(jsonString);
     printWriter.flush();

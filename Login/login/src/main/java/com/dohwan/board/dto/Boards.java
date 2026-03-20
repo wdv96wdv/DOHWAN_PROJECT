@@ -25,8 +25,8 @@ public class Boards {
     private List<String> deleteFiles; // 삭제할 파일 ID 목록
 
     // 파일
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY) // JSON 역직렬화 시 이 필드를 무시하고 직렬화 시에만 사용
-    private Files File;
+    @JsonProperty("file") // JSON 직렬화 시 lowercase 'file'로 보장
+    private Files file;
 
     @Data
     public static class FileInfo {

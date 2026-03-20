@@ -18,9 +18,9 @@ const ListContainer = () => {
     for (let attempt = 1; attempt <= maxAttempts; attempt++) {
       try {
         const response = await boards.list(page, size);
-        const data = await response.data;
-        const list = data.list || [];
-        const pagination = data.pagination || {};
+        const resData = response.data.data;
+        const list = resData.list || [];
+        const pagination = resData.pagination || {};
         setList(list);
         setPagination(pagination);
         break;

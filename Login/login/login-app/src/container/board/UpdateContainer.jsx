@@ -20,9 +20,9 @@ const UpdateContainer = () => {
   const getBoard = async () => {
     try {
       const response = await boards.select(id)
-      const data = await response.data
-      setBoard(data.board)
-      setFileList(data.fileList)
+      const resData = response.data.data
+      setBoard(resData.board)
+      setFileList(resData.fileList)
     } catch (error) {
       console.error(error)
       Swal.fire({ icon: 'error', title: '게시글 조회 중 오류가 발생했습니다.' })

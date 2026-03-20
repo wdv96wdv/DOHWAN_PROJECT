@@ -58,19 +58,20 @@ const useAuthStore = create((set, get) => ({
   login: async (username, password, navigate) => {
     try {
       const response = await auth.login(username, password);
-      const data = response.data;
-      const status = response.status;
-      const headers = response.headers;
-      const authorization = headers.authorization;
-      const jwt = authorization.replace("Bearer ", "");
-
-      if (status === 200) {
-        Cookies.set("jwt", jwt, { expires: 5 });
-        localStorage.setItem("jwt", jwt);
-        get().loginSetting(authorization, data);
-        if (navigate) navigate("/");
+      // Backend (JwtAuthenticationFilter) now returns ApiResponse<User>
+      if (response.status === 200) {
+        const authorization = response.headers['authorization'];
+        
+        // auth.login already saved the jwt to localStorage
+        // Fetch user info after login to ensure session is fully established
+        const infoResponse = await auth.info();
+        if (infoResponse.status === 200) {
+          get().loginSetting(authorization, infoResponse.data.data);
+          if (navigate) navigate("/");
+        }
       }
     } catch (error) {
+      console.error(error);
       Swal.alert(`로그인 실패`, `아이디 또는 비밀번호가 일치하지 않습니다.`, `error`);
     }
   },
@@ -91,7 +92,7 @@ const useAuthStore = create((set, get) => ({
         set({ isLoading: false });
         return;
       }
-      get().loginSetting(authorization, response.data);
+      get().loginSetting(authorization, response.data.data);
     } catch (error) {
       console.error(error);
     } finally {
@@ -120,7 +121,7 @@ const useAuthStore = create((set, get) => ({
     try {
       const response = await auth.info();
       if (response.data && response.status === 200) {
-        const updatedUserInfo = response.data;
+        const updatedUserInfo = response.data.data;
 
         if (updatedUserInfo.no) {
           try {

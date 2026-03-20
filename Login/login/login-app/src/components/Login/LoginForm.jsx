@@ -2,9 +2,10 @@ import React, { useState } from 'react'
 import '../../assets/css/auth.css';
 import useAuthStore from '../../store/useAuthStore'
 import GoogleLoginButton from './GoogleLoginButton';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const LoginForm = () => {
+  const navigate = useNavigate()
   const login = useAuthStore(state => state.login)
   const [capsLockOn, setCapsLockOn] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -17,7 +18,7 @@ const LoginForm = () => {
 
     setLoading(true)
     try {
-      await login(username, password)
+      await login(username, password, navigate)
     } catch (err) {
       console.error(err)
     } finally {

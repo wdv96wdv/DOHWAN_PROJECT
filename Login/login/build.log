@@ -1,0 +1,371 @@
+
+> Task :compileJava
+.\gradlew.bat : C:\web\
+Dohwan_project\Login\lo
+gin\src\main\java\com\d
+ohwan\login\Controller\
+LoginController.java:11
+: error: cannot access 
+SecurityConstants
+?? ?:1 ??:1
++ .\gradlew.bat compile
+Java --console=plain 2>
+&1 | Out-File -FilePath
+ b ...
++ ~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~
+    + CategoryInfo     
+         : NotSpecifi  
+  ed: (C:\web\Dohwan   
+ _p...curityConstan    
+ts:String) [], Rem    o
+teException
+    + FullyQualifiedEr 
+   rorId : NativeComm  
+  andError
+ 
+import com.dohwan.login
+.security.constants.Sec
+urityConstants;
+                       
+                   ^
+  bad class file: C:\we
+b\Dohwan_project\Login\
+login\build\classes\jav
+a\main\com\dohwan\login
+\security\constants\Sec
+urityConstants.class
+    illegal start of cl
+ass file
+    Please remove or ma
+ke sure it appears in t
+he correct subdirectory
+ of the classpath.
+C:\web\Dohwan_project\L
+ogin\login\src\main\jav
+a\com\dohwan\login\conf
+ig\SecurityConfig.java:
+101: error: cannot find
+ symbol
+		log.info("CORS ??? - 
+Allowed Origins: {}", a
+llowedOrigins);
+		^
+  symbol:   variable lo
+g
+  location: class Secur
+ityConfig
+C:\web\Dohwan_project\L
+ogin\login\src\main\jav
+a\com\dohwan\login\conf
+ig\SecurityConfig.java:
+105: error: cannot find
+ symbol
+		log.info("CORS ??? - 
+Allowed Methods: {}", a
+llowedMethods);
+		^
+  symbol:   variable lo
+g
+  location: class Secur
+ityConfig
+C:\web\Dohwan_project\L
+ogin\login\src\main\jav
+a\com\dohwan\login\conf
+ig\SecurityConfig.java:
+109: error: cannot find
+ symbol
+		log.info("CORS ??? - 
+Allowed Headers: {}", a
+llowedHeaders);
+		^
+  symbol:   variable lo
+g
+  location: class Secur
+ityConfig
+C:\web\Dohwan_project\L
+ogin\login\src\main\jav
+a\com\dohwan\login\conf
+ig\SecurityConfig.java:
+113: error: cannot find
+ symbol
+		log.info("CORS ??? - 
+Exposed Headers: {}", e
+xposedHeaders);
+		^
+  symbol:   variable lo
+g
+  location: class Secur
+ityConfig
+C:\web\Dohwan_project\L
+ogin\login\src\main\jav
+a\com\dohwan\login\conf
+ig\SecurityConfig.java:
+116: error: cannot find
+ symbol
+		log.info("CORS ??? - 
+Allow Credentials: {}",
+ true);
+		^
+  symbol:   variable lo
+g
+  location: class Secur
+ityConfig
+C:\web\Dohwan_project\L
+ogin\login\src\main\jav
+a\com\dohwan\login\conf
+ig\SecurityConfig.java:
+121: error: cannot find
+ symbol
+		log.info("CORS ??? - 
+CORS Configuration Sour
+ce ??? ???");
+		^
+  symbol:   variable lo
+g
+  location: class Secur
+ityConfig
+C:\web\Dohwan_project\L
+ogin\login\src\main\jav
+a\com\dohwan\login\Cont
+roller\LoginController.
+java:40: error: cannot 
+find symbol
+        log.info("?????
+??? ??? ???: {}", usern
+ame);
+        ^
+  symbol:   variable lo
+g
+  location: class Login
+Controller
+C:\web\Dohwan_project\L
+ogin\login\src\main\jav
+a\com\dohwan\login\Cont
+roller\LoginController.
+java:53: error: cannot 
+find symbol
+        log.info("??? ?
+??????? - email: {}", r
+equest.getEmail());
+        ^
+  symbol:   variable lo
+g
+  location: class Login
+Controller
+C:\web\Dohwan_project\L
+ogin\login\src\main\jav
+a\com\dohwan\login\Cont
+roller\LoginController.
+java:123: error: cannot
+ find symbol
+                .header
+().add("typ", SecurityC
+onstants.TOKEN_TYPE).an
+d()
+                       
+              ^
+  symbol:   variable Se
+curityConstants
+  location: class Login
+Controller
+C:\web\Dohwan_project\L
+ogin\login\src\main\jav
+a\com\dohwan\login\secu
+rity\filter\JwtAuthenti
+cationFilter.java:39: e
+rror: cannot find symbo
+l
+    setFilterProcessesU
+rl(SecurityConstants.LO
+GIN_URL);
+                       
+   ^
+  symbol:   variable Se
+curityConstants
+  location: class JwtAu
+thenticationFilter
+C:\web\Dohwan_project\L
+ogin\login\src\main\jav
+a\com\dohwan\login\secu
+rity\filter\JwtAuthenti
+cationFilter.java:56: e
+rror: cannot find symbo
+l
+        log.info("CORS 
+Origin: {}", origin);
+        ^
+  symbol:   variable lo
+g
+  location: class JwtAu
+thenticationFilter
+C:\web\Dohwan_project\L
+ogin\login\src\main\jav
+a\com\dohwan\login\secu
+rity\filter\JwtAuthenti
+cationFilter.java:59: e
+rror: cannot find symbo
+l
+        log.info("CORS 
+Request Method: {}", me
+thod);
+        ^
+  symbol:   variable lo
+g
+  location: class JwtAu
+thenticationFilter
+C:\web\Dohwan_project\L
+ogin\login\src\main\jav
+a\com\dohwan\login\secu
+rity\filter\JwtAuthenti
+cationFilter.java:62: e
+rror: cannot find symbo
+l
+        log.info("CORS 
+Request Headers: {}", r
+equestHeaders);
+        ^
+  symbol:   variable lo
+g
+  location: class JwtAu
+thenticationFilter
+C:\web\Dohwan_project\L
+ogin\login\src\main\jav
+a\com\dohwan\login\secu
+rity\filter\JwtAuthenti
+cationFilter.java:73: e
+rror: cannot find symbo
+l
+      log.info("usernam
+e : " + username);
+      ^
+  symbol:   variable lo
+g
+  location: class JwtAu
+thenticationFilter
+C:\web\Dohwan_project\L
+ogin\login\src\main\jav
+a\com\dohwan\login\secu
+rity\filter\JwtAuthenti
+cationFilter.java:74: e
+rror: cannot find symbo
+l
+      log.info("passwor
+d : " + password);
+      ^
+  symbol:   variable lo
+g
+  location: class JwtAu
+thenticationFilter
+C:\web\Dohwan_project\L
+ogin\login\src\main\jav
+a\com\dohwan\login\secu
+rity\filter\JwtAuthenti
+cationFilter.java:102: 
+error: cannot find symb
+ol
+    log.info("??? ???!"
+);
+    ^
+  symbol:   variable lo
+g
+  location: class JwtAu
+thenticationFilter
+C:\web\Dohwan_project\L
+ogin\login\src\main\jav
+a\com\dohwan\login\secu
+rity\filter\JwtAuthenti
+cationFilter.java:117: 
+error: cannot find symb
+ol
+    response.addHeader(
+"Authorization", Securi
+tyConstants.TOKEN_PREFI
+X + jwt);
+                       
+                 ^
+  symbol:   variable Se
+curityConstants
+  location: class JwtAu
+thenticationFilter
+C:\web\Dohwan_project\L
+ogin\login\src\main\jav
+a\com\dohwan\login\secu
+rity\filter\JwtAuthenti
+cationFilter.java:135: 
+error: cannot find symb
+ol
+    log.info("CORS Auth
+orization Header: {}", 
+authorizationHeader);
+    ^
+  symbol:   variable lo
+g
+  location: class JwtAu
+thenticationFilter
+C:\web\Dohwan_project\L
+ogin\login\src\main\jav
+a\com\dohwan\login\secu
+rity\filter\JwtAuthenti
+cationFilter.java:136: 
+error: cannot find symb
+ol
+    log.info("CORS Resp
+onse Status: {}", respo
+nse.getStatus());
+    ^
+  symbol:   variable lo
+g
+  location: class JwtAu
+thenticationFilter
+20 errors
+
+> Task :compileJava FAILED
+
+[Incubating] Problems report is available at: file:///C:/web/Dohwan_project/Login/login/build/reports/problems/problems-report.html
+
+FAILURE: Build failed w
+ith an exception.
+
+* What went wrong:
+Execution failed for ta
+sk ':compileJava'.
+> Compilation failed; s
+ee the compiler output 
+below.
+  C:\web\Dohwan_project
+\Login\login\src\main\j
+ava\com\dohwan\login\Co
+ntroller\LoginControlle
+r.java:11: error: canno
+t access SecurityConsta
+nts
+  import com.dohwan.log
+in.security.constants.S
+ecurityConstants;
+                       
+                     ^
+    bad class file: C:\
+web\Dohwan_project\Logi
+n\login\build\classes\j
+ava\main\com\dohwan\log
+in\security\constants\S
+ecurityConstants.class
+      illegal start of 
+class file
+      Please remove or 
+make sure it appears in
+ the correct subdirecto
+ry of the classpath.
+  20 errors
+
+* Try:
+> Check your code and d
+ependencies to fix the 
+compilation error(s)
+> Run with --scan to ge
+t full insights.
+
+BUILD FAILED in 5s
+1 actionable task: 1 executed

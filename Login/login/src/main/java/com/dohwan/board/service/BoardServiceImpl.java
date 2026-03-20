@@ -45,6 +45,18 @@ public class BoardServiceImpl implements BoardService {
             dto.setUpdatedAt(java.sql.Timestamp.valueOf(entity.getUpdatedAt()));
         }
         dto.setUserNo(entity.getUserNo());
+        
+        // 썸네일(MAIN 파일) 로드
+        try {
+            Files search = new Files();
+            search.setPTable("boards");
+            search.setPNo(entity.getNo());
+            Files mainFile = fileService.selectByType(search);
+            dto.setFile(mainFile);
+        } catch (Exception e) {
+            log.warn("이미지 로드 실패: " + e.getMessage());
+        }
+
         return dto;
     }
 

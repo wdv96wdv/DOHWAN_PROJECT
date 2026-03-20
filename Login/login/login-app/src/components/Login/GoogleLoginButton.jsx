@@ -2,12 +2,13 @@
 import { auth, googleProvider } from '../../utils/firebase';
 import { signInWithPopup } from 'firebase/auth';
 import axios from 'axios';
-import { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import useAuthStore from '../../store/useAuthStore';
 import googleIcon from '../../assets/img/google-icon.svg';
 
 
 const GoogleLoginButton = () => {
+    const navigate = useNavigate();
     const loginWithSocial = useAuthStore(state => state.loginWithSocial);
 
     const handleLogin = async () => {
@@ -23,9 +24,9 @@ const GoogleLoginButton = () => {
             };
 
             const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/auth/social-login`, payload)
-            const { token, userInfo } = response.data;
+            const { token, userInfo } = response.data.data;
 
-            loginWithSocial(token, userInfo); // ✅ LoginContext에 로그인 처리
+            loginWithSocial(token, userInfo, navigate); // ✅ LoginContext에 로그인 처리
             console.log('✅ 로그인 성공:', user);
         } catch (error) {
             console.error('❌ 로그인 실패:', error);
