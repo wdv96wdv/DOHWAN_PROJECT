@@ -14,10 +14,12 @@ export default function MarathonList() {
     const [statusFilter, setStatusFilter] = useState(defaultStatus);
     const [loading, setLoading] = useState(true); // 로딩 상태 추가
 
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
     // --- 1. 백엔드 API 호출 ---
     // MarathonList.js 내부 useEffect
     useEffect(() => {
-        fetch("/api/marathons")
+        fetch(`${API_BASE_URL}/api/marathons`)
             .then(res => res.json())
             .then(data => {
                 console.log("Raw Data from Backend:", data); // 데이터 구조 확인용 로그
