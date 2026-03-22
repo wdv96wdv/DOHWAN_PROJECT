@@ -39,6 +39,7 @@ public class SecurityConfig {
 	private UserDetailServiceImpl userDetailServiceImpl;
 	@Autowired
 	private JwtProvider jwtProvider;
+
 	// AuthenticationManager bean definition
 	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
@@ -48,7 +49,8 @@ public class SecurityConfig {
 
 	// OK : (version : after SpringSecurity 5.4 ⬆)
 	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthenticationManager authenticationManager) throws Exception {
+	public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthenticationManager authenticationManager)
+			throws Exception {
 		// 최상단 로깅 필터 추가
 		http.addFilterBefore(new RequestLogger(), UsernamePasswordAuthenticationFilter.class);
 
@@ -63,28 +65,28 @@ public class SecurityConfig {
 
 		// CORS 및 CSRF 설정 (가장 먼저 설정 권장)
 		http.cors(cors -> cors.configurationSource(corsConfigurationSource()))
-		    .csrf(csrf -> csrf.disable());
+				.csrf(csrf -> csrf.disable());
 
 		// 사용자 정의 인증 서비스 등록
 		http.userDetailsService(userDetailServiceImpl);
 
 		// 요청 권한 설정
 		http.authorizeHttpRequests(auth -> auth
-						.requestMatchers(new AntPathRequestMatcher("/**", "OPTIONS")).permitAll() // ✅ preflight 허용
-						.requestMatchers(new AntPathRequestMatcher("/login")).permitAll()
-						.requestMatchers(new AntPathRequestMatcher("/users")).permitAll()
-						.requestMatchers(new AntPathRequestMatcher("/join")).permitAll()
-						.requestMatchers(new AntPathRequestMatcher("/contact")).permitAll()
-						.requestMatchers(new AntPathRequestMatcher("/")).permitAll()
-						.requestMatchers(new AntPathRequestMatcher("/boards/**")).permitAll()
-						.requestMatchers(new AntPathRequestMatcher("/api/wishlist/**")).authenticated()
-						.requestMatchers(new AntPathRequestMatcher("/admin/**")).hasRole("ADMIN")
-						.requestMatchers(new AntPathRequestMatcher("/manifest.json")).permitAll()
-						.requestMatchers(new AntPathRequestMatcher("/auth/check-username")).permitAll()
-						.requestMatchers(new AntPathRequestMatcher("/auth/social-login", "POST")).permitAll()
-						.requestMatchers(new AntPathRequestMatcher("/error")).permitAll()
-						.anyRequest().authenticated()
-						)
+				.requestMatchers(new AntPathRequestMatcher("/**", "OPTIONS")).permitAll() // ✅ preflight 허용
+				.requestMatchers(new AntPathRequestMatcher("/login")).permitAll()
+				.requestMatchers(new AntPathRequestMatcher("/users")).permitAll()
+				.requestMatchers(new AntPathRequestMatcher("/join")).permitAll()
+				.requestMatchers(new AntPathRequestMatcher("/contact")).permitAll()
+				.requestMatchers(new AntPathRequestMatcher("/")).permitAll()
+				.requestMatchers(new AntPathRequestMatcher("/boards/**")).permitAll()
+				.requestMatchers(new AntPathRequestMatcher("/api/wishlist/**")).authenticated()
+				.requestMatchers(new AntPathRequestMatcher("/admin/**")).hasRole("ADMIN")
+				.requestMatchers(new AntPathRequestMatcher("/manifest.json")).permitAll()
+				.requestMatchers(new AntPathRequestMatcher("/auth/check-username")).permitAll()
+				.requestMatchers(new AntPathRequestMatcher("/auth/social-login", "POST")).permitAll()
+				.requestMatchers(new AntPathRequestMatcher("/error")).permitAll()
+				.requestMatchers(new AntPathRequestMatcher("/marathons/**")).permitAll()
+				.anyRequest().authenticated())
 				.exceptionHandling(exception -> exception
 						.authenticationEntryPoint((request, response, authException) -> {
 							log.warn("::::: 인증 실패 (401) : {} :::::", request.getRequestURI());
@@ -99,8 +101,7 @@ public class SecurityConfig {
 							response.setStatus(403);
 							response.setContentType("application/json;charset=UTF-8");
 							response.getWriter().write("{\"status\":403,\"message\":\"FORBIDDEN\"}");
-						})
-				);
+						}));
 
 		// JWT 필터 추가
 		http.addFilterAt(new JwtAuthenticationFilter(authenticationManager, jwtProvider),
@@ -111,7 +112,6 @@ public class SecurityConfig {
 		// SecurityFilterChain 반환
 		return http.build();
 	}
-
 
 	// ✅ Security에서 사용할 CORS 설정
 	@Bean
@@ -124,8 +124,7 @@ public class SecurityConfig {
 				"http://localhost:5173",
 				"http://127.0.0.1:5173",
 				"http://localhost:3000",
-				"http://127.0.0.1:3000"
-		);
+				"http://127.0.0.1:3000");
 		configuration.setAllowedOrigins(allowedOrigins);
 		log.info("CORS 설정 - Allowed Origins: {}", allowedOrigins);
 
@@ -133,7 +132,8 @@ public class SecurityConfig {
 		configuration.setAllowedMethods(allowedMethods);
 		log.info("CORS 설정 - Allowed Methods: {}", allowedMethods);
 
-		List<String> allowedHeaders = List.of("Authorization", "Content-Type", "X-Requested-With", "Accept", "Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers");
+		List<String> allowedHeaders = List.of("Authorization", "Content-Type", "X-Requested-With", "Accept", "Origin",
+				"Access-Control-Request-Method", "Access-Control-Request-Headers");
 		configuration.setAllowedHeaders(allowedHeaders);
 		log.info("CORS 설정 - Allowed Headers: {}", allowedHeaders);
 

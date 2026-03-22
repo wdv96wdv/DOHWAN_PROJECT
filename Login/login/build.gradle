@@ -65,7 +65,9 @@ dependencies {
 	// 게시판 이미지 서버
 	implementation 'org.springframework.boot:spring-boot-starter-webflux' // WebClient 사용
     implementation 'com.fasterxml.jackson.core:jackson-databind'
-	
+
+	// 크롤링
+	implementation 'org.jsoup:jsoup:1.15.4'
 }
 
 springBoot {
@@ -78,4 +80,12 @@ tasks.named('jar') {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+tasks.named('bootRun') {
+    systemProperty "file.encoding", "UTF-8"
 }
