@@ -11,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.dohwan.login.common.ApiResponse;
 import com.dohwan.login.dto.AuthenticationRequest;
@@ -26,17 +27,21 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * 🔐 JWT 인증 필터
+ */
 @Slf4j
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-  private final AuthenticationManager authenticationManager;
   private final JwtProvider jwtProvider;
 
   public JwtAuthenticationFilter(AuthenticationManager authenticationManager, JwtProvider jwtProvider) {
-    this.authenticationManager = authenticationManager;
+    // 부모 클래스(UsernamePasswordAuthenticationFilter)의 AuthenticationManager 설정
+    super.setAuthenticationManager(authenticationManager);
     this.jwtProvider = jwtProvider;
-    // 필터 URL 경로 설정 : /login
-    setFilterProcessesUrl(SecurityConstants.LOGIN_URL);
+    
+    // 필터 URL 경로 설정 : /login (POST 전용)
+    setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher(SecurityConstants.LOGIN_URL, "POST"));
   }
 
   /**
@@ -47,20 +52,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
   public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
       throws AuthenticationException {
 
+    log.info("::::: JwtAuthenticationFilter.attemptAuthentication 시작 :::::");
+    log.info("Request URI: {}", request.getRequestURI());
+    log.info("Request Method: {}", request.getMethod());
+
     // CORS 관련 로그
     String origin = request.getHeader("Origin");
-    String method = request.getHeader("Access-Control-Request-Method");
-    String requestHeaders = request.getHeader("Access-Control-Request-Headers");
-    
-    if (origin != null) {
-        log.info("CORS Origin: {}", origin);
-    }
-    if (method != null) {
-        log.info("CORS Request Method: {}", method);
-    }
-    if (requestHeaders != null) {
-        log.info("CORS Request Headers: {}", requestHeaders);
-    }
+    if (origin != null) log.info("CORS Origin: {}", origin);
 
     try {
       // 요청 JSON 파싱
@@ -70,36 +68,35 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
       String username = authReq.getUsername();
       String password = authReq.getPassword();
 
-      log.info("username : " + username);
-      log.info("password : " + password);
+      log.info("로그인 시도 아이디 : " + username);
 
       // 인증토큰 객체 생성
       UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password);
 
-      // 인증 시도
-      return authenticationManager.authenticate(authToken);
+      // 인증 시도 (부모 클래스의 AuthenticationManager 사용)
+      AuthenticationManager manager = getAuthenticationManager();
+      if (manager == null) {
+          log.error("::::: AuthenticationManager가 NULL입니다! :::::");
+          throw new RuntimeException("AuthenticationManager is not properly initialized.");
+      }
+      return manager.authenticate(authToken);
 
     } catch (IOException e) {
+      log.error("Login request parsing failed", e);
       throw new RuntimeException(e);
     }
   }
 
   /**
    * ✅ 인증 성공 메소드
-   * : attemptAuthentication() 호출 후,
-   * 반환된 Authentication 객체가 인증된 것이 확인 되면 호출되는 메소드
-   * 
-   * ➡ 💍 JWT
-   * : 로그인 인증에 성공, JWT 토큰 생성
-   * Authorizaion 응답헤더에 jwt 토큰을 담아 응답
-   * { Authorizaion : Bearer + {jwt} }
+   * : 로그인 인증에 성공하면 JWT 토큰을 생성하여 응답 헤더에 담습니다.
    */
   @Override
   protected void successfulAuthentication(
       HttpServletRequest request, HttpServletResponse response, FilterChain chain,
       Authentication authentication) throws IOException, ServletException {
 
-    log.info("인증 성공!");
+    log.info("::::: JwtAuthenticationFilter.successfulAuthentication - 인증 성공! :::::");
     CustomUser customUser = (CustomUser) authentication.getPrincipal();
 
     Users user = customUser.getUser();
@@ -110,6 +107,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         .stream()
         .map(GrantedAuthority::getAuthority)
         .collect(Collectors.toList());
+        
     // 💍 JWT 생성
     String jwt = jwtProvider.createToken(id, username, roles, no);
 
@@ -117,23 +115,25 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     response.addHeader("Authorization", SecurityConstants.TOKEN_PREFIX + jwt);
     response.setStatus(200);
 
-    // 👩‍💼 사용자 정보 body 세팅
-    ObjectMapper objectMapper = new ObjectMapper();
-    // ApiResponse<Users> 형태로 래핑하여 프론트엔드와 규격 맞춤
+    // 👩‍💼 사용자 정보 body 세팅 (ApiResponse 포맷)
     ApiResponse<Users> apiResponse = ApiResponse.success(user);
+    ObjectMapper objectMapper = new ObjectMapper();
     String jsonString = objectMapper.writeValueAsString(apiResponse);
     
     response.setContentType("application/json");
     response.setCharacterEncoding("UTF-8");
-    // jsonString : "{ 'status': 200, 'message': 'SUCCESS', 'data': { 'username' : 'dohwan', ... } }"
     PrintWriter printWriter = response.getWriter();
     printWriter.write(jsonString);
     printWriter.flush();
     
-    // CORS 응답 로그
-    String authorizationHeader = response.getHeader("Authorization");
-    log.info("CORS Authorization Header: {}", authorizationHeader);
-    log.info("CORS Response Status: {}", response.getStatus());
+    log.info("::::: JWT 발급 완료 및 응답 전송 :::::");
+  }
+
+  @Override
+  protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
+      AuthenticationException failed) throws IOException, ServletException {
+      log.warn("::::: JwtAuthenticationFilter.unsuccessfulAuthentication - 인증 실패 : {} :::::", failed.getMessage());
+      super.unsuccessfulAuthentication(request, response, failed);
   }
 
 }

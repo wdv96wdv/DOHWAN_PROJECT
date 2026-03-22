@@ -6,7 +6,7 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import Swal from 'sweetalert2';
 import * as fileApi from '../../apis/files';
-import { Save, List as ListIcon, Image as ImageIcon, FilePlus, X } from 'lucide-react';
+import { Save, List as ListIcon, Image as ImageIcon, FilePlus, X, Plus } from 'lucide-react';
 import useAuthStore from '../../store/useAuthStore';
 
 const Insert = ({ onInsert }) => {
@@ -50,8 +50,8 @@ const Insert = ({ onInsert }) => {
     e.preventDefault();
     if (submitting) return;
 
-    if (!userInfo?.no) return Swal.fire('Login Required', '', 'warning');
-    if (!title.trim() || !content.trim()) return Swal.fire('Missing Fields', 'Title and content are required.', 'warning');
+    if (!userInfo?.no) return Swal.fire('로그인 필요', '로그인 후 이용 가능합니다.', 'warning');
+    if (!title.trim() || !content.trim()) return Swal.fire('필수 입력', '제목과 내용을 입력해주세요.', 'warning');
 
     setSubmitting(true);
     try {
@@ -69,9 +69,9 @@ const Insert = ({ onInsert }) => {
 
       const data = { title, writer, content, mainFile: mainFileInfo, files: filesInfo, userNo: userInfo.no };
       await onInsert(data, { 'Content-Type': 'multipart/form-data' });
-      Swal.fire('Success', 'Post published!', 'success');
+      Swal.fire('성공', '게시글이 등록되었습니다!', 'success');
     } catch (err) {
-      Swal.fire('Error', 'Failed to publish post.', 'error');
+      Swal.fire('오류', '게시글 등록에 실패했습니다.', 'error');
     } finally {
       setSubmitting(false);
     }
@@ -79,26 +79,26 @@ const Insert = ({ onInsert }) => {
 
   return (
     <div className="board-page">
-      <div className="read-container">
+      <div className="read-container" style={{ maxWidth: '800px', margin: '0 auto' }}>
         <header className="read-header">
-           <h1 className="read-title">NEW POST</h1>
+           <h1 className="read-title">새 게시글 작성</h1>
         </header>
 
         <form onSubmit={handleSubmit} className="auth-form" style={{ maxWidth: '100%', gap: '24px' }}>
           <div className="board-form-group">
-            <label className="board-form-label">TITLE</label>
+            <label className="board-form-label">제목</label>
             <input
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               className="form-control"
-              placeholder="Enter post title"
+              placeholder="제목을 입력하세요"
               required
             />
           </div>
 
           <div className="board-form-group">
-            <label className="board-form-label">WRITER</label>
+            <label className="board-form-label">작성자</label>
             <input
               type="text"
               value={writer}
@@ -109,15 +109,15 @@ const Insert = ({ onInsert }) => {
           </div>
 
           <div className="board-form-group">
-            <label className="board-form-label">CONTENT ({charCount} / {MAX_LENGTH})</label>
+            <label className="board-form-label">내용 ({charCount} / {MAX_LENGTH})</label>
             <div className="ck-editor-wrapper">
               <CKEditor
                 editor={ClassicEditor}
                 data={content}
                 onChange={(event, editor) => {
-                  const data = editor.getData();
-                  setContent(data);
-                  setCharCount(data.length);
+                   const data = editor.getData();
+                   setContent(data);
+                   setCharCount(data.length);
                 }}
               />
             </div>
@@ -125,7 +125,7 @@ const Insert = ({ onInsert }) => {
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
             <div className="board-form-group">
-              <label className="board-form-label"><ImageIcon size={16} style={{marginRight: '8px'}} /> MAIN IMAGE</label>
+              <label className="board-form-label"><ImageIcon size={16} style={{marginRight: '8px'}} /> 대표 이미지</label>
               <div className="file-preview-grid">
                 {mainPreview ? (
                   <div className="preview-item">
@@ -143,7 +143,7 @@ const Insert = ({ onInsert }) => {
             </div>
 
             <div className="board-form-group">
-              <label className="board-form-label"><FilePlus size={16} style={{marginRight: '8px'}} /> ATTACHMENTS</label>
+              <label className="board-form-label"><FilePlus size={16} style={{marginRight: '8px'}} /> 첨부 파일</label>
               <div className="file-preview-grid">
                 {filePreviews.map((src, idx) => (
                   <div key={idx} className="preview-item">
@@ -159,12 +159,12 @@ const Insert = ({ onInsert }) => {
             </div>
           </div>
 
-          <div className="board-header" style={{ marginTop: '32px', borderTop: '1px solid var(--glass-border)', paddingTop: '32px' }}>
-            <Link to="/boards" className="btn-auth secondary" style={{ padding: '12px 24px' }}>
-              <ListIcon size={18} style={{marginRight: '8px'}} /> LIST
+          <div className="board-header" style={{ marginTop: '32px', borderTop: '1px solid var(--glass-border)', paddingTop: '32px', justifyContent: 'center', gap: '20px' }}>
+            <Link to="/boards" className="btn-auth secondary" style={{ padding: '12px 24px', width: 'auto', minWidth: '120px' }}>
+              <ListIcon size={18} style={{marginRight: '8px'}} /> 목록
             </Link>
-            <button type="submit" className="btn-auth" disabled={submitting} style={{ padding: '12px 32px' }}>
-              <Save size={18} style={{marginRight: '8px'}} /> {submitting ? 'PUBLISHING...' : 'PUBLISH'}
+            <button type="submit" className="btn-auth" disabled={submitting} style={{ padding: '12px 32px', width: 'auto', minWidth: '150px' }}>
+              <Save size={18} style={{marginRight: '8px'}} /> {submitting ? '등록 중...' : '등록하기'}
             </button>
           </div>
         </form>

@@ -129,8 +129,14 @@
 }
 
 .stat-card {
-  composes: glass-card from global;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
   padding: 40px;
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
 }
 
 .stat-card h3 {
@@ -212,11 +218,20 @@
 }
 
 @media (max-width: 900px) {
-  .hero-content h1 { font-size: 3rem; }
+  .hero-content h1 { font-size: 3.5rem; }
   .feature-section, .feature-section.reverse {
     flex-direction: column;
     text-align: center;
     gap: 40px;
+    padding: 80px 20px;
   }
   .stats-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 600px) {
+  .hero-content h1 { font-size: 2.5rem; letter-spacing: 2px; }
+  .hero-content p { font-size: 1rem; }
+  .feature-text h2 { font-size: 2rem; }
+  .stat-card h3 { font-size: 2.5rem; }
+  .auth-card { padding: 32px 20px; }
 }

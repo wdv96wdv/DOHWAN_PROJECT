@@ -22,7 +22,12 @@
    Board Table
 ========================= */
 .board-table-container {
-  composes: glass-card from global;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
   padding: 1px; /* Clip children to border radius */
   overflow: hidden;
   margin-bottom: 32px;
@@ -130,8 +135,14 @@
    Board Read / View
 ========================= */
 .read-container {
-  composes: glass-card from global;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
   padding: 40px;
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
 }
 
 .read-header {
@@ -162,7 +173,13 @@
 }
 
 /* CKEditor Custom Styling */
+.ck-editor-wrapper {
+  width: 100%;
+  margin-top: 8px;
+}
+
 .ck-content {
+  min-height: 400px;
   background: transparent !important;
   border: none !important;
   color: var(--text-secondary) !important;

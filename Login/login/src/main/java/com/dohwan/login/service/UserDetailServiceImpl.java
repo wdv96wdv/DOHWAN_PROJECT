@@ -27,10 +27,15 @@ public class UserDetailServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        log.info(":::::: loadUserByUsername - username: {}", username);
-
+        log.info("::::: UserDetailServiceImpl.loadUserByUsername 시작 - username: {} :::::", username);
+        
         UserEntity entity = userRepository.findByUsernameWithAuth(username)
-                .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다: " + username));
+                .orElseThrow(() -> {
+                    log.warn("::::: 사용자 찾을 수 없음: {} :::::", username);
+                    return new UsernameNotFoundException("사용자를 찾을 수 없습니다: " + username);
+                });
+
+        log.info("::::: 사용자 발견: {}, 권한 개수: {} :::::", entity.getUsername(), entity.getAuthList().size());
 
         // UserEntity → Users DTO (CustomUser용)
         Users user = new Users();

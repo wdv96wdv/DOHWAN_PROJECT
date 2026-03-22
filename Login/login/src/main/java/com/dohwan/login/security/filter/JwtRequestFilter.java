@@ -42,6 +42,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                                   FilterChain filterChain)
       throws ServletException, IOException {
     
+    log.info("::::: JwtRequestFilter.doFilterInternal 시작 :::::");
+    log.info("Request URI: {}", request.getRequestURI());
+    log.info("Request Method: {}", request.getMethod());
+    
     // CORS 관련 로그 추가
     String origin = request.getHeader("Origin");
     String method = request.getHeader("Access-Control-Request-Method");

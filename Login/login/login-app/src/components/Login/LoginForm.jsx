@@ -36,11 +36,11 @@ const LoginForm = () => {
       <h2 className="auth-title">LOG IN</h2>
       <form className='auth-form' onSubmit={onLogin}>
         <div className="form-group">
-          <label htmlFor="username">Username</label>
+          <label htmlFor="username">아이디</label>
           <input type="text"
             id="username"
             className="form-control"
-            placeholder='Enter your ID'
+            placeholder='아이디를 입력하세요'
             name='username'
             autoComplete='username'
             required
@@ -51,11 +51,11 @@ const LoginForm = () => {
         </div>
 
         <div className="form-group">
-          <label htmlFor="password">Password</label>
+          <label htmlFor="password">비밀번호</label>
           <input type="password"
             id="password"
             className="form-control"
-            placeholder='Enter your password'
+            placeholder='비밀번호를 입력하세요'
             name='password'
             autoComplete='current-password'
             required
@@ -67,24 +67,24 @@ const LoginForm = () => {
 
         {capsLockOn && (
           <div className="capslock-warning">
-            <span>⚠️</span> Caps Lock is ON
+            <span>⚠️</span> Caps Lock이 켜져 있습니다
           </div>
         )}
 
         <button type='submit' className='btn-auth' disabled={loading}>
-          {loading ? 'Processing...' : 'Sign In'}
+          {loading ? '처리 중...' : '로그인'}
         </button>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', margin: '8px 0' }}>
           <hr style={{ flex: 1, border: '0', borderTop: '1px solid var(--border-color)' }} />
-          <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>OR</span>
+          <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>또는</span>
           <hr style={{ flex: 1, border: '0', borderTop: '1px solid var(--border-color)' }} />
         </div>
 
         <GoogleLoginButton />
 
         <div className="auth-footer">
-          Don't have an account? <Link to="/join">Sign Up</Link>
+          계정이 없으신가요? <Link to="/join">회원가입</Link>
         </div>
       </form>
     </div>

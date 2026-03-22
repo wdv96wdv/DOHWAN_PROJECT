@@ -16,12 +16,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.dohwan.login.security.filter.JwtAuthenticationFilter;
 import com.dohwan.login.security.filter.JwtRequestFilter;
+import com.dohwan.login.security.filter.RequestLogger;
 import com.dohwan.login.security.provider.JwtProvider;
 import com.dohwan.login.service.UserDetailServiceImpl;
 
@@ -37,44 +39,68 @@ public class SecurityConfig {
 	private UserDetailServiceImpl userDetailServiceImpl;
 	@Autowired
 	private JwtProvider jwtProvider;
-	private AuthenticationManager authenticationManager;
-
+	// AuthenticationManager bean definition
 	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
 			throws Exception {
-		this.authenticationManager = authenticationConfiguration.getAuthenticationManager();
-		return authenticationManager;
+		return authenticationConfiguration.getAuthenticationManager();
 	}
 
 	// OK : (version : after SpringSecurity 5.4 ⬆)
 	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+	public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthenticationManager authenticationManager) throws Exception {
+		// 최상단 로깅 필터 추가
+		http.addFilterBefore(new RequestLogger(), UsernamePasswordAuthenticationFilter.class);
+
 		// 폼 기반 로그인 비활성화
 		http.formLogin(login -> login.disable());
 
 		// HTTP 기본 인증 비활성화
 		http.httpBasic(basic -> basic.disable());
 
-		// CSRF 비활성화
-		http.csrf(csrf -> csrf.disable());
-
 		// 세션 관리: STATELESS
 		http.sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-		// 사용자 정의 인증 서비스
-		http.userDetailsService(userDetailServiceImpl)
-				// CORS 활성화 (Spring Security 6.1 기준)
-				.cors(cors -> cors.configurationSource(corsConfigurationSource())) // ✅ 명확히 지정
-				.authorizeHttpRequests(auth -> auth
-						.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // ✅ preflight 허용
-						.requestMatchers("/login", "/users", "/join", "/contact", "/", "/boards/**").permitAll()
-						.requestMatchers("/api/wishlist/**").authenticated() // ✅ 찜하기 API는 인증 필요
-						.requestMatchers("/admin/**").hasRole("ADMIN") // ✅ 관리자 전용
-						.requestMatchers("/manifest.json").permitAll()
-						.requestMatchers("/auth/check-username").permitAll()
-						.requestMatchers(HttpMethod.POST, "/auth/social-login").permitAll()
+		// CORS 및 CSRF 설정 (가장 먼저 설정 권장)
+		http.cors(cors -> cors.configurationSource(corsConfigurationSource()))
+		    .csrf(csrf -> csrf.disable());
+
+		// 사용자 정의 인증 서비스 등록
+		http.userDetailsService(userDetailServiceImpl);
+
+		// 요청 권한 설정
+		http.authorizeHttpRequests(auth -> auth
+						.requestMatchers(new AntPathRequestMatcher("/**", "OPTIONS")).permitAll() // ✅ preflight 허용
+						.requestMatchers(new AntPathRequestMatcher("/login")).permitAll()
+						.requestMatchers(new AntPathRequestMatcher("/users")).permitAll()
+						.requestMatchers(new AntPathRequestMatcher("/join")).permitAll()
+						.requestMatchers(new AntPathRequestMatcher("/contact")).permitAll()
+						.requestMatchers(new AntPathRequestMatcher("/")).permitAll()
+						.requestMatchers(new AntPathRequestMatcher("/boards/**")).permitAll()
+						.requestMatchers(new AntPathRequestMatcher("/api/wishlist/**")).authenticated()
+						.requestMatchers(new AntPathRequestMatcher("/admin/**")).hasRole("ADMIN")
+						.requestMatchers(new AntPathRequestMatcher("/manifest.json")).permitAll()
+						.requestMatchers(new AntPathRequestMatcher("/auth/check-username")).permitAll()
+						.requestMatchers(new AntPathRequestMatcher("/auth/social-login", "POST")).permitAll()
+						.requestMatchers(new AntPathRequestMatcher("/error")).permitAll()
 						.anyRequest().authenticated()
-						);
+						)
+				.exceptionHandling(exception -> exception
+						.authenticationEntryPoint((request, response, authException) -> {
+							log.warn("::::: 인증 실패 (401) : {} :::::", request.getRequestURI());
+							log.warn("에러 메시지: {}", authException.getMessage());
+							response.setStatus(401);
+							response.setContentType("application/json;charset=UTF-8");
+							response.getWriter().write("{\"status\":401,\"message\":\"UNAUTHORIZED\"}");
+						})
+						.accessDeniedHandler((request, response, accessDeniedException) -> {
+							log.warn("::::: 인가 거부 (403) : {} :::::", request.getRequestURI());
+							log.warn("에러 메시지: {}", accessDeniedException.getMessage());
+							response.setStatus(403);
+							response.setContentType("application/json;charset=UTF-8");
+							response.getWriter().write("{\"status\":403,\"message\":\"FORBIDDEN\"}");
+						})
+				);
 
 		// JWT 필터 추가
 		http.addFilterAt(new JwtAuthenticationFilter(authenticationManager, jwtProvider),
@@ -92,10 +118,13 @@ public class SecurityConfig {
 	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
 
-		// 실제 프론트 도메인만 명시
+		// 실제 프론트 도메인 및 로컬 환경 허용
 		List<String> allowedOrigins = List.of(
 				"https://dorunning.vercel.app",
-				"http://localhost:5173" // 개발용
+				"http://localhost:5173",
+				"http://127.0.0.1:5173",
+				"http://localhost:3000",
+				"http://127.0.0.1:3000"
 		);
 		configuration.setAllowedOrigins(allowedOrigins);
 		log.info("CORS 설정 - Allowed Origins: {}", allowedOrigins);
@@ -104,7 +133,7 @@ public class SecurityConfig {
 		configuration.setAllowedMethods(allowedMethods);
 		log.info("CORS 설정 - Allowed Methods: {}", allowedMethods);
 
-		List<String> allowedHeaders = List.of("*");
+		List<String> allowedHeaders = List.of("Authorization", "Content-Type", "X-Requested-With", "Accept", "Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers");
 		configuration.setAllowedHeaders(allowedHeaders);
 		log.info("CORS 설정 - Allowed Headers: {}", allowedHeaders);
 

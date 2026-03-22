@@ -71,13 +71,13 @@ const JoinForm = ({ join }) => {
       <h2 className="auth-title">CREATE ACCOUNT</h2>
       <form className="auth-form" onSubmit={onJoin}>
         <div className="form-group">
-          <label htmlFor="username">Username</label>
+          <label htmlFor="username">아이디</label>
           <div className="input-with-button">
             <input
               type="text"
               id="username"
               className="form-control"
-              placeholder="Username"
+              placeholder="아이디를 입력하세요"
               required
               value={username}
               onChange={(e) => setUsername(e.target.value)}
@@ -85,20 +85,20 @@ const JoinForm = ({ join }) => {
               onKeyDown={checkCapsLock}
             />
             <button type="button" onClick={handleCheckUsername} className="btn-outline">
-              Check
+              중복 확인
             </button>
           </div>
-          {isAvailable === false && <p className="validation-msg error">Already in use</p>}
-          {isAvailable === true && <p className="validation-msg success">Available</p>}
+          {isAvailable === false && <p className="validation-msg error">이미 사용 중인 아이디입니다.</p>}
+          {isAvailable === true && <p className="validation-msg success">사용 가능한 아이디입니다!</p>}
         </div>
 
         <div className="form-group">
-          <label htmlFor="password">Password</label>
+          <label htmlFor="password">비밀번호</label>
           <input
             type="password"
             id="password"
             className="form-control"
-            placeholder="Min 8 characters"
+            placeholder="8자 이상 입력하세요"
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -108,12 +108,12 @@ const JoinForm = ({ join }) => {
         </div>
 
         <div className="form-group">
-          <label htmlFor="passwordConfirm">Confirm Password</label>
+          <label htmlFor="passwordConfirm">비밀번호 확인</label>
           <input
             type="password"
             id="passwordConfirm"
             className="form-control"
-            placeholder="Confirm Password"
+            placeholder="비밀번호를 다시 입력하세요"
             required
             value={passwordConfirm}
             onChange={(e) => setPasswordConfirm(e.target.value)}
@@ -122,18 +122,18 @@ const JoinForm = ({ join }) => {
           />
           {password && passwordConfirm && (
             <p className={`validation-msg ${passwordMatch ? 'success' : 'error'}`}>
-              {passwordMatch ? 'Passwords match' : 'Passwords do not match'}
+              {passwordMatch ? '비밀번호가 일치합니다.' : '비밀번호가 일치하지 않습니다.'}
             </p>
           )}
         </div>
 
         <div className="form-group">
-          <label htmlFor="name">Full Name</label>
+          <label htmlFor="name">이름</label>
           <input
             type="text"
             id="name"
             className="form-control"
-            placeholder="Full Name"
+            placeholder="이름을 입력하세요"
             required
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -141,12 +141,12 @@ const JoinForm = ({ join }) => {
         </div>
 
         <div className="form-group">
-          <label htmlFor="email">Email Address</label>
+          <label htmlFor="email">이메일 주소</label>
           <input
             type="email"
             id="email"
             className="form-control"
-            placeholder="Email Address"
+            placeholder="이메일 주소를 입력하세요"
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -155,7 +155,7 @@ const JoinForm = ({ join }) => {
 
         {capsLockOn && (
           <div className="capslock-warning">
-            <span>⚠️</span> Caps Lock is ON
+            <span>⚠️</span> Caps Lock이 켜져 있습니다
           </div>
         )}
 
@@ -164,11 +164,11 @@ const JoinForm = ({ join }) => {
           className="btn-auth"
           disabled={loading || !passwordMatch || isAvailable !== true}
         >
-          {loading ? 'Creating...' : 'Create Account'}
+          {loading ? '처리 중...' : '가입하기'}
         </button>
 
         <div className="auth-footer">
-          Already have an account? <Link to="/login">Log In</Link>
+          이미 계정이 있으신가요? <Link to="/login">로그인</Link>
         </div>
       </form>
     </div>

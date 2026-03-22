@@ -53,6 +53,15 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public boolean insert(Users user) throws Exception {
+        // 아이디 중복 체크
+        if (userRepository.existsByUsername(user.getUsername())) {
+            throw new IllegalArgumentException("이미 존재하는 아이디입니다.");
+        }
+        // 이메일 중복 체크 (이메일이 제공된 경우에만)
+        if (user.getEmail() != null && !user.getEmail().isEmpty() && userRepository.existsByEmail(user.getEmail())) {
+            throw new IllegalArgumentException("이미 존재하는 이메일입니다.");
+        }
+
         UserEntity entity = new UserEntity();
         entity.setUsername(user.getUsername());
         entity.setPassword(passwordEncoder.encode(user.getPassword()));

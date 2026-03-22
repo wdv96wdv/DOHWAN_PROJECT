@@ -52,34 +52,34 @@ const Contact = () => {
   return (
     <div className="info-page">
       <header className="info-header">
-        <h1>CONTACT <span style={{color: 'var(--primary)'}}>US</span></h1>
-        <p>We'd love to hear from you. Send us a message!</p>
+        <h1>문의<span style={{color: 'var(--primary)'}}>하기</span></h1>
+        <p>궁금한 점이 있으신가요? 메시지를 남겨주시면 정성껏 답변해 드리겠습니다.</p>
       </header>
 
       <div className="info-section">
-        <h2><MessageSquare size={24} /> SEND A MESSAGE</h2>
+        <h2><MessageSquare size={24} /> 메시지 보내기</h2>
         {success ? (
           <div className="info-highlight" style={{ textAlign: 'center', borderLeft: 'none', borderRadius: '12px' }}>
             <CheckCircle size={48} color="var(--primary)" style={{ margin: '0 auto 16px' }} />
-            <p className="info-text">Thank you! Your inquiry has been received. We'll get back to you shortly.</p>
-            <button className="btn-auth secondary" onClick={() => setSuccess(false)}>SEND ANOTHER ONE</button>
+            <p className="info-text">감사합니다! 문의가 정상적으로 접수되었습니다. 곧 답변 드리겠습니다.</p>
+            <button className="btn-auth secondary" onClick={() => setSuccess(false)}>새 메시지 보내기</button>
           </div>
         ) : (
-          <form onSubmit={onSubmit} className="auth-form" style={{ maxWidth: '100%', gap: '20px' }}>
+          <form onSubmit={onSubmit} className="auth-form" style={{ maxWidth: '600px', margin: '0 auto', gap: '24px' }}>
             <div className="auth-form-group">
-               <label className="auth-label"><User size={14} /> NAME</label>
-               <input type="text" name="name" className="form-control" placeholder="Your full name" required />
+               <label className="auth-label"><User size={14} /> 이름</label>
+               <input type="text" name="name" className="form-control" placeholder="성함을 입력해주세요" required />
             </div>
             <div className="auth-form-group">
-               <label className="auth-label"><AtSign size={14} /> EMAIL</label>
-               <input type="email" name="email" className="form-control" placeholder="your@email.com" required />
+               <label className="auth-label"><AtSign size={14} /> 이메일</label>
+               <input type="email" name="email" className="form-control" placeholder="answer@email.com" required />
             </div>
             <div className="auth-form-group">
-               <label className="auth-label"><MessageSquare size={14} /> MESSAGE ({message.length} / 500)</label>
+               <label className="auth-label"><MessageSquare size={14} /> 메시지 ({message.length} / 500)</label>
                <textarea
                  name="message"
                  className="form-control"
-                 placeholder="How can we help you?"
+                 placeholder="무엇을 도와드릴까요?"
                  rows="5"
                  required
                  maxLength={500}
@@ -87,8 +87,8 @@ const Contact = () => {
                  style={{ minHeight: '150px' }}
                />
             </div>
-            <button className="btn-auth" type="submit" disabled={loading} style={{ padding: '14px', marginTop: '10px' }}>
-               {loading ? 'SENDING...' : <><Send size={18} style={{marginRight: '8px'}} /> SEND MESSAGE</>}
+            <button className="btn-auth" type="submit" disabled={loading} style={{ padding: '16px', marginTop: '10px', width: 'auto', alignSelf: 'center', minWidth: '200px' }}>
+               {loading ? '전송 중...' : <><Send size={18} style={{marginRight: '8px'}} /> 메시지 보내기</>}
             </button>
           </form>
         )}
@@ -98,14 +98,14 @@ const Contact = () => {
         <div className="contact-item">
           <div className="contact-icon-wrapper"><Mail size={24} /></div>
           <div>
-            <div className="contact-label">Email</div>
+            <div className="contact-label">이메일</div>
             <div className="contact-value">kimdohwan969@gmail.com</div>
           </div>
         </div>
         <div className="contact-item">
           <div className="contact-icon-wrapper"><Phone size={24} /></div>
           <div>
-            <div className="contact-label">Phone</div>
+            <div className="contact-label">연락처</div>
             <div className="contact-value">010-4426-9958</div>
           </div>
         </div>

@@ -65,10 +65,11 @@ const Update = ({
     e.preventDefault();
     
     Swal.fire({
-      title: 'Update post?',
+      title: '게시글을 수정하시겠습니까?',
       icon: 'question',
       showCancelButton: true,
-      confirmButtonText: 'UPDATE',
+      confirmButtonText: '수정',
+      cancelButtonText: '취소'
     }).then(async (res) => {
       if (res.isConfirmed) {
         try {
@@ -96,9 +97,9 @@ const Update = ({
           };
           
           await onUpdate(data, { 'Content-Type': 'application/json' });
-          Swal.fire('Updated!', 'Your post has been updated.', 'success');
+          Swal.fire('수정 완료!', '게시글이 성공적으로 수정되었습니다.', 'success');
         } catch (err) {
-          Swal.fire('Error', 'Failed to update post.', 'error');
+          Swal.fire('오류', '게시글 수정에 실패했습니다.', 'error');
         }
       }
     });
@@ -106,14 +107,14 @@ const Update = ({
 
   return (
     <div className="board-page">
-      <div className="read-container">
+      <div className="read-container" style={{ maxWidth: '800px', margin: '0 auto' }}>
         <header className="read-header">
-           <h1 className="read-title">EDIT POST</h1>
+           <h1 className="read-title">게시글 수정</h1>
         </header>
 
         <form onSubmit={handleSubmit} className="auth-form" style={{ maxWidth: '100%', gap: '24px' }}>
           <div className="board-form-group">
-            <label className="board-form-label">TITLE</label>
+            <label className="board-form-label">제목</label>
             <input
               type="text"
               value={title}
@@ -124,7 +125,7 @@ const Update = ({
           </div>
 
           <div className="board-form-group">
-            <label className="board-form-label">CONTENT ({charCount} / {MAX_LENGTH})</label>
+            <label className="board-form-label">내용 ({charCount} / {MAX_LENGTH})</label>
             <div className="ck-editor-wrapper">
               <CKEditor
                 editor={ClassicEditor}
@@ -139,7 +140,7 @@ const Update = ({
           </div>
 
           <div className="board-form-group">
-            <label className="board-form-label"><FilePlus size={16} style={{marginRight: '8px'}} /> EXISTING ATTACHMENTS (Select for deletion)</label>
+            <label className="board-form-label"><FilePlus size={16} style={{marginRight: '8px'}} /> 기존 첨부 파일 (삭제할 파일을 선택하세요)</label>
             <div className="file-preview-grid">
               {fileList?.map((file) => (
                 <div key={file.id} className="preview-item" style={{ opacity: fileIdList.includes(file.id) ? 0.4 : 1 }}>
@@ -155,7 +156,7 @@ const Update = ({
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
             <div className="board-form-group">
-              <label className="board-form-label"><ImageIcon size={16} style={{marginRight: '8px'}} /> CHANGE MAIN IMAGE</label>
+              <label className="board-form-label"><ImageIcon size={16} style={{marginRight: '8px'}} /> 대표 이미지 변경</label>
               <div className="file-preview-grid">
                 {newMainPreview ? (
                   <div className="preview-item">
@@ -172,7 +173,7 @@ const Update = ({
             </div>
 
             <div className="board-form-group">
-              <label className="board-form-label"><FilePlus size={16} style={{marginRight: '8px'}} /> ADD MORE FILES</label>
+              <label className="board-form-label"><FilePlus size={16} style={{marginRight: '8px'}} /> 파일 추가</label>
               <div className="file-preview-grid">
                 {newFilePreviews.map((src, idx) => (
                   <div key={idx} className="preview-item">
@@ -187,12 +188,12 @@ const Update = ({
             </div>
           </div>
 
-          <div className="board-header" style={{ marginTop: '32px', borderTop: '1px solid var(--glass-border)', paddingTop: '32px' }}>
-            <Link to="/boards" className="btn-auth secondary" style={{ padding: '12px 24px' }}>
-              <ListIcon size={18} style={{marginRight: '8px'}} /> CANCEL
+          <div className="board-header" style={{ marginTop: '32px', borderTop: '1px solid var(--glass-border)', paddingTop: '32px', justifyContent: 'center', gap: '20px' }}>
+            <Link to="/boards" className="btn-auth secondary" style={{ padding: '12px 24px', width: 'auto', minWidth: '120px' }}>
+              <ListIcon size={18} style={{marginRight: '8px'}} /> 취소
             </Link>
-            <button type="submit" className="btn-auth" style={{ padding: '12px 32px' }}>
-              <Save size={18} style={{marginRight: '8px'}} /> UPDATE POST
+            <button type="submit" className="btn-auth" style={{ padding: '12px 32px', width: 'auto', minWidth: '150px' }}>
+              <Save size={18} style={{marginRight: '8px'}} /> 수정하기
             </button>
           </div>
         </form>

@@ -33,11 +33,9 @@ public class JwtProvider {
         return jwtUtil.createToken(id, username, roles, no);
     }
 
-    public UsernamePasswordAuthenticationToken getAuthenticationToken(String authorization) {
-        if (authorization == null || !authorization.startsWith(SecurityConstants.TOKEN_PREFIX))
+    public UsernamePasswordAuthenticationToken getAuthenticationToken(String jwt) {
+        if (jwt == null || jwt.isEmpty())
             return null;
-
-        String jwt = authorization.replace(SecurityConstants.TOKEN_PREFIX, "");
 
         Jws<Claims> parsedToken = jwtUtil.parseToken(jwt);
         if (parsedToken == null) return null;

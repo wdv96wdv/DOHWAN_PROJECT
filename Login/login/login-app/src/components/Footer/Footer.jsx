@@ -15,20 +15,20 @@ const Footer = () => {
         </div>
         
         <div className="footer-section">
-          <h4>Platform</h4>
+          <h4>플랫폼</h4>
           <div className="footer-links">
-            <Link to="/about">About Us</Link>
-            <Link to="/marathon">Marathon</Link>
-            <Link to="/course">Courses</Link>
+            <Link to="/about">소개</Link>
+            <Link to="/marathon">마라톤</Link>
+            <Link to="/course">코스</Link>
           </div>
         </div>
 
         <div className="footer-section">
-          <h4>Support</h4>
+          <h4>고객지원</h4>
           <div className="footer-links">
-            <Link to="/privacy">Privacy Policy</Link>
-            <Link to="/contact">Contact</Link>
-            <Link to="/boards">Community</Link>
+            <Link to="/privacy">개인정보처리방침</Link>
+            <Link to="/contact">문의하기</Link>
+            <Link to="/boards">커뮤니티</Link>
           </div>
         </div>
       </div>

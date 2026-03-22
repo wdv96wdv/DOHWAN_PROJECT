@@ -159,7 +159,11 @@ header.header {
 
 @media (max-width: 1024px) {
   header.header {
-    padding: 0 24px;
+    padding: 0 20px;
+  }
+  
+  .PC-only {
+    display: none !important;
   }
   
   .main-menu:not(.mobile-menu .main-menu),
