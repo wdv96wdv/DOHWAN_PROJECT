@@ -86,6 +86,8 @@ public class SecurityConfig {
 				.requestMatchers(new AntPathRequestMatcher("/auth/social-login", "POST")).permitAll()
 				.requestMatchers(new AntPathRequestMatcher("/error")).permitAll()
 				.requestMatchers(new AntPathRequestMatcher("/marathons/**")).permitAll()
+				.requestMatchers(new AntPathRequestMatcher("/api/marathons/**")).permitAll()
+
 				.anyRequest().authenticated())
 				.exceptionHandling(exception -> exception
 						.authenticationEntryPoint((request, response, authException) -> {
