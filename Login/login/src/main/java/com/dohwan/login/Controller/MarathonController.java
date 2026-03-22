@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/marathons") // 요청 경로 유지
+@RequestMapping("/api/marathons") // 요청 경로 유지
 public class MarathonController {
 
     private static final Logger log = LoggerFactory.getLogger(MarathonController.class);
