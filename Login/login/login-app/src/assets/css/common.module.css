@@ -61,10 +61,13 @@
 
 /* common.module.css 또는 Contact.module.css */
 .contactBtn {
-  width: 100%;          /* 폼 폭에 맞춤 */
-  font-size: 18px;      /* Contact 전용 크기 */
+  width: 100%;
+  /* 폼 폭에 맞춤 */
+  font-size: 18px;
+  /* Contact 전용 크기 */
   padding: 12px;
-  border-radius: 10px;  /* 공통 버튼과 다르게 둥글기 */
+  border-radius: 10px;
+  /* 공통 버튼과 다르게 둥글기 */
 }
 
 /* ✅ 버튼 그룹 */
@@ -225,8 +228,9 @@
   margin-bottom: 30px;
   padding: 24px;
   border-radius: 12px;
-  background-color: #ffffff; /* 회색에서 흰색으로 변경 */
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  background-color: #ffffff;
+  /* 회색에서 흰색으로 변경 */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 /* ===== 소제목 ===== */
@@ -384,12 +388,15 @@
   .pageContainer {
     padding: 20px;
   }
+
   .pageTitle {
     font-size: 24px;
   }
+
   .subtitle {
     font-size: 18px;
   }
+
   .btn {
     font-size: 16px;
     padding: 10px;

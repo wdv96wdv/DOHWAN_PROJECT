@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom"; // ✅ 페이지 이동을 위해 추가
 import Swal from "sweetalert2";
 import supabase from "../../utils/supabaseClient";
 import RecordForm from "../../components/Record/RecordForm";
@@ -20,6 +21,7 @@ const getUserNoFromJWT = () => {
 };
 
 export default function RecordPage() {
+  const navigate = useNavigate(); // ✅ 네비게이트 훅 선언
   const [records, setRecords] = useState([]);
   const [formData, setFormData] = useState({
     running_name: "",
@@ -56,11 +58,11 @@ export default function RecordPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.running_name.trim()) {
-      Swal.fire("Warning", "Title is required", "warning");
+      Swal.fire("경고", "활동 제목을 입력해주세요.", "warning"); // ✅ 한글화
       return;
     }
     if (!user_no) {
-      Swal.fire("Error", "Unauthorized", "error");
+      Swal.fire("에러", "로그인이 필요한 서비스입니다.", "error"); // ✅ 한글화
       return;
     }
 
@@ -68,6 +70,7 @@ export default function RecordPage() {
       const submitData = { ...formData };
       if (!submitData.record_date) submitData.record_date = new Date().toISOString();
 
+      // 데이터 정제 로직은 그대로 유지
       submitData.pace_min_per_km = submitData.pace_min_per_km
         ? parseInt(String(submitData.pace_min_per_km).replace(/[^0-9]/g, ""), 10)
         : null;
@@ -81,6 +84,7 @@ export default function RecordPage() {
       }
 
       if (editingId) {
+        // 수정 모드
         const { data, error } = await supabase
           .from("records")
           .update(submitData)
@@ -89,19 +93,38 @@ export default function RecordPage() {
           .select();
 
         if (error) throw error;
-        Swal.fire("Success", "Record updated", "success");
-        setRecords(prev => prev.map(r => r.id === editingId ? { ...r, ...data[0] } : r));
+
+        Swal.fire({
+          title: "수정 완료",
+          text: "활동 기록이 정상적으로 수정되었습니다.",
+          icon: "success",
+          confirmButtonText: "확인"
+        }).then(() => {
+          setRecords(prev => prev.map(r => r.id === editingId ? { ...r, ...data[0] } : r));
+          navigate("/"); // ✅ 수정 후 메인으로 이동 (또는 목록 유지 선택)
+        });
+
       } else {
+        // 등록 모드
         const { data: inserted, error } = await supabase
           .from("records")
           .insert([{ ...submitData, id: uuidv4(), user_no: parseInt(user_no, 10) }])
           .select();
 
         if (error) throw error;
-        Swal.fire("Success", "Record added", "success");
-        setRecords(prev => [inserted[0], ...prev]);
+
+        Swal.fire({
+          title: "등록 완료",
+          text: "오늘의 러닝 기록을 저장했습니다. 수고하셨어요! 🏃‍♂️",
+          icon: "success",
+          confirmButtonText: "확인"
+        }).then(() => {
+          setRecords(prev => [inserted[0], ...prev]);
+          navigate("/"); // ✅ 등록 후 홈으로 이동 (자연스러운 UX)
+        });
       }
 
+      // 폼 초기화
       setFormData({
         running_name: "", distance_km: "", duration_sec: "", pace_min_per_km: "",
         cadence: "", calories: "", note: "", record_date: new Date().toISOString().slice(0, 10),
@@ -109,7 +132,7 @@ export default function RecordPage() {
       setEditingId(null);
     } catch (err) {
       console.error(err);
-      Swal.fire("Error", "Failed to save", "error");
+      Swal.fire("실패", "데이터 저장 중 오류가 발생했습니다.", "error");
     }
   };
 
@@ -125,16 +148,19 @@ export default function RecordPage() {
       record_date: record.record_date?.slice(0, 10) || "",
     });
     setEditingId(record.id);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: 'smooth' }); // 수정 시 폼이 있는 상단으로 이동
   };
 
   const handleDelete = async (id) => {
     const result = await Swal.fire({
-      title: "Delete record?",
-      text: "This cannot be undone.",
+      title: "기록 삭제",
+      text: "정말로 이 활동 기록을 삭제하시겠습니까? 복구할 수 없습니다.",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonText: "Delete"
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "삭제",
+      cancelButtonText: "취소"
     });
 
     if (!result.isConfirmed) return;
@@ -142,9 +168,9 @@ export default function RecordPage() {
     const { error } = await supabase.from("records").delete().eq("id", id).eq("user_no", parseInt(user_no, 10));
 
     if (error) {
-      Swal.fire("Error", "Delete failed", "error");
+      Swal.fire("오류", "삭제에 실패했습니다.", "error");
     } else {
-      Swal.fire("Deleted", "Record removed", "success");
+      Swal.fire("삭제 완료", "기록이 삭제되었습니다.", "success");
       setRecords(prev => prev.filter(r => r.id !== id));
     }
   };
@@ -152,14 +178,14 @@ export default function RecordPage() {
   return (
     <div className="record-page">
       <header className="record-header">
-        <h1><Activity size={32} style={{verticalAlign: 'middle', marginRight: '12px', color: 'var(--primary)'}} /> ACTIVITY LOG</h1>
+        <h1><Activity size={40} style={{ verticalAlign: 'middle', marginRight: '16px', color: 'var(--primary)' }} /> RECORD</h1>
       </header>
 
       <RecordForm
         formData={formData}
         setFormData={setFormData}
         onSubmit={handleSubmit}
-        submitText={editingId ? "UPDATE RECORD" : "LOG RUN"}
+        submitText={editingId ? "기록 수정하기" : "활동 저장하기"}
       />
 
       <RecordList

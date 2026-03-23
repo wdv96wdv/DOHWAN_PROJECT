@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../../assets/css/record.css";
-import "../../assets/css/auth.css"; // Reuse form-control
+import "../../assets/css/auth.css";
 import { Clock, Calendar, Type, Route, Zap, Flame, AlignLeft } from 'lucide-react';
 
 export default function RecordForm({ formData, setFormData, onSubmit, submitText }) {
@@ -51,7 +51,7 @@ export default function RecordForm({ formData, setFormData, onSubmit, submitText
       <form onSubmit={onSubmit} className="auth-form">
         <div className="record-form-grid">
           <div className="form-group">
-            <label><Calendar size={14} /> Date *</label>
+            <label><Calendar size={14} /> 날짜 *</label>
             <input
               className="form-control"
               type="date"
@@ -63,13 +63,13 @@ export default function RecordForm({ formData, setFormData, onSubmit, submitText
           </div>
 
           <div className="form-group">
-            <label><Type size={14} /> Title *</label>
+            <label><Type size={14} /> 활동 제목 *</label>
             <input
               className="form-control"
               type="text"
               name="running_name"
               value={formData.running_name || ""}
-              placeholder="e.g. Morning Run"
+              placeholder="예: 아침 조깅, 한강 러닝"
               maxLength={100}
               onChange={handleChange}
               required
@@ -77,7 +77,7 @@ export default function RecordForm({ formData, setFormData, onSubmit, submitText
           </div>
 
           <div className="form-group">
-            <label><Route size={14} /> Distance (km)</label>
+            <label><Route size={14} /> 거리 (km)</label>
             <input
               className="form-control"
               type="number"
@@ -91,37 +91,37 @@ export default function RecordForm({ formData, setFormData, onSubmit, submitText
           </div>
 
           <div className="form-group">
-            <label><Clock size={14} /> Duration</label>
+            <label><Clock size={14} /> 운동 시간</label>
             <div className="time-input-group">
               <select className="form-control time-field" value={hours} onChange={(e) => setHours(Number(e.target.value))}>
                 {generateOptions(9)}
               </select>
-              <span>h</span>
+              <span>시</span>
               <select className="form-control time-field" value={minutes} onChange={(e) => setMinutes(Number(e.target.value))}>
                 {generateOptions(59)}
               </select>
-              <span>m</span>
+              <span>분</span>
               <select className="form-control time-field" value={seconds} onChange={(e) => setSeconds(Number(e.target.value))}>
                 {generateOptions(59)}
               </select>
-              <span>s</span>
+              <span>초</span>
             </div>
           </div>
 
           <div className="form-group">
-            <label htmlFor="pace_min_per_km">Pace (min/km)</label>
+            <label htmlFor="pace_min_per_km">페이스 (분/km)</label>
             <input
               className="form-control"
               type="text"
               name="pace_min_per_km"
-              placeholder="e.g. 530"
+              placeholder="예: 530 (5분 30초)"
               value={formData.pace_min_per_km ?? ""}
               onChange={handleChange}
             />
           </div>
 
           <div className="form-group">
-            <label><Zap size={14} /> Cadence</label>
+            <label><Zap size={14} /> 케이던스 (spm)</label>
             <input
               className="form-control"
               type="number"
@@ -133,7 +133,7 @@ export default function RecordForm({ formData, setFormData, onSubmit, submitText
           </div>
 
           <div className="form-group">
-            <label><Flame size={14} /> Calories</label>
+            <label><Flame size={14} /> 칼로리 (kcal)</label>
             <input
               className="form-control"
               type="number"
@@ -146,18 +146,18 @@ export default function RecordForm({ formData, setFormData, onSubmit, submitText
         </div>
 
         <div className="form-group record-form-full">
-          <label><AlignLeft size={14} /> Notes</label>
+          <label><AlignLeft size={14} /> 메모</label>
           <textarea
             className="form-control"
             name="note"
             rows="3"
-            placeholder="How was the run?"
+            placeholder="오늘의 러닝은 어땠나요? 컨디션이나 코스를 기록해보세요."
             maxLength={500}
             value={formData.note || ""}
             onChange={handleChange}
           />
-          <div className="auth-footer" style={{textAlign: 'right', marginTop: '4px'}}>
-            {noteLength} / 500
+          <div className="auth-footer" style={{ textAlign: 'right', marginTop: '4px' }}>
+            {noteLength} / 500 자
           </div>
         </div>
 

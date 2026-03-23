@@ -1,12 +1,14 @@
 import '../../assets/css/user.css';
-import '../../assets/css/auth.css'; // Reuse form-control etc.
+import '../../assets/css/auth.css';
 import React, { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
-import { Link } from 'react-router-dom';
 import supabase from '../../utils/supabaseClient';
-import { Camera, Shield, User, Mail, FileText, Trash2, Heart } from 'lucide-react';
+import { Camera, Shield, User, Trash2, Heart } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import noImage from '../../assets/img/no-image.png';
+import useAuthStore from '../../store/useAuthStore';
 
-const UserForm = ({ userInfo, updateUser, deleteUser, loginType }) => {
+const UserForm = ({ userInfo = {}, updateUser, deleteUser, loginType }) => {
   const [form, setForm] = useState({
     username: '',
     name: '',
@@ -21,6 +23,9 @@ const UserForm = ({ userInfo, updateUser, deleteUser, loginType }) => {
   const [preview, setPreview] = useState('');
   const [capsLockOn, setCapsLockOn] = useState(false);
 
+  // ✅ 스토어에서 이미 만들어진 updateUserInfo 함수를 가져옵니다.
+  const updateUserInfo = useAuthStore((state) => state.updateUserInfo);
+
   useEffect(() => {
     return () => {
       if (preview && preview.startsWith('blob:')) {
@@ -30,18 +35,20 @@ const UserForm = ({ userInfo, updateUser, deleteUser, loginType }) => {
   }, [preview]);
 
   useEffect(() => {
-    if (userInfo) {
+    if (userInfo && Object.keys(userInfo).length > 0) {
       setForm({
         username: userInfo.username || '',
         name: userInfo.name || '',
         email: userInfo.email || '',
-        avatar_url: userInfo.avatar_url || '',
+        avatar_url: userInfo.avatarUrl || userInfo.avatar_url || '',
         bio: userInfo.bio || '',
         currentPassword: '',
         newPassword: '',
         confirmPassword: ''
       });
-      if (userInfo.avatar_url) setPreview(userInfo.avatar_url);
+      if (userInfo.avatarUrl || userInfo.avatar_url) {
+        setPreview(userInfo.avatarUrl || userInfo.avatar_url);
+      }
     }
   }, [userInfo]);
 
@@ -61,11 +68,11 @@ const UserForm = ({ userInfo, updateUser, deleteUser, loginType }) => {
       const isImage = file.type?.startsWith('image/');
       const isUnder5MB = file.size <= 5 * 1024 * 1024;
       if (!isImage) {
-        Swal.fire('Error', 'Only images allowed', 'error');
+        Swal.fire('Error', '이미지 파일만 업로드 가능합니다.', 'error');
         return;
       }
       if (!isUnder5MB) {
-        Swal.fire('Error', 'Max 5MB', 'error');
+        Swal.fire('Error', '파일 크기는 최대 5MB까지 가능합니다.', 'error');
         return;
       }
       setPreview(URL.createObjectURL(file));
@@ -74,69 +81,88 @@ const UserForm = ({ userInfo, updateUser, deleteUser, loginType }) => {
 
   const onUpdate = async (e) => {
     e.preventDefault();
-    const formEl = e.target;
+
+    const avatarInput = document.getElementById('avatar');
+    const avatarFile = avatarInput?.files?.[0];
+
     const currentPassword = loginType === "traditional" ? form.currentPassword : '';
     const newPassword = loginType === "traditional" ? form.newPassword : '';
     const confirmPassword = loginType === "traditional" ? form.confirmPassword : '';
-    const avatarFile = formEl.avatar.files[0];
 
     let passwordPayload = {};
     if (newPassword || confirmPassword) {
       if (!currentPassword || !newPassword || !confirmPassword) {
-        Swal.fire('Error', 'Please fill all password fields', 'error');
+        Swal.fire('Error', '비밀번호 변경을 위해 모든 필드를 입력해주세요.', 'error');
         return;
       }
       if (newPassword !== confirmPassword) {
-        Swal.fire('Error', 'Passwords do not match', 'error');
+        Swal.fire('Error', '새 비밀번호가 일치하지 않습니다.', 'error');
         return;
       }
       passwordPayload = { currentPassword, newPassword, confirmPassword };
     }
 
     let avatar_url = form.avatar_url;
+
     if (avatarFile) {
       const fileExt = avatarFile.name.split('.').pop();
-      const fileName = `${form.username}.${fileExt}`;
-      const { data, error } = await supabase.storage
+      const fileName = `${form.username}_${Date.now()}.${fileExt}`;
+
+      const { error } = await supabase.storage
         .from('avatars')
         .upload(fileName, avatarFile, { upsert: true });
 
       if (error) {
         console.error('Upload failed:', error);
+        Swal.fire('Upload Error', '이미지 서버 업로드에 실패했습니다.', 'error');
       } else {
         const { data: publicData } = supabase.storage.from('avatars').getPublicUrl(fileName);
-        avatar_url = `${publicData.publicUrl}?v=${Date.now()}`;
+        avatar_url = publicData.publicUrl;
       }
     }
 
-    await updateUser({
+    const finalUpdateData = {
       ...form,
       avatar_url,
       ...passwordPayload
-    });
+    };
+
+    try {
+      // 1. DB 업데이트 (API 호출)
+      await updateUser(finalUpdateData);
+
+      // 2. ⭐ 핵심: 스토어의 updateUserInfo를 호출하여 
+      // 최신 정보를 서버에서 다시 가져오고 헤더를 갱신합니다.
+      await updateUserInfo();
+
+      Swal.fire('Success', '프로필이 성공적으로 업데이트되었습니다.', 'success');
+    } catch (err) {
+      console.error(err);
+      Swal.fire('Error', '업데이트 중 오류가 발생했습니다.', 'error');
+    }
   };
 
   return (
     <div className="profile-container">
       <div className="profile-grid">
-        {/* Sidebar Profile Card */}
         <aside className="profile-card">
           <div className="avatar-wrapper">
-            <img 
-              src={preview || 'https://via.placeholder.com/150'} 
-              alt="Profile" 
-              className="avatar-preview" 
+            <img
+              src={preview || noImage}
+              alt="Profile"
+              className="avatar-preview"
+              onError={(e) => { e.target.src = noImage; }}
             />
             <label htmlFor="avatar" className="avatar-upload-btn">
               <Camera size={20} />
             </label>
-            <input 
-              type="file" 
-              id="avatar" 
-              name="avatar" 
-              accept="image/*" 
-              onChange={handleImageChange} 
-              style={{ display: 'none' }} 
+            <input
+              type="file"
+              id="avatar"
+              name="avatar"
+              accept="image/*"
+              onChange={handleImageChange}
+              style={{ display: 'none' }}
             />
           </div>
           <div className="profile-info-brief">
@@ -146,101 +172,100 @@ const UserForm = ({ userInfo, updateUser, deleteUser, loginType }) => {
           <Link to="/wishlist" className="btn-auth" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
             <Heart size={18} /> MY WISHLIST
           </Link>
-          <button 
-            type="button" 
-            className="btn-outline btn-delete" 
+          <button
+            type="button"
+            className="btn-outline btn-delete"
             onClick={() => {
               Swal.fire({
-                title: 'Delete Account?',
-                text: 'This action cannot be undone.',
+                title: '계정을 삭제하시겠습니까?',
+                text: '이 작업은 되돌릴 수 없습니다.',
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#f44336',
-                confirmButtonText: 'Delete'
+                confirmButtonText: '삭제'
               }).then(res => res.isConfirmed && deleteUser(form.username));
             }}
-            style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+            style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginTop: '10px' }}
           >
             <Trash2 size={18} /> DELETE ACCOUNT
           </button>
         </aside>
 
-        {/* Form Content */}
         <main className="profile-form-section">
           <form className="profile-form" onSubmit={onUpdate}>
             <section>
-              <h3><User size={18} style={{marginRight: '8px', verticalAlign: 'middle'}}/> BASIC INFO</h3>
+              <h3><User size={18} style={{ marginRight: '8px', verticalAlign: 'middle' }} /> BASIC INFO</h3>
               <div className="form-group">
                 <label>Full Name</label>
-                <input 
-                  type="text" 
-                  name="name" 
+                <input
+                  type="text"
+                  name="name"
                   className="form-control"
-                  value={form.name} 
-                  onChange={handleChange} 
-                  required 
+                  value={form.name}
+                  onChange={handleChange}
+                  required
                 />
               </div>
               <div className="form-group">
                 <label>Email Address</label>
-                <input 
-                  type="email" 
-                  name="email" 
+                <input
+                  type="email"
+                  name="email"
                   className="form-control"
-                  value={form.email} 
-                  onChange={handleChange} 
-                  required 
+                  value={form.email}
+                  onChange={handleChange}
+                  required
                 />
               </div>
               <div className="form-group">
                 <label>Biography</label>
-                <textarea 
-                  name="bio" 
+                <textarea
+                  name="bio"
                   className="form-control"
-                  rows="4" 
-                  value={form.bio} 
-                  onChange={handleChange} 
-                  placeholder="Tell us about yourself"
+                  rows="4"
+                  value={form.bio}
+                  onChange={handleChange}
+                  placeholder="자기소개를 해주세요"
                   style={{ resize: 'none' }}
                 />
               </div>
             </section>
 
             {loginType === "traditional" && (
-              <section style={{marginTop: '32px'}}>
-                <h3><Shield size={18} style={{marginRight: '8px', verticalAlign: 'middle'}}/> SECURITY</h3>
+              <section style={{ marginTop: '32px' }}>
+                <h3><Shield size={18} style={{ marginRight: '8px', verticalAlign: 'middle' }} /> SECURITY</h3>
                 <div className="form-group">
                   <label>Current Password</label>
-                  <input 
-                    type="password" 
-                    name="currentPassword" 
+                  <input
+                    type="password"
+                    name="currentPassword"
                     className="form-control"
-                    value={form.currentPassword} 
-                    onChange={handleChange} 
+                    value={form.currentPassword}
+                    onChange={handleChange}
                     onKeyUp={checkCapsLock}
                     onKeyDown={checkCapsLock}
                   />
                 </div>
                 <div className="form-group">
                   <label>New Password</label>
-                  <input 
-                    type="password" 
-                    name="newPassword" 
+                  <input
+                    type="password"
+                    name="newPassword"
                     className="form-control"
-                    value={form.newPassword} 
-                    onChange={handleChange} 
+                    value={form.newPassword}
+                    onChange={handleChange}
                     onKeyUp={checkCapsLock}
                     onKeyDown={checkCapsLock}
                   />
                 </div>
                 <div className="form-group">
                   <label>Confirm New Password</label>
-                  <input 
-                    type="password" 
-                    name="confirmPassword" 
+                  <input
+                    type="password"
+                    name="confirmPassword"
                     className="form-control"
-                    value={form.confirmPassword} 
-                    onChange={handleChange} 
+                    value={form.confirmPassword}
+                    onChange={handleChange}
                     onKeyUp={checkCapsLock}
                     onKeyDown={checkCapsLock}
                   />

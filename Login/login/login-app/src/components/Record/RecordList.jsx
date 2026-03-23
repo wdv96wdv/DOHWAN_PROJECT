@@ -8,8 +8,8 @@ export default function RecordList({ records, onEdit, onDelete }) {
     return (
       <div className="records-container" style={{ textAlign: 'center', padding: '60px 0', opacity: 0.6 }}>
         <FolderOpen size={48} style={{ margin: '0 auto 16px' }} />
-        <h3>No records found.</h3>
-        <p>Log your first activity above!</p>
+        <h3>아직 저장된 기록이 없어요.</h3>
+        <p>위의 양식을 작성해 첫 번째 활동을 기록해보세요!</p>
       </div>
     );
   }

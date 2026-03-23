@@ -1,14 +1,15 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../../assets/css/header.css';
 import useAuthStore from '../../store/useAuthStore';
 import logo from '../../assets/img/dorunninglogo.png';
+import noImage from '../../assets/img/no-image.png'; // 기본 이미지 임포트 확인
 import ThemeToggle from '../../components/ThemeToggle/ThemeToggle';
-import { Menu } from 'lucide-react'; // 햄버거 아이콘
+import { Menu } from 'lucide-react';
 
 const Header = ({ theme, toggleTheme }) => {
   const isLogin = useAuthStore(state => state.isLogin) || false;
-  const logout = useAuthStore(state => state.logout) || (() => {});
+  const logout = useAuthStore(state => state.logout) || (() => { });
   const roles = useAuthStore(state => state.roles);
   const userInfo = useAuthStore(state => state.userInfo);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -37,8 +38,14 @@ const Header = ({ theme, toggleTheme }) => {
         <>
           <li>
             <Link to="/user" className="profile-link" onClick={closeMenu}>
-              {userInfo?.avatarUrl ? (
-                <img src={userInfo.avatarUrl} alt="프로필" className="profile-image" />
+              {/* ✅ avatarUrl 또는 avatar_url 중 하나라도 있으면 이미지 표시 */}
+              {(userInfo?.avatarUrl || userInfo?.avatar_url) ? (
+                <img
+                  src={userInfo.avatarUrl || userInfo.avatar_url}
+                  alt="프로필"
+                  className="profile-image"
+                  onError={(e) => { e.target.src = noImage; }}
+                />
               ) : (
                 <span className="btn">마이페이지</span>
               )}

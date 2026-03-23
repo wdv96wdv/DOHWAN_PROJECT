@@ -53,7 +53,7 @@ const User = () => {
           } else {
             setProfileInfo(data || {});
           }
-          break; 
+          break;
         } catch (err) {
           clearTimeout(timeoutId);
           console.warn(`프로필 조회 예외(${attempt}/${maxAttempts})`, err);
@@ -101,6 +101,7 @@ const User = () => {
         Swal.alert('회원정보 수정 성공', '비밀번호가 변경되어 로그아웃 후 다시 로그인해주세요.', 'success', () => logout(true));
       } else {
         Swal.alert('회원정보 수정 성공', '정보가 정상적으로 수정되었습니다.', 'success');
+        navigate('/');
       }
 
     } catch (error) {
@@ -115,6 +116,7 @@ const User = () => {
       const response = await auth.remove(username);
       if (response?.status === 200) {
         Swal.alert('회원탈퇴 성공', '그동안 감사했습니다🙋‍♀️', 'success', () => logout(true));
+        navigate('/');
       } else {
         Swal.alert('회원탈퇴 실패', '나갈 땐 마음대로 안 됩니다.', 'error');
       }
