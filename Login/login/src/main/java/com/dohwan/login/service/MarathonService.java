@@ -66,7 +66,7 @@ public class MarathonService {
     }
 
     // --- 2. 데이터 수집 (병렬 최적화 버전) ---
-    @Scheduled(fixedDelay = 3600000, initialDelay = 5000)
+    @Scheduled(cron = "0 0 3 * * *") // 매일 새벽 3시에 한 번만 실행
     public void crawlMarathonData() {
         log.info(">>> [병렬 수집 시작] 마라톤 데이터 크롤링...");
         String baseUrl = "https://marathongo.co.kr/bbs/board.php?bo_table=sub2_1";

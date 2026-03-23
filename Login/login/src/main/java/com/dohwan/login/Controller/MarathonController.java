@@ -23,6 +23,20 @@ public class MarathonController {
         this.marathonService = marathonService;
     }
 
+    @GetMapping("/ping")
+    public ResponseEntity<String> ping() {
+        // 단순히 "ok"만 반환하여 서버가 살아있음을 알림
+        // DB 조회나 크롤링 로직이 전혀 없으므로 매우 가볍습니다.
+        return ResponseEntity.ok("pong");
+    }
+
+    @GetMapping("/crawl")
+    public ResponseEntity<String> triggerCrawl() {
+        // 이 주소를 찌를 때만 크롤링 수행
+        marathonService.crawlMarathonData();
+        return ResponseEntity.ok("크롤링 완료");
+    }
+
     @GetMapping
     public ResponseEntity<List<Marathon>> getAllMarathons() {
         log.info(">>> [GET] /marathons - 마라톤 목록 조회 요청");
