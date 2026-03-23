@@ -92,11 +92,11 @@ const UserForm = ({ userInfo = {}, updateUser, deleteUser, loginType }) => {
     let passwordPayload = {};
     if (newPassword || confirmPassword) {
       if (!currentPassword || !newPassword || !confirmPassword) {
-        Swal.fire('Error', '비밀번호 변경을 위해 모든 필드를 입력해주세요.', 'error');
+        Swal.fire('오류', '비밀번호 변경을 위해 모든 필드를 입력해주세요.', 'error');
         return;
       }
       if (newPassword !== confirmPassword) {
-        Swal.fire('Error', '새 비밀번호가 일치하지 않습니다.', 'error');
+        Swal.fire('오류', '새 비밀번호가 일치하지 않습니다.', 'error');
         return;
       }
       passwordPayload = { currentPassword, newPassword, confirmPassword };
@@ -114,7 +114,8 @@ const UserForm = ({ userInfo = {}, updateUser, deleteUser, loginType }) => {
 
       if (error) {
         console.error('Upload failed:', error);
-        Swal.fire('Upload Error', '이미지 서버 업로드에 실패했습니다.', 'error');
+        Swal.fire('업로드 오류', '이미지 서버 업로드에 실패했습니다.', 'error');
+        return; // 업로드 실패 시 중단
       } else {
         const { data: publicData } = supabase.storage.from('avatars').getPublicUrl(fileName);
         avatar_url = publicData.publicUrl;
@@ -128,17 +129,22 @@ const UserForm = ({ userInfo = {}, updateUser, deleteUser, loginType }) => {
     };
 
     try {
-      // 1. DB 업데이트 (API 호출)
+      // 1. 부모 컴포넌트의 updateUser 호출
+      // 만약 updateUser 함수 내부에서 이미 Swal을 띄우고 있다면 
+      // 아래의 Swal.fire('성공'...)은 삭제해야 합니다.
       await updateUser(finalUpdateData);
 
-      // 2. ⭐ 핵심: 스토어의 updateUserInfo를 호출하여 
-      // 최신 정보를 서버에서 다시 가져오고 헤더를 갱신합니다.
+      // 2. 스토어 정보 갱신
       await updateUserInfo();
 
-      Swal.fire('Success', '프로필이 성공적으로 업데이트되었습니다.', 'success');
+      // ✅ 만약 updateUser 안에서 알림을 안 띄운다면 아래 코드를 유지하고,
+      // 이미 뜬다면 이 줄을 삭제하세요.
+      // Swal.fire('성공', '프로필 정보가 성공적으로 변경되었습니다.', 'success');
+
     } catch (err) {
       console.error(err);
-      Swal.fire('Error', '업데이트 중 오류가 발생했습니다.', 'error');
+      // 에러 알림은 유지하는 것이 좋습니다.
+      Swal.fire('오류', '정보 업데이트 중 오류가 발생했습니다.', 'error');
     }
   };
 
