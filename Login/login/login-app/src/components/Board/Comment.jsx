@@ -24,7 +24,7 @@ const Comment = ({ comment, onUpdate, onDelete }) => {
         <span className="comment-writer">{comment.writer}</span>
         <span className="comment-date">{new Date(comment.createdAt).toLocaleString()}</span>
       </div>
-      
+
       {isEditing ? (
         <div style={{ marginTop: '12px' }}>
           <textarea
@@ -75,7 +75,7 @@ const CommentList = ({ comments, onCreate, onUpdate, onDelete }) => {
           <textarea
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
-            placeholder="Write a comment..."
+            placeholder="댓글을 작성해주세요."
             className="form-control"
             style={{ paddingRight: '60px', minHeight: '100px' }}
             maxLength={200}

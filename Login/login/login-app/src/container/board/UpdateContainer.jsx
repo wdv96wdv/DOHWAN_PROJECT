@@ -55,14 +55,8 @@ const UpdateContainer = () => {
   }
 
   const onUpdate = async (data, headers) => {
-    try {
-      await boards.update(data, headers)
-      Swal.fire({ icon: 'success', title: '게시글이 수정되었습니다.', timer: 1500, showConfirmButton: false })
-      navigate('/boards')
-    } catch (error) {
-      console.error(error)
-      Swal.fire({ icon: 'error', title: '게시글 수정에 실패했습니다.' })
-    }
+    const response = await boards.update(data, headers)
+    return response.data
   }
 
   const onDeleteFile = async (fileId) => {

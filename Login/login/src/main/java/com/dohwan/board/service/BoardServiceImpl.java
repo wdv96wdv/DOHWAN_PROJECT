@@ -51,6 +51,7 @@ public class BoardServiceImpl implements BoardService {
             Files search = new Files();
             search.setPTable("boards");
             search.setPNo(entity.getNo());
+            search.setType(Files.FileType.MAIN); // <-- Added this
             Files mainFile = fileService.selectByType(search);
             dto.setFile(mainFile);
         } catch (Exception e) {

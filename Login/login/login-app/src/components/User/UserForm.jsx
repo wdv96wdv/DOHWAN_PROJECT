@@ -130,20 +130,13 @@ const UserForm = ({ userInfo = {}, updateUser, deleteUser, loginType }) => {
 
     try {
       // 1. 부모 컴포넌트의 updateUser 호출
-      // 만약 updateUser 함수 내부에서 이미 Swal을 띄우고 있다면 
-      // 아래의 Swal.fire('성공'...)은 삭제해야 합니다.
       await updateUser(finalUpdateData);
 
       // 2. 스토어 정보 갱신
       await updateUserInfo();
 
-      // ✅ 만약 updateUser 안에서 알림을 안 띄운다면 아래 코드를 유지하고,
-      // 이미 뜬다면 이 줄을 삭제하세요.
-      // Swal.fire('성공', '프로필 정보가 성공적으로 변경되었습니다.', 'success');
-
     } catch (err) {
       console.error(err);
-      // 에러 알림은 유지하는 것이 좋습니다.
       Swal.fire('오류', '정보 업데이트 중 오류가 발생했습니다.', 'error');
     }
   };
