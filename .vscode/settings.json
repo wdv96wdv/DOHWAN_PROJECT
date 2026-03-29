@@ -1,5 +1,9 @@
 {
     "java.compile.nullAnalysis.mode": "automatic",
     "java.configuration.updateBuildConfiguration": "interactive",
-    "sqltools.connections": []
+    "sqltools.connections": [],
+    "workbench.commandPalette.experimental.enableNaturalLanguageSearch": false,
+    "simpleBrowser.focusLockIndicator.enabled": false,
+    "spring.dashboard.enableGutter": "off",
+    "spring.dashboard.openWith": "external"
 }

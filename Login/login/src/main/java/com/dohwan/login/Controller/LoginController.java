@@ -86,6 +86,13 @@ public class LoginController {
             formData.add("redirect_uri", redirectUri.trim());
             formData.add("code", code.trim());
 
+            // Client Secret이 설정된 경우 추가 (카카오 보안 설정에 따라 필수)
+            String clientSecret = jwtProps.getKakaoClientSecret();
+            if (clientSecret != null && !clientSecret.isEmpty()) {
+                formData.add("client_secret", clientSecret.trim());
+                log.info("카카오 Client Secret 포함하여 요청");
+            }
+
             Map<String, Object> tokenResponse = webClient.post()
                 .uri(tokenUrl)
                 .header("Content-Type", "application/x-www-form-urlencoded;charset=utf-8")

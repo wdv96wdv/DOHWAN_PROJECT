@@ -12,3 +12,18 @@
 2026-03-30 00:12:18 [http-nio-8080-exec-2] INFO  c.d.l.s.f.JwtAuthenticationFilter - CORS Origin: http://localhost:5173
 2026-03-30 00:12:18 [http-nio-8080-exec-2] INFO  c.d.l.s.f.JwtAuthenticationFilter - 로그인 시도 아이디 : wdv96wdv
 2026-03-30 00:12:18 [http-nio-8080-exec-2] INFO  c.d.l.service.UserDetailServiceImpl - ::::: UserDetailServiceImpl.loadUserByUsername 시작 - username: wdv96wdv :::::
+2026-03-30 00:12:19 [http-nio-8080-exec-2] INFO  c.d.l.service.UserDetailServiceImpl - ::::: 사용자 발견: wdv96wdv, 권한 개수: 1 :::::
+2026-03-30 00:12:19 [http-nio-8080-exec-2] INFO  c.d.l.s.f.JwtAuthenticationFilter - ::::: JwtAuthenticationFilter.successfulAuthentication - 인증 성공! :::::
+2026-03-30 00:12:19 [http-nio-8080-exec-2] INFO  c.d.l.s.f.JwtAuthenticationFilter - ::::: JWT 발급 완료 및 응답 전송 :::::
+2026-03-30 00:12:19 [http-nio-8080-exec-2] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-03-30 00:12:19 [http-nio-8080-exec-6] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /users/info from 0:0:0:0:0:0:0:1
+2026-03-30 00:12:19 [http-nio-8080-exec-6] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-03-30 00:12:19 [http-nio-8080-exec-6] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE3NzUyMjkxMzksImlkIjoiZjMwZDA4MTktOWY1NS00NTYwLTg2MWYtYTcxZTU5MGY2MTZhIiwidXNlcm5hbWUiOiJ3ZHY5NndkdiIsInJvbCI6WyJST0xFX1VTRVIiXSwibm8iOjUyfQ.mlBobogsdRIihpbIyq9FvrvE4kWr59Zt-ofb8-oAC3ssr-D61ljyUgQ3UhmHnQ8MmhF4LbGAls9HQ6BDf4C8gw
+2026-03-30 00:12:19 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-03-30 00:12:19 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /users/info
+2026-03-30 00:12:19 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-03-30 00:12:19 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-03-30 00:12:19 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE3NzUyMjkxMzksImlkIjoiZjMwZDA4MTktOWY1NS00NTYwLTg2MWYtYTcxZTU5MGY2MTZhIiwidXNlcm5hbWUiOiJ3ZHY5NndkdiIsInJvbCI6WyJST0xFX1VTRVIiXSwibm8iOjUyfQ.mlBobogsdRIihpbIyq9FvrvE4kWr59Zt-ofb8-oAC3ssr-D61ljyUgQ3UhmHnQ8MmhF4LbGAls9HQ6BDf4C8gw
+2026-03-30 00:12:19 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-03-30 00:12:19 [http-nio-8080-exec-6] INFO  c.d.login.Controller.UserController - ::::: 사용자 정보 조회 :::::
+2026-03-30 00:12:19 [http-nio-8080-exec-6] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
