@@ -12,6 +12,20 @@
   align-items: center;
   justify-content: center;
   z-index: 9999;
+  transition: all 0.3s ease-in-out;
+}
+
+/* 인라인 모드 스타일 (공간이 꽉 차지 않음) */
+.loading-overlay.inline {
+  position: relative;
+  width: 100%;
+  height: auto;
+  min-height: 120px;
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  padding: 20px;
+  z-index: 1;
 }
 
 .loading-content {
@@ -29,6 +43,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: transform 0.3s ease;
+}
+
+/* 인라인 모드에서 이미지 크기 축소 */
+.loading-overlay.inline .loading-img-wrapper {
+  width: 60px;
+  height: 60px;
 }
 
 .loading-img {
@@ -49,6 +70,11 @@
   animation: glowPulse 2s ease-in-out infinite;
 }
 
+.loading-overlay.inline .loading-glow {
+  width: 40px;
+  height: 10px;
+}
+
 .loading-text {
   font-family: 'Orbitron', sans-serif;
   font-size: 1.1rem;
@@ -57,6 +83,10 @@
   color: var(--primary);
   text-transform: uppercase;
   animation: textPulse 1.5s ease-in-out infinite;
+}
+
+.loading-overlay.inline .loading-text {
+  font-size: 0.85rem;
 }
 
 /* Animations */

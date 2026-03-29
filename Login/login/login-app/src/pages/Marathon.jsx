@@ -121,7 +121,7 @@ export default function MarathonList() {
 
             return matchText && matchType && matchStatus;
         });
-    if (loading) return <Loading text="MARATHON DATA LOADING..." />;
+    if (loading) return <Loading text="마라톤 대회 일정 불러오는중..." />;
 
     return (
         <div className="marathon-page">

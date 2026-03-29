@@ -5,7 +5,21 @@ import useAuthStore from '../../store/useAuthStore';
 import logo from '../../assets/img/dorunninglogo.png';
 import noImage from '../../assets/img/no-image.png'; // 기본 이미지 임포트 확인
 import ThemeToggle from '../../components/ThemeToggle/ThemeToggle';
-import { Menu } from 'lucide-react';
+import { 
+  Map, 
+  Activity, 
+  Trophy, 
+  TrendingUp, 
+  Gift, 
+  MessageSquare, 
+  ShieldCheck, 
+  User, 
+  LogOut, 
+  LogIn,
+  UserPlus,
+  Info,
+  UserCircle
+} from 'lucide-react';
 
 const Header = ({ theme, toggleTheme }) => {
   const isLogin = useAuthStore(state => state.isLogin) || false;
@@ -22,13 +36,13 @@ const Header = ({ theme, toggleTheme }) => {
 
   const NavItems = () => (
     <ul className="nav-list">
-      <li><Link to="/course" onClick={closeMenu}>코스</Link></li>
-      <li><Link to={isLogin ? "/record" : "/login"} onClick={closeMenu}>기록</Link></li>
-      <li><Link to="/marathon" onClick={closeMenu}>마라톤 일정</Link></li>
-      <li><Link to={isLogin ? "/performance" : "/login"} onClick={closeMenu}>퍼포먼스</Link></li>
-      <li><Link to="/event" onClick={closeMenu}>이벤트</Link></li>
-      <li><Link to="/boards" onClick={closeMenu}>커뮤니티</Link></li>
-      {isAdmin && <li><Link to="/admin" onClick={closeMenu}>관리자</Link></li>}
+      <li><Link to="/course" onClick={closeMenu}><Map size={20} /><span>코스</span></Link></li>
+      <li><Link to={isLogin ? "/record" : "/login"} onClick={closeMenu}><Activity size={20} /><span>기록</span></Link></li>
+      <li><Link to="/marathon" onClick={closeMenu}><Trophy size={20} /><span>마라톤 일정</span></Link></li>
+      <li><Link to={isLogin ? "/performance" : "/login"} onClick={closeMenu}><TrendingUp size={20} /><span>퍼포먼스</span></Link></li>
+      <li><Link to="/event" onClick={closeMenu}><Gift size={20} /><span>이벤트</span></Link></li>
+      <li><Link to="/boards" onClick={closeMenu}><MessageSquare size={20} /><span>커뮤니티</span></Link></li>
+      {isAdmin && <li><Link to="/admin" onClick={closeMenu}><ShieldCheck size={20} /><span>관리자</span></Link></li>}
     </ul>
   );
 
@@ -38,26 +52,22 @@ const Header = ({ theme, toggleTheme }) => {
         <>
           <li>
             <Link to="/user" className="profile-link" onClick={closeMenu}>
-              {/* ✅ avatarUrl 또는 avatar_url 중 하나라도 있으면 이미지 표시 */}
-              {(userInfo?.avatarUrl || userInfo?.avatar_url) ? (
-                <img
-                  src={userInfo.avatarUrl || userInfo.avatar_url}
-                  alt="프로필"
-                  className="profile-image"
-                  onError={(e) => { e.target.src = noImage; }}
-                />
-              ) : (
-                <span className="btn">마이페이지</span>
-              )}
+              <User size={20} />
+              <span>마이페이지</span>
             </Link>
           </li>
-          <li><button className="btn" onClick={() => { logout(); closeMenu(); }}>로그아웃</button></li>
+          <li>
+            <button className="btn-logout" onClick={() => { logout(); closeMenu(); }}>
+              <LogOut size={20} />
+              <span>로그아웃</span>
+            </button>
+          </li>
         </>
       ) : (
         <>
-          <li><Link className="btn" to="/login" onClick={closeMenu}>로그인</Link></li>
-          <li><Link className="btn" to="/join" onClick={closeMenu}>회원가입</Link></li>
-          <li><Link className="btn" to="/about" onClick={closeMenu}>소개</Link></li>
+          <li><Link to="/login" onClick={closeMenu}><LogIn size={20} /><span>로그인</span></Link></li>
+          <li><Link to="/join" onClick={closeMenu}><UserPlus size={20} /><span>회원가입</span></Link></li>
+          <li><Link to="/about" onClick={closeMenu}><Info size={20} /><span>소개</span></Link></li>
         </>
       )}
     </ul>
@@ -65,30 +75,90 @@ const Header = ({ theme, toggleTheme }) => {
 
   return (
     <header className="header">
-      <div className="logo-container">
-        <Link to="/" onClick={closeMenu}>
-          <img src={logo} alt="DoRunning Logo" className="logo-img" />
-        </Link>
+      <div className="header-left">
+        <button 
+          className={`menu-toggle ${menuOpen ? 'active' : ''}`} 
+          onClick={toggleMenu} 
+          aria-label="Toggle menu"
+        >
+          <div className="hamburger-box">
+            <span className="hamburger-line"></span>
+            <span className="hamburger-line"></span>
+            <span className="hamburger-line"></span>
+          </div>
+        </button>
+
+        <div className="logo-container">
+          <Link to="/" onClick={closeMenu}>
+            <img src={logo} alt="DoRunning Logo" className="logo-img" />
+          </Link>
+        </div>
       </div>
 
       <nav className="main-menu PC-only">
         <NavItems />
       </nav>
 
-      <div className="util PC-only">
-        <UtilItems />
+      <div className="header-right">
+        <div className="util PC-only">
+          <UtilItems />
+        </div>
+        
+        {/* 유튜브 스타일 프로필 아바타 (상시 노출) */}
+        <div className="user-avatar-container">
+          {isLogin ? (
+            <Link to="/user" onClick={closeMenu} className="header-avatar-link">
+              {(userInfo?.avatarUrl || userInfo?.avatar_url) ? (
+                <img
+                  src={userInfo.avatarUrl || userInfo.avatar_url}
+                  alt="Profile"
+                  className="header-avatar-img"
+                  onError={(e) => { e.target.src = noImage; }}
+                />
+              ) : (
+                <UserCircle size={32} className="header-avatar-icon" />
+              )}
+            </Link>
+          ) : (
+            <Link to="/login" onClick={closeMenu} className="header-avatar-link guest">
+              <UserCircle size={32} className="header-avatar-icon" />
+            </Link>
+          )}
+        </div>
       </div>
 
-      <button className="menu-toggle" onClick={toggleMenu} aria-label="Toggle menu">
-        <Menu size={28} />
-      </button>
+      {/* 모바일 메뉴 배경 레이어 */}
+      <div 
+        className={`mobile-backdrop ${menuOpen ? 'active' : ''}`} 
+        onClick={closeMenu} 
+      />
 
       <div className={`mobile-menu ${menuOpen ? 'active' : ''}`}>
-        <nav className="main-menu">
-          <NavItems />
-        </nav>
-        <div className="util">
-          <UtilItems />
+        <div className="mobile-menu-header">
+           <button className="menu-toggle" onClick={toggleMenu}>
+              <div className="hamburger-box">
+                <span className="hamburger-line"></span>
+                <span className="hamburger-line"></span>
+                <span className="hamburger-line"></span>
+              </div>
+           </button>
+           <Link to="/" onClick={closeMenu}>
+             <img src={logo} alt="DoRunning Logo" className="logo-img" />
+           </Link>
+        </div>
+        
+        <div className="mobile-menu-content">
+          <nav className="mobile-nav-section">
+            <div className="menu-section-label">NAVIGATE</div>
+            <NavItems />
+          </nav>
+          
+          <div className="menu-divider" />
+          
+          <nav className="mobile-nav-section">
+            <div className="menu-section-label">ACCOUNT</div>
+            <UtilItems />
+          </nav>
         </div>
       </div>
     </header>

@@ -6,7 +6,8 @@ import useAuthStore from "../../store/useAuthStore";
 import "../../assets/css/wishlist.css";
 import "../../assets/css/auth.css";
 import Swal from 'sweetalert2';
-import { Heart, ShoppingCart, Sparkles, Loader2, Info } from 'lucide-react';
+import { Heart, ShoppingCart, Sparkles, Info } from 'lucide-react';
+import Loading from "../../components/Common/Loading";
 
 const RecommendResult = () => {
   const location = useLocation();
@@ -173,8 +174,8 @@ const RecommendResult = () => {
         ))}
       </div>
 
-      <div ref={observerRef} style={{ height: "60px", display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        {loading && <Loader2 size={32} className="rotate" color="var(--primary)" />}
+      <div ref={observerRef} style={{ height: "120px", display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        {loading && <Loading inline={true} text="더 많은 신발을 찾는 중..." />}
         {!loading && products.length >= total && products.length > 0 && (
           <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>You've reached the end of personalized recommendations.</p>
         )}

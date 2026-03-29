@@ -3,7 +3,8 @@ import axios from "axios";
 import "../../assets/css/board.css";
 import "../../assets/css/auth.css";
 import Swal from "sweetalert2"; 
-import { ShieldAlert, Trash2, Mail, User, MessageSquare, Loader2 } from 'lucide-react';
+import { ShieldAlert, Trash2, Mail, User, MessageSquare } from 'lucide-react';
+import Loading from "../../components/Common/Loading";
 
 const AdminContact = () => {
   const [contacts, setContacts] = useState([]);
@@ -62,8 +63,8 @@ const AdminContact = () => {
   }, []);
 
   if (loading) return (
-    <div style={{ padding: '100px', textAlign: 'center' }}>
-      <Loader2 size={48} className="rotate" color="var(--primary)" style={{ margin: '0 auto' }} />
+    <div style={{ padding: '100px 0' }}>
+      <Loading inline={true} text="문의 내역을 불러오는 중..." />
     </div>
   );
   

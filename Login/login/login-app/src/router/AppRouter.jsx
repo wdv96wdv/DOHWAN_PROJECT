@@ -1,5 +1,6 @@
 import React, { Suspense, lazy } from 'react';
 import { Routes, Route } from 'react-router-dom';
+import Loading from '../components/Common/Loading';
 
 // Lazy loaded components
 const Home = lazy(() => import('../pages/Login/Home'));
@@ -27,7 +28,7 @@ const WishlistPage = lazy(() => import('../pages/WishlistPage'));
 
 const AppRouter = ({ theme }) => {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<Loading text="페이지를 준비하고 있습니다..." />}>
       <Routes>
         <Route path="/" element={<Home theme={theme} />} />
         <Route path="/login" element={<Login />} />

@@ -2,9 +2,9 @@ import React from 'react';
 import '../../assets/css/Loading.css';
 import loadingShoe from '../../assets/img/loading-shoe.png';
 
-const Loading = ({ text = "LOADING DATA..." }) => {
+const Loading = ({ text = "LOADING DATA...", inline = false }) => {
   return (
-    <div className="loading-overlay">
+    <div className={`loading-overlay ${inline ? 'inline' : ''}`}>
       <div className="loading-content">
         <div className="loading-img-wrapper">
           <img src={loadingShoe} alt="Loading..." className="loading-img" />

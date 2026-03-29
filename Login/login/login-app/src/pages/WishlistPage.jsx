@@ -6,6 +6,7 @@ import "../assets/css/wishlist.css";
 import "../assets/css/auth.css";
 import Swal from 'sweetalert2';
 import { Heart, ShoppingCart, Trash2, PackageSearch } from 'lucide-react';
+import Loading from '../components/Common/Loading';
 
 const WishlistPage = () => {
   const userInfo = useAuthStore(state => state.userInfo);
@@ -62,7 +63,7 @@ const WishlistPage = () => {
       
       <div>
         {loading ? (
-          <div className="empty-state">Loading your wishlist...</div>
+          <Loading inline={true} text="찜 목록을 불러오는 중..." />
         ) : wishlistItems.length > 0 ? (
           <div className="product-grid">
             {wishlistItems.map((item) => (
