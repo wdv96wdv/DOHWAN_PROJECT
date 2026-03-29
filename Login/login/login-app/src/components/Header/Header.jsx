@@ -49,20 +49,12 @@ const Header = ({ theme, toggleTheme }) => {
   const UtilItems = () => (
     <ul className="util-list">
       {isLogin ? (
-        <>
-          <li>
-            <Link to="/user" className="profile-link" onClick={closeMenu}>
-              <User size={20} />
-              <span>마이페이지</span>
-            </Link>
-          </li>
-          <li>
-            <button className="btn-logout" onClick={() => { logout(); closeMenu(); }}>
-              <LogOut size={20} />
-              <span>로그아웃</span>
-            </button>
-          </li>
-        </>
+        <li>
+          <button className="btn-logout" onClick={() => { logout(); closeMenu(); }}>
+            <LogOut size={20} />
+            <span>로그아웃</span>
+          </button>
+        </li>
       ) : (
         <>
           <li><Link to="/login" onClick={closeMenu}><LogIn size={20} /><span>로그인</span></Link></li>
