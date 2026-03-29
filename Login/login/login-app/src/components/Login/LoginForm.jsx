@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import '../../assets/css/auth.css';
 import useAuthStore from '../../store/useAuthStore'
 import GoogleLoginButton from './GoogleLoginButton';
+import KakaoLoginButton from './KakaoLoginButton';
 import { Link, useNavigate } from 'react-router-dom';
 
 const LoginForm = () => {
@@ -82,6 +83,8 @@ const LoginForm = () => {
         </div>
 
         <GoogleLoginButton />
+        <div style={{ height: '8px' }}></div>
+        {/* <KakaoLoginButton /> */}
 
         <div className="auth-footer">
           계정이 없으신가요? <Link to="/join">회원가입</Link>

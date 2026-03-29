@@ -61,14 +61,13 @@ const useAuthStore = create((set, get) => ({
       // Backend (JwtAuthenticationFilter) now returns ApiResponse<User>
       if (response.status === 200) {
         const authorization = response.headers['authorization'];
-        
-        // auth.login already saved the jwt to localStorage
-        // Fetch user info after login to ensure session is fully established
-        const infoResponse = await auth.info();
-        if (infoResponse.status === 200) {
-          get().loginSetting(authorization, infoResponse.data.data);
-          if (navigate) navigate("/");
+        if (authorization) {
+          api.defaults.headers.common.Authorization = authorization;
+          localStorage.setItem("isLogin", "true");
         }
+        // Fetch full user info including Supabase profile after login
+        await get().updateUserInfo();
+        if (navigate) navigate("/");
       }
     } catch (error) {
       console.error(error);
@@ -87,12 +86,7 @@ const useAuthStore = create((set, get) => ({
     api.defaults.headers.common.Authorization = authorization;
 
     try {
-      const response = await auth.info();
-      if (response.data === 'UNAUTHORIZED' || response.status === 401) {
-        set({ isLoading: false });
-        return;
-      }
-      get().loginSetting(authorization, response.data.data);
+      await get().updateUserInfo();
     } catch (error) {
       console.error(error);
     } finally {
@@ -149,9 +143,10 @@ const useAuthStore = create((set, get) => ({
             if (obj.auth === 'ROLE_ADMIN') updateRoles.isAdmin = true;
           });
         }
+        localStorage.setItem("isLogin", "true");
         localStorage.setItem("roles", JSON.stringify(updateRoles));
 
-        set({ userInfo: updatedUserInfo, roles: updateRoles });
+        set({ isLogin: true, userInfo: updatedUserInfo, roles: updateRoles });
         return true;
       }
     } catch (error) {

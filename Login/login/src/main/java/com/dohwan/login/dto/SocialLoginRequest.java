@@ -8,4 +8,5 @@ public class SocialLoginRequest {
     private String name;
     private String email;
     private String avatar_url;
+    private String provider;
 }

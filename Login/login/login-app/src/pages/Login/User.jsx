@@ -12,6 +12,7 @@ const User = () => {
   const roles = useAuthStore(state => state.roles);
   const logout = useAuthStore(state => state.logout);
   const userInfo = useAuthStore(state => state.userInfo);
+  const updateUserInfo = useAuthStore(state => state.updateUserInfo);
   const navigate = useNavigate();
   const [profileInfo, setProfileInfo] = useState({});
 
@@ -100,6 +101,8 @@ const User = () => {
       if (isPasswordChange) {
         Swal.alert('회원정보 수정 성공', '비밀번호가 변경되어 로그아웃 후 다시 로그인해주세요.', 'success', () => logout(true));
       } else {
+        // 전역 상태 갱신 (헤더 아바타 등 즉시 반영)
+        await updateUserInfo();
         Swal.alert('회원정보 수정 성공', '정보가 정상적으로 수정되었습니다.', 'success');
         navigate('/');
       }

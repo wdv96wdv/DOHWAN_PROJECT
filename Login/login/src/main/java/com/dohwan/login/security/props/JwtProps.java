@@ -17,5 +17,7 @@ public class JwtProps {
   // com.dohwan.login.secretKey로 지정된 프로퍼티 값을 주입받는 필드
   // ✅ com.dohwan.login.secret-key ➡ secretKey : {인코딩된 시크릿 키}
   private String secretKey;
-  
+  private String kakaoClientId;
+  private String kakaoRedirectUri;
+  private String kakaoClientSecret;
 }

@@ -76,7 +76,7 @@ public class SecurityConfig {
 				.requestMatchers("/login", "/users", "/join", "/contact", "/", "/boards/**").permitAll()
 				.requestMatchers("/api/wishlist/**").authenticated()
 				.requestMatchers("/admin/**").hasRole("ADMIN")
-				.requestMatchers("/manifest.json", "/auth/check-username", "/auth/social-login").permitAll()
+				.requestMatchers("/manifest.json", "/auth/check-username", "/auth/social-login", "/auth/kakao-login").permitAll()
 				.requestMatchers("/error", "/marathons/**", "/api/marathons/**", "/api/naver-shopping/**").permitAll()
 
 				.anyRequest().authenticated())

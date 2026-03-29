@@ -42,7 +42,7 @@ const Join = () => {
 
   return (
     <>
-      <div className="container">
+      <div className="auth-page">
         <JoinForm join={ join } />
       </div>
     </>

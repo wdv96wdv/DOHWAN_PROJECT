@@ -302,6 +302,16 @@ header.header {
   text-align: left;
 }
 
+.mobile-only {
+  display: flex !important;
+}
+
+@media (min-width: 1025px) {
+  .mobile-only {
+    display: none !important;
+  }
+}
+
 .mobile-menu li a:hover,
 .mobile-menu li button:hover {
   background: var(--border-color);

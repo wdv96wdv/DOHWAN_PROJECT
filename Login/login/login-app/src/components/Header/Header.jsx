@@ -97,8 +97,15 @@ const Header = ({ theme, toggleTheme }) => {
         </div>
         
         {/* 유튜브 스타일 프로필 아바타 (상시 노출) */}
-        <div className="user-avatar-container">
-          {isLogin ? (
+        {/* 유튜브 스타일 프로필 아바타 (상시 노출) */}
+        {!isLogin ? (
+          <div className="user-avatar-container mobile-only">
+            <Link to="/login" onClick={closeMenu} className="header-avatar-link guest">
+              <UserCircle size={32} className="header-avatar-icon" />
+            </Link>
+          </div>
+        ) : (
+          <div className="user-avatar-container">
             <Link to="/user" onClick={closeMenu} className="header-avatar-link">
               {(userInfo?.avatarUrl || userInfo?.avatar_url) ? (
                 <img
@@ -111,12 +118,8 @@ const Header = ({ theme, toggleTheme }) => {
                 <UserCircle size={32} className="header-avatar-icon" />
               )}
             </Link>
-          ) : (
-            <Link to="/login" onClick={closeMenu} className="header-avatar-link guest">
-              <UserCircle size={32} className="header-avatar-icon" />
-            </Link>
-          )}
-        </div>
+          </div>
+        )}
       </div>
 
       {/* 모바일 메뉴 배경 레이어 */}

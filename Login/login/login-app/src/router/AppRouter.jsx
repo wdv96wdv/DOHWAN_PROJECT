@@ -8,6 +8,7 @@ const Login = lazy(() => import('../pages/Login/Login'));
 const Join = lazy(() => import('../pages/Login/Join'));
 const User = lazy(() => import('../pages/Login/User'));
 const Record = lazy(() => import('../pages/Login/Record'));
+const KakaoCallback = lazy(() => import('../pages/Login/KakaoCallback'));
 const Course = lazy(() => import('../pages/Course'));
 const Event = lazy(() => import('../pages/Event'));
 const About = lazy(() => import('../pages/About'));
@@ -32,6 +33,7 @@ const AppRouter = ({ theme }) => {
       <Routes>
         <Route path="/" element={<Home theme={theme} />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/login/kakao" element={<KakaoCallback />} />
         <Route path="/join" element={<Join />} />
         <Route path="/user" element={<User />} />
         <Route path="/wishlist" element={<WishlistPage />} />
