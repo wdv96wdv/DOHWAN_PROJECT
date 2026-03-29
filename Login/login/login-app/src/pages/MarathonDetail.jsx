@@ -25,7 +25,8 @@ const MarathonDetail = () => {
         const fetchDetail = async () => {
             try {
                 setLoading(true);
-                const response = await axios.get(`http://localhost:8080/api/marathons/${id}`);
+                const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+                const response = await axios.get(`${API_BASE_URL}/api/marathons/${id}`);
                 setMarathon(response.data);
             } catch (err) {
                 console.error('상세 정보 로드 실패:', err);
