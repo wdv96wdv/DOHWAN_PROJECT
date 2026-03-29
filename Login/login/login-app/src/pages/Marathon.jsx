@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from "react"; // useEffect 추가
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom"; // 추가
 import "../assets/css/marathon.css";
 import "../assets/css/auth.css";
 import { Search, MapPin, Calendar, Footprints, RotateCcw, Award } from 'lucide-react';
+import Loading from '../components/Common/Loading';
 
 export default function MarathonList() {
     const defaultSearch = "";
@@ -20,7 +22,14 @@ export default function MarathonList() {
     // MarathonList.js 내부 useEffect
     useEffect(() => {
         fetch(`${API_BASE_URL}/api/marathons`)
-            .then(res => res.json())
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error(`HTTP error! status: ${res.status}`);
+                }
+                // 응답이 204 No Content이거나 본문이 빌 경우 빈 배열 반환
+                if (res.status === 204) return [];
+                return res.json();
+            })
             .then(data => {
                 console.log("Raw Data from Backend:", data); // 데이터 구조 확인용 로그
                 const formattedData = data.map(m => {
@@ -112,7 +121,7 @@ export default function MarathonList() {
 
             return matchText && matchType && matchStatus;
         });
-    if (loading) return <div style={{ textAlign: 'center', padding: '100px' }}>Loading...</div>;
+    if (loading) return <Loading text="MARATHON DATA LOADING..." />;
 
     return (
         <div className="marathon-page">
@@ -120,7 +129,7 @@ export default function MarathonList() {
                 <h1><Award size={40} style={{ verticalAlign: 'middle', marginRight: '16px', color: 'var(--primary)' }} /> MARATHON EVENTS</h1>
             </header>
 
-            <div className="marathon-filters">
+            <div className="marathon-filters glass-card">
                 <div className="search-row">
                     <div className="search-input-wrapper">
                         <Search className="search-icon" size={18} />
@@ -161,12 +170,10 @@ export default function MarathonList() {
 
             <div className="marathon-grid">
                 {filtered.map(m => (
-                    <a
-                        key={m.id || m.link} // id가 없을 경우 link를 키로 사용
-                        href={m.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="marathon-card"
+                    <Link
+                        key={m.id || m.link}
+                        to={`/marathon/${m.id}`}
+                        className="marathon-card glass-card"
                     >
                         <div className={`m-badge ${statusClassMap[m.status]}`}>
                             {m.status}
@@ -188,7 +195,7 @@ export default function MarathonList() {
                                 <span style={{ fontWeight: 600 }}>{m.type.join(" / ")}</span>
                             </div>
                         </div>
-                    </a>
+                    </Link>
                 ))}
             </div>
 

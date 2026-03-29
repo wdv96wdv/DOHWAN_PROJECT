@@ -26,8 +26,9 @@ const RecommendResult = () => {
   useEffect(() => {
     if (userInfo) {
       getWishlist()
-        .then((data) => {
-          const wishlistedProductIds = new Set(data.map((item) => item.productId));
+        .then((res) => {
+          const items = res.data || [];
+          const wishlistedProductIds = new Set(items.map((item) => item.productId));
           setWishlist(wishlistedProductIds);
         })
         .catch((error) => console.error("Wishlist initialization failed:", error));
@@ -148,7 +149,7 @@ const RecommendResult = () => {
 
       <div className="product-grid">
         {products.map((item, index) => (
-          <div key={index} className="product-card">
+          <div key={index} className="product-card glass-card">
             <div className="product-img-wrapper">
               <img src={item.image} alt={item.title} className="product-img" />
             </div>

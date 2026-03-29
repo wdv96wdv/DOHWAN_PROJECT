@@ -16,11 +16,16 @@
   color: var(--text-primary);
 }
 
+@media (max-width: 768px) {
+  .marathon-header h1 {
+    font-size: 1.8rem;
+  }
+}
+
 /* =========================
    Filter Section
 ========================= */
 .marathon-filters {
-  composes: glass-card from global;
   padding: 24px;
   margin-bottom: 40px;
   display: flex;
@@ -31,6 +36,16 @@
 .search-row {
   display: flex;
   gap: 12px;
+}
+
+@media (max-width: 600px) {
+  .search-row {
+    flex-direction: column;
+  }
+  
+  .search-row .btn-primary {
+    width: 100%;
+  }
 }
 
 .search-input-wrapper {
@@ -102,12 +117,18 @@
 ========================= */
 .marathon-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 24px;
 }
 
+@media (max-width: 480px) {
+  .marathon-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
 .marathon-card {
-  composes: glass-card from global;
   padding: 24px;
   display: flex;
   flex-direction: column;

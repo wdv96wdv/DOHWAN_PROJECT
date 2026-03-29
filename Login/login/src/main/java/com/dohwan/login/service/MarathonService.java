@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import com.dohwan.login.repository.MarathonRepository;
 import com.dohwan.login.entity.Marathon;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -27,7 +26,7 @@ public class MarathonService {
     private static final Logger log = LoggerFactory.getLogger(MarathonService.class);
     private final RestTemplate restTemplate;
     private final MarathonRepository marathonRepository;
-    private final ObjectMapper objectMapper;
+    // objectMapper 필드 제거됨
 
     // 병렬 처리를 위한 스레드 풀 생성 (동시 10개 작업)
     private final ExecutorService executor = Executors.newFixedThreadPool(10);
@@ -38,14 +37,12 @@ public class MarathonService {
     @Value("${supabase.key}")
     private String supabaseKey;
 
-    public MarathonService(RestTemplate restTemplate, MarathonRepository marathonRepository,
-            ObjectMapper objectMapper) {
+    public MarathonService(RestTemplate restTemplate, MarathonRepository marathonRepository) {
         this.restTemplate = restTemplate;
         this.marathonRepository = marathonRepository;
-        this.objectMapper = objectMapper;
     }
 
-    // --- 1. 데이터 조회 (기존 유지) ---
+    // --- 1. 데이터 조회 (기존 유지 및 단건 추가) ---
     public List<Marathon> findAllMarathons() {
         HttpHeaders headers = new HttpHeaders();
         headers.set("apikey", supabaseKey);
@@ -54,14 +51,49 @@ public class MarathonService {
 
         try {
             String url = supabaseUrl + "/rest/v1/marathons?select=*&order=race_date.desc";
-            ResponseEntity<List> response = restTemplate.exchange(url, HttpMethod.GET, entity, List.class);
-            if (response.getBody() == null)
+            
+            // ParameterizedTypeReference를 사용하여 제네릭 타입 정보 유지
+            ResponseEntity<List<Marathon>> response = restTemplate.exchange(
+                url, 
+                HttpMethod.GET, 
+                entity, 
+                new org.springframework.core.ParameterizedTypeReference<List<Marathon>>() {}
+            );
+            
+            if (response == null || response.getBody() == null)
                 return Collections.emptyList();
-            return objectMapper.convertValue(response.getBody(),
-                    objectMapper.getTypeFactory().constructCollectionType(List.class, Marathon.class));
+            
+            return response.getBody();
         } catch (Exception e) {
             log.error(">>> [조회 실패] : {}", e.getMessage());
             return marathonRepository.findAllByOrderByRaceDateDesc();
+        }
+    }
+
+    public Optional<Marathon> findMarathonById(Long id) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("apikey", supabaseKey);
+        headers.set("Authorization", "Bearer " + supabaseKey);
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+
+        try {
+            String url = supabaseUrl + "/rest/v1/marathons?id=eq." + id + "&select=*";
+            
+            ResponseEntity<List<Marathon>> response = restTemplate.exchange(
+                url, 
+                HttpMethod.GET, 
+                entity, 
+                new org.springframework.core.ParameterizedTypeReference<List<Marathon>>() {}
+            );
+            List<Marathon> body = (response != null) ? response.getBody() : null;
+            if (body == null || body.isEmpty())
+                return marathonRepository.findById(id);
+
+            Marathon single = body.get(0);
+            return Optional.ofNullable(single);
+        } catch (Exception e) {
+            log.error(">>> [단건 조회 실패] : {}", e.getMessage());
+            return marathonRepository.findById(id);
         }
     }
 
@@ -69,7 +101,8 @@ public class MarathonService {
     @Scheduled(cron = "0 0 3 * * *") // 매일 새벽 3시에 한 번만 실행
     public void crawlMarathonData() {
         log.info(">>> [병렬 수집 시작] 마라톤 데이터 크롤링...");
-        String baseUrl = "https://marathongo.co.kr/bbs/board.php?bo_table=sub2_1";
+        // 마라톤Go 사이트 구조 변경에 따른 목록 페이지 URL 최신화
+        String baseUrl = "https://marathongo.co.kr/raceSchedule/domestic";
 
         try {
             Document listDoc = Jsoup.connect(baseUrl)
@@ -123,12 +156,21 @@ public class MarathonService {
                 dateCandidates.add(extractDate(m.group()));
             }
 
-            if (dateCandidates.size() < 2)
-                return;
+            String raceDate = null;
+            String startDate = null;
+            String endDate = null;
 
-            String raceDate = dateCandidates.get(0);
-            String startDate = dateCandidates.get(1);
-            String endDate = (dateCandidates.size() >= 3) ? dateCandidates.get(2) : startDate;
+            if (dateCandidates.size() >= 1) raceDate = dateCandidates.get(0);
+            if (dateCandidates.size() >= 2) startDate = dateCandidates.get(1);
+            if (dateCandidates.size() >= 3) endDate = dateCandidates.get(2);
+            
+            if (startDate == null) startDate = raceDate;
+            if (endDate == null) endDate = startDate;
+
+            if (raceDate == null) {
+                log.warn(">>> [날짜 추출 실패] 건너뜀 : {}", detailUrl);
+                return;
+            }
 
             // 3. 종목(Type) 정밀 추출 (리액트 필터 연동용)
             Set<String> typeSet = new HashSet<>();
@@ -154,17 +196,84 @@ public class MarathonService {
                 }
             }
 
-            // 4. 데이터 패키징 및 전송
+            // 4. 실제 공식 홈페이지(신청하기) 링크 추출 시도 (정밀화)
+            String officialLink = detailUrl; // 기본값
+            boolean found = false;
+
+            // 4-1. OG Meta Description에서 링크 추출 시도 (가장 정확한 경우가 많음)
+            Element ogDesc = detailDoc.select("meta[property=og:description]").first();
+            if (ogDesc != null) {
+                String descContent = ogDesc.attr("content");
+                // 정규표현식으로 URL 추출 (한글 등 비영어권 문자 제외)
+                java.util.regex.Matcher urlMatcher = java.util.regex.Pattern
+                        .compile("https?://[a-zA-Z0-9\\.\\-]+(?:/[a-zA-Z0-9\\.\\-/\\?\\=\\&_]*)?")
+                        .matcher(descContent);
+                
+                while (urlMatcher.find()) {
+                    String candidate = urlMatcher.group().trim()
+                            .split("[^\\p{ASCII}]")[0] // 한글 등 비ASCII 문자가 보이면 그 앞에서 자름
+                            .replaceAll("[\\.\\,\\!\\?\\>\\<\\(\\)\\[\\]\\{\\}]+$", ""); 
+                    if (!candidate.contains("marathongo.co.kr")) {
+                        officialLink = candidate;
+                        found = true;
+                        break;
+                    }
+                }
+            }
+
+            // 4-2. '신청하기', '홈페이지' 텍스트를 포함하는 링크 찾기 (OG에서 못 찾은 경우)
+            if (!found) {
+                Elements allLinks = detailDoc.select("a[href]");
+                for (Element linkEl : allLinks) {
+                    String linkText = linkEl.text().trim();
+                    String href = linkEl.attr("abs:href");
+
+                    // 핵심 키워드가 포함되었거나, marathongo가 아닌 외부 도메인인 경우
+                    if (linkText.contains("신청하기") || linkText.contains("홈페이지") || linkText.contains("접수하기")) {
+                        if (href != null && !href.isEmpty() && !href.contains("marathongo.co.kr") && href.startsWith("http")) {
+                            officialLink = href;
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            // 4-3. 도저히 못 찾으면 본문 텍스트 내에서 URL 패턴 검색
+            if (!found) {
+                java.util.regex.Matcher mUrl = java.util.regex.Pattern
+                        .compile("https?://[a-zA-Z0-9\\.\\-]+(?:/[a-zA-Z0-9\\.\\-/\\?\\=\\&_]*)?")
+                        .matcher(allText);
+                while (mUrl.find()) {
+                    String candidate = mUrl.group().trim()
+                            .split("[^\\p{ASCII}]")[0] // 한글 등 비ASCII 문자가 보이면 그 앞에서 자름
+                            .replaceAll("[\\.\\,\\!\\?\\>\\<\\(\\)\\[\\]\\{\\}]+$", ""); 
+                    if (!candidate.contains("marathongo.co.kr") && !candidate.contains("google.com")) {
+                        officialLink = candidate;
+                        found = true;
+                        break;
+                    }
+                }
+            }
+
+            if (found) {
+                log.info(">>> [공식 사이트 추출 성공] : {} (대회: {})", officialLink, title);
+            } else {
+                log.warn(">>> [공식 사이트 추출 실패] 상세 페이지 유지 : {} (대회: {})", detailUrl, title);
+            }
+
+            // 5. 데이터 패키징 및 전송
             Map<String, Object> data = new HashMap<>();
             data.put("title", cleanMarathonTitle(title));
-            data.put("link", detailUrl);
+            data.put("link", officialLink);
             data.put("location", extractLocation(allText));
             data.put("race_date", raceDate);
             data.put("start_date", startDate);
             data.put("end_date", endDate);
-            data.put("type", typeSet.toArray(new String[0])); // 수집된 종목 배열화
+            data.put("type", typeSet.toArray(new String[0])); 
             data.put("is_first_come", allText.contains("선착순"));
 
+            log.info(">>> [업서트 준비] : {} (날짜: {}, 링크: {})", data.get("title"), raceDate, officialLink);
             sendToSupabase(data);
 
         } catch (Exception e) {
@@ -210,8 +319,10 @@ public class MarathonService {
 
         HttpEntity<Map<String, Object>> entity = new HttpEntity<>(data, headers);
         try {
-            restTemplate.postForEntity(supabaseUrl + "/rest/v1/marathons", entity, String.class);
-            log.info(">>> [저장 완료] : {}", data.get("title"));
+            // on_conflict 파라미터를 추가해야 중복 시 링크 등이 업데이트(UPSERT)됩니다.
+            String upsertUrl = supabaseUrl + "/rest/v1/marathons?on_conflict=title,race_date";
+            restTemplate.postForEntity(upsertUrl, entity, String.class);
+            log.info(">>> [저장/갱신 완료] : {}", data.get("title"));
         } catch (Exception e) {
             log.warn(">>> [저장 실패] : {}", e.getMessage());
         }

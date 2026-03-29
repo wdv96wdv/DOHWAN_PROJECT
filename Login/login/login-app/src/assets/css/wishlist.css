@@ -16,6 +16,16 @@
   margin-bottom: 16px;
 }
 
+@media (max-width: 768px) {
+  .wishlist-header {
+    margin-bottom: 40px;
+  }
+  
+  .wishlist-header h1 {
+    font-size: 1.8rem;
+  }
+}
+
 .wishlist-header p {
   color: var(--text-muted);
   font-size: 1.1rem;
@@ -27,8 +37,21 @@
   gap: 32px;
 }
 
+@media (max-width: 768px) {
+  .product-grid {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .product-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
 .product-card {
-  composes: glass-card from global;
   padding: 0;
   overflow: hidden;
   transition: all var(--transition-normal);
@@ -74,6 +97,7 @@
   line-height: 1.4;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }

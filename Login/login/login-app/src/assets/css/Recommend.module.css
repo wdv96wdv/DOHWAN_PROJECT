@@ -24,6 +24,14 @@ button {
   cursor: pointer;
 }
 
+.btn-reset {
+  background-color: #6c757d;
+  color: white;
+  padding: 0.75rem;
+  border: none;
+  cursor: pointer;
+}
+
 .reviewSection {
   margin-top: 40px;
   padding: 20px;

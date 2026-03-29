@@ -4,6 +4,12 @@
   padding: 40px 20px;
 }
 
+@media (max-width: 768px) {
+  .board-page {
+    padding: 24px 16px;
+  }
+}
+
 .board-header {
   display: flex;
   justify-content: space-between;
@@ -18,6 +24,19 @@
   margin: 0;
 }
 
+@media (max-width: 768px) {
+  .board-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  
+  .board-header h1 {
+    font-size: 1.5rem;
+  }
+}
+
 /* =========================
    Board Table
 ========================= */
@@ -29,14 +48,16 @@
   border: 1px solid var(--glass-border);
   box-shadow: var(--glass-shadow);
   padding: 1px; /* Clip children to border radius */
-  overflow: hidden;
+  overflow-x: auto; /* Enable horizontal scroll on mobile */
   margin-bottom: 32px;
+  -webkit-overflow-scrolling: touch;
 }
 
 .board-table {
   width: 100%;
   border-collapse: collapse;
   background: transparent;
+  min-width: 600px; /* Ensure table doesn't get too squashed */
 }
 
 .board-table th {
@@ -143,6 +164,21 @@
   box-shadow: var(--glass-shadow);
   padding: 40px;
   transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+@media (max-width: 768px) {
+  .read-container {
+    padding: 24px 16px;
+  }
+  
+  .read-title {
+    font-size: 1.5rem;
+  }
+  
+  .read-meta {
+    flex-direction: column;
+    gap: 8px;
+  }
 }
 
 .read-header {

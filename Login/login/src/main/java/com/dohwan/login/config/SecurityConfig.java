@@ -16,7 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+// AntPathRequestMatcher 제거됨
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -72,21 +72,12 @@ public class SecurityConfig {
 
 		// 요청 권한 설정
 		http.authorizeHttpRequests(auth -> auth
-				.requestMatchers(new AntPathRequestMatcher("/**", "OPTIONS")).permitAll() // ✅ preflight 허용
-				.requestMatchers(new AntPathRequestMatcher("/login")).permitAll()
-				.requestMatchers(new AntPathRequestMatcher("/users")).permitAll()
-				.requestMatchers(new AntPathRequestMatcher("/join")).permitAll()
-				.requestMatchers(new AntPathRequestMatcher("/contact")).permitAll()
-				.requestMatchers(new AntPathRequestMatcher("/")).permitAll()
-				.requestMatchers(new AntPathRequestMatcher("/boards/**")).permitAll()
-				.requestMatchers(new AntPathRequestMatcher("/api/wishlist/**")).authenticated()
-				.requestMatchers(new AntPathRequestMatcher("/admin/**")).hasRole("ADMIN")
-				.requestMatchers(new AntPathRequestMatcher("/manifest.json")).permitAll()
-				.requestMatchers(new AntPathRequestMatcher("/auth/check-username")).permitAll()
-				.requestMatchers(new AntPathRequestMatcher("/auth/social-login", "POST")).permitAll()
-				.requestMatchers(new AntPathRequestMatcher("/error")).permitAll()
-				.requestMatchers(new AntPathRequestMatcher("/marathons/**")).permitAll()
-				.requestMatchers(new AntPathRequestMatcher("/api/marathons/**")).permitAll()
+				.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // ✅ preflight 허용
+				.requestMatchers("/login", "/users", "/join", "/contact", "/", "/boards/**").permitAll()
+				.requestMatchers("/api/wishlist/**").authenticated()
+				.requestMatchers("/admin/**").hasRole("ADMIN")
+				.requestMatchers("/manifest.json", "/auth/check-username", "/auth/social-login").permitAll()
+				.requestMatchers("/error", "/marathons/**", "/api/marathons/**", "/api/naver-shopping/**").permitAll()
 
 				.anyRequest().authenticated())
 				.exceptionHandling(exception -> exception

@@ -86,7 +86,7 @@ const CommentList = ({ comments, onCreate, onUpdate, onDelete }) => {
         </form>
       ) : (
         <div style={{ padding: '24px', textAlign: 'center', background: 'hsla(0,0%,50%,0.03)', borderRadius: '12px', marginBottom: '40px', border: '1px dashed var(--glass-border)' }}>
-          Please login to leave a comment.
+          댓글을 작성하려면 로그인이 필요합니다.
         </div>
       )}
 

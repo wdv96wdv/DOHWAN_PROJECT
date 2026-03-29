@@ -28,8 +28,9 @@ const WishlistPage = () => {
 
     setLoading(true);
     getWishlist()
-      .then(data => {
-        setWishlistItems(data);
+      .then(res => {
+        const items = res.data || [];
+        setWishlistItems(items);
         setLoading(false);
       })
       .catch(error => {
@@ -65,7 +66,7 @@ const WishlistPage = () => {
         ) : wishlistItems.length > 0 ? (
           <div className="product-grid">
             {wishlistItems.map((item) => (
-              <div key={item.productId} className="product-card">
+              <div key={item.productId} className="product-card glass-card">
                 <div className="product-img-wrapper">
                    <img src={item.image} alt={item.title} className="product-img" />
                 </div>
