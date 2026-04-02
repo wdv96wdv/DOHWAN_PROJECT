@@ -87,3 +87,6 @@ CREATE POLICY "Allow public read access" ON marathons FOR SELECT TO public USING
 -- Allow anonymous upsert (for crawler)
 DROP POLICY IF EXISTS "Allow anonymous upsert" ON marathons;
 CREATE POLICY "Allow anonymous upsert" ON marathons FOR ALL TO public USING (true) WITH CHECK (true);
+
+-- Nested Comments UPDATE (Run this manually on the database to apply)
+ALTER TABLE comments ADD COLUMN parent_id VARCHAR(255) REFERENCES comments(id) ON DELETE CASCADE;

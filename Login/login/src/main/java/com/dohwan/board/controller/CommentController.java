@@ -53,11 +53,14 @@ public class CommentController {
             @PathVariable("boardId") String boardId,
             @RequestBody Map<String, Object> request) {
         try {
+            String parentId = request.get("parentId") != null ? request.get("parentId").toString() : null;
+
             Comment comment = Comment.builder()
                     .boardId(boardId)
                     .userNo(user.getUserNo())
                     .writer(user.getUser().getName())
                     .content(request.get("content").toString())
+                    .parentId(parentId)
                     .build();
 
             Comment savedComment = commentRepository.save(comment);

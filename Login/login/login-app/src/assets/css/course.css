@@ -1,9 +1,11 @@
 .course-page {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 40px 20px;
 }
 
+/* ==================
+   Header & Filter
+================== */
 .course-header {
   text-align: center;
   margin-bottom: 64px;
@@ -21,24 +23,80 @@
   color: var(--text-muted);
 }
 
+.region-filter-container {
+  margin-top: 40px;
+  display: flex;
+  justify-content: center;
+}
+
+.region-select-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--glass-border);
+  border-radius: 30px;
+  padding: 8px 24px 8px 48px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+}
+
+.region-select-wrapper:hover {
+  border-color: rgba(0, 255, 204, 0.5);
+  box-shadow: 0 10px 30px rgba(0, 255, 204, 0.15);
+}
+
+.region-select-icon {
+  position: absolute;
+  left: 20px;
+  color: #00ffcc;
+  pointer-events: none;
+}
+
+.region-select {
+  appearance: none;
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-size: 1.1rem;
+  font-weight: 700;
+  outline: none;
+  cursor: pointer;
+  padding-right: 20px;
+}
+
+.region-select option {
+  background: #111;
+  color: #fff;
+}
+
+/* ==================
+   Course Grid & Card
+================== */
 .course-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: 32px;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 40px;
 }
 
 .course-card {
-  composes: glass-card from global;
-  padding: 1px;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
   overflow: hidden;
   transition: all var(--transition-normal);
   display: flex;
   flex-direction: column;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
 }
 
 .course-card:hover {
   transform: translateY(-8px);
-  border-color: var(--primary);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 30px 60px rgba(0,0,0,0.4);
 }
 
 .course-img-wrapper {
@@ -62,8 +120,8 @@
 .course-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.4);
-  backdrop-filter: blur(4px);
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(2px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -79,6 +137,20 @@
   opacity: 1;
 }
 
+.course-level-badge {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
 .course-body {
   padding: 24px;
   flex: 1;
@@ -88,8 +160,8 @@
 }
 
 .course-title {
-  font-size: 1.25rem;
-  font-weight: 700;
+  font-size: 1.3rem;
+  font-weight: 800;
   color: var(--text-primary);
   margin: 0;
 }
@@ -97,18 +169,55 @@
 .course-desc {
   font-size: 0.95rem;
   color: var(--text-secondary);
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
+/* ==================
+   Map Container
+================== */
 .map-container {
   border-top: 1px solid var(--glass-border);
-  background: hsla(0, 0%, 50%, 0.05);
-  animation: slideDown 0.3s ease-out;
+  background: #000;
+  overflow: hidden;
+}
+
+.fade-in {
+  animation: slideDown 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.neon-btn {
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--text-secondary);
+  transition: all 0.3s;
+}
+
+.neon-btn:hover {
+  color: #fff;
+  background: rgba(255,255,255,0.2) !important;
 }
 
 @keyframes slideDown {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; max-height: 0; }
+  to { opacity: 1; max-height: 400px; }
+}
+
+/* ==================
+   Leaflet Animations
+================== */
+.animated-polyline {
+  animation: dash 30s linear infinite;
+}
+
+@keyframes dash {
+  to {
+    stroke-dashoffset: -1000;
+  }
+}
+
+/* Fix marker z-index sometimes causing weird cutoffs */
+.custom-neon-marker {
+  z-index: 1000 !important;
 }
 
 @media (max-width: 600px) {

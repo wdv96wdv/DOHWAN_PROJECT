@@ -45,6 +45,9 @@ public class Comment {
     @Column(name = "content", nullable = false, columnDefinition = "TEXT")
     private String content; // 댓글 내용
     
+    @Column(name = "parent_id")
+    private String parentId; // 부모 댓글 ID (대댓글용)
+    
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;

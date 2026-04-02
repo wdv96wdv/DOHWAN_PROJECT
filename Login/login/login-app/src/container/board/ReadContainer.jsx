@@ -66,7 +66,6 @@ const ReadContainer = () => {
       const newData = { ...data, userNo: userInfo.no, writer: userInfo.name };
       await comments.create(id, newData)
       await getComments() // 댓글 목록 다시 불러오기
-      Swal.fire({ icon: 'success', title: '댓글이 등록되었습니다.', timer: 1500, showConfirmButton: false })
     } catch (err) {
       console.error('댓글 작성 실패:', err)
       Swal.fire({ icon: 'error', title: '댓글 작성에 실패했습니다.' })
@@ -78,7 +77,6 @@ const ReadContainer = () => {
       const newData = { ...data, userNo: userInfo.no };
       await comments.update(id, commentId, newData)
       await getComments()
-      Swal.fire({ icon: 'success', title: '댓글이 수정되었습니다.', timer: 1500, showConfirmButton: false })
     } catch (err) {
       console.error('댓글 수정 실패:', err)
       Swal.fire({ icon: 'error', title: '댓글 수정에 실패했습니다.' })
@@ -98,7 +96,6 @@ const ReadContainer = () => {
     try {
       await comments.remove(id, commentId, { userNo })
       await getComments()
-      Swal.fire({ icon: 'success', title: '댓글이 삭제되었습니다.', timer: 1500, showConfirmButton: false })
     } catch (err) {
       console.error('댓글 삭제 실패:', err)
       Swal.fire({ icon: 'error', title: '댓글 삭제 중 오류 발생:', text: err.message })
