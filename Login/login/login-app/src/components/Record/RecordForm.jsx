@@ -1,10 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "../../assets/css/record.css";
 import "../../assets/css/auth.css";
-import { Clock, Calendar, Type, Route, Zap, Flame, AlignLeft } from 'lucide-react';
+import { Clock, Calendar, Type, Route, Zap, Flame, AlignLeft, Camera, Loader2 } from 'lucide-react';
+import { processNRCImage } from "../../utils/ocrService";
+import Swal from "sweetalert2";
 
 export default function RecordForm({ formData, setFormData, onSubmit, submitText }) {
   const [noteLength, setNoteLength] = useState(formData.note?.length || 0);
+  const [isOcrLoading, setIsOcrLoading] = useState(false);
+  const fileInputRef = useRef(null);
 
   const getTimeFromSeconds = (totalSeconds) => {
     if (!totalSeconds) return { hours: 0, minutes: 0, seconds: 0 };
@@ -31,6 +35,61 @@ export default function RecordForm({ formData, setFormData, onSubmit, submitText
     setSeconds(time.seconds);
   }, [formData.duration_sec]);
 
+  // 시간 문자열 (HH:MM:SS)을 초 단위로 변환
+  const parseTimeToSeconds = (timeStr) => {
+    if (!timeStr) return 0;
+    const parts = timeStr.split(':').map(Number);
+    if (parts.length === 3) return parts[0] * 3600 + parts[1] * 60 + parts[2];
+    if (parts.length === 2) return parts[0] * 60 + parts[1];
+    return 0;
+  };
+
+  // 페이스 문자열 (M'SS")을 포맷 (MSS)으로 변환
+  const parsePaceToFormat = (paceStr) => {
+    if (!paceStr) return "";
+    const match = paceStr.match(/(\d+)[':](\d+)/);
+    if (match) return match[1] + match[2].padStart(2, '0');
+    return "";
+  };
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setIsOcrLoading(true);
+    try {
+      const data = await processNRCImage(file);
+      
+      const newDurationSeconds = parseTimeToSeconds(data.duration);
+      const newPace = parsePaceToFormat(data.pace);
+
+      setFormData(prev => ({
+        ...prev,
+        running_name: "NRC Run - " + (data.record_date || new Date().toLocaleDateString()),
+        distance_km: data.distance_km || prev.distance_km,
+        duration_sec: newDurationSeconds || prev.duration_sec,
+        pace_min_per_km: newPace || prev.pace_min_per_km,
+        calories: data.calories || prev.calories,
+        cadence: data.cadence || prev.cadence,
+        record_date: data.record_date || prev.record_date,
+      }));
+
+      Swal.fire({
+        title: "인식 완료!",
+        text: "나이키 런 데이터를 성공적으로 추출했습니다. 입력된 내용을 확인해주세요.",
+        icon: "success",
+        timer: 2000,
+        showConfirmButton: false
+      });
+    } catch (err) {
+      console.error(err);
+      Swal.fire("인식 실패", "사진에서 데이터를 읽어오지 못했습니다. 직접 입력해주세요.", "error");
+    } finally {
+      setIsOcrLoading(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name === "note") setNoteLength(value.length);
@@ -48,6 +107,31 @@ export default function RecordForm({ formData, setFormData, onSubmit, submitText
 
   return (
     <div className="record-form-card">
+      {isOcrLoading && (
+        <div className="ocr-loading-overlay">
+          <Loader2 className="spinner" size={48} />
+          <p>나이키 런 데이터를 분석 중입니다...</p>
+        </div>
+      )}
+      
+      <div className="nrc-upload-section">
+        <button 
+          type="button" 
+          className="btn-nrc-auto"
+          onClick={() => fileInputRef.current?.click()}
+        >
+          <Camera size={20} />
+          <span>나이키 런 사진으로 자동 입력</span>
+        </button>
+        <input 
+          type="file" 
+          ref={fileInputRef} 
+          hidden 
+          accept="image/*" 
+          onChange={handleImageUpload} 
+        />
+      </div>
+
       <form onSubmit={onSubmit} className="auth-form">
         <div className="record-form-grid">
           <div className="form-group">
