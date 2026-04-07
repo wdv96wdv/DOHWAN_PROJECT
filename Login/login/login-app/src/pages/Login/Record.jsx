@@ -101,7 +101,6 @@ export default function RecordPage() {
           confirmButtonText: "확인"
         }).then(() => {
           setRecords(prev => prev.map(r => r.id === editingId ? { ...r, ...data[0] } : r));
-          navigate("/"); // ✅ 수정 후 메인으로 이동 (또는 목록 유지 선택)
         });
 
       } else {
@@ -120,7 +119,6 @@ export default function RecordPage() {
           confirmButtonText: "확인"
         }).then(() => {
           setRecords(prev => [inserted[0], ...prev]);
-          navigate("/"); // ✅ 등록 후 홈으로 이동 (자연스러운 UX)
         });
       }
 

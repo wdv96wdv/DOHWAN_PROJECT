@@ -60,6 +60,18 @@ export default function RecordForm({ formData, setFormData, onSubmit, submitText
     try {
       const data = await processNRCImage(file);
       
+      // NRC 사진 검증 실패 시 처리
+      if (!data.isNRC) {
+        Swal.fire({
+          title: "인식 불가",
+          text: "나이키 런 스크린샷 형식이 아닌 것 같습니다. 직접 입력하시거나 다른 사진을 선택해주세요.",
+          icon: "warning",
+          confirmButtonColor: "#3085d6",
+          confirmButtonText: "확인"
+        });
+        return;
+      }
+      
       const newDurationSeconds = parseTimeToSeconds(data.duration);
       const newPace = parsePaceToFormat(data.pace);
 

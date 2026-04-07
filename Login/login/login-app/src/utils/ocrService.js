@@ -106,11 +106,12 @@ const parseNRCText = (text) => {
     }
   }
 
-  // 6. 날짜 추출
-  const dateMatch = bodyText.match(/(\d{4}[.\-/]\d{2}[.\-/]\d{2})/);
-  if (dateMatch) {
-    date = dateMatch[1].replace(/\./g, "-");
-  }
+  // 7. NRC 사진 여부 검증
+  const nrcKeywords = ["nike", "nrc", "페이스", "킬로미터", "시간", "칼로리", "케이던스", "km"];
+  const hasKeyword = nrcKeywords.some(key => text.toLowerCase().includes(key));
+  
+  // 거리나 시간이 있으면서 키워드가 최소 하나라도 발견되어야 유효한 NRC 사진으로 간주
+  const isNRC = hasKeyword && (!!distance || !!duration);
 
   return {
     distance_km: distance,
@@ -119,6 +120,7 @@ const parseNRCText = (text) => {
     calories: calories,
     cadence: cadence,
     record_date: date,
+    isNRC: isNRC, // 유효성 플래그 추가
     rawText: text
   };
 };
