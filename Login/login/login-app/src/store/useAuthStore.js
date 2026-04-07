@@ -20,6 +20,12 @@ const useAuthStore = create((set, get) => ({
     localStorage.setItem("isLogin", "true");
 
     const updatedUserInfo = { ...data };
+    
+    // 소셜 로그인(구글 등)에서 오는 이미지 필드를 avatarUrl로 정규화
+    if (!updatedUserInfo.avatarUrl && !updatedUserInfo.avatar_url) {
+      updatedUserInfo.avatarUrl = data.picture || data.profileImage || data.thumbnail || data.profile_image;
+    }
+
     if (updatedUserInfo.provider === 'GOOGLE' || (updatedUserInfo.email && updatedUserInfo.email.endsWith('@gmail.com'))) {
       updatedUserInfo.loginType = 'google';
     } else {
