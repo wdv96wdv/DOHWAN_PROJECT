@@ -37,9 +37,13 @@ const parseNRCText = (text) => {
   let cadence = null;
 
   // 1. 거리 (KM) 추출: bodyText에서 탐색
-  const distanceMatch = bodyText.match(/(\d+\.\d{2})/);
-  if (distanceMatch) {
-    distance = distanceMatch[1];
+  // (\d+\.\d{2}) 패턴을 기본으로 하되, 주변에 KM/킬로미터가 있는지 우선 확인
+  const distanceWithUnit = bodyText.match(/(\d+\.\d{2})\s*(?:km|KM|킬로미터|킬로미터)/);
+  if (distanceWithUnit) {
+    distance = distanceWithUnit[1];
+  } else {
+    const distanceMatch = bodyText.match(/(\d+\.\d{2})/);
+    if (distanceMatch) distance = distanceMatch[1];
   }
 
   // 2. 시간 추출: '시간' 키워드 근처 또는 bodyText 하단부 탐색
@@ -83,6 +87,18 @@ const parseNRCText = (text) => {
   
   if (calMatch) {
     calories = calMatch[1];
+  } else {
+    // 폴백: 거리/시간/페이스로 인식되지 않은 숫자 중 50~2000 사이의 숫자를 칼로리로 추정
+    const allNumbers = bodyText.match(/\b\d{2,4}\b/g) || [];
+    const usedValues = [distance, cadence].filter(Boolean);
+    const candidates = allNumbers
+      .map(Number)
+      .filter(n => n >= 50 && n <= 2000 && !usedValues.includes(String(n)));
+    
+    if (candidates.length > 0) {
+      // 보통 칼로리는 뒤쪽에 배치됨
+      calories = String(candidates[candidates.length - 1]);
+    }
   }
 
   // 5. 케이던스 추출 (탐욕적 매칭 방지 및 범위 필터링 추가)
@@ -106,12 +122,36 @@ const parseNRCText = (text) => {
     }
   }
 
-  // 7. NRC 사진 여부 검증
-  const nrcKeywords = ["nike", "nrc", "페이스", "킬로미터", "시간", "칼로리", "케이던스", "km"];
-  const hasKeyword = nrcKeywords.some(key => text.toLowerCase().includes(key));
+  // 7. NRC 사진 여부 심층 검증
+  const lowerText = text.toLowerCase();
   
-  // 거리나 시간이 있으면서 키워드가 최소 하나라도 발견되어야 유효한 NRC 사진으로 간주
-  const isNRC = hasKeyword && (!!distance || !!duration);
+  // OCR 오인식 대응 키워드 포함
+  const nrcKeywords = [
+    "nike", "nrc", "페이스", "킬로미터", "시간", "칼로리", "케이던스", "km", "km/h",
+    "rk", "rn", "nr", "nik", "pace", "duration", "calories", "cadence", "kcal"
+  ];
+  
+  const foundKeywords = nrcKeywords.filter(key => lowerText.includes(key));
+  const hasMultipleKeywords = foundKeywords.length >= 2;
+  
+  // 필수 데이터 존재 여부
+  const hasCoreData = !!distance && (!!duration || !!pace);
+  const hasSomeData = !!distance || (!!duration && !!pace);
+
+  /**
+   * 인식 결과 분류: 
+   * - high: 확실한 NRC 형식 (데이터 + 다수 키워드)
+   * - normal: 유효한 데이터가 충분히 발견됨 (자른 사진 등)
+   * - low: 데이터가 부족하거나 형식이 불분명함
+   */
+  let matchQuality = "low";
+  if (hasCoreData && hasMultipleKeywords) {
+    matchQuality = "high";
+  } else if (hasCoreData || (hasSomeData && foundKeywords.length >= 1)) {
+    matchQuality = "normal";
+  } else if (hasSomeData) {
+    matchQuality = "low"; // 데이터는 있으나 확신 부족
+  }
 
   return {
     distance_km: distance,
@@ -120,7 +160,9 @@ const parseNRCText = (text) => {
     calories: calories,
     cadence: cadence,
     record_date: date,
-    isNRC: isNRC, // 유효성 플래그 추가
+    isNRC: matchQuality !== "low", // 기존 호환성 유지
+    matchQuality: matchQuality,    // 정밀 검증용 추가
+    foundKeywords: foundKeywords,
     rawText: text
   };
 };

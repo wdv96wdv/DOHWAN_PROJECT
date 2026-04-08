@@ -60,16 +60,32 @@ export default function RecordForm({ formData, setFormData, onSubmit, submitText
     try {
       const data = await processNRCImage(file);
       
-      // NRC 사진 검증 실패 시 처리
-      if (!data.isNRC) {
-        Swal.fire({
-          title: "인식 불가",
-          text: "나이키 런 스크린샷 형식이 아닌 것 같습니다. 직접 입력하시거나 다른 사진을 선택해주세요.",
-          icon: "warning",
-          confirmButtonColor: "#3085d6",
-          confirmButtonText: "확인"
-        });
-        return;
+      // 인식 결과에 따른 처리
+      if (data.matchQuality === "low") {
+        const hasAnyData = data.distance_km || data.duration || data.pace;
+        
+        if (hasAnyData) {
+          const result = await Swal.fire({
+            title: "형식 불분명",
+            text: "나이키 런 스크린샷 형식인지 확실하지 않지만 일부 데이터를 찾았습니다. 그래도 데이터를 입력창에 채울까요?",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#aaa",
+            confirmButtonText: "예, 채워주세요",
+            cancelButtonText: "아니오"
+          });
+          if (!result.isConfirmed) return;
+        } else {
+          Swal.fire({
+            title: "인식 불가",
+            text: "사진에서 운동 데이터를 찾을 수 없습니다. 직접 입력하시거나 다른 사진을 선택해주세요.",
+            icon: "warning",
+            confirmButtonColor: "#3085d6",
+            confirmButtonText: "확인"
+          });
+          return;
+        }
       }
       
       const newDurationSeconds = parseTimeToSeconds(data.duration);
