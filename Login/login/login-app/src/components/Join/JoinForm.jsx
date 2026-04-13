@@ -31,7 +31,10 @@ const JoinForm = ({ join }) => {
     }
     try {
       const res = await checkUsername(username);
-      if (res.data.exists) {
+      // ApiResponse 구조상 res.data.data.exists로 접근해야 함
+      const exists = res.data.data?.exists;
+      
+      if (exists) {
         Swal.alert('중복된 아이디입니다.', '다른 아이디를 입력해주세요.', 'warning');
         setIsAvailable(false);
       } else {
@@ -41,6 +44,12 @@ const JoinForm = ({ join }) => {
     } catch (err) {
       Swal.alert('확인 실패', '서버 오류가 발생했습니다.', 'error');
     }
+  };
+
+  const handleChangeUsername = (e) => {
+    const value = e.target.value.replace(/[^a-zA-Z0-9]/g, '');
+    setUsername(value);
+    setIsAvailable(null); // 아이디가 바뀌면 중복확인 상태 초기화
   };
 
   const onJoin = async (e) => {
@@ -77,10 +86,10 @@ const JoinForm = ({ join }) => {
               type="text"
               id="username"
               className="form-control"
-              placeholder="아이디를 입력하세요"
+              placeholder="영문, 숫자만 입력 가능합니다"
               required
               value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              onChange={handleChangeUsername}
               onKeyUp={checkCapsLock}
               onKeyDown={checkCapsLock}
             />
