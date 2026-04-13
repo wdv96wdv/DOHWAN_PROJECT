@@ -88,23 +88,30 @@ public class LoginController {
 
             // Client Secret이 설정된 경우 추가 (카카오 보안 설정에 따라 필수)
             String clientSecret = jwtProps.getKakaoClientSecret();
+            
+            // 보안 로그: 값의 길이와 앞뒤 4자리만 출력하여 검증
+            if (clientId != null && clientId.length() > 8) {
+                log.info("[보안검증] ClientID 길이: {}, 값: {}...{}", 
+                    clientId.length(), clientId.substring(0, 4), clientId.substring(clientId.length()-4));
+            }
+            if (clientSecret != null && clientSecret.length() > 8) {
+                log.info("[보안검증] ClientSecret 길이: {}, 값: {}...{}", 
+                    clientSecret.length(), clientSecret.substring(0, 4), clientSecret.substring(clientSecret.length()-4));
+            } else {
+                log.warn("[보안검증] ClientSecret이 설정되지 않았거나 너무 짧습니다.");
+            }
+
             if (clientSecret != null && !clientSecret.isEmpty()) {
                 formData.add("client_secret", clientSecret.trim());
-                log.info("카카오 Client Secret 포함하여 요청");
+                log.info("카카오 Client Secret 포함하여 요청 전송 준비 완료");
             }
 
             Map<String, Object> tokenResponse = webClient.post()
                 .uri(tokenUrl)
                 .header("Content-Type", "application/x-www-form-urlencoded;charset=utf-8")
+                .header("Accept", "application/json")
                 .body(BodyInserters.fromFormData(formData))
                 .retrieve()
-                .onStatus(status -> status.isError(), clientResponse -> {
-                    return clientResponse.bodyToMono(String.class)
-                            .flatMap(errorBody -> {
-                                log.error("카카오 토큰 발급 실패 상세 응답: {}", errorBody);
-                                return Mono.error(new RuntimeException("카카오 토큰 발급 실패: " + errorBody));
-                            });
-                })
                 .bodyToMono(Map.class)
                 .block();
 
@@ -139,10 +146,17 @@ public class LoginController {
             socialRequest.setUsername("kakao_" + userInfoResponse.get("id").toString());
             socialRequest.setName(profile != null ? (String) profile.get("nickname") : "KakaoUser");
             socialRequest.setEmail(email);
-            socialRequest.setAvatar_url(profile != null ? (String) profile.get("thumbnail_image_url") : null);
+            
+            // 이미지 처리: thumbnail_image_url 보다 profile_image_url이 고해상도이므로 우선순위 부여
+            String avatarUrl = null;
+            if (profile != null) {
+                avatarUrl = (String) profile.get("profile_image_url");
+                if (avatarUrl == null) avatarUrl = (String) profile.get("thumbnail_image_url");
+            }
+            socialRequest.setAvatar_url(avatarUrl);
             socialRequest.setProvider("kakao");
 
-            log.info("카카오 프로필 변환 완료 - Email: {}", email);
+            log.info("카카오 프로필 변환 완료 - Email: {}, Avatar: {}", email, avatarUrl);
 
             return processSocialLogin(socialRequest);
         } catch (Exception e) {
@@ -166,25 +180,42 @@ public class LoginController {
             user.setPassword("SOCIAL_LOGIN_NO_PASSWORD");
             user.setProvider(request.getProvider() != null ? request.getProvider() : "google");
             user.setAvatarUrl(request.getAvatar_url());
-            UserEntity saved = userRepository.save(user);
+            user = userRepository.save(user);
 
             UserAuthEntity authEntity = UserAuthEntity.builder()
-                    .username(saved.getUsername())
+                    .username(user.getUsername())
                     .auth("ROLE_USER")
                     .build();
             userAuthRepository.save(authEntity);
 
             // 권한 포함 재조회
-            user = userRepository.findByEmailWithAuth(request.getEmail()).orElse(saved);
+            user = userRepository.findByEmailWithAuth(request.getEmail()).orElse(user);
         } else {
-            // 기존 사용자 provider 업데이트 (필요시)
+            // 기존 사용자 정보 업데이트 (이름, 이미지, 제공자)
+            boolean updated = false;
             String requestProvider = request.getProvider() != null ? request.getProvider() : "google";
+            
             if (!requestProvider.equals(user.getProvider())) {
                 user.setProvider(requestProvider);
+                updated = true;
+            }
+            if (request.getName() != null && !request.getName().equals(user.getName())) {
+                user.setName(request.getName());
+                updated = true;
+            }
+            if (request.getAvatar_url() != null && !request.getAvatar_url().equals(user.getAvatarUrl())) {
+                user.setAvatarUrl(request.getAvatar_url());
+                updated = true;
+            }
+
+            if (updated) {
                 userRepository.save(user);
                 user = userRepository.findByEmailWithAuth(request.getEmail()).orElse(user);
             }
         }
+
+        // profiles 테이블 삭제로 인해 동기화 로직 제거 (users 테이블이 단일 소스)
+        // userRepository.syncProfile(user.getNo(), user.getUsername(), user.getAvatarUrl());
 
         String jwt = buildJwt(user);
         Users userDto = entityToDto(user);
@@ -241,6 +272,7 @@ public class LoginController {
         dto.setEmail(entity.getEmail());
         dto.setEnabled(true);
         dto.setProvider(entity.getProvider());
+        dto.setAvatarUrl(entity.getAvatarUrl());
         List<UserAuth> authList = entity.getAuthList().stream()
                 .map(a -> UserAuth.builder().username(a.getUsername()).auth(a.getAuth()).build())
                 .collect(Collectors.toList());

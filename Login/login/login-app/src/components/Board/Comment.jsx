@@ -330,7 +330,7 @@ const CommentList = ({ comments, onCreate, onUpdate, onDelete }) => {
       try {
         const { default: supabase } = await import('../../utils/supabaseClient');
         const { data, error } = await supabase
-          .from('profiles')
+          .from('users')
           .select('no, avatar_url')
           .in('no', uniqueUserNos);
           

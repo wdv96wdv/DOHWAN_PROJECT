@@ -14,87 +14,22 @@ const User = () => {
   const userInfo = useAuthStore(state => state.userInfo);
   const updateUserInfo = useAuthStore(state => state.updateUserInfo);
   const navigate = useNavigate();
-  const [profileInfo, setProfileInfo] = useState({});
-
-  // 로그인 체크
-  useEffect(() => {
-    if (isLoading) return;
-    if (!isLogin || !roles.isUser) {
-      navigate('/login');
-    }
-  }, [isLoading, isLogin, roles, navigate]);
-
-  // Supabase 프로필 정보 불러오기 (재시도/타임아웃 포함)
-  useEffect(() => {
-    const fetchProfileWithRetry = async () => {
-      if (!userInfo?.no) return;
-
-      const maxAttempts = 3;
-      const baseDelayMs = 300;
-      for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 5000); // 5s 타임아웃
-        try {
-          const { data, error } = await supabase
-            .from('profiles')
-            .select('avatar_url, bio')
-            .eq('no', userInfo.no)
-            .single({ head: false });
-
-          clearTimeout(timeoutId);
-
-          if (error) {
-            const status = error?.code || error?.status || 'unknown';
-            console.warn(`프로필 조회 실패(${attempt}/${maxAttempts}) status=${status}`, error);
-            if (attempt < maxAttempts) {
-              await new Promise((r) => setTimeout(r, baseDelayMs * Math.pow(2, attempt - 1)));
-              continue;
-            }
-            setProfileInfo({});
-          } else {
-            setProfileInfo(data || {});
-          }
-          break;
-        } catch (err) {
-          clearTimeout(timeoutId);
-          console.warn(`프로필 조회 예외(${attempt}/${maxAttempts})`, err);
-          if (attempt < maxAttempts) {
-            await new Promise((r) => setTimeout(r, baseDelayMs * Math.pow(2, attempt - 1)));
-            continue;
-          }
-          setProfileInfo({});
-        }
-      }
-    };
-
-    fetchProfileWithRetry();
-  }, [userInfo]);
-
   // 회원 정보 수정
   const updateUser = async (form) => {
-    const { username, name, email, avatar_url, bio,
+    const { username, name, email, avatarUrl, bio,
       currentPassword, newPassword, confirmPassword } = form;
 
     const isPasswordChange = !!(newPassword && confirmPassword);
 
     try {
+      // 이제 백엔드에서 avatarUrl과 bio도 함께 처리합니다.
       const response = await auth.update({
-        username, name, email, currentPassword,
-        newPassword, confirmPassword
+        username, name, email, avatarUrl, bio,
+        currentPassword, newPassword, confirmPassword
       });
+
       if (response.status !== 200) {
-        Swal.alert('회원정보 수정 실패', '기본 정보 수정에 실패했습니다.', 'error');
-        return;
-      }
-
-      const { error } = await supabase
-        .from('profiles')
-        .update({ avatar_url, bio })
-        .eq('no', userInfo.no);
-
-      if (error) {
-        console.error('프로필 업데이트 실패:', error);
-        Swal.alert('프로필 수정 실패', '프로필 정보 저장 중 오류가 발생했습니다.', 'error');
+        Swal.alert('회원정보 수정 실패', '회원 정보 수정에 실패했습니다.', 'error');
         return;
       }
 
@@ -129,10 +64,18 @@ const User = () => {
     }
   };
 
+  // 로그인 체크
+  useEffect(() => {
+    if (isLoading) return;
+    if (!isLogin || !roles?.isUser) {
+      navigate('/login');
+    }
+  }, [isLoading, isLogin, roles, navigate]);
+
   return (
     <div className="container">
       <UserForm
-        userInfo={{ ...userInfo, ...profileInfo }}
+        userInfo={userInfo}
         updateUser={updateUser}
         deleteUser={deleteUser}
         loginType={userInfo?.loginType}

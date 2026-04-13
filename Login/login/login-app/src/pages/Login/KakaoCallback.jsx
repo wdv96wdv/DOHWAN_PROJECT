@@ -9,13 +9,16 @@ const KakaoCallback = () => {
     const location = useLocation();
     const loginWithSocial = useAuthStore(state => state.loginWithSocial);
 
+    const hasCalled = React.useRef(false);
+
     useEffect(() => {
         const params = new URLSearchParams(location.search);
         const code = params.get('code');
 
-        if (code) {
+        if (code && !hasCalled.current) {
+            hasCalled.current = true;
             handleKakaoLogin(code);
-        } else {
+        } else if (!code) {
             console.error('❌ 카카오 인증 코드가 없습니다.');
             navigate('/login');
         }

@@ -14,20 +14,11 @@ const KakaoLoginButton = () => {
         <button 
             type="button" 
             onClick={handleLogin} 
-            style={{ 
-                padding: 0, 
-                border: 'none', 
-                background: 'none', 
-                cursor: 'pointer',
-                width: '100%',
-                display: 'flex',
-                justifyContent: 'center'
-            }}
+            className="btn-social-login kakao"
         >
             <img 
                 src={kakaoIcon} 
                 alt="카카오 로그인" 
-                style={{ width: '100%', maxWidth: '300px', borderRadius: '6px' }} 
             />
         </button>
     );

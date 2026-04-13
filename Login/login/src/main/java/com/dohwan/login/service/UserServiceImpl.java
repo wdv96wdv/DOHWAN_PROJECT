@@ -140,6 +140,8 @@ public class UserServiceImpl implements UserService {
 
         entity.setName(request.getName());
         entity.setEmail(request.getEmail());
+        entity.setBio(request.getBio());
+        entity.setAvatarUrl(request.getAvatarUrl());
         userRepository.save(entity);
         return passwordChanged;
     }

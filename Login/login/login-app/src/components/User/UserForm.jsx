@@ -13,7 +13,7 @@ const UserForm = ({ userInfo = {}, updateUser, deleteUser, loginType }) => {
     username: '',
     name: '',
     email: '',
-    avatar_url: '',
+    avatarUrl: '',
     bio: '',
     currentPassword: '',
     newPassword: '',
@@ -40,14 +40,14 @@ const UserForm = ({ userInfo = {}, updateUser, deleteUser, loginType }) => {
         username: userInfo.username || '',
         name: userInfo.name || '',
         email: userInfo.email || '',
-        avatar_url: userInfo.avatarUrl || userInfo.avatar_url || '',
+        avatarUrl: userInfo.avatarUrl || '',
         bio: userInfo.bio || '',
         currentPassword: '',
         newPassword: '',
         confirmPassword: ''
       });
-      if (userInfo.avatarUrl || userInfo.avatar_url) {
-        setPreview(userInfo.avatarUrl || userInfo.avatar_url);
+      if (userInfo.avatarUrl) {
+        setPreview(userInfo.avatarUrl);
       }
     }
   }, [userInfo]);
@@ -102,7 +102,7 @@ const UserForm = ({ userInfo = {}, updateUser, deleteUser, loginType }) => {
       passwordPayload = { currentPassword, newPassword, confirmPassword };
     }
 
-    let avatar_url = form.avatar_url;
+    let avatarUrl = form.avatarUrl;
 
     if (avatarFile) {
       const fileExt = avatarFile.name.split('.').pop();
@@ -118,13 +118,13 @@ const UserForm = ({ userInfo = {}, updateUser, deleteUser, loginType }) => {
         return; // 업로드 실패 시 중단
       } else {
         const { data: publicData } = supabase.storage.from('avatars').getPublicUrl(fileName);
-        avatar_url = publicData.publicUrl;
+        avatarUrl = publicData.publicUrl;
       }
     }
 
     const finalUpdateData = {
       ...form,
-      avatar_url,
+      avatarUrl,
       ...passwordPayload
     };
 

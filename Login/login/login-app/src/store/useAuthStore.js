@@ -124,20 +124,7 @@ const useAuthStore = create((set, get) => ({
         const updatedUserInfo = response.data.data;
 
         if (updatedUserInfo.no) {
-          try {
-            const { data: profileData, error: profileError } = await supabase
-              .from('profiles')
-              .select('avatar_url, bio')
-              .eq('no', updatedUserInfo.no)
-              .single();
-
-            if (!profileError && profileData) {
-              updatedUserInfo.avatarUrl = profileData.avatar_url;
-              updatedUserInfo.bio = profileData.bio;
-            }
-          } catch (profileErr) {
-            console.warn('프로필 정보 조회 실패:', profileErr);
-          }
+          // profiles 테이블 제거됨 -> 모든 정보는 users 테이블(auth.info)에서 가져옴
         }
 
         localStorage.setItem("userInfo", JSON.stringify(updatedUserInfo ?? {}));

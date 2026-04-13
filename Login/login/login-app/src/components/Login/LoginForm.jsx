@@ -84,7 +84,7 @@ const LoginForm = () => {
 
         <GoogleLoginButton />
         <div style={{ height: '8px' }}></div>
-        {/* <KakaoLoginButton /> */}
+        <KakaoLoginButton />
 
         <div className="auth-footer">
           계정이 없으신가요? <Link to="/join">회원가입</Link>
