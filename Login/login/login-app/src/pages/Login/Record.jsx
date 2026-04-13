@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"; // ✅ 페이지 이동을 위해 추가
 import Swal from "sweetalert2";
-import supabase from "../../utils/supabaseClient";
+import api from "../../apis/api";
 import RecordForm from "../../components/Record/RecordForm";
 import RecordList from "../../components/Record/RecordList";
 import "../../assets/css/record.css";
@@ -41,17 +41,21 @@ export default function RecordPage() {
   }, [user_no]);
 
   const fetchRecords = async () => {
-    const { data, error } = await supabase
-      .from("records")
-      .select("*")
-      .eq("user_no", user_no)
-      .order("record_date", { ascending: false });
-
-    if (error) {
+    try {
+      const response = await api.get("/records");
+      const list = (response.data.data || []).map(item => ({
+        ...item,
+        running_name: item.runningName,
+        distance_km: item.distanceKm,
+        duration_sec: item.durationSec,
+        pace_min_per_km: item.paceMinPerKm,
+        speed_kmh: item.speedKmh,
+        record_date: item.recordDate
+      }));
+      setRecords(list);
+    } catch (error) {
       console.error("불러오기 오류:", error);
       Swal.fire("오류", "기록을 불러오지 못했습니다.", "error");
-    } else {
-      setRecords(data || []);
     }
   };
 
@@ -83,16 +87,28 @@ export default function RecordPage() {
         submitData.speed_kmh = submitData.distance_km / (submitData.duration_sec / 3600);
       }
 
+      const backendPayload = {
+        runningName: submitData.running_name,
+        distanceKm: submitData.distance_km,
+        durationSec: submitData.duration_sec,
+        paceMinPerKm: submitData.pace_min_per_km,
+        speedKmh: submitData.speed_kmh,
+        cadence: submitData.cadence,
+        calories: submitData.calories,
+        note: submitData.note,
+        recordDate: submitData.record_date.length === 10 ? `${submitData.record_date}T00:00:00` : submitData.record_date
+      };
+
       if (editingId) {
         // 수정 모드
-        const { data, error } = await supabase
-          .from("records")
-          .update(submitData)
-          .eq("id", editingId)
-          .eq("user_no", parseInt(user_no, 10))
-          .select();
-
-        if (error) throw error;
+        const response = await api.put(`/records/${editingId}`, backendPayload);
+        const saved = response.data.data;
+        const normalized = {
+          ...saved,
+          running_name: saved.runningName, distance_km: saved.distanceKm,
+          duration_sec: saved.durationSec, pace_min_per_km: saved.paceMinPerKm,
+          speed_kmh: saved.speedKmh, record_date: saved.recordDate
+        };
 
         Swal.fire({
           title: "수정 완료",
@@ -100,17 +116,19 @@ export default function RecordPage() {
           icon: "success",
           confirmButtonText: "확인"
         }).then(() => {
-          setRecords(prev => prev.map(r => r.id === editingId ? { ...r, ...data[0] } : r));
+          setRecords(prev => prev.map(r => r.id === editingId ? { ...r, ...normalized } : r));
         });
 
       } else {
         // 등록 모드
-        const { data: inserted, error } = await supabase
-          .from("records")
-          .insert([{ ...submitData, id: uuidv4(), user_no: parseInt(user_no, 10) }])
-          .select();
-
-        if (error) throw error;
+        const response = await api.post(`/records`, backendPayload);
+        const saved = response.data.data;
+        const normalized = {
+          ...saved,
+          running_name: saved.runningName, distance_km: saved.distanceKm,
+          duration_sec: saved.durationSec, pace_min_per_km: saved.paceMinPerKm,
+          speed_kmh: saved.speedKmh, record_date: saved.recordDate
+        };
 
         Swal.fire({
           title: "등록 완료",
@@ -118,7 +136,7 @@ export default function RecordPage() {
           icon: "success",
           confirmButtonText: "확인"
         }).then(() => {
-          setRecords(prev => [inserted[0], ...prev]);
+          setRecords(prev => [normalized, ...prev]);
         });
       }
 
@@ -163,13 +181,13 @@ export default function RecordPage() {
 
     if (!result.isConfirmed) return;
 
-    const { error } = await supabase.from("records").delete().eq("id", id).eq("user_no", parseInt(user_no, 10));
-
-    if (error) {
-      Swal.fire("오류", "삭제에 실패했습니다.", "error");
-    } else {
+    try {
+      await api.delete(`/records/${id}`);
       Swal.fire("삭제 완료", "기록이 삭제되었습니다.", "success");
       setRecords(prev => prev.filter(r => r.id !== id));
+    } catch (err) {
+      console.error(err);
+      Swal.fire("오류", "삭제에 실패했습니다.", "error");
     }
   };
 

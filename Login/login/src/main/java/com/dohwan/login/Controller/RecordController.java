@@ -204,4 +204,19 @@ public class RecordController {
                     .body(ApiResponse.error(500, "서버 에러가 발생했습니다."));
         }
     }
+
+    // 이달의 리더보드 조회
+    @GetMapping("/leaderboard")
+    public ResponseEntity<ApiResponse<List<com.dohwan.login.dto.LeaderboardDto>>> getLeaderboard() {
+        try {
+            LocalDateTime now = LocalDateTime.now();
+            LocalDateTime startOfMonth = now.withDayOfMonth(1).withHour(0).withMinute(0).withSecond(0).withNano(0);
+            List<com.dohwan.login.dto.LeaderboardDto> leaderboard = recordRepository.getMonthlyLeaderboard(startOfMonth, now);
+            return ResponseEntity.ok(ApiResponse.success(leaderboard));
+        } catch (Exception e) {
+            log.error("리더보드 조회 에러: ", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponse.error(500, "서버 에러가 발생했습니다."));
+        }
+    }
 }

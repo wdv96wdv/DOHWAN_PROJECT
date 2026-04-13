@@ -5,16 +5,16 @@ import useAuthStore from '../../store/useAuthStore';
 import logo from '../../assets/img/dorunninglogo.png';
 import noImage from '../../assets/img/no-image.png'; // 기본 이미지 임포트 확인
 import ThemeToggle from '../../components/ThemeToggle/ThemeToggle';
-import { 
-  Map, 
-  Activity, 
-  Trophy, 
-  TrendingUp, 
-  Gift, 
-  MessageSquare, 
-  ShieldCheck, 
-  User, 
-  LogOut, 
+import {
+  Map,
+  Activity,
+  Trophy,
+  TrendingUp,
+  Gift,
+  MessageSquare,
+  ShieldCheck,
+  User,
+  LogOut,
   LogIn,
   UserPlus,
   Info,
@@ -40,7 +40,7 @@ const Header = ({ theme, toggleTheme }) => {
       <li><Link to={isLogin ? "/record" : "/login"} onClick={closeMenu}><Activity size={20} /><span>기록</span></Link></li>
       <li><Link to="/marathon" onClick={closeMenu}><Trophy size={20} /><span>마라톤 일정</span></Link></li>
       <li><Link to={isLogin ? "/performance" : "/login"} onClick={closeMenu}><TrendingUp size={20} /><span>퍼포먼스</span></Link></li>
-      <li><Link to="/event" onClick={closeMenu}><Gift size={20} /><span>이벤트</span></Link></li>
+      <li><Link to="/event" onClick={closeMenu}><Gift size={20} /><span>챌린지</span></Link></li>
       <li><Link to="/boards" onClick={closeMenu}><MessageSquare size={20} /><span>커뮤니티</span></Link></li>
       {isAdmin && <li><Link to="/admin" onClick={closeMenu}><ShieldCheck size={20} /><span>관리자</span></Link></li>}
     </ul>
@@ -68,9 +68,9 @@ const Header = ({ theme, toggleTheme }) => {
   return (
     <header className="header">
       <div className="header-left">
-        <button 
-          className={`menu-toggle ${menuOpen ? 'active' : ''}`} 
-          onClick={toggleMenu} 
+        <button
+          className={`menu-toggle ${menuOpen ? 'active' : ''}`}
+          onClick={toggleMenu}
           aria-label="Toggle menu"
         >
           <div className="hamburger-box">
@@ -95,7 +95,7 @@ const Header = ({ theme, toggleTheme }) => {
         <div className="util PC-only">
           <UtilItems />
         </div>
-        
+
         {/* 유튜브 스타일 프로필 아바타 (상시 노출) */}
         {/* 유튜브 스타일 프로필 아바타 (상시 노출) */}
         {!isLogin ? (
@@ -123,33 +123,33 @@ const Header = ({ theme, toggleTheme }) => {
       </div>
 
       {/* 모바일 메뉴 배경 레이어 */}
-      <div 
-        className={`mobile-backdrop ${menuOpen ? 'active' : ''}`} 
-        onClick={closeMenu} 
+      <div
+        className={`mobile-backdrop ${menuOpen ? 'active' : ''}`}
+        onClick={closeMenu}
       />
 
       <div className={`mobile-menu ${menuOpen ? 'active' : ''}`}>
         <div className="mobile-menu-header">
-           <button className="menu-toggle" onClick={toggleMenu}>
-              <div className="hamburger-box">
-                <span className="hamburger-line"></span>
-                <span className="hamburger-line"></span>
-                <span className="hamburger-line"></span>
-              </div>
-           </button>
-           <Link to="/" onClick={closeMenu}>
-             <img src={logo} alt="DoRunning Logo" className="logo-img" />
-           </Link>
+          <button className="menu-toggle" onClick={toggleMenu}>
+            <div className="hamburger-box">
+              <span className="hamburger-line"></span>
+              <span className="hamburger-line"></span>
+              <span className="hamburger-line"></span>
+            </div>
+          </button>
+          <Link to="/" onClick={closeMenu}>
+            <img src={logo} alt="DoRunning Logo" className="logo-img" />
+          </Link>
         </div>
-        
+
         <div className="mobile-menu-content">
           <nav className="mobile-nav-section">
             <div className="menu-section-label">NAVIGATE</div>
             <NavItems />
           </nav>
-          
+
           <div className="menu-divider" />
-          
+
           <nav className="mobile-nav-section">
             <div className="menu-section-label">ACCOUNT</div>
             <UtilItems />

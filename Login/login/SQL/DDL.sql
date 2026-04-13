@@ -84,9 +84,44 @@ ALTER TABLE marathons ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS "Allow public read access" ON marathons;
 CREATE POLICY "Allow public read access" ON marathons FOR SELECT TO public USING (true);
 
--- Allow anonymous upsert (for crawler)
+-- Allow anonymous upsert (Removed for security - maintenance via Service Role only)
 DROP POLICY IF EXISTS "Allow anonymous upsert" ON marathons;
-CREATE POLICY "Allow anonymous upsert" ON marathons FOR ALL TO public USING (true) WITH CHECK (true);
 
 -- Nested Comments UPDATE (Run this manually on the database to apply)
 ALTER TABLE comments ADD COLUMN parent_id VARCHAR(255) REFERENCES comments(id) ON DELETE CASCADE;
+
+-- ==========================================
+-- Security Hardening & RLS Implementation
+-- ==========================================
+
+-- [보안 강화] 모든 테이블 RLS 활성화 및 정책 설정
+ALTER TABLE public.records ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.user_auth ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.users ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.boards ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.files ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.contact ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.comments ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.run_record ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.goal ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.wishlist ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.marathons ENABLE ROW LEVEL SECURITY;
+
+-- 마라톤 테이블 정책: 누구나 조회 가능, 수정 불가
+DROP POLICY IF EXISTS "Allow public read access" ON public.marathons;
+CREATE POLICY "Allow public read access" ON public.marathons 
+FOR SELECT TO public 
+USING (true);
+
+-- 프로필 테이블 정책: 프론트엔드 연동을 위해 누구나 조회 가능
+DROP POLICY IF EXISTS "Allow public read access" ON public.profiles;
+CREATE POLICY "Allow public read access" ON public.profiles 
+FOR SELECT TO public 
+USING (true);
+
+-- 함수 보안: search_path 고정
+ALTER FUNCTION public.delete_user_all_data SET search_path = public;
+ALTER FUNCTION public.delete_user_data SET search_path = public;
+ALTER FUNCTION public.handle_new_user SET search_path = public;
+ALTER FUNCTION public.update_updated_at_column SET search_path = public;

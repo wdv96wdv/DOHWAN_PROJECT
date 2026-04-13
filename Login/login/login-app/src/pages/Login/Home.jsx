@@ -15,11 +15,11 @@ import useAuthStore from "../../store/useAuthStore";
 import "../../assets/css/home.css";
 import "../../assets/css/auth.css";
 import { ChevronRight, ArrowRight, Calendar, MapPin, Activity } from 'lucide-react';
-import { MARATHON_LIST } from "../../utils/marathon";
 
 const Home = () => {
   const navigate = useNavigate();
   const isLogin = useAuthStore(state => state.isLogin);
+  const [upcomingMarathons, setUpcomingMarathons] = useState([]);
 
   const handleGetStarted = () => {
     if (isLogin === "true" || isLogin === true) {
@@ -37,10 +37,50 @@ const Home = () => {
       easing: "ease-in-out",
       once: true,
     });
-  }, []);
 
-  // Get upcoming marathons
-  const upcomingMarathons = MARATHON_LIST.slice(0, 7);
+    // DB에서 실시간 마라톤 일정 가져와서 "접수중"인 메인 리스트 구성하기
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+    fetch(`${API_BASE_URL}/api/marathons`)
+      .then(res => {
+          if (!res.ok) throw new Error("HTTP error!");
+          if (res.status === 204) return [];
+          return res.json();
+      })
+      .then(data => {
+          const formatRawDate = (date) => {
+              if (Array.isArray(date)) {
+                  return `${date[0]}-${String(date[1]).padStart(2, '0')}-${String(date[2]).padStart(2, '0')}`;
+              }
+              return date;
+          };
+
+          const today = new Date();
+          const kstOffset = 9 * 60 * 60 * 1000;
+          const kstDate = new Date(today.getTime() + kstOffset);
+          const todayStr = kstDate.toISOString().split('T')[0];
+
+          const activeList = data.map(m => ({
+              id: m.id,
+              title: m.title,
+              link: m.link,
+              location: m.location,
+              raceDate: formatRawDate(m.race_date),
+              startDate: formatRawDate(m.start_date),
+              endDate: formatRawDate(m.end_date),
+              type: Array.isArray(m.type) ? m.type : ["마라톤"],
+          })).filter(item => {
+              if (item.startDate && item.endDate) {
+                  return todayStr >= item.startDate && todayStr <= item.endDate;
+              }
+              return false;
+          });
+
+          // 랜덤으로 7개 섞기
+          const shuffled = activeList.sort(() => 0.5 - Math.random());
+          setUpcomingMarathons(shuffled.slice(0, 7));
+      })
+      .catch(err => console.error("Failed to fetch marathons on home:", err));
+  }, []);
 
   return (
     <div className="home-page">
@@ -71,46 +111,54 @@ const Home = () => {
       {/* Marathon Schedule Carousel */}
       <section className="marathon-carousel-section" data-aos="fade-up">
         <div className="section-header">
-           <div className="section-badge">UPCOMING EVENTS</div>
-           <h2>전국 주요 마라톤 일정</h2>
+           <div className="section-badge">ACCEPTING NOW</div>
+           <h2>현재 접수 중인 마라톤 일정</h2>
            <p>당신의 도전을 기다리고 있는 다가오는 경기들을 확인하세요</p>
         </div>
         
-        <Swiper
-          effect={'coverflow'}
-          grabCursor={true}
-          centeredSlides={true}
-          slidesPerView={'auto'}
-          coverflowEffect={{
-            rotate: 15,
-            stretch: 0,
-            depth: 150,
-            modifier: 1.5,
-            slideShadows: false,
-          }}
-          pagination={{ clickable: true }}
-          autoplay={{ delay: 3500, disableOnInteraction: false }}
-          modules={[EffectCoverflow, Pagination, Autoplay]}
-          className="marathon-swiper"
-        >
-          {upcomingMarathons.map((item, idx) => (
-            <SwiperSlide key={idx} className="marathon-slide">
-              <div className="marathon-card-glass">
-                <div className="marathon-card-header">
-                   <span className="marathon-location"><MapPin size={16}/> {item.location}</span>
-                   <span className="marathon-date"><Calendar size={16}/> {item.raceDate}</span>
+        {upcomingMarathons.length > 0 ? (
+          <Swiper
+            effect={'coverflow'}
+            grabCursor={true}
+            centeredSlides={true}
+            slidesPerView={'auto'}
+            coverflowEffect={{
+              rotate: 15,
+              stretch: 0,
+              depth: 150,
+              modifier: 1.5,
+              slideShadows: false,
+            }}
+            pagination={{ clickable: true }}
+            autoplay={{ delay: 3500, disableOnInteraction: false }}
+            modules={[EffectCoverflow, Pagination, Autoplay]}
+            className="marathon-swiper"
+          >
+            {upcomingMarathons.map((item, idx) => (
+              <SwiperSlide key={item.id || idx} className="marathon-slide">
+                <div className="marathon-card-glass">
+                  <div className="marathon-card-header">
+                     <span className="marathon-location"><MapPin size={16}/> {item.location}</span>
+                     <span className="marathon-date"><Calendar size={16}/> {item.raceDate}</span>
+                  </div>
+                  <h3>{item.title}</h3>
+                  <div className="marathon-tags">
+                    {item.type.map(t => <span key={t} className="marathon-tag">{t}</span>)}
+                  </div>
+                  <button className="marathon-link-btn" onClick={() => navigate(`/marathon/${item.id}`)}>
+                     상세정보 보기 <ChevronRight size={16} />
+                  </button>
                 </div>
-                <h3>{item.title}</h3>
-                <div className="marathon-tags">
-                  {item.type.map(t => <span key={t} className="marathon-tag">{t}</span>)}
-                </div>
-                <button className="marathon-link-btn" onClick={() => navigate(`/marathon/${item.id}`)}>
-                   상세정보 보기 <ChevronRight size={16} />
-                </button>
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        ) : (
+          <div className="no-active-marathons" style={{ textAlign: 'center', padding: '60px 20px', color: 'var(--text-muted)' }}>
+            <Calendar size={48} style={{ opacity: 0.5, marginBottom: '16px' }} />
+            <h3>현재 접수 중인 마라톤 대회가 없습니다.</h3>
+            <p>다음에 열릴 멋진 대회들을 기대해 주세요!</p>
+          </div>
+        )}
       </section>
 
       {/* AI Shoe Guide */}

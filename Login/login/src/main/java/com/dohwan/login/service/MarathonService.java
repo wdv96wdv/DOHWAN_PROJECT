@@ -50,7 +50,8 @@ public class MarathonService {
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
         try {
-            String url = supabaseUrl + "/rest/v1/marathons?select=*&order=race_date.desc";
+            // 정렬 기준을 뺀 기본 조회 쿼리 유지 (전체 데이터를 받아옴)
+            String url = supabaseUrl + "/rest/v1/marathons?select=*";
             
             // ParameterizedTypeReference를 사용하여 제네릭 타입 정보 유지
             ResponseEntity<List<Marathon>> response = restTemplate.exchange(
@@ -63,10 +64,16 @@ public class MarathonService {
             if (response == null || response.getBody() == null)
                 return Collections.emptyList();
             
-            return response.getBody();
+            // 데이터 형평성을 위해 매번 랜덤하게 섞어서 반환
+            List<Marathon> marathons = new ArrayList<>(response.getBody());
+            Collections.shuffle(marathons);
+            return marathons;
         } catch (Exception e) {
             log.error(">>> [조회 실패] : {}", e.getMessage());
-            return marathonRepository.findAllByOrderByRaceDateDesc();
+            // DB fallback 시에도 랜덤하게 섞어서 반환
+            List<Marathon> fallbackList = new ArrayList<>(marathonRepository.findAllByOrderByRaceDateDesc());
+            Collections.shuffle(fallbackList);
+            return fallbackList;
         }
     }
 
