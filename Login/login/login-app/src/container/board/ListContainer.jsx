@@ -10,6 +10,8 @@ const ListContainer = () => {
   const [list, setList] = useState([]);
   const [page, setPage] = useState(1);
   const [size, setSize] = useState(10);
+  const [type, setType] = useState('전체');  // 카테고리
+  const [keyword, setKeyword] = useState(''); // 검색어
   
   //게시글 목록 데이터 (재시도 포함)
   const getList = async () => {
@@ -17,7 +19,7 @@ const ListContainer = () => {
     const baseDelayMs = 300;
     for (let attempt = 1; attempt <= maxAttempts; attempt++) {
       try {
-        const response = await boards.list(page, size);
+        const response = await boards.list(page, size, type, keyword);
         const resData = response.data.data;
         const list = resData.list || [];
         const pagination = resData.pagination || {};
@@ -36,36 +38,33 @@ const ListContainer = () => {
   }
 
   // URL 가져오는 방법
-
   const location = useLocation();
-
 
   //페이지 번호 클릭 -> URL page 파라미터 변경
   const updatePage = () => {
     const query = new URLSearchParams(location.search);
     const newPage = query.get('page') ?? 1;
     const newSize = query.get('size') ?? 10;
-    console.log(`newPage: ${newPage}`);
-    console.log(`newSize: ${newSize}`);
-    setPage(newPage);
-    setSize(newSize);
+    const newType = query.get('type') ?? '전체';
+    const newKeyword = query.get('keyword') ?? '';
+    
+    setPage(Number(newPage));
+    setSize(Number(newSize));
+    setType(newType);
+    setKeyword(newKeyword);
   }
 
-  // ❓
   useEffect(() => {
     getList();
-  }, [page, size]);
-  // 의존성배열 [page, size]
-  // : page, size 바뀔 때마다 재실행
+  }, [page, size, type, keyword]);
 
   useEffect(() => {
     updatePage()
   },[location.search]);
-  // URL 쿼리스트링이 바뀔때마다 재실행 
 
   return (
   <>
-    <List list={list} pagination={pagination} />
+    <List list={list} pagination={pagination} currentFilters={{ type, keyword }} />
   </>
   )
 }

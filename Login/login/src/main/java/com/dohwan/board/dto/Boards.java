@@ -13,6 +13,7 @@ public class Boards {
     private String title; // 제목
     private String writer; // 작성자
     private String content; // 내용
+    private String type; // 카테고리
     private Date createdAt; // 등록일자
     private Date updatedAt; // 수정일자
     private Long userNo; //user(FK)

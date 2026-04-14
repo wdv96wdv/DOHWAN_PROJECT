@@ -1,7 +1,8 @@
 import api from './api';
 
 //목록
-export const list = (page, size) => api.get(`/boards?page=${page}&size=${size}`);
+export const list = (page = 1, size = 10, type = '전체', keyword = '') => 
+    api.get(`/boards?page=${page}&size=${size}&type=${type}&keyword=${keyword}`);
 //조회
 export const select = (id) => api.get(`/boards/${id}`);
 //등록

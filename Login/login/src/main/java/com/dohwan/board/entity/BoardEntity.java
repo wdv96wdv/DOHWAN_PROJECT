@@ -34,6 +34,9 @@ public class BoardEntity {
     @Column(name = "content", columnDefinition = "TEXT", nullable = false)
     private String content;
 
+    @Column(name = "type", length = 50)
+    private String type;
+
     @Column(name = "user_no", nullable = false)
     private Long userNo;
 

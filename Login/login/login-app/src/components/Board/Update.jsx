@@ -6,22 +6,35 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import Swal from 'sweetalert2';
 import * as fileApi from '../../apis/files';
-import { Save, List as ListIcon, Image as ImageIcon, FilePlus, X, Trash2, Plus, Pencil, Type, User, Camera } from 'lucide-react';
+import { 
+  Save, 
+  ArrowLeft, 
+  Image as ImageIcon, 
+  FilePlus, 
+  X, 
+  Trash2, 
+  Plus, 
+  Pencil, 
+  Type, 
+  User, 
+  Camera,
+  Layout
+} from 'lucide-react';
 
 const Update = ({
   board,
   fileList,
   onUpdate,
-  onDownload,
-  onDeleteFile,
   deleteCheckedFiles
 }) => {
   const { id } = useParams();
   const navigate = useNavigate();
+  
   const [title, setTitle] = useState('');
   const [writer, setWriter] = useState('');
   const [content, setContent] = useState('');
-  const [fileIdList, setFileIdList] = useState([]);
+  const [type, setType] = useState('자유');
+  const [fileIdList, setFileIdList] = useState([]); // List of file IDs to delete
   const [charCount, setCharCount] = useState(0);
   const MAX_LENGTH = 3000;
 
@@ -35,6 +48,7 @@ const Update = ({
       setTitle(board.title ?? '');
       setWriter(board.writer ?? '');
       setContent(board.content ?? '');
+      setType(board.type ?? '자유');
       setCharCount(board.content?.length || 0);
     }
   }, [board]);
@@ -44,7 +58,7 @@ const Update = ({
     if (file) {
       setNewMainFile(file);
       setNewMainPreview(URL.createObjectURL(file));
-      // Mark old main for deletion if exists
+      // Automatically check the old main file for deletion
       const oldMain = fileList?.find(f => f.type === 'MAIN');
       if (oldMain && !fileIdList.includes(oldMain.id)) {
         setFileIdList(prev => [...prev, oldMain.id]);
@@ -62,222 +76,152 @@ const Update = ({
     setFileIdList(prev => prev.includes(id) ? prev.filter(fid => fid !== id) : [...prev, id]);
   };
 
+  const removeNewFile = (index) => {
+    setNewFiles(prev => prev.filter((_, i) => i !== index));
+    setNewFilePreviews(prev => prev.filter((_, i) => i !== index));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    Swal.fire({
+    if (charCount > MAX_LENGTH) {
+      Swal.fire('경고', '내용이 너무 깁니다.', 'warning');
+      return;
+    }
+
+    const result = await Swal.fire({
       title: '게시글을 수정하시겠습니까?',
       icon: 'question',
       showCancelButton: true,
       confirmButtonText: '수정',
-      cancelButtonText: '취소'
-    }).then(async (res) => {
-      if (res.isConfirmed) {
-        try {
-          // Upload new files
-          let addedMainFile = null;
-          if (newMainFile) {
-            const uploaded = await fileApi.uploadFileToSupabase(newMainFile, 'MAIN');
-            addedMainFile = { url: uploaded.fileUrl, name: newMainFile.name, originName: newMainFile.name, size: newMainFile.size };
-          }
-
-          const addedFiles = [];
-          for (const f of newFiles) {
-            const uploaded = await fileApi.uploadFileToSupabase(f, 'SUB');
-            addedFiles.push({ url: uploaded.fileUrl, name: f.name, originName: f.name, size: f.size });
-          }
-
-          const data = {
-            id,
-            title,
-            writer,
-            content,
-            deleteFiles: fileIdList,
-            ...(addedMainFile ? { mainFile: addedMainFile } : {}),
-            ...(addedFiles.length ? { files: addedFiles } : {}),
-          };
-          
-          if (fileIdList.length > 0) {
-            await deleteCheckedFiles(fileIdList);
-          }
-          await onUpdate(data, { 'Content-Type': 'application/json' });
-          await Swal.fire('수정 완료!', '게시글이 성공적으로 수정되었습니다.', 'success');
-          navigate(`/boards/${id}`);
-        } catch (err) {
-          console.error(err);
-          Swal.fire('오류', '게시글 수정에 실패했습니다.', 'error');
-        }
-      }
+      cancelButtonText: '취소',
+      confirmButtonColor: 'var(--primary)',
+      background: 'var(--bg)',
+      color: 'var(--text-primary)'
     });
+
+    if (result.isConfirmed) {
+      try {
+        // Upload new files
+        let addedMainFile = null;
+        if (newMainFile) {
+          const uploaded = await fileApi.uploadFileToSupabase(newMainFile, 'MAIN');
+          addedMainFile = { url: uploaded.fileUrl, name: newMainFile.name, originName: newMainFile.name, size: newMainFile.size };
+        }
+
+        const addedFiles = [];
+        for (const f of newFiles) {
+          const uploaded = await fileApi.uploadFileToSupabase(f, 'SUB');
+          addedFiles.push({ url: uploaded.fileUrl, name: f.name, originName: f.name, size: f.size });
+        }
+
+        const data = {
+          id,
+          title,
+          writer,
+          content,
+          type,
+          deleteFiles: fileIdList,
+          ...(addedMainFile ? { mainFile: addedMainFile } : {}),
+          ...(addedFiles.length ? { files: addedFiles } : {}),
+        };
+        
+        if (fileIdList.length > 0) {
+          await deleteCheckedFiles(fileIdList);
+        }
+        await onUpdate(data, { 'Content-Type': 'application/json' });
+        await Swal.fire({
+          icon: 'success',
+          title: '수정 완료!',
+          text: '게시글이 성공적으로 수정되었습니다.',
+          timer: 1500,
+          showConfirmButton: false
+        });
+        navigate(`/boards/${id}`);
+      } catch (err) {
+        console.error(err);
+        Swal.fire('오류', '게시글 수정에 실패했습니다.', 'error');
+      }
+    }
   };
 
   return (
-    <div className="board-page trendy-board">
-      <style>{`
-        .trendy-board .read-container {
-          background: rgba(255, 255, 255, 0.85);
-          backdrop-filter: blur(24px);
-          -webkit-backdrop-filter: blur(24px);
-          border-radius: 28px;
-          border: 1px solid rgba(255, 255, 255, 0.6);
-          box-shadow: 0 24px 48px rgba(0, 0, 0, 0.05), 0 4px 12px rgba(0, 0, 0, 0.03);
-          padding: 56px;
-        }
-        .trendy-board .read-title {
-          font-size: 2.4rem;
-          font-weight: 800;
-          background: linear-gradient(135deg, var(--primary, #007bff) 0%, #8a2be2 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          margin-bottom: 8px;
-        }
-        .trendy-board .board-form-label {
-          font-weight: 700;
-          color: #475569;
-          font-size: 0.95rem;
-          margin-bottom: 12px;
-          display: flex;
-          align-items: center;
-        }
-        .trendy-board .form-control {
-          background: #f8fafc;
-          border: 2px solid transparent;
-          border-radius: 16px;
-          padding: 18px 20px;
-          font-size: 1.05rem;
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
-          width: 100%;
-          color: #1e293b;
-        }
-        .trendy-board .form-control:focus {
-          background: #fff;
-          border-color: var(--primary, #007bff);
-          box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.15), inset 0 2px 4px rgba(0,0,0,0.01);
-          outline: none;
-        }
-        .trendy-board .preview-item {
-          border-radius: 16px;
-          box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-          transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-          border: 2px dashed #cbd5e1;
-          background: #f8fafc;
-        }
-        .trendy-board .preview-item:hover {
-          transform: translateY(-4px);
-          box-shadow: 0 12px 24px rgba(0,0,0,0.1);
-          border-color: var(--primary, #007bff);
-          background: rgba(0, 123, 255, 0.02);
-        }
-        .trendy-board .preview-img {
-          border-radius: 14px;
-        }
-        .trendy-board .btn-auth {
-          border-radius: 16px;
-          font-weight: 700;
-          letter-spacing: 0.5px;
-          transition: all 0.3s ease;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          text-decoration: none;
-        }
-        .trendy-board .btn-auth[type="submit"] {
-          background: linear-gradient(135deg, var(--primary, #007bff) 0%, #8a2be2 100%);
-          border: none;
-          box-shadow: 0 8px 16px rgba(0, 123, 255, 0.25);
-          color: white;
-        }
-        .trendy-board .btn-auth[type="submit"]:hover:not(:disabled) {
-          transform: translateY(-2px) scale(1.02);
-          box-shadow: 0 12px 24px rgba(0, 123, 255, 0.35);
-        }
-        .trendy-board .btn-auth.secondary {
-          background: #f1f5f9;
-          color: #475569;
-          border: 2px solid transparent;
-        }
-        .trendy-board .btn-auth.secondary:hover {
-          background: #e2e8f0;
-          color: #1e293b;
-          transform: translateY(-2px);
-        }
-        .trendy-board .ck-editor__editable {
-          border-radius: 0 0 16px 16px !important;
-          border: 2px solid #cbd5e1 !important;
-          border-top: none !important;
-          transition: border-color 0.3s ease;
-          min-height: 480px;
-          font-size: 1.05rem;
-          color: #334155 !important;
-        }
-        .trendy-board .ck-editor__editable.ck-focused {
-          border-color: var(--primary, #007bff) !important;
-          box-shadow: 0 8px 24px rgba(0,0,0,0.05) !important;
-        }
-        .trendy-board .ck-toolbar {
-          border-radius: 16px 16px 0 0 !important;
-          border: 2px solid #cbd5e1 !important;
-          background: #f8fafc !important;
-          padding: 8px !important;
-        }
-        .trendy-board .board-header-actions {
-          border-top: none !important;
-          margin-top: 48px !important;
-          padding-top: 0 !important;
-          display: flex;
-          justify-content: center;
-          gap: 20px;
-        }
-        /* 다크모드 대응 */
-        @media (prefers-color-scheme: dark) {
-          .trendy-board .read-container {
-            background: rgba(30, 41, 59, 0.85);
-            border-color: rgba(255, 255, 255, 0.1);
-          }
-          .trendy-board .board-form-label { color: #e2e8f0; }
-          .trendy-board .form-control { background: #0f172a; color: #f8fafc; border-color: rgba(255,255,255,0.05); }
-          .trendy-board .form-control:focus { background: #1e293b; }
-          .trendy-board .preview-item { background: #0f172a; border-color: rgba(255,255,255,0.1); }
-          .trendy-board .ck-editor__editable { color: #f8fafc !important; border-color: rgba(255,255,255,0.1) !important; background: #0f172a !important; }
-          .trendy-board .ck-toolbar { background: #1e293b !important; border-color: rgba(255,255,255,0.1) !important; }
-          .trendy-board .btn-auth.secondary { background: rgba(255,255,255,0.1); color: #f8fafc; }
-          .trendy-board .btn-auth.secondary:hover { background: rgba(255,255,255,0.15); }
-        }
-      `}</style>
-      <div className="read-container" style={{ maxWidth: '850px', margin: '0 auto' }}>
-        <header className="read-header" style={{ borderBottom: 'none', textAlign: 'center', paddingBottom: '16px', marginBottom: '40px' }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0, 123, 255, 0.1)', padding: '10px 20px', borderRadius: '30px', marginBottom: '20px' }}>
-            <Pencil size={18} style={{ color: 'var(--primary, #007bff)', marginRight: '8px' }} />
-            <span style={{ color: 'var(--primary, #007bff)', fontWeight: 800, letterSpacing: '1px', fontSize: '0.9rem' }}>EDIT POST</span>
+    <div className="board-page premium-board forms-page">
+      <div className="form-container-full glass">
+        {/* Navigation */}
+        <nav className="form-nav">
+          <button onClick={() => navigate(-1)} className="back-link">
+            <ArrowLeft size={18} />
+            <span>돌아가기</span>
+          </button>
+        </nav>
+
+        {/* Header */}
+        <header className="form-header">
+          <div className="header-badge">
+            <Pencil size={16} />
+            <span>EDIT POST</span>
           </div>
-          <h1 className="read-title">게시글 수정</h1>
-          <p style={{ color: '#64748b', fontSize: '1.1rem', marginTop: '12px', fontWeight: 500 }}>더 나은 내용으로 게시글을 수정해보세요.</p>
+          <h1 className="form-title">이야기 수정하기</h1>
+          <p className="form-subtitle">더 나은 내용으로 소통을 이어가보세요.</p>
         </header>
 
-        <form onSubmit={handleSubmit} className="auth-form" style={{ maxWidth: '100%', gap: '32px' }}>
-          <div className="board-form-group" style={{ marginBottom: 0 }}>
-            <label className="board-form-label"><Type size={18} style={{marginRight: '8px', color: 'var(--primary, #007bff)'}}/> 제목</label>
-            <input
-              type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              className="form-control"
-              required
-            />
-          </div>
+        <form onSubmit={handleSubmit} className="premium-form">
+          {/* Basic Info Section */}
+          <section className="form-section">
+            <div className="section-title-area">
+              <Layout size={18} />
+              <h3>기본 정보</h3>
+            </div>
+            
+            <div className="form-row">
+              <div className="board-form-group flex-2">
+                <label className="board-form-label">제목</label>
+                <input
+                  type="text"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  className="form-control"
+                  placeholder="공감 가는 제목으로 수정해보세요"
+                  required
+                />
+              </div>
+              <div className="board-form-group flex-1">
+                <label className="board-form-label">카테고리</label>
+                <select 
+                  className="form-control" 
+                  value={type} 
+                  onChange={(e) => setType(e.target.value)}
+                >
+                  <option value="자유">자유</option>
+                  <option value="정보">정보</option>
+                  <option value="코스추천">코스추천</option>
+                  <option value="Q&A">Q&A</option>
+                </select>
+              </div>
+              <div className="board-form-group flex-1">
+                <label className="board-form-label">작성자</label>
+                <input type="text" value={writer} className="form-control readonly" readOnly tabIndex={-1} />
+              </div>
+            </div>
+          </section>
 
-          <div className="board-form-group" style={{ marginBottom: 0 }}>
-            <label className="board-form-label" style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-              <span><FilePlus size={18} style={{marginRight: '8px', color: 'var(--primary, #007bff)'}}/> 내용</span>
-              <span style={{ color: charCount > MAX_LENGTH ? '#ef4444' : '#94a3b8', fontSize: '0.85rem', fontWeight: 500 }}>
-                {charCount} / {MAX_LENGTH}
+          {/* Editor Section */}
+          <section className="form-section">
+            <div className="section-title-area">
+              <Type size={18} />
+              <h3>내용 작성</h3>
+              <span className={`char-counter ${charCount > MAX_LENGTH ? 'danger' : ''}`}>
+                {charCount.toLocaleString()} / {MAX_LENGTH.toLocaleString()}
               </span>
-            </label>
+            </div>
             <div className="ck-editor-wrapper">
               <CKEditor
                 editor={ClassicEditor}
                 data={content}
+                onReady={editor => {
+                  console.log('Editor UI is ready!');
+                }}
                 onChange={(event, editor) => {
                   const data = editor.getData();
                   setContent(data);
@@ -285,63 +229,102 @@ const Update = ({
                 }}
               />
             </div>
-          </div>
+          </section>
 
-          <div className="board-form-group" style={{ marginBottom: 0 }}>
-            <label className="board-form-label"><FilePlus size={18} style={{marginRight: '8px', color: 'var(--primary, #007bff)'}} /> 기존 첨부 파일 (삭제할 파일을 선택하세요)</label>
-            <div className="file-preview-grid">
-              {fileList?.map((file) => (
-                <div key={file.id} className="preview-item" style={{ opacity: fileIdList.includes(file.id) ? 0.4 : 1 }}>
-                   <img src={file.filePath} className="preview-img" alt="file" />
-                   {file.type === 'MAIN' && <span className="preview-badge">MAIN</span>}
-                   <button type="button" onClick={() => toggleFileCheck(file.id)} className={`btn-icon ${fileIdList.includes(file.id) ? 'active' : ''}`} style={{ position: 'absolute', top: '4px', right: '4px' }}>
-                     {fileIdList.includes(file.id) ? <Trash2 size={12} color="red" /> : <X size={12}/>}
-                   </button>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '32px', marginTop: '16px' }}>
-            <div className="board-form-group" style={{ marginBottom: 0 }}>
-              <label className="board-form-label"><Camera size={18} style={{marginRight: '8px', color: 'var(--primary, #007bff)'}} /> 대표 이미지 변경</label>
-              <div className="file-preview-grid">
-                {newMainPreview ? (
-                  <div className="preview-item">
-                     <span className="preview-badge">NEW MAIN</span>
-                     <img src={newMainPreview} className="preview-img" alt="preview" />
-                  </div>
-                ) : (
-                  <label className="preview-item" style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2px dashed var(--glass-border)', background: 'transparent' }}>
-                    <Plus size={24} color="var(--text-muted)" />
-                    <input type="file" onChange={handleNewMainFileChange} style={{ display: 'none' }} accept="image/*" />
-                  </label>
-                )}
+          {/* Existing Files Section */}
+          {fileList && fileList.length > 0 && (
+            <section className="form-section">
+              <div className="section-title-area">
+                <Trash2 size={18} />
+                <h3>기존 첨부 파일 <span className="helper-text">(삭제할 파일을 선택하세요)</span></h3>
               </div>
-            </div>
-
-            <div className="board-form-group" style={{ marginBottom: 0 }}>
-              <label className="board-form-label"><ImageIcon size={18} style={{marginRight: '8px', color: 'var(--primary, #007bff)'}} /> 첨부 파일 추가</label>
               <div className="file-preview-grid">
-                {newFilePreviews.map((src, idx) => (
-                  <div key={idx} className="preview-item">
-                    <img src={src} className="preview-img" alt="preview" />
+                {fileList.map((file) => (
+                  <div 
+                    key={file.id} 
+                    className={`preview-item glass ${fileIdList.includes(file.id) ? 'marked-delete' : ''}`}
+                    onClick={() => toggleFileCheck(file.id)}
+                  >
+                    <div className="preview-media">
+                      <img src={file.filePath} alt="existing file" />
+                      {file.type === 'MAIN' && <span className="media-badge">MAIN</span>}
+                      <div className="delete-overlay">
+                        {fileIdList.includes(file.id) ? <Plus size={24} style={{transform: 'rotate(45deg)'}} /> : <Trash2 size={24} />}
+                      </div>
+                    </div>
+                    <div className="preview-info">
+                      <span className="file-name">{file.originName}</span>
+                    </div>
                   </div>
                 ))}
-                <label className="preview-item" style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2px dashed var(--glass-border)', background: 'transparent' }}>
-                  <Plus size={24} color="var(--text-muted)" />
-                  <input type="file" multiple onChange={handleNewFilesChange} style={{ display: 'none' }} accept="image/*" />
-                </label>
+              </div>
+            </section>
+          )}
+
+          {/* New Files Section */}
+          <section className="form-section">
+            <div className="form-row">
+              {/* Main Image Change */}
+              <div className="board-form-group flex-1">
+                <div className="section-title-area">
+                  <Camera size={18} />
+                  <h3>대표 이미지 변경</h3>
+                </div>
+                <div className="file-preview-grid single">
+                  {newMainPreview ? (
+                    <div className="preview-item glass">
+                      <div className="preview-media">
+                        <img src={newMainPreview} alt="new main" />
+                        <span className="media-badge new">NEW MAIN</span>
+                        <button type="button" className="btn-remove" onClick={() => {setNewMainFile(null); setNewMainPreview(null)}}>
+                          <X size={14} />
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <label className="upload-placeholder glass">
+                      <Plus size={32} />
+                      <span>교체할 사진 선택</span>
+                      <input type="file" onChange={handleNewMainFileChange} style={{ display: 'none' }} accept="image/*" />
+                    </label>
+                  )}
+                </div>
+              </div>
+
+              {/* Additional Files */}
+              <div className="board-form-group flex-2">
+                <div className="section-title-area">
+                  <ImageIcon size={18} />
+                  <h3>추가 첨부 파일</h3>
+                </div>
+                <div className="file-preview-grid">
+                  {newFilePreviews.map((src, idx) => (
+                    <div key={idx} className="preview-item glass">
+                      <div className="preview-media">
+                        <img src={src} alt="preview" />
+                        <button type="button" className="btn-remove" onClick={() => removeNewFile(idx)}>
+                          <X size={14} />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                  <label className="upload-placeholder glass">
+                    <Plus size={32} />
+                    <input type="file" multiple onChange={handleNewFilesChange} style={{ display: 'none' }} accept="image/*" />
+                  </label>
+                </div>
               </div>
             </div>
-          </div>
+          </section>
 
-          <div className="board-header-actions">
-            <button type="button" onClick={() => navigate(-1)} className="btn-auth secondary" style={{ padding: '16px 32px', minWidth: '140px', fontSize: '1.05rem' }}>
-              <ListIcon size={20} style={{marginRight: '10px'}} /> 취소
+          {/* Actions */}
+          <div className="form-actions">
+            <button type="button" onClick={() => navigate(-1)} className="premium-btn secondary">
+              취소하기
             </button>
-            <button type="submit" className="btn-auth" style={{ padding: '16px 40px', minWidth: '180px', fontSize: '1.05rem' }}>
-              <Save size={20} style={{marginRight: '10px'}} /> 게시글 수정하기
+            <button type="submit" className="premium-btn primary">
+              <Save size={20} />
+              <span>수정 완료</span>
             </button>
           </div>
         </form>

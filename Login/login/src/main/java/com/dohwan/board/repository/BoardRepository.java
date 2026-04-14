@@ -21,4 +21,11 @@ public interface BoardRepository extends JpaRepository<BoardEntity, Long> {
     void deleteByIdentifier(@Param("id") String id);
 
     Page<BoardEntity> findAllByOrderByCreatedAtDesc(Pageable pageable);
+
+    @Query("SELECT b FROM BoardEntity b WHERE " +
+           "(:type = '전체' OR b.type = :type) AND " +
+           "(LOWER(b.title) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+           " LOWER(b.content) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+           " LOWER(b.writer) LIKE LOWER(CONCAT('%', :keyword, '%')))")
+    Page<BoardEntity> search(@Param("type") String type, @Param("keyword") String keyword, Pageable pageable);
 }

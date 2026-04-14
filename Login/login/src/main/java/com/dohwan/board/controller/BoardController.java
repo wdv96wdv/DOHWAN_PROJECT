@@ -48,10 +48,12 @@ public class BoardController {
     @GetMapping
     public ResponseEntity<ApiResponse<Map<String, Object>>> findAll(
         @RequestParam(value = "page", required = false, defaultValue = "1") int page,
-        @RequestParam(value = "size", required = false, defaultValue = "10") int size
+        @RequestParam(value = "size", required = false, defaultValue = "10") int size,
+        @RequestParam(value = "type", required = false, defaultValue = "전체") String type,
+        @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword
         ){
         try {
-            Page<Boards> pageInfo = boardService.page(page, size);
+            Page<Boards> pageInfo = boardService.page(page, size, type, keyword);
             Pagination pagination = new Pagination();
             pagination.setPage(page);
             pagination.setSize(size);

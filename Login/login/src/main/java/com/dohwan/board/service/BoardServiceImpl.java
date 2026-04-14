@@ -17,6 +17,7 @@ import com.dohwan.board.dto.Boards.FileInfo;
 import com.dohwan.board.dto.Files;
 import com.dohwan.board.entity.BoardEntity;
 import com.dohwan.board.repository.BoardRepository;
+import com.dohwan.board.repository.CommentRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -28,6 +29,8 @@ public class BoardServiceImpl implements BoardService {
     private BoardRepository boardRepository;
     @Autowired
     private FileService fileService;
+    @Autowired
+    private CommentRepository commentRepository;
 
     // Helper to map Entity to Domain
     private Boards toDomain(BoardEntity entity) {
@@ -38,6 +41,7 @@ public class BoardServiceImpl implements BoardService {
         dto.setTitle(entity.getTitle());
         dto.setWriter(entity.getWriter());
         dto.setContent(entity.getContent());
+        dto.setType(entity.getType());
         if (entity.getCreatedAt() != null) {
             dto.setCreatedAt(java.sql.Timestamp.valueOf(entity.getCreatedAt()));
         }
@@ -51,11 +55,19 @@ public class BoardServiceImpl implements BoardService {
             Files search = new Files();
             search.setPTable("boards");
             search.setPNo(entity.getNo());
-            search.setType(Files.FileType.MAIN); // <-- Added this
+            search.setType(Files.FileType.MAIN);
             Files mainFile = fileService.selectByType(search);
             dto.setFile(mainFile);
         } catch (Exception e) {
             log.warn("이미지 로드 실패: " + e.getMessage());
+        }
+
+        // 댓글 개수 로드
+        try {
+            long count = commentRepository.countByBoardId(entity.getId());
+            dto.setCommentCount((int) count);
+        } catch (Exception e) {
+            log.warn("댓글 개수 조회 실패: " + e.getMessage());
         }
 
         return dto;
@@ -71,6 +83,7 @@ public class BoardServiceImpl implements BoardService {
         entity.setTitle(dto.getTitle());
         entity.setWriter(dto.getWriter());
         entity.setContent(dto.getContent());
+        entity.setType(dto.getType());
         entity.setUserNo(dto.getUserNo());
         return entity;
     }
@@ -191,6 +204,7 @@ public class BoardServiceImpl implements BoardService {
             if (boards.getTitle() != null) entity.setTitle(boards.getTitle());
             if (boards.getWriter() != null) entity.setWriter(boards.getWriter());
             if (boards.getContent() != null) entity.setContent(boards.getContent());
+            if (boards.getType() != null) entity.setType(boards.getType());
             boardRepository.save(entity);
             upload(boards);
             return true;
@@ -204,6 +218,7 @@ public class BoardServiceImpl implements BoardService {
             if (boards.getTitle() != null) entity.setTitle(boards.getTitle());
             if (boards.getWriter() != null) entity.setWriter(boards.getWriter());
             if (boards.getContent() != null) entity.setContent(boards.getContent());
+            if (boards.getType() != null) entity.setType(boards.getType());
             boardRepository.save(entity);
             boards.setNo(entity.getNo());
             upload(boards);
@@ -245,9 +260,17 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public Page<Boards> page(int page, int size) {
-        // Spring Data JPA pagination is 0-indexed, while PageHelper was 1-indexed.
+        return page(page, size, "전체", "");
+    }
+
+    @Override
+    public Page<Boards> page(int page, int size, String type, String keyword) {
         int zeroBasedPage = Math.max(0, page - 1);
-        Pageable pageable = PageRequest.of(zeroBasedPage, size);
-        return boardRepository.findAllByOrderByCreatedAtDesc(pageable).map(this::toDomain);
+        Pageable pageable = PageRequest.of(zeroBasedPage, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+        
+        if (type == null) type = "전체";
+        if (keyword == null) keyword = "";
+
+        return boardRepository.search(type, keyword, pageable).map(this::toDomain);
     }
 }

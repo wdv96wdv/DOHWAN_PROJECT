@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import "../../assets/css/board.css";
 import "../../assets/css/auth.css";
 import noImage from '../../assets/img/no-image.png';
@@ -8,33 +8,63 @@ import {
   ChevronRight,
   ChevronsLeft,
   ChevronsRight,
-  Pencil,
-  MessageSquare,
+  Plus,
+  User,
+  Clock,
+  LayoutGrid,
+  List as ListIcon,
   Search,
-  Map,
-  Activity,
-  Calendar,
-  Users,
-  User
+  MessageSquare
 } from 'lucide-react';
 import * as format from '../../utils/format';
 import Swal from 'sweetalert2';
 import useAuthStore from '../../store/useAuthStore';
 
-const List = ({ list = [], pagination }) => {
+const List = ({ list = [], pagination, currentFilters }) => {
   const isLogin = useAuthStore(state => state.isLogin);
+  const navigate = useNavigate();
   const [pageList, setPageList] = useState([]);
+  const [viewMode, setViewMode] = useState('list');
+  const [searchInput, setSearchInput] = useState(currentFilters?.keyword || '');
+
+  const categories = ['전체', '자유', '정보', '코스추천', 'Q&A'];
 
   useEffect(() => {
     createPageList();
   }, [pagination]);
 
+  useEffect(() => {
+    setSearchInput(currentFilters?.keyword || '');
+  }, [currentFilters?.keyword]);
+
+  // Real-time Search Debounce logic
+  useEffect(() => {
+    if (searchInput === (currentFilters?.keyword || '')) return;
+
+    const debounceTimer = setTimeout(() => {
+      navigate(`/boards?page=1&type=${encodeURIComponent(currentFilters?.type || '전체')}&keyword=${encodeURIComponent(searchInput)}`);
+    }, 400);
+
+    return () => clearTimeout(debounceTimer);
+  }, [searchInput, currentFilters?.type, navigate]);
+
   const createPageList = () => {
     const newPageList = [];
-    for (let i = pagination.start; i <= pagination.end; i++) {
-      newPageList.push(i);
+    if (pagination && pagination.start && pagination.end) {
+      for (let i = pagination.start; i <= pagination.end; i++) {
+        newPageList.push(i);
+      }
     }
     setPageList(newPageList);
+  };
+
+  const handleCategoryClick = (cat) => {
+    navigate(`/boards?page=1&type=${encodeURIComponent(cat)}&keyword=${encodeURIComponent(searchInput)}`);
+  };
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    navigate(`/boards?page=1&type=${encodeURIComponent(currentFilters?.type || '전체')}&keyword=${encodeURIComponent(searchInput)}`);
   };
 
   const handleWriteClick = (e) => {
@@ -43,284 +73,176 @@ const List = ({ list = [], pagination }) => {
       Swal.fire({
         icon: 'info',
         title: 'Login Required',
-        text: 'Please login to write a post.',
+        text: '게시글을 작성하려면 로그인이 필요합니다.',
         confirmButtonColor: 'var(--primary)'
       });
     }
   };
 
-  return (
-    <div className="board-page trendy-list">
-      <style>{`
-        .trendy-list .board-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-bottom: 40px;
-          padding-bottom: 20px;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.4);
-        }
-        .trendy-list .page-title-badge {
-          display: inline-flex;
-          align-items: center;
-          background: rgba(0, 123, 255, 0.1);
-          padding: 8px 16px;
-          border-radius: 20px;
-          color: var(--primary, #007bff);
-          font-weight: 800;
-          font-size: 0.85rem;
-          letter-spacing: 1px;
-          margin-bottom: 12px;
-        }
-        .trendy-list header h1 {
-          font-size: 2.8rem;
-          font-weight: 900;
-          margin: 0;
-          background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          letter-spacing: -0.5px;
-        }
-        .trendy-list .btn-write {
-          background: linear-gradient(135deg, var(--primary, #007bff) 0%, #8a2be2 100%);
-          border: none;
-          box-shadow: 0 8px 16px rgba(0, 123, 255, 0.25);
-          color: white;
-          border-radius: 20px;
-          padding: 14px 28px;
-          font-weight: 700;
-          letter-spacing: 0.5px;
-          transition: all 0.3s ease;
-          display: inline-flex;
-          align-items: center;
-          text-decoration: none;
-        }
-        .trendy-list .btn-write:hover {
-          transform: translateY(-2px) scale(1.02);
-          box-shadow: 0 12px 24px rgba(0, 123, 255, 0.35);
-        }
-        .trendy-list .board-table-container {
-          background: rgba(255, 255, 255, 0.85);
-          backdrop-filter: blur(24px);
-          -webkit-backdrop-filter: blur(24px);
-          border-radius: 24px;
-          border: 1px solid rgba(255, 255, 255, 0.6);
-          box-shadow: 0 24px 48px rgba(0, 0, 0, 0.04), 0 4px 12px rgba(0, 0, 0, 0.02);
-          overflow: hidden;
-          padding: 0;
-        }
-        .trendy-list .board-table {
-          width: 100%;
-          border-collapse: separate;
-          border-spacing: 0;
-        }
-        .trendy-list .board-table th {
-          background: #f8fafc;
-          padding: 20px 24px;
-          font-weight: 700;
-          color: #64748b;
-          font-size: 0.85rem;
-          text-transform: uppercase;
-          letter-spacing: 1px;
-          border-bottom: 2px solid #f1f5f9;
-        }
-        .trendy-list .board-table td {
-          padding: 20px 24px;
-          vertical-align: middle;
-          border-bottom: 1px solid #f1f5f9;
-          transition: background 0.3s ease;
-        }
-        .trendy-list .board-table tr {
-          transition: all 0.2s ease;
-        }
-        .trendy-list .board-table tbody tr:hover {
-          background: #f8fafc;
-          transform: scale(1.002);
-          box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-          position: relative;
-          z-index: 10;
-        }
-        .trendy-list .board-table tbody tr:hover td {
-          border-bottom-color: transparent;
-        }
-        .trendy-list .board-thumb {
-          width: 80px;
-          height: 80px;
-          border-radius: 16px;
-          object-fit: cover;
-          box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-          border: 1px solid #e2e8f0;
-          transition: transform 0.3s ease;
-        }
-        .trendy-list .board-table tr:hover .board-thumb {
-          transform: scale(1.05);
-        }
-        .trendy-list .board-link {
-          font-size: 1.1rem;
-          font-weight: 700;
-          color: #1e293b;
-          text-decoration: none;
-          transition: color 0.2s ease;
-          display: flex;
-          align-items: center;
-          gap: 10px;
-        }
-        .trendy-list .board-link:hover {
-          color: var(--primary, #007bff);
-        }
-        .trendy-list .writer-badge {
-          display: inline-flex;
-          align-items: center;
-          gap: 6px;
-          background: #f1f5f9;
-          padding: 6px 12px;
-          border-radius: 20px;
-          font-size: 0.9rem;
-          font-weight: 600;
-          color: #475569;
-        }
-        .trendy-list .comment-count {
-          background: #ffe4e6;
-          color: #e11d48;
-          padding: 4px 10px;
-          border-radius: 12px;
-          font-size: 0.8rem;
-          font-weight: 700;
-        }
-        .trendy-list .pagination {
-          margin-top: 48px;
-          gap: 12px;
-        }
-        .trendy-list .page-btn {
-          width: 44px;
-          height: 44px;
-          border-radius: 14px;
-          border: none;
-          background: white;
-          box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-          color: #475569;
-          font-weight: 600;
-        }
-        .trendy-list .page-btn:hover {
-          background: #f8fafc;
-          transform: translateY(-2px);
-          box-shadow: 0 8px 16px rgba(0,0,0,0.08);
-          color: var(--primary, #007bff);
-        }
-        .trendy-list .page-btn.active {
-          background: linear-gradient(135deg, var(--primary, #007bff) 0%, #8a2be2 100%);
-          color: white;
-          box-shadow: 0 8px 16px rgba(0, 123, 255, 0.25);
-        }
-        /* 다크모드 대응 */
-        @media (prefers-color-scheme: dark) {
-          .trendy-list .board-table-container { background: rgba(30, 41, 59, 0.6); border-color: rgba(255,255,255,0.1); }
-          .trendy-list header h1 { background: linear-gradient(135deg, #f8fafc 0%, #cbd5e1 100%); -webkit-background-clip: text; }
-          .trendy-list .board-table th { background: #0f172a; color: #94a3b8; border-color: #1e293b; }
-          .trendy-list .board-table td { border-color: #1e293b; }
-          .trendy-list .board-table tbody tr:hover { background: #1e293b; }
-          .trendy-list .board-link { color: #f1f5f9; }
-          .trendy-list .writer-badge { background: #0f172a; color: #cbd5e1; }
-          .trendy-list .page-btn { background: #1e293b; color: #cbd5e1; }
-          .trendy-list .page-btn:hover { background: #0f172a; }
-        }
-      `}</style>
+  const getPageUrl = (page) => {
+    return `/boards?page=${page}&size=${pagination.size}&type=${currentFilters?.type || '전체'}&keyword=${searchInput}`;
+  };
 
-      <header className="board-header">
-        <div>
-          <div className="page-title-badge"><Users size={16} style={{ marginRight: '6px' }} /> COMMUNITY</div>
-          <h1>COMMUNITY</h1>
-          <p style={{ color: '#64748b', fontSize: '1.05rem', marginTop: '8px', fontWeight: 500 }}>코스 추천부터 일상까지, 자유롭게 소통하세요.</p>
+  return (
+    <div className="board-page premium-board">
+      {/* Header Section */}
+      <header className="board-index-header">
+        <div className="header-content">
+          <div className="title-area">
+            <span className="subtitle">DORUNNING COMMUNITY</span>
+            <h1 className="main-title">우리들의 달리기 이야기</h1>
+            <p className="description">함께 뛰고 소통하며 더욱 즐거운 러닝 라이프를 만들어가세요.</p>
+          </div>
+          
+          <div className="header-actions">
+            <Link to="/boards/insert" className="premium-btn btn-write" onClick={handleWriteClick}>
+              <Plus size={20} />
+              <span>새 글 쓰기</span>
+            </Link>
+          </div>
         </div>
-        <Link to="/boards/insert" className="btn-write" onClick={handleWriteClick}>
-          <Pencil size={18} style={{ marginRight: '8px' }} /> CREATE POST
-        </Link>
+
+        {/* Categories & Search Toolbar */}
+        <div className="board-toolbar glass">
+          <div className="categories">
+            {categories.map(cat => (
+              <button 
+                key={cat} 
+                className={`category-item ${currentFilters?.type === cat ? 'active' : ''}`}
+                onClick={() => handleCategoryClick(cat)}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+          
+          <div className="toolbar-right">
+            <div className="view-toggle">
+              <button 
+                className={`toggle-btn ${viewMode === 'list' ? 'active' : ''}`}
+                onClick={() => setViewMode('list')}
+                title="리스트 형태로 보기"
+              >
+                <ListIcon size={18} />
+              </button>
+              <button 
+                className={`toggle-btn ${viewMode === 'grid' ? 'active' : ''}`}
+                onClick={() => setViewMode('grid')}
+                title="그리드 형태로 보기"
+              >
+                <LayoutGrid size={18} />
+              </button>
+            </div>
+            
+            <form className="search-box" onSubmit={handleSearchSubmit}>
+              <Search size={18} className="search-icon" />
+              <input 
+                type="text" 
+                placeholder="검색어를 입력하세요..." 
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+              />
+            </form>
+          </div>
+        </div>
       </header>
 
-      <div className="board-table-container">
-        <table className="board-table">
-          <thead>
-            <tr>
-              <th style={{ width: '80px', textAlign: 'center' }}>NO</th>
-              <th style={{ width: '120px', textAlign: 'center' }}>THUMBNAIL</th>
-              <th>SUBJECT</th>
-              <th style={{ width: '160px', textAlign: 'center' }}>WRITER</th>
-              <th style={{ width: '140px', textAlign: 'center' }}>DATE</th>
-            </tr>
-          </thead>
-          <tbody>
-            {list.length === 0 ? (
-              <tr>
-                <td colSpan={5} style={{ padding: '100px 0', textAlign: 'center', opacity: 0.5 }}>
-                  <Search size={48} style={{ margin: '0 auto 16px', display: 'block' }} />
-                  No posts found.
-                </td>
-              </tr>
-            ) : (
-              list.map((board, index) => (
-                <tr key={board.id}>
-                  <td style={{ textAlign: 'center', color: '#94a3b8', fontWeight: 600 }}>
-                    {index + 1 + (pagination.page - 1) * pagination.size}
-                  </td>
-                  <td style={{ textAlign: 'center' }}>
-                    <img
-                      src={board.file?.filePath || noImage}
-                      alt="thumb"
-                      className="board-thumb"
-                    />
-                  </td>
-                  <td>
-                    <Link to={`/boards/${board.id}`} className="board-link">
-                      {board.title}
-                      {board.commentCount > 0 && (
-                        <span className="comment-count">
-                          <MessageSquare size={12} style={{ marginRight: '4px', verticalAlign: 'middle' }} />
-                          {board.commentCount}
-                        </span>
-                      )}
-                    </Link>
-                  </td>
-                  <td style={{ textAlign: 'center' }}>
-                    <div className="writer-badge">
-                      <User size={14} />
-                      {board.writer}
-                    </div>
-                  </td>
-                  <td style={{ textAlign: 'center', color: '#64748b', fontSize: '0.9rem', fontWeight: 500 }}>
-                    {format.formatDate(board.createdAt)}
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+      {/* Content Section */}
+      <div className={`board-content-wrapper view-mode-${viewMode}`}>
+        {viewMode === 'list' && (
+          <div className="board-table-header">
+            <div className="col-type">종류</div>
+            <div className="col-thumb">이미지</div>
+            <div className="col-info">보드 정보</div>
+            <div className="col-writer">작성자</div>
+            <div className="col-date">날짜</div>
+          </div>
+        )}
+
+        <div className={`board-list-container ${viewMode}`}>
+          {list.length === 0 ? (
+            <div className="empty-state glass">
+              <Search size={48} />
+              <p>검색 결과가 없습니다.</p>
+              <span className="sub-text">새로운 소식을 가장 먼저 전해보세요!</span>
+            </div>
+          ) : (
+            list.map((board) => (
+              <div key={board.id} className={`board-item-row glass ${viewMode === 'grid' ? 'grid-item' : ''}`}>
+                <div className="item-type">
+                  <span className={`type-badge ${board.type || '자유'}`}>
+                    {board.type || '자유'}
+                  </span>
+                </div>
+                
+                <div className="item-thumb-wrapper">
+                  <img
+                    src={board.file?.filePath || noImage}
+                    alt="thumb"
+                    className="item-thumb"
+                  />
+                </div>
+
+                <div className="item-info">
+                  <Link to={`/boards/${board.id}`} className="item-title">
+                    {board.title}
+                    {board.commentCount > 0 && (
+                      <span className="comment-count-inline">
+                        ({board.commentCount})
+                      </span>
+                    )}
+                  </Link>
+                </div>
+                
+                <div className="item-writer">
+                  <div className="avatar-mini">
+                    <User size={14} />
+                  </div>
+                  <span>{board.writer}</span>
+                </div>
+
+                <div className="item-date">
+                  <Clock size={14} />
+                  <span>{format.formatDate(board.createdAt)}</span>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
       </div>
 
-      <div className="pagination">
-        <Link to={`/boards?page=${pagination.first}`} className="page-btn">
-          <ChevronsLeft size={18} />
-        </Link>
-        <Link to={`/boards?page=${pagination.prev}`} className="page-btn">
-          <ChevronLeft size={18} />
-        </Link>
+      {/* Pagination */}
+      <footer className="board-footer">
+        <div className="pagination-area">
+          <div className="pagination premium-pagination">
+            <Link to={getPageUrl(pagination.first)} className="page-link">
+              <ChevronsLeft size={18} />
+            </Link>
+            <Link to={getPageUrl(pagination.prev)} className="page-link">
+              <ChevronLeft size={18} />
+            </Link>
 
-        {pageList.map((page) => (
-          <Link
-            key={page}
-            to={`/boards?page=${page}&size=${pagination.size}`}
-            className={`page-btn ${page === Number(pagination.page) ? 'active' : ''}`}
-          >
-            {page}
-          </Link>
-        ))}
+            <div className="page-numbers">
+              {pageList.map((page) => (
+                <Link
+                  key={page}
+                  to={getPageUrl(page)}
+                  className={`page-number ${page === Number(pagination.page) ? 'active' : ''}`}
+                >
+                  {page}
+                </Link>
+              ))}
+            </div>
 
-        <Link to={`/boards?page=${pagination.next}`} className="page-btn">
-          <ChevronRight size={18} />
-        </Link>
-        <Link to={`/boards?page=${pagination.last}`} className="page-btn">
-          <ChevronsRight size={18} />
-        </Link>
-      </div>
+            <Link to={getPageUrl(pagination.next)} className="page-link">
+              <ChevronRight size={18} />
+            </Link>
+            <Link to={getPageUrl(pagination.last)} className="page-link">
+              <ChevronsRight size={18} />
+            </Link>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };
