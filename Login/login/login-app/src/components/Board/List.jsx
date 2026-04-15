@@ -90,10 +90,10 @@ const List = ({ list = [], pagination, currentFilters }) => {
         <div className="header-content">
           <div className="title-area">
             <span className="subtitle">DORUNNING COMMUNITY</span>
-            <h1 className="main-title">우리들의 달리기 이야기</h1>
+            <h1 className="main-title">COMMUNITY</h1>
             <p className="description">함께 뛰고 소통하며 더욱 즐거운 러닝 라이프를 만들어가세요.</p>
           </div>
-          
+
           <div className="header-actions">
             <Link to="/boards/insert" className="premium-btn btn-write" onClick={handleWriteClick}>
               <Plus size={20} />
@@ -106,8 +106,8 @@ const List = ({ list = [], pagination, currentFilters }) => {
         <div className="board-toolbar glass">
           <div className="categories">
             {categories.map(cat => (
-              <button 
-                key={cat} 
+              <button
+                key={cat}
                 className={`category-item ${currentFilters?.type === cat ? 'active' : ''}`}
                 onClick={() => handleCategoryClick(cat)}
               >
@@ -115,17 +115,17 @@ const List = ({ list = [], pagination, currentFilters }) => {
               </button>
             ))}
           </div>
-          
+
           <div className="toolbar-right">
             <div className="view-toggle">
-              <button 
+              <button
                 className={`toggle-btn ${viewMode === 'list' ? 'active' : ''}`}
                 onClick={() => setViewMode('list')}
                 title="리스트 형태로 보기"
               >
                 <ListIcon size={18} />
               </button>
-              <button 
+              <button
                 className={`toggle-btn ${viewMode === 'grid' ? 'active' : ''}`}
                 onClick={() => setViewMode('grid')}
                 title="그리드 형태로 보기"
@@ -133,12 +133,12 @@ const List = ({ list = [], pagination, currentFilters }) => {
                 <LayoutGrid size={18} />
               </button>
             </div>
-            
+
             <form className="search-box" onSubmit={handleSearchSubmit}>
               <Search size={18} className="search-icon" />
-              <input 
-                type="text" 
-                placeholder="검색어를 입력하세요..." 
+              <input
+                type="text"
+                placeholder="검색어를 입력하세요..."
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
               />
@@ -174,7 +174,7 @@ const List = ({ list = [], pagination, currentFilters }) => {
                     {board.type || '자유'}
                   </span>
                 </div>
-                
+
                 <div className="item-thumb-wrapper">
                   <img
                     src={board.file?.filePath || noImage}
@@ -193,7 +193,7 @@ const List = ({ list = [], pagination, currentFilters }) => {
                     )}
                   </Link>
                 </div>
-                
+
                 <div className="item-writer">
                   <div className="avatar-mini">
                     <User size={14} />

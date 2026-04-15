@@ -48,12 +48,12 @@
   }
 }
 
-.search-input-wrapper {
+.marathon-page .search-input-wrapper {
   position: relative;
   flex: 1;
 }
 
-.search-icon {
+.marathon-page .search-icon {
   position: absolute;
   left: 14px;
   top: 50%;
@@ -62,7 +62,7 @@
   pointer-events: none;
 }
 
-.marathon-filters .form-control {
+.marathon-page .marathon-filters .form-control {
   padding-left: 40px;
 }
 

@@ -56,7 +56,7 @@ const EventPage = () => {
             <header className="event-header">
                 <div className="pulse-circle"></div>
                 <h1><Trophy size={48} className="text-primary" style={{ verticalAlign: 'middle', marginRight: '16px' }} /> {currentMonth.toUpperCase()} CHALLENGE</h1>
-                <p>이번 달, 가장 꾸준히 달린 러너는 누구일까요? 🏃‍♂️💨</p>
+                <p>이번 달, 가장 꾸준히 달린 러너는 누구일까요?</p>
                 <div className="challenge-goal glass-card">
                     <h3>🏆 이달의 공동 목표 : 50km 달성하기 🏆</h3>
                     <p>Dorunning 크루들과 함께 한계에 도전하고 명예의 전당 최상단을 차지하세요!</p>
@@ -65,9 +65,9 @@ const EventPage = () => {
 
             <div className="leaderboard-container glass-card">
                 <h2 className="leaderboard-title"><TrendingUp size={28} style={{ marginRight: '10px', verticalAlign: 'middle', color: 'var(--primary)' }} /> 월간 명예의 전당</h2>
-                
+
                 {leaderboard.length === 0 ? (
-                    <div className="no-data"><Info size={32} /> 아직 이번 달 기록이 없습니다.<br/>첫 번째 주인공이 되어보세요!</div>
+                    <div className="no-data"><Info size={32} /> 아직 이번 달 기록이 없습니다.<br />첫 번째 주인공이 되어보세요!</div>
                 ) : (
                     <>
                         {/* Podium Section for Top 3 */}
@@ -141,11 +141,11 @@ const EventPage = () => {
                                     <div key={user.username} className={`leaderboard-item ${isCurrentUser ? 'current-user-rank' : ''}`}>
                                         <div className="rank-badge rank-other">{index + 1}</div>
                                         {avatarSrc ? (
-                                            <img 
-                                                src={avatarSrc} 
-                                                alt={user.username} 
+                                            <img
+                                                src={avatarSrc}
+                                                alt={user.username}
                                                 className="player-avatar"
-                                                onError={(e) => { e.target.src = noImage; }} 
+                                                onError={(e) => { e.target.src = noImage; }}
                                             />
                                         ) : (
                                             <div className="player-avatar fallback-icon-small"><UserCircle size={32} color="#888" strokeWidth={1.5} /></div>

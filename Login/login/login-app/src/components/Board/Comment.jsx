@@ -27,7 +27,7 @@ const Avatar = ({ name, url, size = 36 }) => {
 
   const bgColor = getAvatarColor(name || '?');
   const initial = name ? name.charAt(0).toUpperCase() : '?';
-  
+
   return (
     <div className="comment-avatar" style={{
       width: size, height: size, borderRadius: '50%', backgroundColor: bgColor, color: 'white',
@@ -149,25 +149,25 @@ const Comment = ({ comment, onUpdate, onDelete, onCreateReply, isReply = false, 
           )}
         </div>
       </div>
-      
+
       {!isReply && comment.allReplies && comment.allReplies.length > 0 && (
         <div className="replies-container">
-          <button 
-            className="replies-toggle" 
+          <button
+            className="replies-toggle"
             onClick={() => setShowReplies(!showReplies)}
           >
             {showReplies ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
             <span>답글 {comment.allReplies.length}개 {showReplies ? '숨기기' : '보기'}</span>
           </button>
-          
+
           {showReplies && (
             <div className="replies-list">
               {comment.allReplies.map(reply => (
-                <Comment 
-                  key={reply.id} 
-                  comment={reply} 
-                  onUpdate={onUpdate} 
-                  onDelete={onDelete} 
+                <Comment
+                  key={reply.id}
+                  comment={reply}
+                  onUpdate={onUpdate}
+                  onDelete={onDelete}
                   onCreateReply={onCreateReply}
                   isReply={true}
                   avatars={avatars}
@@ -197,13 +197,13 @@ const CommentList = ({ comments, onCreate, onUpdate, onDelete }) => {
           .from('users')
           .select('no, avatar_url')
           .in('no', uniqueUserNos);
-          
+
         if (!error && data) {
           const map = {};
           data.forEach(p => { if (p.avatar_url) map[p.no] = p.avatar_url; });
           setAvatars(map);
         }
-      } catch(e) {
+      } catch (e) {
         console.warn('Failed to load profile avatars', e);
       }
     };
@@ -257,8 +257,8 @@ const CommentList = ({ comments, onCreate, onUpdate, onDelete }) => {
   return (
     <div className="premium-comments-section">
       <h3 className="section-title">
-        <MessageSquare size={18} /> 
-        <span>댓글 이야기</span> 
+        <MessageSquare size={18} />
+        <span>COMMENT</span>
         <span className="count">{(comments?.length || 0)}</span>
       </h3>
 
@@ -288,11 +288,11 @@ const CommentList = ({ comments, onCreate, onUpdate, onDelete }) => {
       <div className="comment-list">
         {commentRoots && commentRoots.length > 0 ? (
           commentRoots.map(comment => (
-            <Comment 
-              key={comment.id} 
-              comment={comment} 
-              onUpdate={onUpdate} 
-              onDelete={onDelete} 
+            <Comment
+              key={comment.id}
+              comment={comment}
+              onUpdate={onUpdate}
+              onDelete={onDelete}
               onCreateReply={handleCreateReply}
               avatars={avatars}
             />

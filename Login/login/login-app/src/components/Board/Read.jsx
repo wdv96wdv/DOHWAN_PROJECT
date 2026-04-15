@@ -79,7 +79,7 @@ const Read = ({
                 <span>{new Date(board.createdAt).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
               </div>
             </div>
-            
+
             {user_no && user_no === board.userNo && (
               <div className="owner-actions">
                 <Link to={`/boards/update/${id}`} className="meta-action-btn edit" title="수정">
@@ -101,11 +101,11 @@ const Read = ({
             {/* Main Post Image (if exists) */}
             {fileList.find(f => f.type === 'MAIN') && (
               <div className="main-post-image" style={{ marginBottom: '32px', textAlign: 'center' }}>
-                <img 
-                  src={fileList.find(f => f.type === 'MAIN').filePath} 
-                  alt="Main Post" 
-                  style={{ 
-                    borderRadius: 'var(--radius-xl)', 
+                <img
+                  src={fileList.find(f => f.type === 'MAIN').filePath}
+                  alt="Main Post"
+                  style={{
+                    borderRadius: 'var(--radius-xl)',
                     boxShadow: '0 12px 24px rgba(0,0,0,0.1)',
                     maxWidth: '100%',
                     height: 'auto'
@@ -148,9 +148,6 @@ const Read = ({
 
         {/* Post Footer */}
         <footer className="read-post-footer">
-          <div className="comment-area-header">
-            <h3 className="section-title"><MessageSquare size={18} /> 댓글 이야기</h3>
-          </div>
           <div className="comment-wrapper">
             <CommentList
               comments={commentList}

@@ -4150,3 +4150,653 @@
 2026-04-15 01:48:14 [http-nio-8080-exec-4] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
 2026-04-15 01:48:14 [http-nio-8080-exec-9] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
 2026-04-15 01:48:14 [http-nio-8080-exec-4] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-15 01:56:30 [restartedMain] INFO  com.dohwan.login.LoginApplication - Starting LoginApplication using Java 17.0.16 with PID 21952 (C:\web\Dohwan_project\Login\login\build\classes\java\main started by user in C:\web\Dohwan_project\Login\login)
+2026-04-15 01:56:30 [restartedMain] INFO  com.dohwan.login.LoginApplication - The following 1 profile is active: "prod"
+2026-04-15 01:56:31 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-04-15 01:56:31 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-04-15 01:56:32 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-04-15 01:56:32 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 286 ms. Found 11 JPA repository interfaces.
+2026-04-15 01:56:33 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-04-15 01:56:33 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-04-15 01:56:33 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.44]
+2026-04-15 01:56:34 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-04-15 01:56:34 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 3053 ms
+2026-04-15 01:56:34 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-04-15 01:56:34 [restartedMain] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.26.Final
+2026-04-15 01:56:34 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-04-15 01:56:34 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-04-15 01:56:35 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-04-15 01:56:35 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@24266a8e
+2026-04-15 01:56:35 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-04-15 01:56:35 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-04-15 01:56:35 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 17.6
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-04-15 01:56:37 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-04-15 01:56:37 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-04-15 01:56:38 [restartedMain] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-04-15 01:56:41 [restartedMain] INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page: class path resource [static/index.html]
+2026-04-15 01:56:42 [restartedMain] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name userDetailServiceImpl
+2026-04-15 01:56:42 [restartedMain] INFO  c.dohwan.login.config.SecurityConfig - CORS 설정 - Allowed Origins: [https://dorunning.vercel.app, http://localhost:5173, http://127.0.0.1:5173, http://localhost:3000, http://127.0.0.1:3000]
+2026-04-15 01:56:42 [restartedMain] INFO  c.dohwan.login.config.SecurityConfig - CORS 설정 - Allowed Methods: [GET, POST, PUT, DELETE, OPTIONS]
+2026-04-15 01:56:42 [restartedMain] INFO  c.dohwan.login.config.SecurityConfig - CORS 설정 - Allowed Headers: [Authorization, Content-Type, X-Requested-With, Accept, Origin, Access-Control-Request-Method, Access-Control-Request-Headers]
+2026-04-15 01:56:42 [restartedMain] INFO  c.dohwan.login.config.SecurityConfig - CORS 설정 - Exposed Headers: [Authorization]
+2026-04-15 01:56:42 [restartedMain] INFO  c.dohwan.login.config.SecurityConfig - CORS 설정 - Allow Credentials: true
+2026-04-15 01:56:42 [restartedMain] INFO  c.dohwan.login.config.SecurityConfig - CORS 설정 - CORS Configuration Source 등록 완료
+2026-04-15 01:56:42 [restartedMain] WARN  o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2026-04-15 01:56:42 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2026-04-15 01:56:42 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-04-15 01:56:42 [restartedMain] INFO  com.dohwan.login.LoginApplication - Started LoginApplication in 12.742 seconds (process running for 13.386)
+2026-04-15 01:58:33 [http-nio-8080-exec-2] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-04-15 01:58:33 [http-nio-8080-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-04-15 01:58:33 [http-nio-8080-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms
+2026-04-15 01:58:33 [http-nio-8080-exec-4] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /boards from 0:0:0:0:0:0:0:1
+2026-04-15 01:58:33 [http-nio-8080-exec-3] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /boards from 0:0:0:0:0:0:0:1
+2026-04-15 01:58:33 [http-nio-8080-exec-4] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-15 01:58:33 [http-nio-8080-exec-3] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-15 01:58:33 [http-nio-8080-exec-4] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 01:58:33 [http-nio-8080-exec-3] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 01:58:33 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-15 01:58:33 [http-nio-8080-exec-4] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-15 01:58:33 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /boards
+2026-04-15 01:58:33 [http-nio-8080-exec-4] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /boards
+2026-04-15 01:58:33 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-15 01:58:33 [http-nio-8080-exec-4] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-15 01:58:33 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-15 01:58:33 [http-nio-8080-exec-4] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-15 01:58:33 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 01:58:33 [http-nio-8080-exec-4] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 01:58:34 [http-nio-8080-exec-4] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-15 01:58:34 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-15 01:58:34 [http-nio-8080-exec-3] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-15 01:58:34 [http-nio-8080-exec-4] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-15 01:58:37 [http-nio-8080-exec-6] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /boards/a943cf13-57b8-4d95-8206-b07f4856a2e8 from 0:0:0:0:0:0:0:1
+2026-04-15 01:58:37 [http-nio-8080-exec-6] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-15 01:58:37 [http-nio-8080-exec-6] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 01:58:37 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-15 01:58:37 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /boards/a943cf13-57b8-4d95-8206-b07f4856a2e8
+2026-04-15 01:58:37 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-15 01:58:37 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-15 01:58:37 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 01:58:37 [http-nio-8080-exec-10] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /boards/a943cf13-57b8-4d95-8206-b07f4856a2e8/comments from 0:0:0:0:0:0:0:1
+2026-04-15 01:58:37 [http-nio-8080-exec-5] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /boards/a943cf13-57b8-4d95-8206-b07f4856a2e8 from 0:0:0:0:0:0:0:1
+2026-04-15 01:58:37 [http-nio-8080-exec-5] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-15 01:58:37 [http-nio-8080-exec-5] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 01:58:37 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-15 01:58:37 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /boards/a943cf13-57b8-4d95-8206-b07f4856a2e8
+2026-04-15 01:58:37 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-15 01:58:37 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-15 01:58:37 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 01:58:37 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-15 01:58:37 [http-nio-8080-exec-10] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-15 01:58:37 [http-nio-8080-exec-10] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 01:58:37 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-15 01:58:37 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /boards/a943cf13-57b8-4d95-8206-b07f4856a2e8/comments
+2026-04-15 01:58:37 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-15 01:58:37 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-15 01:58:37 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 01:58:37 [http-nio-8080-exec-9] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /boards/a943cf13-57b8-4d95-8206-b07f4856a2e8/comments from 0:0:0:0:0:0:0:1
+2026-04-15 01:58:37 [http-nio-8080-exec-9] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-15 01:58:37 [http-nio-8080-exec-9] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 01:58:37 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-15 01:58:37 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /boards/a943cf13-57b8-4d95-8206-b07f4856a2e8/comments
+2026-04-15 01:58:37 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-15 01:58:37 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-15 01:58:37 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 01:58:37 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-15 01:58:37 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-15 01:58:37 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-15 01:58:37 [http-nio-8080-exec-10] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-15 01:58:37 [http-nio-8080-exec-9] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-15 01:58:37 [http-nio-8080-exec-5] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-15 01:58:37 [http-nio-8080-exec-6] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-15 01:58:42 [http-nio-8080-exec-8] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /records/leaderboard from 0:0:0:0:0:0:0:1
+2026-04-15 01:58:42 [http-nio-8080-exec-8] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-15 01:58:42 [http-nio-8080-exec-8] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 01:58:42 [http-nio-8080-exec-8] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-15 01:58:42 [http-nio-8080-exec-8] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /records/leaderboard
+2026-04-15 01:58:42 [http-nio-8080-exec-8] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-15 01:58:42 [http-nio-8080-exec-8] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-15 01:58:42 [http-nio-8080-exec-8] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 01:58:42 [http-nio-8080-exec-7] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /records/leaderboard from 0:0:0:0:0:0:0:1
+2026-04-15 01:58:42 [http-nio-8080-exec-7] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-15 01:58:42 [http-nio-8080-exec-7] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 01:58:42 [http-nio-8080-exec-7] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-15 01:58:42 [http-nio-8080-exec-7] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /records/leaderboard
+2026-04-15 01:58:42 [http-nio-8080-exec-7] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-15 01:58:42 [http-nio-8080-exec-7] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-15 01:58:42 [http-nio-8080-exec-7] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 01:58:42 [http-nio-8080-exec-7] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-15 01:58:42 [http-nio-8080-exec-8] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-15 01:58:42 [http-nio-8080-exec-7] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-15 01:58:42 [http-nio-8080-exec-8] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-15 01:58:44 [http-nio-8080-exec-9] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /boards from 0:0:0:0:0:0:0:1
+2026-04-15 01:58:44 [http-nio-8080-exec-9] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-15 01:58:44 [http-nio-8080-exec-9] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 01:58:44 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-15 01:58:44 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /boards
+2026-04-15 01:58:44 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-15 01:58:44 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-15 01:58:44 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 01:58:44 [http-nio-8080-exec-10] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /boards from 0:0:0:0:0:0:0:1
+2026-04-15 01:58:44 [http-nio-8080-exec-10] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-15 01:58:44 [http-nio-8080-exec-10] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 01:58:44 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-15 01:58:44 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /boards
+2026-04-15 01:58:44 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-15 01:58:44 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-15 01:58:44 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 01:58:44 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-15 01:58:44 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-15 01:58:44 [http-nio-8080-exec-10] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-15 01:58:44 [http-nio-8080-exec-9] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-15 12:36:18 [restartedMain] INFO  com.dohwan.login.LoginApplication - Starting LoginApplication using Java 17.0.16 with PID 21492 (C:\web\Dohwan_project\Login\login\build\classes\java\main started by user in C:\web\Dohwan_project\Login\login)
+2026-04-15 12:36:18 [restartedMain] INFO  com.dohwan.login.LoginApplication - The following 1 profile is active: "prod"
+2026-04-15 12:36:18 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-04-15 12:36:18 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-04-15 12:36:23 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-04-15 12:36:24 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 1119 ms. Found 11 JPA repository interfaces.
+2026-04-15 12:36:27 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-04-15 12:36:27 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-04-15 12:36:27 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.44]
+2026-04-15 12:36:27 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-04-15 12:36:27 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 9123 ms
+2026-04-15 12:36:28 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-04-15 12:36:28 [restartedMain] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.26.Final
+2026-04-15 12:36:28 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-04-15 12:36:29 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-04-15 12:36:29 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-04-15 12:36:31 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@4b26f615
+2026-04-15 12:36:31 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-04-15 12:36:31 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-04-15 12:36:31 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 17.6
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-04-15 12:36:36 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-04-15 12:36:36 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-04-15 12:36:37 [restartedMain] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-04-15 12:36:42 [restartedMain] INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page: class path resource [static/index.html]
+2026-04-15 12:36:42 [restartedMain] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name userDetailServiceImpl
+2026-04-15 12:36:42 [restartedMain] INFO  c.dohwan.login.config.SecurityConfig - CORS 설정 - Allowed Origins: [https://dorunning.vercel.app, http://localhost:5173, http://127.0.0.1:5173, http://localhost:3000, http://127.0.0.1:3000]
+2026-04-15 12:36:42 [restartedMain] INFO  c.dohwan.login.config.SecurityConfig - CORS 설정 - Allowed Methods: [GET, POST, PUT, DELETE, OPTIONS]
+2026-04-15 12:36:42 [restartedMain] INFO  c.dohwan.login.config.SecurityConfig - CORS 설정 - Allowed Headers: [Authorization, Content-Type, X-Requested-With, Accept, Origin, Access-Control-Request-Method, Access-Control-Request-Headers]
+2026-04-15 12:36:42 [restartedMain] INFO  c.dohwan.login.config.SecurityConfig - CORS 설정 - Exposed Headers: [Authorization]
+2026-04-15 12:36:42 [restartedMain] INFO  c.dohwan.login.config.SecurityConfig - CORS 설정 - Allow Credentials: true
+2026-04-15 12:36:42 [restartedMain] INFO  c.dohwan.login.config.SecurityConfig - CORS 설정 - CORS Configuration Source 등록 완료
+2026-04-15 12:36:43 [restartedMain] WARN  o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2026-04-15 12:36:43 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2026-04-15 12:36:43 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-04-15 12:36:43 [restartedMain] INFO  com.dohwan.login.LoginApplication - Started LoginApplication in 29.634 seconds (process running for 31.381)
+2026-04-15 12:36:44 [http-nio-8080-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-04-15 12:36:44 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-04-15 12:36:44 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 6 ms
+2026-04-15 12:36:44 [http-nio-8080-exec-4] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /boards from 0:0:0:0:0:0:0:1
+2026-04-15 12:36:44 [http-nio-8080-exec-4] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-15 12:36:44 [http-nio-8080-exec-4] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:36:44 [http-nio-8080-exec-4] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-15 12:36:44 [http-nio-8080-exec-4] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /boards
+2026-04-15 12:36:44 [http-nio-8080-exec-4] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-15 12:36:44 [http-nio-8080-exec-4] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-15 12:36:44 [http-nio-8080-exec-4] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:36:44 [http-nio-8080-exec-3] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /boards from 0:0:0:0:0:0:0:1
+2026-04-15 12:36:44 [http-nio-8080-exec-3] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-15 12:36:44 [http-nio-8080-exec-3] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:36:44 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-15 12:36:44 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /boards
+2026-04-15 12:36:44 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-15 12:36:44 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-15 12:36:44 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:36:45 [http-nio-8080-exec-4] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-15 12:36:45 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-15 12:36:46 [http-nio-8080-exec-4] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-15 12:36:46 [http-nio-8080-exec-3] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-15 12:36:46 [http-nio-8080-exec-5] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /boards from 0:0:0:0:0:0:0:1
+2026-04-15 12:36:46 [http-nio-8080-exec-5] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-15 12:36:46 [http-nio-8080-exec-5] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:36:46 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-15 12:36:46 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /boards
+2026-04-15 12:36:46 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-15 12:36:46 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-15 12:36:46 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:36:46 [http-nio-8080-exec-8] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /boards from 0:0:0:0:0:0:0:1
+2026-04-15 12:36:46 [http-nio-8080-exec-8] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-15 12:36:46 [http-nio-8080-exec-8] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:36:46 [http-nio-8080-exec-8] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-15 12:36:46 [http-nio-8080-exec-8] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /boards
+2026-04-15 12:36:46 [http-nio-8080-exec-8] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-15 12:36:46 [http-nio-8080-exec-8] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-15 12:36:46 [http-nio-8080-exec-8] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:36:46 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-15 12:36:47 [http-nio-8080-exec-8] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-15 12:36:47 [http-nio-8080-exec-5] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-15 12:36:47 [http-nio-8080-exec-8] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-15 12:36:50 [http-nio-8080-exec-4] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /boards/d4b52b40-fb5b-47e5-bef4-deaed4c58adb/comments from 0:0:0:0:0:0:0:1
+2026-04-15 12:36:50 [http-nio-8080-exec-4] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-15 12:36:50 [http-nio-8080-exec-4] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:36:50 [http-nio-8080-exec-4] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-15 12:36:50 [http-nio-8080-exec-4] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /boards/d4b52b40-fb5b-47e5-bef4-deaed4c58adb/comments
+2026-04-15 12:36:50 [http-nio-8080-exec-4] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-15 12:36:50 [http-nio-8080-exec-4] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-15 12:36:50 [http-nio-8080-exec-4] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:36:50 [http-nio-8080-exec-3] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /boards/d4b52b40-fb5b-47e5-bef4-deaed4c58adb from 0:0:0:0:0:0:0:1
+2026-04-15 12:36:50 [http-nio-8080-exec-3] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-15 12:36:50 [http-nio-8080-exec-6] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /boards/d4b52b40-fb5b-47e5-bef4-deaed4c58adb from 0:0:0:0:0:0:0:1
+2026-04-15 12:36:50 [http-nio-8080-exec-6] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-15 12:36:50 [http-nio-8080-exec-6] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:36:50 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-15 12:36:50 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /boards/d4b52b40-fb5b-47e5-bef4-deaed4c58adb
+2026-04-15 12:36:50 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-15 12:36:50 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-15 12:36:50 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:36:50 [http-nio-8080-exec-7] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /boards/d4b52b40-fb5b-47e5-bef4-deaed4c58adb/comments from 0:0:0:0:0:0:0:1
+2026-04-15 12:36:50 [http-nio-8080-exec-7] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-15 12:36:50 [http-nio-8080-exec-3] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:36:50 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-15 12:36:50 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /boards/d4b52b40-fb5b-47e5-bef4-deaed4c58adb
+2026-04-15 12:36:50 [http-nio-8080-exec-7] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:36:50 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-15 12:36:50 [http-nio-8080-exec-7] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-15 12:36:50 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-15 12:36:50 [http-nio-8080-exec-7] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /boards/d4b52b40-fb5b-47e5-bef4-deaed4c58adb/comments
+2026-04-15 12:36:50 [http-nio-8080-exec-7] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-15 12:36:50 [http-nio-8080-exec-7] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-15 12:36:50 [http-nio-8080-exec-7] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:36:50 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:36:50 [http-nio-8080-exec-4] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-15 12:36:50 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-15 12:36:50 [http-nio-8080-exec-7] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-15 12:36:50 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-15 12:36:50 [http-nio-8080-exec-4] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-15 12:36:50 [http-nio-8080-exec-7] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-15 12:36:50 [http-nio-8080-exec-6] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-15 12:36:50 [http-nio-8080-exec-3] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-15 12:37:50 [http-nio-8080-exec-2] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /boards/d4b52b40-fb5b-47e5-bef4-deaed4c58adb from 0:0:0:0:0:0:0:1
+2026-04-15 12:37:50 [http-nio-8080-exec-2] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-15 12:37:50 [http-nio-8080-exec-2] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:37:50 [http-nio-8080-exec-2] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-15 12:37:50 [http-nio-8080-exec-2] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /boards/d4b52b40-fb5b-47e5-bef4-deaed4c58adb
+2026-04-15 12:37:50 [http-nio-8080-exec-2] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-15 12:37:50 [http-nio-8080-exec-4] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /boards/d4b52b40-fb5b-47e5-bef4-deaed4c58adb from 0:0:0:0:0:0:0:1
+2026-04-15 12:37:50 [http-nio-8080-exec-2] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-15 12:37:50 [http-nio-8080-exec-4] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-15 12:37:50 [http-nio-8080-exec-2] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:37:50 [http-nio-8080-exec-4] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:37:50 [http-nio-8080-exec-4] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-15 12:37:50 [http-nio-8080-exec-4] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /boards/d4b52b40-fb5b-47e5-bef4-deaed4c58adb
+2026-04-15 12:37:50 [http-nio-8080-exec-4] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-15 12:37:50 [http-nio-8080-exec-4] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-15 12:37:50 [http-nio-8080-exec-4] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:37:50 [http-nio-8080-exec-7] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /boards/d4b52b40-fb5b-47e5-bef4-deaed4c58adb/comments from 0:0:0:0:0:0:0:1
+2026-04-15 12:37:50 [http-nio-8080-exec-7] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-15 12:37:50 [http-nio-8080-exec-7] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:37:50 [http-nio-8080-exec-7] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-15 12:37:50 [http-nio-8080-exec-7] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /boards/d4b52b40-fb5b-47e5-bef4-deaed4c58adb/comments
+2026-04-15 12:37:50 [http-nio-8080-exec-7] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-15 12:37:50 [http-nio-8080-exec-7] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-15 12:37:50 [http-nio-8080-exec-7] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:37:50 [http-nio-8080-exec-1] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /boards/d4b52b40-fb5b-47e5-bef4-deaed4c58adb/comments from 0:0:0:0:0:0:0:1
+2026-04-15 12:37:50 [http-nio-8080-exec-1] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-15 12:37:50 [http-nio-8080-exec-1] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:37:50 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-15 12:37:50 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /boards/d4b52b40-fb5b-47e5-bef4-deaed4c58adb/comments
+2026-04-15 12:37:50 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-15 12:37:50 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-15 12:37:50 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:37:50 [http-nio-8080-exec-4] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-15 12:37:50 [http-nio-8080-exec-2] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-15 12:37:50 [http-nio-8080-exec-7] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-15 12:37:50 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-15 12:37:50 [http-nio-8080-exec-4] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-15 12:37:50 [http-nio-8080-exec-7] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-15 12:37:50 [http-nio-8080-exec-1] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-15 12:37:51 [http-nio-8080-exec-2] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-15 12:38:49 [http-nio-8080-exec-9] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /boards from 0:0:0:0:0:0:0:1
+2026-04-15 12:38:49 [http-nio-8080-exec-10] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /boards from 0:0:0:0:0:0:0:1
+2026-04-15 12:38:49 [http-nio-8080-exec-9] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-15 12:38:49 [http-nio-8080-exec-10] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-15 12:38:49 [http-nio-8080-exec-9] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:38:49 [http-nio-8080-exec-10] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:38:49 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-15 12:38:49 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-15 12:38:49 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /boards
+2026-04-15 12:38:49 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /boards
+2026-04-15 12:38:49 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-15 12:38:49 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-15 12:38:49 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-15 12:38:49 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-15 12:38:49 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:38:49 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:38:49 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-15 12:38:49 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-15 12:38:49 [http-nio-8080-exec-10] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-15 12:38:49 [http-nio-8080-exec-9] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-15 12:38:51 [http-nio-8080-exec-6] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /records/leaderboard from 0:0:0:0:0:0:0:1
+2026-04-15 12:38:51 [http-nio-8080-exec-3] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /records/leaderboard from 0:0:0:0:0:0:0:1
+2026-04-15 12:38:51 [http-nio-8080-exec-6] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-15 12:38:51 [http-nio-8080-exec-3] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-15 12:38:51 [http-nio-8080-exec-6] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:38:51 [http-nio-8080-exec-3] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:38:51 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-15 12:38:51 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-15 12:38:51 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /records/leaderboard
+2026-04-15 12:38:51 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-15 12:38:51 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-15 12:38:51 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:38:51 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /records/leaderboard
+2026-04-15 12:38:51 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-15 12:38:51 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-15 12:38:51 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:38:51 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-15 12:38:51 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-15 12:38:51 [http-nio-8080-exec-6] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-15 12:38:51 [http-nio-8080-exec-3] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-15 12:38:52 [http-nio-8080-exec-9] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /boards from 0:0:0:0:0:0:0:1
+2026-04-15 12:38:52 [http-nio-8080-exec-9] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-15 12:38:52 [http-nio-8080-exec-9] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:38:52 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-15 12:38:52 [http-nio-8080-exec-7] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /boards from 0:0:0:0:0:0:0:1
+2026-04-15 12:38:52 [http-nio-8080-exec-7] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-15 12:38:52 [http-nio-8080-exec-7] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:38:52 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /boards
+2026-04-15 12:38:52 [http-nio-8080-exec-7] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-15 12:38:52 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-15 12:38:52 [http-nio-8080-exec-7] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /boards
+2026-04-15 12:38:52 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-15 12:38:52 [http-nio-8080-exec-7] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-15 12:38:52 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:38:52 [http-nio-8080-exec-7] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-15 12:38:52 [http-nio-8080-exec-7] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:38:52 [http-nio-8080-exec-7] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-15 12:38:52 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-15 12:38:53 [http-nio-8080-exec-7] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-15 12:38:53 [http-nio-8080-exec-9] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-15 12:38:54 [http-nio-8080-exec-10] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /records from 0:0:0:0:0:0:0:1
+2026-04-15 12:38:54 [http-nio-8080-exec-4] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /records from 0:0:0:0:0:0:0:1
+2026-04-15 12:38:54 [http-nio-8080-exec-6] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /records from 0:0:0:0:0:0:0:1
+2026-04-15 12:38:54 [http-nio-8080-exec-6] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-15 12:38:54 [http-nio-8080-exec-6] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:38:54 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-15 12:38:54 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /records
+2026-04-15 12:38:54 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-15 12:38:54 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-15 12:38:54 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:38:54 [http-nio-8080-exec-4] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-15 12:38:54 [http-nio-8080-exec-4] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:38:54 [http-nio-8080-exec-4] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-15 12:38:54 [http-nio-8080-exec-4] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /records
+2026-04-15 12:38:54 [http-nio-8080-exec-4] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-15 12:38:54 [http-nio-8080-exec-4] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-15 12:38:54 [http-nio-8080-exec-4] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:38:54 [http-nio-8080-exec-5] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /records from 0:0:0:0:0:0:0:1
+2026-04-15 12:38:54 [http-nio-8080-exec-5] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-15 12:38:54 [http-nio-8080-exec-5] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:38:54 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-15 12:38:54 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /records
+2026-04-15 12:38:54 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-15 12:38:54 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-15 12:38:54 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:38:54 [http-nio-8080-exec-10] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-15 12:38:54 [http-nio-8080-exec-10] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:38:54 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-15 12:38:54 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /records
+2026-04-15 12:38:54 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-15 12:38:54 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-15 12:38:54 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:38:54 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-15 12:38:54 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-15 12:38:54 [http-nio-8080-exec-4] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-15 12:38:54 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-15 12:38:54 [http-nio-8080-exec-10] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-15 12:38:54 [http-nio-8080-exec-5] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-15 12:38:54 [http-nio-8080-exec-5] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /run/goal from 0:0:0:0:0:0:0:1
+2026-04-15 12:38:54 [http-nio-8080-exec-5] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-15 12:38:54 [http-nio-8080-exec-5] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:38:54 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-15 12:38:54 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /run/goal
+2026-04-15 12:38:54 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-15 12:38:54 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-15 12:38:54 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:38:54 [http-nio-8080-exec-9] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /records from 0:0:0:0:0:0:0:1
+2026-04-15 12:38:54 [http-nio-8080-exec-9] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-15 12:38:54 [http-nio-8080-exec-9] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:38:54 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-15 12:38:54 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /records
+2026-04-15 12:38:54 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-15 12:38:54 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-15 12:38:54 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:38:54 [http-nio-8080-exec-4] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-15 12:38:54 [http-nio-8080-exec-6] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-15 12:38:54 [http-nio-8080-exec-1] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /run/goal from 0:0:0:0:0:0:0:1
+2026-04-15 12:38:54 [http-nio-8080-exec-1] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-15 12:38:54 [http-nio-8080-exec-1] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:38:54 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-15 12:38:54 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /run/goal
+2026-04-15 12:38:54 [http-nio-8080-exec-10] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /records from 0:0:0:0:0:0:0:1
+2026-04-15 12:38:54 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-15 12:38:54 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-15 12:38:54 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-15 12:38:54 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:38:54 [http-nio-8080-exec-10] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-15 12:38:54 [http-nio-8080-exec-10] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:38:54 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-15 12:38:54 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /records
+2026-04-15 12:38:54 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-15 12:38:54 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-15 12:38:54 [http-nio-8080-exec-7] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /records from 0:0:0:0:0:0:0:1
+2026-04-15 12:38:54 [http-nio-8080-exec-7] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-15 12:38:54 [http-nio-8080-exec-7] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:38:54 [http-nio-8080-exec-7] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-15 12:38:54 [http-nio-8080-exec-7] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /records
+2026-04-15 12:38:54 [http-nio-8080-exec-7] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-15 12:38:54 [http-nio-8080-exec-7] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-15 12:38:54 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:38:54 [http-nio-8080-exec-5] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-15 12:38:54 [http-nio-8080-exec-7] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:38:54 [http-nio-8080-exec-8] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /records from 0:0:0:0:0:0:0:1
+2026-04-15 12:38:54 [http-nio-8080-exec-8] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-15 12:38:54 [http-nio-8080-exec-8] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:38:54 [http-nio-8080-exec-8] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-15 12:38:54 [http-nio-8080-exec-8] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /records
+2026-04-15 12:38:54 [http-nio-8080-exec-8] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-15 12:38:54 [http-nio-8080-exec-8] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-15 12:38:54 [http-nio-8080-exec-8] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:38:54 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-15 12:38:54 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-15 12:38:54 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-15 12:38:54 [http-nio-8080-exec-8] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-15 12:38:54 [http-nio-8080-exec-7] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-15 12:38:54 [http-nio-8080-exec-9] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-15 12:38:54 [http-nio-8080-exec-10] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-15 12:38:54 [http-nio-8080-exec-8] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-15 12:38:54 [http-nio-8080-exec-1] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-15 12:38:54 [http-nio-8080-exec-7] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-15 12:38:55 [http-nio-8080-exec-3] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /api/marathons from 0:0:0:0:0:0:0:1
+2026-04-15 12:38:55 [http-nio-8080-exec-3] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-15 12:38:55 [http-nio-8080-exec-3] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: null
+2026-04-15 12:38:55 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-15 12:38:55 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /api/marathons
+2026-04-15 12:38:55 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-15 12:38:55 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-15 12:38:55 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: null
+2026-04-15 12:38:55 [http-nio-8080-exec-3] INFO  c.d.l.Controller.MarathonController - >>> [GET] /marathons - 마라톤 목록 조회 요청
+2026-04-15 12:38:55 [http-nio-8080-exec-6] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /api/marathons from 0:0:0:0:0:0:0:1
+2026-04-15 12:38:55 [http-nio-8080-exec-6] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-15 12:38:55 [http-nio-8080-exec-6] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: null
+2026-04-15 12:38:55 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-15 12:38:55 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /api/marathons
+2026-04-15 12:38:55 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-15 12:38:55 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-15 12:38:55 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: null
+2026-04-15 12:38:55 [http-nio-8080-exec-6] INFO  c.d.l.Controller.MarathonController - >>> [GET] /marathons - 마라톤 목록 조회 요청
+2026-04-15 12:38:55 [http-nio-8080-exec-6] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-15 12:38:55 [http-nio-8080-exec-3] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-15 12:38:57 [http-nio-8080-exec-5] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /boards from 0:0:0:0:0:0:0:1
+2026-04-15 12:38:57 [http-nio-8080-exec-5] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-15 12:38:57 [http-nio-8080-exec-5] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:38:57 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-15 12:38:57 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /boards
+2026-04-15 12:38:57 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-15 12:38:57 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-15 12:38:57 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:38:57 [http-nio-8080-exec-9] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /boards from 0:0:0:0:0:0:0:1
+2026-04-15 12:38:57 [http-nio-8080-exec-9] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-15 12:38:57 [http-nio-8080-exec-9] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:38:57 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-15 12:38:57 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /boards
+2026-04-15 12:38:57 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-15 12:38:57 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-15 12:38:57 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:38:57 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-15 12:38:57 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-15 12:38:57 [http-nio-8080-exec-9] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-15 12:38:57 [http-nio-8080-exec-5] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-15 12:39:43 [http-nio-8080-exec-6] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /boards/d4b52b40-fb5b-47e5-bef4-deaed4c58adb/comments from 0:0:0:0:0:0:0:1
+2026-04-15 12:39:43 [http-nio-8080-exec-6] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-15 12:39:43 [http-nio-8080-exec-6] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:39:43 [http-nio-8080-exec-3] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /boards/d4b52b40-fb5b-47e5-bef4-deaed4c58adb from 0:0:0:0:0:0:0:1
+2026-04-15 12:39:43 [http-nio-8080-exec-3] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-15 12:39:43 [http-nio-8080-exec-3] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:39:43 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-15 12:39:43 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /boards/d4b52b40-fb5b-47e5-bef4-deaed4c58adb
+2026-04-15 12:39:43 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-15 12:39:43 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-15 12:39:43 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:39:43 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-15 12:39:43 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /boards/d4b52b40-fb5b-47e5-bef4-deaed4c58adb/comments
+2026-04-15 12:39:43 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-15 12:39:43 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-15 12:39:43 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:39:43 [http-nio-8080-exec-4] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /boards/d4b52b40-fb5b-47e5-bef4-deaed4c58adb from 0:0:0:0:0:0:0:1
+2026-04-15 12:39:43 [http-nio-8080-exec-4] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-15 12:39:43 [http-nio-8080-exec-4] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:39:43 [http-nio-8080-exec-4] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-15 12:39:43 [http-nio-8080-exec-4] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /boards/d4b52b40-fb5b-47e5-bef4-deaed4c58adb
+2026-04-15 12:39:43 [http-nio-8080-exec-4] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-15 12:39:43 [http-nio-8080-exec-4] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-15 12:39:43 [http-nio-8080-exec-4] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:39:43 [http-nio-8080-exec-2] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /boards/d4b52b40-fb5b-47e5-bef4-deaed4c58adb/comments from 0:0:0:0:0:0:0:1
+2026-04-15 12:39:43 [http-nio-8080-exec-2] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-15 12:39:43 [http-nio-8080-exec-2] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:39:43 [http-nio-8080-exec-2] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-15 12:39:43 [http-nio-8080-exec-2] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /boards/d4b52b40-fb5b-47e5-bef4-deaed4c58adb/comments
+2026-04-15 12:39:43 [http-nio-8080-exec-2] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-15 12:39:43 [http-nio-8080-exec-2] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-15 12:39:43 [http-nio-8080-exec-2] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:39:43 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-15 12:39:43 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-15 12:39:43 [http-nio-8080-exec-4] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-15 12:39:43 [http-nio-8080-exec-2] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-15 12:39:43 [http-nio-8080-exec-6] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-15 12:39:43 [http-nio-8080-exec-2] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-15 12:39:43 [http-nio-8080-exec-4] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-15 12:39:43 [http-nio-8080-exec-3] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-15 12:39:50 [http-nio-8080-exec-10] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /boards from 0:0:0:0:0:0:0:1
+2026-04-15 12:39:50 [http-nio-8080-exec-10] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-15 12:39:50 [http-nio-8080-exec-10] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:39:50 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-15 12:39:50 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /boards
+2026-04-15 12:39:50 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-15 12:39:50 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-15 12:39:50 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:39:50 [http-nio-8080-exec-8] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /boards from 0:0:0:0:0:0:0:1
+2026-04-15 12:39:50 [http-nio-8080-exec-8] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-15 12:39:50 [http-nio-8080-exec-8] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:39:50 [http-nio-8080-exec-8] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-15 12:39:50 [http-nio-8080-exec-8] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /boards
+2026-04-15 12:39:50 [http-nio-8080-exec-8] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-15 12:39:50 [http-nio-8080-exec-8] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-15 12:39:50 [http-nio-8080-exec-8] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:39:50 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-15 12:39:50 [http-nio-8080-exec-8] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-15 12:39:50 [http-nio-8080-exec-8] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-15 12:39:50 [http-nio-8080-exec-10] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-15 12:40:18 [http-nio-8080-exec-5] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /boards from 0:0:0:0:0:0:0:1
+2026-04-15 12:40:18 [http-nio-8080-exec-5] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-15 12:40:18 [http-nio-8080-exec-5] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:40:18 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-15 12:40:18 [http-nio-8080-exec-8] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /boards from 0:0:0:0:0:0:0:1
+2026-04-15 12:40:18 [http-nio-8080-exec-8] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-15 12:40:18 [http-nio-8080-exec-8] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:40:18 [http-nio-8080-exec-8] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-15 12:40:18 [http-nio-8080-exec-8] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /boards
+2026-04-15 12:40:18 [http-nio-8080-exec-8] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-15 12:40:18 [http-nio-8080-exec-8] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-15 12:40:18 [http-nio-8080-exec-8] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:40:18 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /boards
+2026-04-15 12:40:18 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-15 12:40:18 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-15 12:40:18 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:40:19 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-15 12:40:19 [http-nio-8080-exec-8] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-15 12:40:19 [http-nio-8080-exec-5] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-15 12:40:19 [http-nio-8080-exec-8] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-15 12:40:21 [http-nio-8080-exec-7] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /records/leaderboard from 0:0:0:0:0:0:0:1
+2026-04-15 12:40:21 [http-nio-8080-exec-7] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-15 12:40:21 [http-nio-8080-exec-7] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:40:21 [http-nio-8080-exec-7] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-15 12:40:21 [http-nio-8080-exec-7] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /records/leaderboard
+2026-04-15 12:40:21 [http-nio-8080-exec-7] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-15 12:40:21 [http-nio-8080-exec-7] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-15 12:40:21 [http-nio-8080-exec-7] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:40:21 [http-nio-8080-exec-6] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /records/leaderboard from 0:0:0:0:0:0:0:1
+2026-04-15 12:40:21 [http-nio-8080-exec-6] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-15 12:40:21 [http-nio-8080-exec-6] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:40:21 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-15 12:40:21 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /records/leaderboard
+2026-04-15 12:40:21 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-15 12:40:21 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-15 12:40:21 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:40:21 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-15 12:40:21 [http-nio-8080-exec-7] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-15 12:40:21 [http-nio-8080-exec-7] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-15 12:40:21 [http-nio-8080-exec-6] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-15 12:40:22 [http-nio-8080-exec-3] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /boards from 0:0:0:0:0:0:0:1
+2026-04-15 12:40:22 [http-nio-8080-exec-3] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-15 12:40:22 [http-nio-8080-exec-3] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:40:22 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-15 12:40:22 [http-nio-8080-exec-9] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /boards from 0:0:0:0:0:0:0:1
+2026-04-15 12:40:22 [http-nio-8080-exec-9] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-15 12:40:22 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /boards
+2026-04-15 12:40:22 [http-nio-8080-exec-9] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:40:22 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-15 12:40:22 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-15 12:40:22 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /boards
+2026-04-15 12:40:22 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-15 12:40:22 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-15 12:40:22 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:40:22 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-15 12:40:22 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:40:22 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-15 12:40:22 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-15 12:40:22 [http-nio-8080-exec-9] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-15 12:40:22 [http-nio-8080-exec-3] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-15 12:40:23 [http-nio-8080-exec-10] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /records/leaderboard from 0:0:0:0:0:0:0:1
+2026-04-15 12:40:23 [http-nio-8080-exec-10] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-15 12:40:23 [http-nio-8080-exec-10] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:40:23 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-15 12:40:23 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /records/leaderboard
+2026-04-15 12:40:23 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-15 12:40:23 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-15 12:40:23 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:40:23 [http-nio-8080-exec-1] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /records/leaderboard from 0:0:0:0:0:0:0:1
+2026-04-15 12:40:23 [http-nio-8080-exec-1] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-15 12:40:23 [http-nio-8080-exec-1] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:40:23 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-15 12:40:23 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /records/leaderboard
+2026-04-15 12:40:23 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-15 12:40:23 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-15 12:40:23 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-15 12:40:23 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-15 12:40:23 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-15 12:40:23 [http-nio-8080-exec-10] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-15 12:40:23 [http-nio-8080-exec-1] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
