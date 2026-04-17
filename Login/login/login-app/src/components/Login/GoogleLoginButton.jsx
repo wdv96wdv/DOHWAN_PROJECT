@@ -36,7 +36,7 @@ const GoogleLoginButton = () => {
     return (
         <button className="btn-social-login google" onClick={handleLogin}>
             <img src={googleIcon} alt="Google" />
-            <span>Google로 로그인</span>
+            <span>Google 로그인</span>
         </button>
     );
 };

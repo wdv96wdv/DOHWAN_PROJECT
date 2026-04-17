@@ -82,6 +82,15 @@ const Home = () => {
       .catch(err => console.error("Failed to fetch marathons on home:", err));
   }, []);
 
+  useEffect(() => {
+    if (upcomingMarathons.length > 0) {
+      // Swiper가 렌더링 된 후 AOS 레이아웃을 다시 계산하도록 함
+      setTimeout(() => {
+        AOS.refresh();
+      }, 100);
+    }
+  }, [upcomingMarathons]);
+
   return (
     <div className="home-page">
       {/* Hero Section */}
@@ -109,8 +118,8 @@ const Home = () => {
       </section>
 
       {/* Marathon Schedule Carousel */}
-      <section className="marathon-carousel-section" data-aos="fade-up">
-        <div className="section-header">
+      <section className="marathon-carousel-section">
+        <div className="home-section-header" data-aos="fade-up">
            <div className="section-badge">ACCEPTING NOW</div>
            <h2>현재 접수 중인 마라톤 일정</h2>
            <p>당신의 도전을 기다리고 있는 다가오는 경기들을 확인하세요</p>
@@ -118,10 +127,16 @@ const Home = () => {
         
         {upcomingMarathons.length > 0 ? (
           <Swiper
+            key={upcomingMarathons.length}
             effect={'coverflow'}
             grabCursor={true}
             centeredSlides={true}
             slidesPerView={'auto'}
+            spaceBetween={30}
+            centeredSlidesBounds={true}
+            observer={true}
+            observeParents={true}
+            watchSlidesProgress={true}
             coverflowEffect={{
               rotate: 15,
               stretch: 0,
