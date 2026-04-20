@@ -6,16 +6,19 @@ async function generateSitemap() {
   const links = [
     { url: '/', changefreq: 'daily', priority: 1.0 },
     { url: '/login', changefreq: 'weekly', priority: 0.8 },
-    { url: '/register', changefreq: 'weekly', priority: 0.8 },
+    { url: '/join', changefreq: 'weekly', priority: 0.8 },
     { url: '/about', changefreq: 'monthly', priority: 0.7 },
     { url: '/calendar', changefreq: 'monthly', priority: 0.7 },
     { url: '/contact', changefreq: 'monthly', priority: 0.7 },
     { url: '/course', changefreq: 'monthly', priority: 0.7 },
     { url: '/event', changefreq: 'monthly', priority: 0.7 },
-    { url: '/marathon', changefreq: 'monthly', priority: 0.7 },
-    { url: '/privacy', changefreq: 'monthly', priority: 0.7 },
-    { url: '/wishlist', changefreq: 'monthly', priority: 0.7 },
-    { url: '/board/list', changefreq: 'daily', priority: 0.9 },
+    { url: '/marathon', changefreq: 'daily', priority: 0.9 },
+    { url: '/privacy', changefreq: 'monthly', priority: 0.5 },
+    { url: '/wishlist', changefreq: 'monthly', priority: 0.6 },
+    { url: '/boards', changefreq: 'daily', priority: 0.8 },
+    { url: '/performance', changefreq: 'weekly', priority: 0.8 },
+    { url: '/recommend', changefreq: 'weekly', priority: 0.8 },
+    { url: '/record', changefreq: 'weekly', priority: 0.7 },
     // Add other pages here
   ];
 
