@@ -45,10 +45,10 @@ async function generateSitemap() {
   // 2. 게시판 데이터 가져오기
   const { data: boards } = await supabase
     .from('boards')
-    .select('no, created_at');
+    .select('id, created_at');
 
   const boardLinks = (boards || []).map(b => ({
-    url: `/boards/${b.no}`,
+    url: `/boards/${b.id}`,
     changefreq: 'daily',
     priority: 0.7,
     lastmod: b.created_at
