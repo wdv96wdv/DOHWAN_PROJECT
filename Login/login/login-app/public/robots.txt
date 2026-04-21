@@ -1,4 +1,17 @@
 User-agent: *
 Allow: /
+# 검색 노출이 불필요한 페이지 차단
+Disallow: /login
+Disallow: /join
+Disallow: /user
+Disallow: /wishlist
+Disallow: /record
+Disallow: /admin
+Disallow: /boards/insert
+Disallow: /boards/update/
+Disallow: /recommend/result
+
+User-agent: Yeti
+Allow: /
 
 Sitemap: https://dorunning.vercel.app/sitemap.xml
