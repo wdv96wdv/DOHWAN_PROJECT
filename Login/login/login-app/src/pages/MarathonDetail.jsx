@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import axios from 'axios';
 import { 
   Calendar, 
@@ -54,6 +55,22 @@ const MarathonDetail = () => {
 
     return (
         <div className="container marathon-detail-page">
+            <Helmet>
+                <title>{marathon.title} - Dorunning</title>
+                <meta name="description" content={`${marathon.location}에서 열리는 ${marathon.title} 상세 정보입니다. 접수 기간: ${marathon.start_date} ~ ${marathon.end_date}`} />
+                
+                {/* Open Graph / KakaoTalk */}
+                <meta property="og:title" content={`${marathon.title} - 마라톤 일정`} />
+                <meta property="og:description" content={`${marathon.race_date} ${marathon.location} 개최. 종목: ${marathon.type?.join(', ')}`} />
+                {marathon.poster_url && <meta property="og:image" content={marathon.poster_url} />}
+                <meta property="og:url" content={window.location.href} />
+
+                {/* Twitter */}
+                <meta name="twitter:title" content={marathon.title} />
+                <meta name="twitter:description" content={`${marathon.race_date} ${marathon.location} 개최.`} />
+                {marathon.poster_url && <meta name="twitter:image" content={marathon.poster_url} />}
+            </Helmet>
+
             <button className="back-btn" onClick={() => navigate(-1)}>
                 <ArrowLeft size={20} /> 뒤로가기
             </button>

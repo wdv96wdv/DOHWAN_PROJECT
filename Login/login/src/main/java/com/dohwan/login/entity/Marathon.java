@@ -54,4 +54,8 @@ public class Marathon {
     @JdbcTypeCode(SqlTypes.ARRAY)
     @Column(name = "type", columnDefinition = "text[]")
     private List<String> type;
+
+    @JsonProperty("poster_url")
+    @Column(name = "poster_url")
+    private String posterUrl;
 }

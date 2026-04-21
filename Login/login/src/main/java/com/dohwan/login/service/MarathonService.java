@@ -166,6 +166,13 @@ public class MarathonService {
             String raceDate = null;
             String startDate = null;
             String endDate = null;
+            String posterUrl = null;
+
+            // 2.1 메타 태그에서 OG Image 추출 (포스터 등)
+            Element ogImg = detailDoc.select("meta[property=og:image]").first();
+            if (ogImg != null) {
+                posterUrl = ogImg.attr("content");
+            }
 
             if (dateCandidates.size() >= 1) raceDate = dateCandidates.get(0);
             if (dateCandidates.size() >= 2) startDate = dateCandidates.get(1);
@@ -279,6 +286,7 @@ public class MarathonService {
             data.put("end_date", endDate);
             data.put("type", typeSet.toArray(new String[0])); 
             data.put("is_first_come", allText.contains("선착순"));
+            data.put("poster_url", posterUrl);
 
             log.info(">>> [업서트 준비] : {} (날짜: {}, 링크: {})", data.get("title"), raceDate, officialLink);
             sendToSupabase(data);
