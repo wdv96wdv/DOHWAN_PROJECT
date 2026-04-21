@@ -64,7 +64,12 @@ async function generateSitemap() {
   allLinks.forEach(link => stream.write(link));
   stream.end();
 
-  await streamToPromise(stream);
+  // sitemap 스트림과 파일 쓰기 스트림이 모두 완료될 때까지 기다림
+  await new Promise((resolve, reject) => {
+    writeStream.on('finish', resolve);
+    writeStream.on('error', reject);
+  });
+
   console.log(`sitemap.xml 생성 완료! (총 ${allLinks.length}개의 경로)`);
   process.exit(0);
 }
