@@ -7,6 +7,8 @@ import * as comments from '../../apis/comments'
 import Swal from 'sweetalert2'
 import useAuthStore from '../../store/useAuthStore'
 
+import { Helmet } from 'react-helmet-async'
+
 const ReadContainer = () => {
   const { id } = useParams()
   const navigate = useNavigate() // useNavigate 인스턴스 생성
@@ -124,16 +126,25 @@ const ReadContainer = () => {
   }, [id])
 
   return (
-    <Read
-      board={board}
-      fileList={fileList}
-      commentList={commentList}
-      onDownload={onDownload}
-      onCreateComment={onCreateComment}
-      onUpdateComment={onUpdateComment}
-      onDeleteComment={onDeleteComment}
-      onDelete={onDelete} // onDelete prop 추가
-    />
+    <>
+      <Helmet>
+        <title>{board.title || '게시글'} - Dorunning 커뮤니티</title>
+        <meta name="description" content={`${board.writer || '작성자'}님의 게시글: ${board.title}`} />
+        <meta property="og:title" content={`${board.title} - Dorunning`} />
+        <meta property="og:description" content={board.content ? board.content.substring(0, 100).replace(/<[^>]*>?/gm, '') : 'Dorunning 커뮤니티 게시글입니다.'} />
+        <meta property="og:type" content="article" />
+      </Helmet>
+      <Read
+        board={board}
+        fileList={fileList}
+        commentList={commentList}
+        onDownload={onDownload}
+        onCreateComment={onCreateComment}
+        onUpdateComment={onUpdateComment}
+        onDeleteComment={onDeleteComment}
+        onDelete={onDelete} // onDelete prop 추가
+      />
+    </>
   )
 }
 
