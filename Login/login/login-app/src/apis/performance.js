@@ -17,9 +17,17 @@ export const saveRunRecord = async (runData) => {
     ? Math.round(((runData.durationSec / 60) / runData.distanceKm) * 100)
     : null;
 
+  // 날짜와 현재 시간을 결합
+  let recordDate = new Date();
+  if (runData.date) {
+    const [year, month, day] = runData.date.split('-').map(Number);
+    const now = new Date();
+    recordDate = new Date(year, month - 1, day, now.getHours(), now.getMinutes(), now.getSeconds());
+  }
+
   // 백엔드 Records 엔티티 구조에 맞게 변환
   const recordData = {
-    runningName: runData.runningName || `러닝 기록 ${new Date(runData.recordDate || Date.now()).toLocaleDateString()}`,
+    runningName: runData.runningName || `러닝 기록 ${recordDate.toLocaleDateString()}`,
     distanceKm: runData.distanceKm || null,
     durationSec: runData.durationSec || null,
     paceMinPerKm: paceMinPerKm,
@@ -27,7 +35,7 @@ export const saveRunRecord = async (runData) => {
     cadence: runData.cadence || null,
     calories: runData.calories || null,
     note: runData.note || null,
-    recordDate: runData.recordDate ? new Date(runData.recordDate).toISOString() : new Date().toISOString(),
+    recordDate: recordDate.toISOString(),
   };
 
   const response = await api.post("/records", recordData);
@@ -43,18 +51,31 @@ export const getRunRecords = async () => {
   const data = response.data.data || [];
 
   // 프론트엔드 UI 형식으로 변환
-  const formattedData = data.map(record => ({
-    id: record.id,
-    date: record.recordDate ? new Date(record.recordDate).toISOString().split('T')[0] : null,
-    distanceKm: record.distanceKm || record.distance_km || 0,
-    durationSec: record.durationSec || record.duration_sec || 0,
-    paceMinPerKm: (record.paceMinPerKm || record.pace_min_per_km) ? ((record.paceMinPerKm || record.pace_min_per_km) / 100) : 0,
-    speedKmh: record.speedKmh || record.speed_kmh || 0,
-    calories: record.calories || 0,
-    cadence: record.cadence || null,
-    runningName: record.runningName || record.running_name || '',
-    note: record.note || null,
-  }));
+  const formattedData = data.map(record => {
+    const d = record.recordDate ? new Date(record.recordDate) : null;
+    let dateStr = null;
+    if (d) {
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      const hours = String(d.getHours()).padStart(2, '0');
+      const minutes = String(d.getMinutes()).padStart(2, '0');
+      dateStr = `${year}-${month}-${day} ${hours}:${minutes}`;
+    }
+    
+    return {
+      id: record.id,
+      date: dateStr,
+      distanceKm: record.distanceKm || record.distance_km || 0,
+      durationSec: record.durationSec || record.duration_sec || 0,
+      paceMinPerKm: (record.paceMinPerKm || record.pace_min_per_km) ? ((record.paceMinPerKm || record.pace_min_per_km) / 100) : 0,
+      speedKmh: record.speedKmh || record.speed_kmh || 0,
+      calories: record.calories || 0,
+      cadence: record.cadence || null,
+      runningName: record.runningName || record.running_name || '',
+      note: record.note || null,
+    };
+  });
 
   return { data: formattedData };
 };

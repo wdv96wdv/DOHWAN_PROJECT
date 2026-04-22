@@ -21,11 +21,20 @@ const RunTrendChart = ({ refreshKey = 0 }) => {
           .sort((a, b) => new Date(a.date || 0) - new Date(b.date || 0))
           .slice(-10);
         
-        const formatted = sorted.map(r => ({
-          date: r.date ? new Date(r.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '',
-          distance: r.distanceKm || 0,
-          pace: r.paceMinPerKm || 0
-        }));
+        const formatted = sorted.map(r => {
+          if (!r.date) return { date: '', distance: 0, pace: 0 };
+          
+          // YYYY-MM-DD HH:mm 파싱하여 로컬 데이트 객체 생성
+          const [datePart] = r.date.split(' ');
+          const [y, m, d] = datePart.split('-').map(Number);
+          const dateObj = new Date(y, m - 1, d);
+          
+          return {
+            date: dateObj.toLocaleDateString('ko-KR', { month: 'short', day: 'numeric' }),
+            distance: r.distanceKm || 0,
+            pace: r.paceMinPerKm || 0
+          };
+        });
         setChartData(formatted);
       })
       .catch(console.error);

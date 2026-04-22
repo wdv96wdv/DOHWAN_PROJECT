@@ -6,8 +6,13 @@ import useAuthStore from '../../store/useAuthStore';
 
 const RunInputForm = ({ onRecordSaved }) => {
   const userInfo = useAuthStore(state => state.userInfo);
+  const getTodayStr = () => {
+    const now = new Date();
+    return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+  };
+
   const [form, setForm] = useState({
-    date: new Date().toISOString().split('T')[0], // 오늘 날짜 기본값
+    date: getTodayStr(), // 오늘 날짜 기본값
     distanceKm: '',
     durationSec: '',
     calories: ''
@@ -40,7 +45,7 @@ const RunInputForm = ({ onRecordSaved }) => {
       
       // 폼 초기화
       setForm({
-        date: new Date().toISOString().split('T')[0],
+        date: getTodayStr(),
         distanceKm: '',
         durationSec: '',
         calories: ''
