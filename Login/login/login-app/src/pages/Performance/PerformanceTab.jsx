@@ -43,9 +43,13 @@ const PerformanceTab = () => {
       </div>
 
       <div className="widgets-grid">
-        <GoalTracker />
-        <WaterIntakeCalculator />
-        <ShareCard record={latestRecord} />
+        <div className="widgets-left">
+          <GoalTracker />
+          <WaterIntakeCalculator />
+        </div>
+        <div className="widgets-right">
+          <ShareCard record={latestRecord} />
+        </div>
       </div>
 
       <section style={{marginTop: '48px'}}>

@@ -25,6 +25,7 @@ const RunRecordList = ({ refreshKey = 0 }) => {
         <table className="board-table" style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr style={{ borderBottom: '1px solid var(--border-color)', color: 'var(--text-muted)', fontSize: '0.85rem' }}>
+              <th style={{ padding: '12px', textAlign: 'left' }}>ACTIVITY</th>
               <th style={{ padding: '12px', textAlign: 'left' }}>DATE</th>
               <th style={{ padding: '12px', textAlign: 'right' }}>DIST (KM)</th>
               <th style={{ padding: '12px', textAlign: 'right' }}>TIME (M)</th>
@@ -35,7 +36,8 @@ const RunRecordList = ({ refreshKey = 0 }) => {
           <tbody>
             {records.map((r) => (
               <tr key={r.id} style={{ borderBottom: '1px solid var(--glass-border)', fontSize: '0.9rem' }}>
-                <td style={{ padding: '12px' }}>{r.date || '-'}</td>
+                <td style={{ padding: '12px', fontWeight: '500' }}>{r.runningName || '러닝'}</td>
+                <td style={{ padding: '12px', whiteSpace: 'nowrap' }}>{r.date || '-'}</td>
                 <td style={{ padding: '12px', textAlign: 'right', fontWeight: 'bold' }}>{r.distanceKm?.toFixed(2) || '-'}</td>
                 <td style={{ padding: '12px', textAlign: 'right' }}>{r.durationSec ? (r.durationSec / 60).toFixed(1) : '-'}</td>
                 <td style={{ padding: '12px', textAlign: 'right' }}>{r.paceMinPerKm?.toFixed(2) || '-'}</td>

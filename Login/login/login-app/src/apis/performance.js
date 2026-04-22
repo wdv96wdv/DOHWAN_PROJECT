@@ -25,9 +25,19 @@ export const saveRunRecord = async (runData) => {
     recordDate = new Date(year, month - 1, day, now.getHours(), now.getMinutes(), now.getSeconds());
   }
 
+  // NRC 스타일 제목 자동 생성 함수
+  const getNrcStyleTitle = (date) => {
+    const hour = date.getHours();
+    if (hour >= 5 && hour < 11) return "아침 러닝";
+    if (hour >= 11 && hour < 14) return "오후 러닝";
+    if (hour >= 14 && hour < 17) return "오후 러닝";
+    if (hour >= 17 && hour < 21) return "저녁 러닝";
+    return "밤 러닝";
+  };
+
   // 백엔드 Records 엔티티 구조에 맞게 변환
   const recordData = {
-    runningName: runData.runningName || `러닝 기록 ${recordDate.toLocaleDateString()}`,
+    runningName: runData.runningName || getNrcStyleTitle(recordDate),
     distanceKm: runData.distanceKm || null,
     durationSec: runData.durationSec || null,
     paceMinPerKm: paceMinPerKm,

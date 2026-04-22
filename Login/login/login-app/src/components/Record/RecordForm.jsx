@@ -93,7 +93,7 @@ export default function RecordForm({ formData, setFormData, onSubmit, submitText
 
       setFormData(prev => ({
         ...prev,
-        running_name: "NRC Run - " + (data.record_date || new Date().toLocaleDateString()),
+        running_name: data.running_name || ("NRC Run - " + (data.record_date || new Date().toLocaleDateString())),
         distance_km: data.distance_km || prev.distance_km,
         duration_sec: newDurationSeconds || prev.duration_sec,
         pace_min_per_km: newPace || prev.pace_min_per_km,

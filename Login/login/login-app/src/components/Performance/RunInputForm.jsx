@@ -12,6 +12,7 @@ const RunInputForm = ({ onRecordSaved }) => {
   };
 
   const [form, setForm] = useState({
+    runningName: '', // 활동 제목
     date: getTodayStr(), // 오늘 날짜 기본값
     distanceKm: '',
     durationSec: '',
@@ -45,6 +46,7 @@ const RunInputForm = ({ onRecordSaved }) => {
       
       // 폼 초기화
       setForm({
+        runningName: '',
         date: getTodayStr(),
         distanceKm: '',
         durationSec: '',
@@ -70,6 +72,16 @@ const RunInputForm = ({ onRecordSaved }) => {
     <div className={styles.container}>
       <h2 className={styles.title}>새 러닝 기록 입력</h2>
       <form onSubmit={handleSubmit}>
+        <label>활동 제목</label>
+        <input
+          type="text"
+          name="runningName"
+          value={form.runningName}
+          onChange={handleChange}
+          className={styles.formInput}
+          placeholder="예: 아침 러닝, 한강 질주 (미입력 시 자동 생성)"
+        />
+
         <label>날짜</label>
         <input
           type="date"

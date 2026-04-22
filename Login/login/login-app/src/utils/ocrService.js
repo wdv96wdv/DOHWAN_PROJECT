@@ -35,6 +35,31 @@ const parseNRCText = (text) => {
   let date = null;
   let calories = null;
   let cadence = null;
+  let activityName = null;
+
+  // 0. 활동 제목 추출 (Activity Title)
+  // 보통 상단 시스템 레이어를 제외한 첫 번째 또는 두 번째 줄에 위치함
+  const titleCandidates = bodyLines.slice(0, 3).filter(line => {
+    const l = line.trim();
+    // 너무 짧거나, 숫자만 있거나, 날짜 형식인 것 제외
+    if (l.length < 2) return false;
+    if (/^\d/.test(l) && l.length < 10) return false; // 숫자로 시작하고 짧은 것 (거리 등) 제외
+    if (l.includes(":") || l.includes("'")) return false; // 시간/페이스 형식 제외
+    return true;
+  });
+
+  if (titleCandidates.length > 0) {
+    activityName = titleCandidates[0].trim();
+    // NRC 특유의 '러닝', '런', 'Run' 등이 포함되어 있으면 제목으로 확신
+    const nrcTitleWords = ["런", "러닝", "Run", "Running", "아침", "오후", "저녁", "밤"];
+    const hasNrcWord = nrcTitleWords.some(word => activityName.includes(word));
+    if (!hasNrcWord && titleCandidates.length > 1) {
+      const secondCandidate = titleCandidates[1].trim();
+      if (nrcTitleWords.some(word => secondCandidate.includes(word))) {
+        activityName = secondCandidate;
+      }
+    }
+  }
 
   // 1. 거리 (KM) 추출: bodyText에서 탐색
   // (\d+\.\d{2}) 패턴을 기본으로 하되, 주변에 KM/킬로미터가 있는지 우선 확인
@@ -160,6 +185,7 @@ const parseNRCText = (text) => {
     calories: calories,
     cadence: cadence,
     record_date: date,
+    running_name: activityName,
     isNRC: matchQuality !== "low", // 기존 호환성 유지
     matchQuality: matchQuality,    // 정밀 검증용 추가
     foundKeywords: foundKeywords,
