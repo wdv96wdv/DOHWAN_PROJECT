@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import html2canvas from 'html2canvas';
 import "../../assets/css/performance.css";
 import { Share2, Download, Trophy, RotateCw } from 'lucide-react';
+import Swal from 'sweetalert2';
 
 const THEMES = [
   {
@@ -63,7 +64,7 @@ const ShareCard = ({ record }) => {
       });
       
       const dataUrl = canvas.toDataURL('image/png');
-      const blob = await (await fetch(dataUrl)).blob();
+      const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
       const fileName = `dorunning-${record?.date?.split(' ')[0] || 'share'}.png`;
       const file = new File([blob], fileName, { type: 'image/png' });
 
@@ -79,7 +80,9 @@ const ShareCard = ({ record }) => {
         const link = document.createElement('a');
         link.download = fileName;
         link.href = dataUrl;
+        document.body.appendChild(link);
         link.click();
+        document.body.removeChild(link);
         
         // 모바일인 경우 알림 추가
         if (/Android|iPhone|iPad/i.test(navigator.userAgent)) {

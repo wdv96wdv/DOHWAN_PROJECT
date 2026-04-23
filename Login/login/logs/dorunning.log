@@ -2,3 +2,1070 @@
 2026-04-23 01:06:10 [restartedMain] INFO  com.dohwan.login.LoginApplication - The following 1 profile is active: "prod"
 2026-04-23 01:06:10 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
 2026-04-23 01:06:10 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-04-23 01:06:11 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-04-23 01:06:12 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 323 ms. Found 11 JPA repository interfaces.
+2026-04-23 01:06:13 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-04-23 01:06:13 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-04-23 01:06:13 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.44]
+2026-04-23 01:06:13 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-04-23 01:06:13 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 3229 ms
+2026-04-23 01:06:14 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-04-23 01:06:14 [restartedMain] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.26.Final
+2026-04-23 01:06:14 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-04-23 01:06:14 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-04-23 01:06:14 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-04-23 01:06:15 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@7466fc9
+2026-04-23 01:06:15 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-04-23 01:06:15 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-04-23 01:06:15 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 17.6
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-04-23 01:06:17 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-04-23 01:06:18 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-04-23 01:06:18 [restartedMain] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-04-23 01:06:23 [restartedMain] INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page: class path resource [static/index.html]
+2026-04-23 01:06:24 [restartedMain] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name userDetailServiceImpl
+2026-04-23 01:06:24 [restartedMain] INFO  c.dohwan.login.config.SecurityConfig - CORS 설정 - Allowed Origins: [https://dorunning.vercel.app, http://localhost:5173, http://127.0.0.1:5173, http://localhost:3000, http://127.0.0.1:3000]
+2026-04-23 01:06:24 [restartedMain] INFO  c.dohwan.login.config.SecurityConfig - CORS 설정 - Allowed Methods: [GET, POST, PUT, DELETE, OPTIONS]
+2026-04-23 01:06:24 [restartedMain] INFO  c.dohwan.login.config.SecurityConfig - CORS 설정 - Allowed Headers: [Authorization, Content-Type, X-Requested-With, Accept, Origin, Access-Control-Request-Method, Access-Control-Request-Headers]
+2026-04-23 01:06:24 [restartedMain] INFO  c.dohwan.login.config.SecurityConfig - CORS 설정 - Exposed Headers: [Authorization]
+2026-04-23 01:06:24 [restartedMain] INFO  c.dohwan.login.config.SecurityConfig - CORS 설정 - Allow Credentials: true
+2026-04-23 01:06:24 [restartedMain] INFO  c.dohwan.login.config.SecurityConfig - CORS 설정 - CORS Configuration Source 등록 완료
+2026-04-23 01:06:24 [restartedMain] WARN  o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2026-04-23 01:06:24 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2026-04-23 01:06:24 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-04-23 01:06:24 [restartedMain] INFO  com.dohwan.login.LoginApplication - Started LoginApplication in 15.154 seconds (process running for 15.81)
+2026-04-23 01:06:42 [http-nio-8080-exec-2] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-04-23 01:06:42 [http-nio-8080-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-04-23 01:06:42 [http-nio-8080-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2026-04-23 01:06:42 [http-nio-8080-exec-3] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /records from 0:0:0:0:0:0:0:1
+2026-04-23 01:06:42 [http-nio-8080-exec-3] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-23 01:06:42 [http-nio-8080-exec-3] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-23 01:06:42 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-23 01:06:42 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /records
+2026-04-23 01:06:42 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-23 01:06:42 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-23 01:06:42 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-23 01:06:43 [http-nio-8080-exec-3] ERROR c.dohwan.login.security.util.JwtUtil - 토큰 만료
+2026-04-23 01:06:43 [http-nio-8080-exec-3] WARN  c.d.l.s.filter.JwtRequestFilter - 유효하지 않은 JWT 토큰
+2026-04-23 01:06:43 [http-nio-8080-exec-3] WARN  c.dohwan.login.config.SecurityConfig - ::::: 인증 실패 (401) : /records :::::
+2026-04-23 01:06:43 [http-nio-8080-exec-3] WARN  c.dohwan.login.config.SecurityConfig - 에러 메시지: Full authentication is required to access this resource
+2026-04-23 01:06:43 [http-nio-8080-exec-3] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 401
+2026-04-23 01:06:43 [http-nio-8080-exec-5] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /records from 0:0:0:0:0:0:0:1
+2026-04-23 01:06:43 [http-nio-8080-exec-5] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-23 01:06:43 [http-nio-8080-exec-5] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-23 01:06:43 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-23 01:06:43 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /records
+2026-04-23 01:06:43 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-23 01:06:43 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-23 01:06:43 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-23 01:06:43 [http-nio-8080-exec-5] ERROR c.dohwan.login.security.util.JwtUtil - 토큰 만료
+2026-04-23 01:06:43 [http-nio-8080-exec-5] WARN  c.d.l.s.filter.JwtRequestFilter - 유효하지 않은 JWT 토큰
+2026-04-23 01:06:43 [http-nio-8080-exec-5] WARN  c.dohwan.login.config.SecurityConfig - ::::: 인증 실패 (401) : /records :::::
+2026-04-23 01:06:43 [http-nio-8080-exec-5] WARN  c.dohwan.login.config.SecurityConfig - 에러 메시지: Full authentication is required to access this resource
+2026-04-23 01:06:43 [http-nio-8080-exec-5] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 401
+2026-04-23 01:06:45 [http-nio-8080-exec-4] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /records from 0:0:0:0:0:0:0:1
+2026-04-23 01:06:45 [http-nio-8080-exec-4] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-23 01:06:45 [http-nio-8080-exec-4] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-23 01:06:45 [http-nio-8080-exec-4] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-23 01:06:45 [http-nio-8080-exec-4] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /records
+2026-04-23 01:06:45 [http-nio-8080-exec-4] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-23 01:06:45 [http-nio-8080-exec-4] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-23 01:06:45 [http-nio-8080-exec-4] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-23 01:06:45 [http-nio-8080-exec-4] ERROR c.dohwan.login.security.util.JwtUtil - 토큰 만료
+2026-04-23 01:06:45 [http-nio-8080-exec-4] WARN  c.d.l.s.filter.JwtRequestFilter - 유효하지 않은 JWT 토큰
+2026-04-23 01:06:45 [http-nio-8080-exec-4] WARN  c.dohwan.login.config.SecurityConfig - ::::: 인증 실패 (401) : /records :::::
+2026-04-23 01:06:45 [http-nio-8080-exec-4] WARN  c.dohwan.login.config.SecurityConfig - 에러 메시지: Full authentication is required to access this resource
+2026-04-23 01:06:45 [http-nio-8080-exec-4] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 401
+2026-04-23 01:06:45 [http-nio-8080-exec-6] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /records from 0:0:0:0:0:0:0:1
+2026-04-23 01:06:45 [http-nio-8080-exec-6] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-23 01:06:45 [http-nio-8080-exec-6] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-23 01:06:45 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-23 01:06:45 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /records
+2026-04-23 01:06:45 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-23 01:06:45 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-23 01:06:45 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc2NTI3MTY2fQ.-sErNTLpnEyvjzoCPvEogPjT0YPN3dUup5JW2TfYjzeE9uJFw7-VnlEYf2TTKrOzlAuHgL9o3S09nlncBLReaw
+2026-04-23 01:06:45 [http-nio-8080-exec-6] ERROR c.dohwan.login.security.util.JwtUtil - 토큰 만료
+2026-04-23 01:06:45 [http-nio-8080-exec-6] WARN  c.d.l.s.filter.JwtRequestFilter - 유효하지 않은 JWT 토큰
+2026-04-23 01:06:45 [http-nio-8080-exec-6] WARN  c.dohwan.login.config.SecurityConfig - ::::: 인증 실패 (401) : /records :::::
+2026-04-23 01:06:45 [http-nio-8080-exec-6] WARN  c.dohwan.login.config.SecurityConfig - 에러 메시지: Full authentication is required to access this resource
+2026-04-23 01:06:45 [http-nio-8080-exec-6] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 401
+2026-04-23 01:06:52 [http-nio-8080-exec-8] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] POST /auth/kakao-login from 0:0:0:0:0:0:0:1
+2026-04-23 01:06:52 [http-nio-8080-exec-8] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-23 01:06:52 [http-nio-8080-exec-8] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: null
+2026-04-23 01:06:52 [http-nio-8080-exec-8] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-23 01:06:52 [http-nio-8080-exec-8] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /auth/kakao-login
+2026-04-23 01:06:52 [http-nio-8080-exec-8] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: POST
+2026-04-23 01:06:52 [http-nio-8080-exec-8] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-23 01:06:52 [http-nio-8080-exec-8] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: null
+2026-04-23 01:06:52 [http-nio-8080-exec-8] INFO  c.d.login.Controller.LoginController - 카카오 로그인 요청 - code: 9R5xZAr9AGrR2BRhyf26Zc-BUPEQcoq_7GUeVAHv9t2YaJ9KYUBZ3gAAAAQKFxTuAAABnbXxvfGQgW3aWXatGQ
+2026-04-23 01:06:52 [http-nio-8080-exec-8] INFO  c.d.login.Controller.LoginController - 카카오 설정 확인 - ClientId exists: true, RedirectUri: http://localhost:5173/login/kakao
+2026-04-23 01:06:52 [http-nio-8080-exec-8] INFO  c.d.login.Controller.LoginController - [보안검증] ClientID 길이: 32, 값: 5406...f34f
+2026-04-23 01:06:52 [http-nio-8080-exec-8] INFO  c.d.login.Controller.LoginController - [보안검증] ClientSecret 길이: 32, 값: UK1Q...esK4
+2026-04-23 01:06:52 [http-nio-8080-exec-8] INFO  c.d.login.Controller.LoginController - 카카오 Client Secret 포함하여 요청 전송 준비 완료
+2026-04-23 01:06:54 [http-nio-8080-exec-8] INFO  c.d.login.Controller.LoginController - 카카오 프로필 변환 완료 - Email: wdv96wdv@naver.com, Avatar: http://k.kakaocdn.net/dn/ho3fO/dJMcafGgsoC/hxkJdZJybKowjqGcRHbA31/img_640x640.jpg
+2026-04-23 01:06:54 [http-nio-8080-exec-8] INFO  c.d.login.Controller.LoginController - 소셜 로그인 처리 - email: wdv96wdv@naver.com, provider: kakao
+2026-04-23 01:06:54 [http-nio-8080-exec-8] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-23 01:06:54 [http-nio-8080-exec-9] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /api/marathons from 0:0:0:0:0:0:0:1
+2026-04-23 01:06:54 [http-nio-8080-exec-9] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-23 01:06:54 [http-nio-8080-exec-9] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: null
+2026-04-23 01:06:54 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-23 01:06:54 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /api/marathons
+2026-04-23 01:06:54 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-23 01:06:54 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-23 01:06:54 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: null
+2026-04-23 01:06:54 [http-nio-8080-exec-9] INFO  c.d.l.Controller.MarathonController - >>> [GET] /marathons - 마라톤 목록 조회 요청
+2026-04-23 01:06:55 [http-nio-8080-exec-10] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /api/marathons from 0:0:0:0:0:0:0:1
+2026-04-23 01:06:55 [http-nio-8080-exec-10] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-23 01:06:55 [http-nio-8080-exec-10] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: null
+2026-04-23 01:06:55 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-23 01:06:55 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /api/marathons
+2026-04-23 01:06:55 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-23 01:06:55 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-23 01:06:55 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: null
+2026-04-23 01:06:55 [http-nio-8080-exec-10] INFO  c.d.l.Controller.MarathonController - >>> [GET] /marathons - 마라톤 목록 조회 요청
+2026-04-23 01:06:55 [http-nio-8080-exec-9] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-23 01:06:55 [http-nio-8080-exec-10] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-23 01:06:56 [http-nio-8080-exec-3] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /records from 0:0:0:0:0:0:0:1
+2026-04-23 01:06:56 [http-nio-8080-exec-3] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-23 01:06:56 [http-nio-8080-exec-3] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:06:56 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-23 01:06:56 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /records
+2026-04-23 01:06:56 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-23 01:06:56 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-23 01:06:56 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:06:56 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-23 01:06:57 [http-nio-8080-exec-3] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-23 01:06:57 [http-nio-8080-exec-5] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /records from 0:0:0:0:0:0:0:1
+2026-04-23 01:06:57 [http-nio-8080-exec-5] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-23 01:06:57 [http-nio-8080-exec-5] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:06:57 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-23 01:06:57 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /records
+2026-04-23 01:06:57 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-23 01:06:57 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-23 01:06:57 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:06:57 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-23 01:06:57 [http-nio-8080-exec-5] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-23 01:07:41 [http-nio-8080-exec-5] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /run/goal from 0:0:0:0:0:0:0:1
+2026-04-23 01:07:41 [http-nio-8080-exec-5] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-23 01:07:41 [http-nio-8080-exec-5] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:07:41 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-23 01:07:41 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /run/goal
+2026-04-23 01:07:41 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-23 01:07:41 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-23 01:07:41 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:07:41 [http-nio-8080-exec-9] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /records from 0:0:0:0:0:0:0:1
+2026-04-23 01:07:41 [http-nio-8080-exec-9] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-23 01:07:41 [http-nio-8080-exec-9] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:07:41 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-23 01:07:41 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /records
+2026-04-23 01:07:41 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-23 01:07:41 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-23 01:07:41 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:07:42 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-23 01:07:42 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-23 01:07:42 [http-nio-8080-exec-5] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-23 01:07:42 [http-nio-8080-exec-4] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /run/goal from 0:0:0:0:0:0:0:1
+2026-04-23 01:07:42 [http-nio-8080-exec-4] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-23 01:07:42 [http-nio-8080-exec-4] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:07:42 [http-nio-8080-exec-4] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-23 01:07:42 [http-nio-8080-exec-4] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /run/goal
+2026-04-23 01:07:42 [http-nio-8080-exec-4] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-23 01:07:42 [http-nio-8080-exec-4] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-23 01:07:42 [http-nio-8080-exec-4] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:07:42 [http-nio-8080-exec-9] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-23 01:07:42 [http-nio-8080-exec-2] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /records from 0:0:0:0:0:0:0:1
+2026-04-23 01:07:42 [http-nio-8080-exec-2] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-23 01:07:42 [http-nio-8080-exec-2] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:07:42 [http-nio-8080-exec-2] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-23 01:07:42 [http-nio-8080-exec-2] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /records
+2026-04-23 01:07:42 [http-nio-8080-exec-2] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-23 01:07:42 [http-nio-8080-exec-2] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-23 01:07:42 [http-nio-8080-exec-2] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:07:42 [http-nio-8080-exec-4] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-23 01:07:42 [http-nio-8080-exec-2] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-23 01:07:42 [http-nio-8080-exec-4] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-23 01:07:42 [http-nio-8080-exec-2] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-23 01:07:42 [http-nio-8080-exec-10] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /records from 0:0:0:0:0:0:0:1
+2026-04-23 01:07:42 [http-nio-8080-exec-10] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-23 01:07:42 [http-nio-8080-exec-10] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:07:42 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-23 01:07:42 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /records
+2026-04-23 01:07:42 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-23 01:07:42 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-23 01:07:42 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:07:42 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-23 01:07:42 [http-nio-8080-exec-7] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /records from 0:0:0:0:0:0:0:1
+2026-04-23 01:07:42 [http-nio-8080-exec-7] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-23 01:07:42 [http-nio-8080-exec-7] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:07:42 [http-nio-8080-exec-7] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-23 01:07:42 [http-nio-8080-exec-7] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /records
+2026-04-23 01:07:42 [http-nio-8080-exec-7] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-23 01:07:42 [http-nio-8080-exec-7] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-23 01:07:42 [http-nio-8080-exec-7] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:07:42 [http-nio-8080-exec-10] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-23 01:07:42 [http-nio-8080-exec-7] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-23 01:07:42 [http-nio-8080-exec-7] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-23 01:07:42 [http-nio-8080-exec-6] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /records from 0:0:0:0:0:0:0:1
+2026-04-23 01:07:42 [http-nio-8080-exec-6] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-23 01:07:42 [http-nio-8080-exec-6] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:07:42 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-23 01:07:42 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /records
+2026-04-23 01:07:42 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-23 01:07:42 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-23 01:07:42 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:07:42 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-23 01:07:42 [http-nio-8080-exec-6] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-23 01:07:42 [http-nio-8080-exec-8] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /records from 0:0:0:0:0:0:0:1
+2026-04-23 01:07:42 [http-nio-8080-exec-8] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-23 01:07:42 [http-nio-8080-exec-8] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:07:42 [http-nio-8080-exec-8] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-23 01:07:42 [http-nio-8080-exec-8] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /records
+2026-04-23 01:07:42 [http-nio-8080-exec-8] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-23 01:07:42 [http-nio-8080-exec-8] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-23 01:07:42 [http-nio-8080-exec-8] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:07:42 [http-nio-8080-exec-8] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-23 01:07:42 [http-nio-8080-exec-8] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-23 01:07:42 [http-nio-8080-exec-1] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /records from 0:0:0:0:0:0:0:1
+2026-04-23 01:07:42 [http-nio-8080-exec-1] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-23 01:07:42 [http-nio-8080-exec-1] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:07:42 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-23 01:07:42 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /records
+2026-04-23 01:07:42 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-23 01:07:42 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-23 01:07:42 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:07:42 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-23 01:07:42 [http-nio-8080-exec-1] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-23 01:07:42 [http-nio-8080-exec-1] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /records from 0:0:0:0:0:0:0:1
+2026-04-23 01:07:42 [http-nio-8080-exec-1] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-23 01:07:42 [http-nio-8080-exec-1] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:07:42 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-23 01:07:42 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /records
+2026-04-23 01:07:42 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-23 01:07:42 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-23 01:07:42 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:07:42 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-23 01:07:42 [http-nio-8080-exec-1] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-23 01:10:45 [http-nio-8080-exec-5] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /records from 0:0:0:0:0:0:0:1
+2026-04-23 01:10:45 [http-nio-8080-exec-5] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-23 01:10:45 [http-nio-8080-exec-5] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:10:45 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-23 01:10:45 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /records
+2026-04-23 01:10:45 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-23 01:10:45 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-23 01:10:45 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:10:45 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-23 01:10:45 [http-nio-8080-exec-5] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-23 01:11:49 [http-nio-8080-exec-10] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /records from 0:0:0:0:0:0:0:1
+2026-04-23 01:11:49 [http-nio-8080-exec-10] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-23 01:11:49 [http-nio-8080-exec-10] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:11:49 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-23 01:11:49 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /records
+2026-04-23 01:11:49 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-23 01:11:49 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-23 01:11:49 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:11:49 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-23 01:11:49 [http-nio-8080-exec-10] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-23 01:11:49 [http-nio-8080-exec-10] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /records from 0:0:0:0:0:0:0:1
+2026-04-23 01:11:49 [http-nio-8080-exec-10] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-23 01:11:49 [http-nio-8080-exec-10] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:11:49 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-23 01:11:49 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /records
+2026-04-23 01:11:49 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-23 01:11:49 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-23 01:11:49 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:11:49 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-23 01:11:49 [http-nio-8080-exec-10] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-23 01:11:49 [http-nio-8080-exec-8] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /records from 0:0:0:0:0:0:0:1
+2026-04-23 01:11:49 [http-nio-8080-exec-8] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-23 01:11:49 [http-nio-8080-exec-8] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:11:49 [http-nio-8080-exec-8] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-23 01:11:49 [http-nio-8080-exec-8] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /records
+2026-04-23 01:11:49 [http-nio-8080-exec-8] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-23 01:11:49 [http-nio-8080-exec-8] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-23 01:11:49 [http-nio-8080-exec-8] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:11:49 [http-nio-8080-exec-8] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-23 01:11:49 [http-nio-8080-exec-8] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-23 01:11:49 [http-nio-8080-exec-3] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /records from 0:0:0:0:0:0:0:1
+2026-04-23 01:11:49 [http-nio-8080-exec-3] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-23 01:11:49 [http-nio-8080-exec-3] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:11:49 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-23 01:11:49 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /records
+2026-04-23 01:11:49 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-23 01:11:49 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-23 01:11:49 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:11:49 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-23 01:11:49 [http-nio-8080-exec-3] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-23 01:11:49 [http-nio-8080-exec-1] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /records from 0:0:0:0:0:0:0:1
+2026-04-23 01:11:49 [http-nio-8080-exec-1] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-23 01:11:49 [http-nio-8080-exec-1] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:11:49 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-23 01:11:49 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /records
+2026-04-23 01:11:49 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-23 01:11:49 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-23 01:11:49 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:11:49 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-23 01:11:49 [http-nio-8080-exec-1] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-23 01:11:49 [http-nio-8080-exec-5] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /records from 0:0:0:0:0:0:0:1
+2026-04-23 01:11:49 [http-nio-8080-exec-5] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-23 01:11:49 [http-nio-8080-exec-5] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:11:49 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-23 01:11:49 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /records
+2026-04-23 01:11:49 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-23 01:11:49 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-23 01:11:49 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:11:49 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-23 01:11:49 [http-nio-8080-exec-5] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-23 01:11:49 [http-nio-8080-exec-4] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /records from 0:0:0:0:0:0:0:1
+2026-04-23 01:11:49 [http-nio-8080-exec-4] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-23 01:11:49 [http-nio-8080-exec-4] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:11:49 [http-nio-8080-exec-4] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-23 01:11:49 [http-nio-8080-exec-4] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /records
+2026-04-23 01:11:49 [http-nio-8080-exec-4] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-23 01:11:49 [http-nio-8080-exec-4] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-23 01:11:49 [http-nio-8080-exec-4] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:11:49 [http-nio-8080-exec-4] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-23 01:11:49 [http-nio-8080-exec-4] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-23 01:11:49 [http-nio-8080-exec-9] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /records from 0:0:0:0:0:0:0:1
+2026-04-23 01:11:49 [http-nio-8080-exec-9] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-23 01:11:49 [http-nio-8080-exec-9] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:11:49 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-23 01:11:49 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /records
+2026-04-23 01:11:49 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-23 01:11:49 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-23 01:11:49 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:11:49 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-23 01:11:49 [http-nio-8080-exec-9] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-23 01:11:49 [http-nio-8080-exec-6] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /records from 0:0:0:0:0:0:0:1
+2026-04-23 01:11:49 [http-nio-8080-exec-6] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-23 01:11:49 [http-nio-8080-exec-6] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:11:49 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-23 01:11:49 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /records
+2026-04-23 01:11:49 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-23 01:11:49 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-23 01:11:49 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:11:49 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-23 01:11:49 [http-nio-8080-exec-6] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-23 01:11:49 [http-nio-8080-exec-2] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /records from 0:0:0:0:0:0:0:1
+2026-04-23 01:11:49 [http-nio-8080-exec-2] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-23 01:11:49 [http-nio-8080-exec-2] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:11:49 [http-nio-8080-exec-2] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-23 01:11:49 [http-nio-8080-exec-2] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /records
+2026-04-23 01:11:49 [http-nio-8080-exec-2] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-23 01:11:49 [http-nio-8080-exec-2] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-23 01:11:49 [http-nio-8080-exec-2] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:11:49 [http-nio-8080-exec-2] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-23 01:11:49 [http-nio-8080-exec-2] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-23 01:12:28 [http-nio-8080-exec-10] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /records from 0:0:0:0:0:0:0:1
+2026-04-23 01:12:28 [http-nio-8080-exec-10] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-23 01:12:28 [http-nio-8080-exec-10] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:12:28 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-23 01:12:28 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /records
+2026-04-23 01:12:28 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-23 01:12:28 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-23 01:12:28 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:12:28 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-23 01:12:28 [http-nio-8080-exec-10] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-23 01:18:23 [http-nio-8080-exec-1] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /records from 0:0:0:0:0:0:0:1
+2026-04-23 01:18:23 [http-nio-8080-exec-1] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-23 01:18:23 [http-nio-8080-exec-1] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:18:23 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-23 01:18:23 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /records
+2026-04-23 01:18:23 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-23 01:18:23 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-23 01:18:23 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:18:23 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-23 01:18:23 [http-nio-8080-exec-1] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-23 01:18:23 [http-nio-8080-exec-8] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /records from 0:0:0:0:0:0:0:1
+2026-04-23 01:18:23 [http-nio-8080-exec-8] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-23 01:18:23 [http-nio-8080-exec-8] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:18:23 [http-nio-8080-exec-8] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-23 01:18:23 [http-nio-8080-exec-8] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /records
+2026-04-23 01:18:23 [http-nio-8080-exec-8] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-23 01:18:23 [http-nio-8080-exec-8] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-23 01:18:23 [http-nio-8080-exec-8] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:18:23 [http-nio-8080-exec-8] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-23 01:18:23 [http-nio-8080-exec-8] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-23 01:19:26 [http-nio-8080-exec-2] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /api/marathons from 0:0:0:0:0:0:0:1
+2026-04-23 01:19:26 [http-nio-8080-exec-2] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-23 01:19:26 [http-nio-8080-exec-2] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: null
+2026-04-23 01:19:26 [http-nio-8080-exec-2] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-23 01:19:26 [http-nio-8080-exec-2] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /api/marathons
+2026-04-23 01:19:26 [http-nio-8080-exec-2] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-23 01:19:26 [http-nio-8080-exec-2] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-23 01:19:26 [http-nio-8080-exec-2] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: null
+2026-04-23 01:19:26 [http-nio-8080-exec-2] INFO  c.d.l.Controller.MarathonController - >>> [GET] /marathons - 마라톤 목록 조회 요청
+2026-04-23 01:19:27 [http-nio-8080-exec-2] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-23 01:19:27 [http-nio-8080-exec-6] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /api/marathons from 0:0:0:0:0:0:0:1
+2026-04-23 01:19:27 [http-nio-8080-exec-6] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-23 01:19:27 [http-nio-8080-exec-6] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: null
+2026-04-23 01:19:27 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-23 01:19:27 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /api/marathons
+2026-04-23 01:19:27 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-23 01:19:27 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-23 01:19:27 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: null
+2026-04-23 01:19:27 [http-nio-8080-exec-6] INFO  c.d.l.Controller.MarathonController - >>> [GET] /marathons - 마라톤 목록 조회 요청
+2026-04-23 01:19:27 [http-nio-8080-exec-6] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-23 01:19:29 [http-nio-8080-exec-1] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /records from 0:0:0:0:0:0:0:1
+2026-04-23 01:19:29 [http-nio-8080-exec-1] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-23 01:19:29 [http-nio-8080-exec-1] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:19:29 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-23 01:19:29 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /records
+2026-04-23 01:19:29 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-23 01:19:29 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-23 01:19:29 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:19:29 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-23 01:19:29 [http-nio-8080-exec-1] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-23 01:19:29 [http-nio-8080-exec-8] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /records from 0:0:0:0:0:0:0:1
+2026-04-23 01:19:29 [http-nio-8080-exec-8] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-23 01:19:29 [http-nio-8080-exec-8] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:19:29 [http-nio-8080-exec-8] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-23 01:19:29 [http-nio-8080-exec-8] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /records
+2026-04-23 01:19:29 [http-nio-8080-exec-8] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-23 01:19:29 [http-nio-8080-exec-8] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-23 01:19:29 [http-nio-8080-exec-8] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:19:29 [http-nio-8080-exec-8] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-23 01:19:29 [http-nio-8080-exec-8] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-23 01:19:32 [http-nio-8080-exec-3] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /boards from 0:0:0:0:0:0:0:1
+2026-04-23 01:19:32 [http-nio-8080-exec-3] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-23 01:19:32 [http-nio-8080-exec-3] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:19:32 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-23 01:19:32 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /boards
+2026-04-23 01:19:32 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-23 01:19:32 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-23 01:19:32 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:19:32 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-23 01:19:32 [http-nio-8080-exec-3] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-23 01:19:32 [http-nio-8080-exec-4] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /boards from 0:0:0:0:0:0:0:1
+2026-04-23 01:19:32 [http-nio-8080-exec-4] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-23 01:19:32 [http-nio-8080-exec-4] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:19:32 [http-nio-8080-exec-4] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-23 01:19:32 [http-nio-8080-exec-4] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /boards
+2026-04-23 01:19:32 [http-nio-8080-exec-4] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-23 01:19:32 [http-nio-8080-exec-4] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-23 01:19:32 [http-nio-8080-exec-4] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:19:32 [http-nio-8080-exec-4] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-23 01:19:32 [http-nio-8080-exec-4] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-23 01:19:37 [http-nio-8080-exec-2] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /api/marathons from 0:0:0:0:0:0:0:1
+2026-04-23 01:19:37 [http-nio-8080-exec-2] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-23 01:19:37 [http-nio-8080-exec-2] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: null
+2026-04-23 01:19:37 [http-nio-8080-exec-2] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-23 01:19:37 [http-nio-8080-exec-2] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /api/marathons
+2026-04-23 01:19:37 [http-nio-8080-exec-2] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-23 01:19:37 [http-nio-8080-exec-2] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-23 01:19:37 [http-nio-8080-exec-2] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: null
+2026-04-23 01:19:37 [http-nio-8080-exec-2] INFO  c.d.l.Controller.MarathonController - >>> [GET] /marathons - 마라톤 목록 조회 요청
+2026-04-23 01:19:37 [http-nio-8080-exec-6] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /api/marathons from 0:0:0:0:0:0:0:1
+2026-04-23 01:19:37 [http-nio-8080-exec-6] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-23 01:19:37 [http-nio-8080-exec-6] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: null
+2026-04-23 01:19:37 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-23 01:19:37 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /api/marathons
+2026-04-23 01:19:37 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-23 01:19:37 [http-nio-8080-exec-2] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-23 01:19:37 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-23 01:19:37 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: null
+2026-04-23 01:19:37 [http-nio-8080-exec-6] INFO  c.d.l.Controller.MarathonController - >>> [GET] /marathons - 마라톤 목록 조회 요청
+2026-04-23 01:19:37 [http-nio-8080-exec-6] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-23 01:19:49 [http-nio-8080-exec-5] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /api/naver-shopping from 0:0:0:0:0:0:0:1
+2026-04-23 01:19:49 [http-nio-8080-exec-5] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-23 01:19:49 [http-nio-8080-exec-5] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:19:49 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-23 01:19:49 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /api/naver-shopping
+2026-04-23 01:19:49 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-23 01:19:49 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-23 01:19:49 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:19:49 [http-nio-8080-exec-1] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /api/wishlist from 0:0:0:0:0:0:0:1
+2026-04-23 01:19:49 [http-nio-8080-exec-1] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-23 01:19:49 [http-nio-8080-exec-1] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:19:49 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-23 01:19:49 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /api/wishlist
+2026-04-23 01:19:49 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-23 01:19:49 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-23 01:19:49 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:19:49 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-23 01:19:49 [http-nio-8080-exec-5] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-23 01:19:49 [http-nio-8080-exec-1] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-23 01:19:49 [http-nio-8080-exec-9] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /api/wishlist from 0:0:0:0:0:0:0:1
+2026-04-23 01:19:49 [http-nio-8080-exec-9] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-23 01:19:49 [http-nio-8080-exec-9] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:19:49 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-23 01:19:49 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /api/wishlist
+2026-04-23 01:19:49 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-23 01:19:49 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-23 01:19:49 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:19:49 [http-nio-8080-exec-9] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-23 01:19:49 [http-nio-8080-exec-9] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-23 01:19:49 [http-nio-8080-exec-5] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-23 01:19:49 [http-nio-8080-exec-3] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /api/naver-shopping from 0:0:0:0:0:0:0:1
+2026-04-23 01:19:49 [http-nio-8080-exec-3] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-23 01:19:49 [http-nio-8080-exec-3] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:19:49 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-23 01:19:49 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /api/naver-shopping
+2026-04-23 01:19:49 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-23 01:19:49 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-23 01:19:49 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:19:49 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-23 01:19:49 [http-nio-8080-exec-3] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-23 01:19:51 [http-nio-8080-exec-2] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /api/naver-shopping from 0:0:0:0:0:0:0:1
+2026-04-23 01:19:51 [http-nio-8080-exec-2] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-23 01:19:51 [http-nio-8080-exec-2] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:19:51 [http-nio-8080-exec-2] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-23 01:19:51 [http-nio-8080-exec-2] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /api/naver-shopping
+2026-04-23 01:19:51 [http-nio-8080-exec-2] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-23 01:19:51 [http-nio-8080-exec-2] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-23 01:19:51 [http-nio-8080-exec-2] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6Indkdjk2d2R2IiwiaWQiOiJmMzBkMDgxOS05ZjU1LTQ1NjAtODYxZi1hNzFlNTkwZjYxNmEiLCJyb2wiOlsiUk9MRV9VU0VSIl0sIm5vIjo1MiwiZXhwIjoxNzc3MzA2MDE0fQ.gSANzNHk7__igYaXbCDV_9rKkC7__eWigQLwiV_3k9dbx74lHyNkVLLhEooJdxJATZo-en-pLzvh86B5AFFvYQ
+2026-04-23 01:19:51 [http-nio-8080-exec-2] INFO  c.d.l.s.filter.JwtRequestFilter - 유효한 JWT 토큰, 인증 처리 완료. 사용자: wdv96wdv, 권한: [ROLE_USER]
+2026-04-23 01:19:51 [http-nio-8080-exec-2] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-23 01:19:53 [http-nio-8080-exec-6] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /api/marathons from 0:0:0:0:0:0:0:1
+2026-04-23 01:19:53 [http-nio-8080-exec-6] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-23 01:19:53 [http-nio-8080-exec-6] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: null
+2026-04-23 01:19:53 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-23 01:19:53 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /api/marathons
+2026-04-23 01:19:53 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-23 01:19:53 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-23 01:19:53 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: null
+2026-04-23 01:19:53 [http-nio-8080-exec-6] INFO  c.d.l.Controller.MarathonController - >>> [GET] /marathons - 마라톤 목록 조회 요청
+2026-04-23 01:19:54 [http-nio-8080-exec-7] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /api/marathons from 0:0:0:0:0:0:0:1
+2026-04-23 01:19:54 [http-nio-8080-exec-7] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
+2026-04-23 01:19:54 [http-nio-8080-exec-7] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: null
+2026-04-23 01:19:54 [http-nio-8080-exec-7] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
+2026-04-23 01:19:54 [http-nio-8080-exec-7] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /api/marathons
+2026-04-23 01:19:54 [http-nio-8080-exec-7] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
+2026-04-23 01:19:54 [http-nio-8080-exec-7] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
+2026-04-23 01:19:54 [http-nio-8080-exec-7] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: null
+2026-04-23 01:19:54 [http-nio-8080-exec-7] INFO  c.d.l.Controller.MarathonController - >>> [GET] /marathons - 마라톤 목록 조회 요청
+2026-04-23 01:19:54 [http-nio-8080-exec-6] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-23 01:19:54 [http-nio-8080-exec-7] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-04-23 03:00:00 [scheduling-1] INFO  c.d.login.service.MarathonService - >>> [병렬 수집 시작] 마라톤 데이터 크롤링...
+2026-04-23 03:00:00 [scheduling-1] INFO  c.d.login.service.MarathonService - >>> 분석 대상 URL 수: 175개
+2026-04-23 03:00:00 [pool-2-thread-4] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://mara1080.com/event/8921cdef-67fc-4e1c-9237-763520b90c80 (대회: 제30회 삼척 황영조 국제 마라톤 | 마라톤GO)
+2026-04-23 03:00:00 [pool-2-thread-3] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://blog.naver.com/npa2023/224157041339 (대회: 2026 송도 WALK & RUN | 마라톤GO)
+2026-04-23 03:00:00 [pool-2-thread-9] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://mara1080.com/event/e40f1082-eb59-40b3-9fbe-b05afe6bf741 (대회: 제4회 아산 이순신 백의종군길 마라톤 | 마라톤GO)
+2026-04-23 03:00:00 [pool-2-thread-9] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 제4회 아산 이순신 백의종군길 마라톤 (날짜: 2026-04-26, 링크: http://mara1080.com/event/e40f1082-eb59-40b3-9fbe-b05afe6bf741)
+2026-04-23 03:00:00 [pool-2-thread-1] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://cprun222k.com (대회: 제17회 성지순례222KM울트라마라톤 | 마라톤GO)
+2026-04-23 03:00:00 [pool-2-thread-1] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 제17회 성지순례222KM울트라마라톤 (날짜: 2026-04-24, 링크: http://cprun222k.com)
+2026-04-23 03:00:00 [pool-2-thread-10] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://koreatrail.net (대회: 속리산 문장대Trail running | 마라톤GO)
+2026-04-23 03:00:00 [pool-2-thread-2] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://giverun.co.kr/ (대회: 2026 GIVE RUN IN NAJU | 마라톤GO)
+2026-04-23 03:00:00 [pool-2-thread-10] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 속리산 문장대Trail running (날짜: 2026-04-26, 링크: http://koreatrail.net)
+2026-04-23 03:00:00 [pool-2-thread-3] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 송도 WALK & RUN (날짜: 2026-04-25, 링크: http://blog.naver.com/npa2023/224157041339)
+2026-04-23 03:00:00 [pool-2-thread-2] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 GIVE RUN IN NAJU (날짜: 2026-04-25, 링크: http://giverun.co.kr/)
+2026-04-23 03:00:00 [pool-2-thread-4] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 제30회 삼척 황영조 국제 마라톤 (날짜: 2026-04-25, 링크: http://mara1080.com/event/8921cdef-67fc-4e1c-9237-763520b90c80)
+2026-04-23 03:00:00 [pool-2-thread-7] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://www.bankimoonmarathon.kr/ (대회: 제20회 반기문마라톤 | 마라톤GO)
+2026-04-23 03:00:00 [pool-2-thread-7] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 제20회 반기문마라톤 (날짜: 2026-04-26, 링크: http://www.bankimoonmarathon.kr/)
+2026-04-23 03:00:00 [pool-2-thread-5] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://www.irunman.kr (대회: 패밀리 런 페스타 | 마라톤GO)
+2026-04-23 03:00:00 [pool-2-thread-5] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 패밀리 런 페스타 (날짜: 2026-04-26, 링크: http://www.irunman.kr)
+2026-04-23 03:00:00 [pool-2-thread-6] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://gmaf.kr/ (대회: 제14회 광명육상연맹회장배 건강달리기 | 마라톤GO)
+2026-04-23 03:00:00 [pool-2-thread-6] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 제14회 광명육상연맹회장배 건강달리기 (날짜: 2026-04-26, 링크: http://gmaf.kr/)
+2026-04-23 03:00:00 [pool-2-thread-8] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://홍천트레일런.com?utm_source=marathongo&utm_medium=referral (대회: 제2회 홍천트레일런 | 마라톤GO)
+2026-04-23 03:00:00 [pool-2-thread-8] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 제2회 홍천트레일런 (날짜: 2026-04-26, 링크: http://홍천트레일런.com?utm_source=marathongo&utm_medium=referral)
+2026-04-23 03:00:01 [pool-2-thread-9] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:01 [pool-2-thread-5] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:01 [pool-2-thread-6] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:01 [pool-2-thread-1] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:01 [pool-2-thread-8] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:01 [pool-2-thread-7] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:01 [pool-2-thread-4] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:01 [pool-2-thread-2] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:01 [pool-2-thread-3] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:01 [pool-2-thread-10] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:01 [pool-2-thread-6] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://www.seoulhalfmarathon.com (대회: 2026 서울하프마라톤 | 마라톤GO)
+2026-04-23 03:00:01 [pool-2-thread-6] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 서울하프마라톤 (날짜: 2026-04-26, 링크: http://www.seoulhalfmarathon.com)
+2026-04-23 03:00:01 [pool-2-thread-2] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://www.womenmarathon.co.kr (대회: 제26회 여성마라톤 | 마라톤GO)
+2026-04-23 03:00:01 [pool-2-thread-10] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://518run.com (대회: 제26회 5.18마라톤대회 | 마라톤GO)
+2026-04-23 03:00:01 [pool-2-thread-2] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 제26회 여성마라톤 (날짜: 2026-05-02, 링크: http://www.womenmarathon.co.kr)
+2026-04-23 03:00:01 [pool-2-thread-10] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 제26회 5.18마라톤대회 (날짜: 2026-05-02, 링크: http://518run.com)
+2026-04-23 03:00:01 [pool-2-thread-1] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://koreatrail.net (대회: 제2회 소백산 문장대 Trail running | 마라톤GO)
+2026-04-23 03:00:01 [pool-2-thread-1] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 제2회 소백산 문장대 Trail running (날짜: 2026-04-26, 링크: http://koreatrail.net)
+2026-04-23 03:00:01 [pool-2-thread-8] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : https://www.sc.or.kr/marathon/main.do (대회: 2026 대전 국제어린이마라톤 | 마라톤GO)
+2026-04-23 03:00:01 [pool-2-thread-8] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 대전 국제어린이마라톤 (날짜: 2026-05-02, 링크: https://www.sc.or.kr/marathon/main.do)
+2026-04-23 03:00:01 [pool-2-thread-6] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:01 [pool-2-thread-9] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://koreatrail.net (대회: 제2회 속리산 문장대 Trail running | 마라톤GO)
+2026-04-23 03:00:01 [pool-2-thread-9] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 제2회 속리산 문장대 Trail running (날짜: 2026-04-26, 링크: http://koreatrail.net)
+2026-04-23 03:00:01 [pool-2-thread-1] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:01 [pool-2-thread-2] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:01 [pool-2-thread-5] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://phrun.co.kr/ (대회: 제24회 통일기원 포항해변마라톤 | 마라톤GO)
+2026-04-23 03:00:01 [pool-2-thread-5] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 제24회 통일기원 포항해변마라톤 (날짜: 2026-04-26, 링크: http://phrun.co.kr/)
+2026-04-23 03:00:01 [pool-2-thread-4] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://runten.co.kr (대회: 2026 JUST RUN10 남양주 | 마라톤GO)
+2026-04-23 03:00:01 [pool-2-thread-4] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 JUST RUN10 남양주 (날짜: 2026-05-02, 링크: http://runten.co.kr)
+2026-04-23 03:00:01 [pool-2-thread-8] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:01 [pool-2-thread-10] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:01 [pool-2-thread-7] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://2026darangrun.org (대회: 제3회 남해다랑논마라톤 | 마라톤GO)
+2026-04-23 03:00:01 [pool-2-thread-7] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 제3회 남해다랑논마라톤 (날짜: 2026-05-02, 링크: http://2026darangrun.org)
+2026-04-23 03:00:01 [pool-2-thread-9] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:01 [pool-2-thread-8] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://my.kbstar.com/lpB731R (대회: KB스타런 | 마라톤GO)
+2026-04-23 03:00:01 [pool-2-thread-8] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : KB스타런 (날짜: 2026-05-03, 링크: http://my.kbstar.com/lpB731R)
+2026-04-23 03:00:01 [pool-2-thread-3] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://lifemarathon.co.kr/ (대회: 2026 서울 라이프마라톤 | 마라톤GO)
+2026-04-23 03:00:01 [pool-2-thread-3] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 서울 라이프마라톤 (날짜: 2026-05-02, 링크: http://lifemarathon.co.kr/)
+2026-04-23 03:00:01 [pool-2-thread-9] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://goobne-ovenrun.com (대회: 2026 굽네 오븐런 마라톤대회 | 마라톤GO)
+2026-04-23 03:00:01 [pool-2-thread-9] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 굽네 오븐런 마라톤대회 (날짜: 2026-05-03, 링크: http://goobne-ovenrun.com)
+2026-04-23 03:00:01 [pool-2-thread-5] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:01 [pool-2-thread-4] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:01 [pool-2-thread-5] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://daegu.therace.co.kr (대회: 2026 THE RACE DAEGU 10K | 마라톤GO)
+2026-04-23 03:00:01 [pool-2-thread-5] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 THE RACE DAEGU 10K (날짜: 2026-05-03, 링크: http://daegu.therace.co.kr)
+2026-04-23 03:00:01 [pool-2-thread-1] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://mara1080.com/event/6c02d9f8-cbe9-4a7b-ba9d-6e1f93a18b1a (대회: 제21회 보성 녹차 마라톤 | 마라톤GO)
+2026-04-23 03:00:01 [pool-2-thread-1] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 제21회 보성 녹차 마라톤 (날짜: 2026-05-02, 링크: http://mara1080.com/event/6c02d9f8-cbe9-4a7b-ba9d-6e1f93a18b1a)
+2026-04-23 03:00:01 [pool-2-thread-2] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://www.mtrailrun.kr (대회: 남한산성 트레일런 | 마라톤GO)
+2026-04-23 03:00:01 [pool-2-thread-8] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:01 [pool-2-thread-2] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 남한산성 트레일런 (날짜: 2026-05-03, 링크: http://www.mtrailrun.kr)
+2026-04-23 03:00:01 [pool-2-thread-4] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://www.urmarathon.com (대회: 2026 전국의병 마라톤 | 마라톤GO)
+2026-04-23 03:00:01 [pool-2-thread-4] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 전국의병 마라톤 (날짜: 2026-05-03, 링크: http://www.urmarathon.com)
+2026-04-23 03:00:01 [pool-2-thread-7] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:01 [pool-2-thread-3] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:01 [pool-2-thread-9] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:01 [pool-2-thread-8] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://www.koreatrail.net/home/main.php?link=event&einc=eapp&opp=20250511195054&csno=20170613133750 (대회: 제24회 불.수.사.도.북 Trail Run | 마라톤GO)
+2026-04-23 03:00:01 [pool-2-thread-8] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 제24회 불.수.사.도.북 Trail Run (날짜: 2026-05-03, 링크: http://www.koreatrail.net/home/main.php?link=event&einc=eapp&opp=20250511195054&csno=20170613133750)
+2026-04-23 03:00:01 [pool-2-thread-6] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://grrun.kr (대회: 2026 구례 지리산봄길 마라톤 | 마라톤GO)
+2026-04-23 03:00:01 [pool-2-thread-6] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 구례 지리산봄길 마라톤 (날짜: 2026-05-02, 링크: http://grrun.kr)
+2026-04-23 03:00:01 [pool-2-thread-5] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:01 [pool-2-thread-10] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://heartsignalrunfesta.com (대회: 2026 하트시그널 러닝 페스타 | 마라톤GO)
+2026-04-23 03:00:01 [pool-2-thread-10] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 하트시그널 러닝 페스타 (날짜: 2026-05-03, 링크: http://heartsignalrunfesta.com)
+2026-04-23 03:00:01 [pool-2-thread-1] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:01 [pool-2-thread-9] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://brrun.co.kr/ (대회: 2026 제23회 보령머드임해마라톤 | 마라톤GO)
+2026-04-23 03:00:01 [pool-2-thread-9] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 제23회 보령머드임해마라톤 (날짜: 2026-05-09, 링크: http://brrun.co.kr/)
+2026-04-23 03:00:01 [pool-2-thread-2] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:01 [pool-2-thread-4] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:01 [pool-2-thread-2] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://dhultra.kr (대회: 제19회 대전 한밭울트라마라톤 | 마라톤GO)
+2026-04-23 03:00:01 [pool-2-thread-2] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 제19회 대전 한밭울트라마라톤 (날짜: 2026-05-09, 링크: http://dhultra.kr)
+2026-04-23 03:00:01 [pool-2-thread-8] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:01 [pool-2-thread-6] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:01 [pool-2-thread-10] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:01 [pool-2-thread-3] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://www.solorun.kr (대회: 2026 나는 솔로런 | 마라톤GO)
+2026-04-23 03:00:01 [pool-2-thread-3] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 나는 솔로런 (날짜: 2026-05-09, 링크: http://www.solorun.kr)
+2026-04-23 03:00:01 [pool-2-thread-9] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:01 [pool-2-thread-8] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://www.barefootfesta.com/ (대회: 2026 선양마사이 마라톤 | 마라톤GO)
+2026-04-23 03:00:01 [pool-2-thread-8] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 선양마사이 마라톤 (날짜: 2026-05-10, 링크: http://www.barefootfesta.com/)
+2026-04-23 03:00:01 [pool-2-thread-1] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://www.busan-50k.com (대회: 2026 BUSAN 50K | 마라톤GO)
+2026-04-23 03:00:01 [pool-2-thread-1] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 BUSAN 50K (날짜: 2026-05-09, 링크: http://www.busan-50k.com)
+2026-04-23 03:00:01 [pool-2-thread-10] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://seoulstrollerrace.imweb.me/ (대회: 서울유아차레이스 with 신한 20+ 뛰어요 | 마라톤GO)
+2026-04-23 03:00:01 [pool-2-thread-10] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 서울유아차레이스 with 신한 20+ 뛰어요 (날짜: 2026-05-10, 링크: http://seoulstrollerrace.imweb.me/)
+2026-04-23 03:00:01 [pool-2-thread-6] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://www.tjrace.net (대회: 제22회 3대하천마라톤 | 마라톤GO)
+2026-04-23 03:00:01 [pool-2-thread-6] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 제22회 3대하천마라톤 (날짜: 2026-05-10, 링크: http://www.tjrace.net)
+2026-04-23 03:00:01 [pool-2-thread-9] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : https://www.goodrunner.co.kr/race/race.html?id=100 (대회: 2026 동해 스카이레이스 | 마라톤GO)
+2026-04-23 03:00:01 [pool-2-thread-9] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 동해 스카이레이스 (날짜: 2026-05-10, 링크: https://www.goodrunner.co.kr/race/race.html?id=100)
+2026-04-23 03:00:01 [pool-2-thread-5] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://coffeebbangrun.com/ (대회: 커피 빵빵런2026 | 마라톤GO)
+2026-04-23 03:00:01 [pool-2-thread-5] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 커피 빵빵런2026 (날짜: 2026-05-09, 링크: http://coffeebbangrun.com/)
+2026-04-23 03:00:01 [pool-2-thread-3] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:01 [pool-2-thread-2] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:01 [pool-2-thread-7] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : https://hscity-marathon.com (대회: 제27회 화성 효 마라톤 | 마라톤GO)
+2026-04-23 03:00:01 [pool-2-thread-7] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 제27회 화성 효 마라톤 (날짜: 2026-05-05, 링크: https://hscity-marathon.com)
+2026-04-23 03:00:01 [pool-2-thread-8] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:01 [pool-2-thread-1] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:01 [pool-2-thread-6] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:01 [pool-2-thread-10] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:01 [pool-2-thread-9] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:01 [pool-2-thread-7] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:01 [pool-2-thread-5] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:01 [pool-2-thread-9] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://www.run518.com (대회: RUN 518 도청가는길 | 마라톤GO)
+2026-04-23 03:00:01 [pool-2-thread-9] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : RUN 518 도청가는길 (날짜: 2026-05-16, 링크: http://www.run518.com)
+2026-04-23 03:00:01 [pool-2-thread-1] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://soaam.runningdr.co.kr/ (대회: 소아암환우돕기 제23회 서울시민마라톤 | 마라톤GO)
+2026-04-23 03:00:01 [pool-2-thread-1] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 소아암환우돕기 제23회 서울시민마라톤 (날짜: 2026-05-10, 링크: http://soaam.runningdr.co.kr/)
+2026-04-23 03:00:01 [pool-2-thread-6] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : https://www.science.go.kr/mps/0/bbs/431/moveBbsNttDetail.do?nttSn=49006 (대회: 2026 연구단지 생물다양성 마라톤 ‘다다다런’ | 마라톤GO)
+2026-04-23 03:00:01 [pool-2-thread-6] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 연구단지 생물다양성 마라톤 ‘다다다런’ (날짜: 2026-05-16, 링크: https://www.science.go.kr/mps/0/bbs/431/moveBbsNttDetail.do?nttSn=49006)
+2026-04-23 03:00:01 [pool-2-thread-4] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://www.redbull.com/kr-ko/events/wings-for-life-world-run-2026 (대회: 윙스 포 라이프 월드런 2026 | 마라톤GO)
+2026-04-23 03:00:01 [pool-2-thread-4] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 윙스 포 라이프 월드런 2026 (날짜: 2026-05-10, 링크: http://www.redbull.com/kr-ko/events/wings-for-life-world-run-2026)
+2026-04-23 03:00:01 [pool-2-thread-3] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://yonginmarathon.net (대회: 2026 용인마라톤 | 마라톤GO)
+2026-04-23 03:00:01 [pool-2-thread-3] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 용인마라톤 (날짜: 2026-05-10, 링크: http://yonginmarathon.net)
+2026-04-23 03:00:02 [pool-2-thread-9] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-1] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-4] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-8] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://cafe.naver.com/matrailrun (대회: 2026 무의도구석구석 국제트레일런 | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-8] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 무의도구석구석 국제트레일런 (날짜: 2026-05-10, 링크: http://cafe.naver.com/matrailrun)
+2026-04-23 03:00:02 [pool-2-thread-6] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-3] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-1] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://runten.co.kr (대회: 2026 JUST RUN10 양산 10k 러닝 | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-1] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 JUST RUN10 양산 10k 러닝 (날짜: 2026-05-16, 링크: http://runten.co.kr)
+2026-04-23 03:00:02 [pool-2-thread-2] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://xn--o39a84ke5dgxc710an6as16b.kr/ (대회: 2026 가정의달 하하호호마라톤 | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-2] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 가정의달 하하호호마라톤 (날짜: 2026-05-10, 링크: http://xn--o39a84ke5dgxc710an6as16b.kr/)
+2026-04-23 03:00:02 [pool-2-thread-5] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://upluslegolandrun.com/ (대회: 유플러스와 함께하는 레고랜드런 | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-5] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 유플러스와 함께하는 레고랜드런 (날짜: 2026-05-16, 링크: http://upluslegolandrun.com/)
+2026-04-23 03:00:02 [pool-2-thread-7] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://www.starbucks.co.kr/whats_new/campaign_view.do?pro_seq=3358 (대회: 오클리 커뮤니티 러닝 with 스타벅스 | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-7] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 오클리 커뮤니티 러닝 with 스타벅스 (날짜: 2026-05-16, 링크: http://www.starbucks.co.kr/whats_new/campaign_view.do?pro_seq=3358)
+2026-04-23 03:00:02 [pool-2-thread-3] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://kgseasiderun.co.kr/ (대회: 2026 제1회 경기신문 씨사이드 마라톤 | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-3] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 제1회 경기신문 씨사이드 마라톤 (날짜: 2026-05-16, 링크: http://kgseasiderun.co.kr/)
+2026-04-23 03:00:02 [pool-2-thread-6] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://run.seoul.co.kr/ (대회: 2026 서울신문 하프마라톤 | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-6] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 서울신문 하프마라톤 (날짜: 2026-05-16, 링크: http://run.seoul.co.kr/)
+2026-04-23 03:00:02 [pool-2-thread-10] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://www.sfinder.co.kr/contest/contest_info/390 (대회: 시골스런)
+2026-04-23 03:00:02 [pool-2-thread-10] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 시골스런 (날짜: 2026-05-16, 링크: http://www.sfinder.co.kr/contest/contest_info/390)
+2026-04-23 03:00:02 [pool-2-thread-8] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-1] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-2] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-7] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-3] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-5] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-6] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-10] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-9] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://www.kosa.or.kr (대회: 2026 철강마라톤 | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-9] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 철강마라톤 (날짜: 2026-05-16, 링크: http://www.kosa.or.kr)
+2026-04-23 03:00:02 [pool-2-thread-2] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://runable.me/comp/3735 (대회: 2026 GOLD RUSH RACE | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-2] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 GOLD RUSH RACE (날짜: 2026-05-17, 링크: http://runable.me/comp/3735)
+2026-04-23 03:00:02 [pool-2-thread-7] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://incheonafcup.co.kr/ (대회: 2026 인천시육상연맹배 마라톤 | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-7] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 인천시육상연맹배 마라톤 (날짜: 2026-05-17, 링크: http://incheonafcup.co.kr/)
+2026-04-23 03:00:02 [pool-2-thread-3] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://mara1080.com/event/29a34ee9-32a9-4a3b-b92f-37b3772cc183 (대회: 2026 식품안전 마라톤 | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-3] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 식품안전 마라톤 (날짜: 2026-05-17, 링크: http://mara1080.com/event/29a34ee9-32a9-4a3b-b92f-37b3772cc183)
+2026-04-23 03:00:02 [pool-2-thread-10] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://thefast.co.kr (대회: 2026 분노의질주런 용인스피드웨이 | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-10] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 분노의질주런 용인스피드웨이 (날짜: 2026-05-23, 링크: http://thefast.co.kr)
+2026-04-23 03:00:02 [pool-2-thread-6] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://www.sc.or.kr/marathon/ (대회: 2026 세이브더칠드런 국제어린이마라톤(나주) | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-6] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 세이브더칠드런 국제어린이마라톤(나주) (날짜: 2026-05-23, 링크: http://www.sc.or.kr/marathon/)
+2026-04-23 03:00:02 [pool-2-thread-4] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://mosirun.co.kr (대회: 2026 서천한산모시마라톤 | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-4] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 서천한산모시마라톤 (날짜: 2026-05-16, 링크: http://mosirun.co.kr)
+2026-04-23 03:00:02 [pool-2-thread-9] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-7] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-6] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-10] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-2] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-3] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-8] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://www.oxfamtrailwalker.or.kr/ko/ (대회: 2026 옥스팜 트레일워커 | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-8] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 옥스팜 트레일워커 (날짜: 2026-05-16, 링크: http://www.oxfamtrailwalker.or.kr/ko/)
+2026-04-23 03:00:02 [pool-2-thread-1] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://www.seoul-hangang.kr (대회: 제4회 서울한강울트라마라톤 | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-1] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 제4회 서울한강울트라마라톤 (날짜: 2026-05-16, 링크: http://www.seoul-hangang.kr)
+2026-04-23 03:00:02 [pool-2-thread-5] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://daejeon.therace.co.kr (대회: 2026 THE RACE DAEJEON 10K | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-5] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 THE RACE DAEJEON 10K (날짜: 2026-05-17, 링크: http://daejeon.therace.co.kr)
+2026-04-23 03:00:02 [pool-2-thread-4] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-10] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://roserun.kr (대회: 2026 안양천 장미꽃 축제 마라톤 | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-10] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 안양천 장미꽃 축제 마라톤 (날짜: 2026-05-23, 링크: http://roserun.kr)
+2026-04-23 03:00:02 [pool-2-thread-2] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://badamarathon.com (대회: 제31회 바다의 날 마라톤 | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-2] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 제31회 바다의 날 마라톤 (날짜: 2026-05-23, 링크: http://badamarathon.com)
+2026-04-23 03:00:02 [pool-2-thread-3] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://www.koreatrail.net/home/main.php?link=event&einc=eapp&opp=20250519153230&csno=20150930092416 (대회: 제37회 지리산 화대종주 | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-3] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 제37회 지리산 화대종주 (날짜: 2026-05-24, 링크: http://www.koreatrail.net/home/main.php?link=event&einc=eapp&opp=20250519153230&csno=20150930092416)
+2026-04-23 03:00:02 [pool-2-thread-4] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://www.burningrun.co.kr (대회: 버닝런 2026 | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-4] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 버닝런 2026 (날짜: 2026-05-25, 링크: http://www.burningrun.co.kr)
+2026-04-23 03:00:02 [pool-2-thread-1] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-5] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-8] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-10] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-2] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-6] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://www.harurun.co.kr (대회: hy하루야채와 함께하는 하루런 마라톤 | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-6] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : hy하루야채와 함께하는 하루런 마라톤 (날짜: 2026-05-23, 링크: http://www.harurun.co.kr)
+2026-04-23 03:00:02 [pool-2-thread-3] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-4] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-10] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://hrun.co.kr (대회: 제2회 한밭 런앤워크 | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-10] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 제2회 한밭 런앤워크 (날짜: 2026-05-30, 링크: http://hrun.co.kr)
+2026-04-23 03:00:02 [pool-2-thread-2] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://jejubbangrun.com/ (대회: 제주 김녕 빵빵런 2026 | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-2] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 제주 김녕 빵빵런 2026 (날짜: 2026-05-30, 링크: http://jejubbangrun.com/)
+2026-04-23 03:00:02 [pool-2-thread-7] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://korearun01.imweb.me/ (대회: 제1회 회동호 트레일런 | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-7] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 제1회 회동호 트레일런 (날짜: 2026-05-23, 링크: http://korearun01.imweb.me/)
+2026-04-23 03:00:02 [pool-2-thread-9] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : https://yonginrunfesta.com (대회: 달려용, 인 2026 RUN FESTA | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-9] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 달려용, 인 2026 RUN FESTA (날짜: 2026-05-23, 링크: https://yonginrunfesta.com)
+2026-04-23 03:00:02 [pool-2-thread-4] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://www.dawnmarathon.com (대회: 제18회 여명국제마라톤 | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-4] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 제18회 여명국제마라톤 (날짜: 2026-05-30, 링크: http://www.dawnmarathon.com)
+2026-04-23 03:00:02 [pool-2-thread-3] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://earthrun.kr (대회: 2026 지구런 : 더 아시안 하이웨이 | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-3] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 지구런 : 더 아시안 하이웨이 (날짜: 2026-05-30, 링크: http://earthrun.kr)
+2026-04-23 03:00:02 [pool-2-thread-6] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-7] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-2] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-10] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-8] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://runten.co.kr (대회: 2026 JUST RUN10 대구 10k 러닝 | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-8] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 JUST RUN10 대구 10k 러닝 (날짜: 2026-05-30, 링크: http://runten.co.kr)
+2026-04-23 03:00:02 [pool-2-thread-3] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-4] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-9] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-2] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://cafe.naver.com/ydprun1/614 (대회: 제22회 영등포구연맹회장배 육상대회 | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-2] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 제22회 영등포구연맹회장배 육상대회 (날짜: 2026-05-31, 링크: http://cafe.naver.com/ydprun1/614)
+2026-04-23 03:00:02 [pool-2-thread-9] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://www.bsama.co.kr/ (대회: 2026 백양산숲길건강달리기 | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-9] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 백양산숲길건강달리기 (날짜: 2026-05-31, 링크: http://www.bsama.co.kr/)
+2026-04-23 03:00:02 [pool-2-thread-3] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://forms.gle/GgxNLeTT9bNoPgwz7 (대회: 2026 고래마라톤 | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-3] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 고래마라톤 (날짜: 2026-05-31, 링크: http://forms.gle/GgxNLeTT9bNoPgwz7)
+2026-04-23 03:00:02 [pool-2-thread-5] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : https://gangnam-marathon.com (대회: 2026 강남 하프레이스 | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-5] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 강남 하프레이스 (날짜: 2026-05-30, 링크: https://gangnam-marathon.com)
+2026-04-23 03:00:02 [pool-2-thread-8] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-1] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://nightrun.busan.com (대회: 2026 야반도주 in Busan | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-1] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 야반도주 in Busan (날짜: 2026-05-30, 링크: http://nightrun.busan.com)
+2026-04-23 03:00:02 [pool-2-thread-6] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://geoje100.creatorlink.net/ (대회: 제13회 거제100K | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-6] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 제13회 거제100K (날짜: 2026-05-30, 링크: http://geoje100.creatorlink.net/)
+2026-04-23 03:00:02 [pool-2-thread-2] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-5] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-9] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-3] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-2] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://mara1080.com/event/d9909060-99e2-49ff-9112-0dc6c7c4d1db (대회: 전마협 창단25주년기념 2026금산월드런마라톤 | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-2] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 전마협 창단25주년기념 2026금산월드런마라톤 (날짜: 2026-05-31, 링크: http://mara1080.com/event/d9909060-99e2-49ff-9112-0dc6c7c4d1db)
+2026-04-23 03:00:02 [pool-2-thread-4] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://gwangju.therace.co.kr (대회: 2026 THE RACE GWANGJU 10K | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-4] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 THE RACE GWANGJU 10K (날짜: 2026-05-31, 링크: http://gwangju.therace.co.kr)
+2026-04-23 03:00:02 [pool-2-thread-7] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://samsamis.com (대회: 2026 삼삼트레일런 | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-7] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 삼삼트레일런 (날짜: 2026-05-30, 링크: http://samsamis.com)
+2026-04-23 03:00:02 [pool-2-thread-10] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://bamseom.com (대회: 제4회 밤섬 마라톤 | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-10] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 제4회 밤섬 마라톤 (날짜: 2026-05-31, 링크: http://bamseom.com)
+2026-04-23 03:00:02 [pool-2-thread-1] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-6] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-8] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://경주시육상연맹.com?utm_source=marathongo&utm_medium=referral (대회: 2026년 독도수호를 위한 동호인마라톤 | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-8] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026년 독도수호를 위한 동호인마라톤 (날짜: 2026-05-31, 링크: http://경주시육상연맹.com?utm_source=marathongo&utm_medium=referral)
+2026-04-23 03:00:02 [pool-2-thread-7] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-4] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-2] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-10] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-7] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://ccpmarathon.kr/math/index.php (대회: 2026 춘천봄내마라톤 | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-7] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 춘천봄내마라톤 (날짜: 2026-06-06, 링크: http://ccpmarathon.kr/math/index.php)
+2026-04-23 03:00:02 [pool-2-thread-5] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://www.ndru200.co.kr/ (대회: 2026 물사랑 낙동강 200km울트라마라톤 | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-5] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 물사랑 낙동강 200km울트라마라톤 (날짜: 2026-06-05, 링크: http://www.ndru200.co.kr/)
+2026-04-23 03:00:02 [pool-2-thread-3] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://citygasonrun.com (대회: 2026 도시가스 트레일 온 런 강원 | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-3] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 도시가스 트레일 온 런 강원 (날짜: 2026-06-06, 링크: http://citygasonrun.com)
+2026-04-23 03:00:02 [pool-2-thread-8] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-10] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://koreatrail.net (대회: 제9회한국 남한산성 TRAIL RUNNING | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-10] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 제9회한국 남한산성 TRAIL RUNNING (날짜: 2026-06-06, 링크: http://koreatrail.net)
+2026-04-23 03:00:02 [pool-2-thread-9] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://simsimrun.com (대회: 2026 백산수 심심런 | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-9] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 백산수 심심런 (날짜: 2026-06-06, 링크: http://simsimrun.com)
+2026-04-23 03:00:02 [pool-2-thread-7] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-6] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://ktra.kr (대회: 2026 한라산 트레일러닝 | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-6] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 한라산 트레일러닝 (날짜: 2026-06-06, 링크: http://ktra.kr)
+2026-04-23 03:00:02 [pool-2-thread-2] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://koreatrail.net (대회: 제9회남한산성TRAILRUNNING | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-2] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 제9회남한산성TRAILRUNNING (날짜: 2026-06-06, 링크: http://koreatrail.net)
+2026-04-23 03:00:02 [pool-2-thread-5] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-3] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-8] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://koreatrail.net (대회: 2026 남한산성 1222트레일러닝 | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-4] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://blueskyrun.kr/ (대회: 2026 푸른하늘런 | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-8] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 남한산성 1222트레일러닝 (날짜: 2026-06-06, 링크: http://koreatrail.net)
+2026-04-23 03:00:02 [pool-2-thread-4] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 푸른하늘런 (날짜: 2026-06-06, 링크: http://blueskyrun.kr/)
+2026-04-23 03:00:02 [pool-2-thread-10] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-5] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://marathonworld.kr/?utm_source=marathongo&utm_medium=referral (대회: 제11회 너릿재마라톤 | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-5] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 제11회 너릿재마라톤 (날짜: 2026-06-07, 링크: http://marathonworld.kr/?utm_source=marathongo&utm_medium=referral)
+2026-04-23 03:00:02 [pool-2-thread-9] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-6] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-2] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-1] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://www.hangangmarathon.net (대회: 제28회 양평이봉주마라톤 | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-1] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 제28회 양평이봉주마라톤 (날짜: 2026-06-06, 링크: http://www.hangangmarathon.net)
+2026-04-23 03:00:02 [pool-2-thread-9] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://lightrun2026.imweb.me (대회: 2026 지중해마을 라이트런 | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-9] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 지중해마을 라이트런 (날짜: 2026-06-13, 링크: http://lightrun2026.imweb.me)
+2026-04-23 03:00:02 [pool-2-thread-8] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-4] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-5] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-3] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://jejumarathon.com (대회: 제30회 제주관광마라톤 축제 | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-3] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 제30회 제주관광마라톤 축제 (날짜: 2026-06-07, 링크: http://jejumarathon.com)
+2026-04-23 03:00:02 [pool-2-thread-1] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-2] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://runten.co.kr (대회: 2026 JUST RUN10 대전 대회 | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-6] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://culturerun.net/index.php (대회: 2026 컬처런 | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-6] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 컬처런 (날짜: 2026-06-13, 링크: http://culturerun.net/index.php)
+2026-04-23 03:00:02 [pool-2-thread-2] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 JUST RUN10 대전 대회 (날짜: 2026-06-13, 링크: http://runten.co.kr)
+2026-04-23 03:00:02 [pool-2-thread-7] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://mindmarathon.kr (대회: 2026 마인드 마라톤 | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-7] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 마인드 마라톤 (날짜: 2026-06-07, 링크: http://mindmarathon.kr)
+2026-04-23 03:00:02 [pool-2-thread-10] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://www.imrun.kr (대회: 2026 im뱅크 코리아 오픈 마라톤 | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-10] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 im뱅크 코리아 오픈 마라톤 (날짜: 2026-06-07, 링크: http://www.imrun.kr)
+2026-04-23 03:00:02 [pool-2-thread-9] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-3] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-10] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-6] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-7] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-2] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-8] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://www (대회: 2026 강릉옥계헌화로11K Run | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-8] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 강릉옥계헌화로11K Run (날짜: 2026-06-13, 링크: http://www)
+2026-04-23 03:00:02 [pool-2-thread-3] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://gj100k.org (대회: 2026 제23회 빛고을 울트라마라톤 | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-3] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 제23회 빛고을 울트라마라톤 (날짜: 2026-06-13, 링크: http://gj100k.org)
+2026-04-23 03:00:02 [pool-2-thread-9] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://www.mudolgil518.or.kr (대회: 제5회 무등산무돌길완주대회 | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-9] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 제5회 무등산무돌길완주대회 (날짜: 2026-06-13, 링크: http://www.mudolgil518.or.kr)
+2026-04-23 03:00:02 [pool-2-thread-5] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://www.sbsa.or.kr (대회: 제12회 시각장애인과 함께하는 어울림 마라톤 | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-5] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 제12회 시각장애인과 함께하는 어울림 마라톤 (날짜: 2026-06-13, 링크: http://www.sbsa.or.kr)
+2026-04-23 03:00:02 [pool-2-thread-2] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://ulmarathon.co.kr/ (대회: 2026 제21회 울릉도전국마라톤 | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-2] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 제21회 울릉도전국마라톤 (날짜: 2026-06-14, 링크: http://ulmarathon.co.kr/)
+2026-04-23 03:00:02 [pool-2-thread-7] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://mara1080.com/event/cc73d8d1-a3d1-410c-9246-5d2eb76dd95e (대회: 전마협창단25주년 2026 대전월드런마라톤축제 | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-7] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 전마협창단25주년 2026 대전월드런마라톤축제 (날짜: 2026-06-14, 링크: http://mara1080.com/event/cc73d8d1-a3d1-410c-9246-5d2eb76dd95e)
+2026-04-23 03:00:02 [pool-2-thread-4] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://ktra.kr (대회: 2026 성남마라톤 | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-4] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 성남마라톤 (날짜: 2026-06-13, 링크: http://ktra.kr)
+2026-04-23 03:00:02 [pool-2-thread-1] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://phsteelrun.com (대회: 2026 제10회 포항철강마라톤 | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-1] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 제10회 포항철강마라톤 (날짜: 2026-06-13, 링크: http://phsteelrun.com)
+2026-04-23 03:00:02 [pool-2-thread-3] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-5] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-8] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-9] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-2] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:02 [pool-2-thread-10] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://ksgaaf.co.kr/ (대회: 제21회 광진구연맹회장배 육상대회 | 마라톤GO)
+2026-04-23 03:00:02 [pool-2-thread-10] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 제21회 광진구연맹회장배 육상대회 (날짜: 2026-06-14, 링크: http://ksgaaf.co.kr/)
+2026-04-23 03:00:03 [pool-2-thread-7] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-8] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : https://global6kforwater.com/frt/application/applicationOverview.do?CMPT_AREA_TYPE=6&utm_source=marathongo&utm_medium=MRG_01&utm_campaign=26Running6K (대회: 2026 글로벌 6K 포 워터 서울 | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-8] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 글로벌 6K 포 워터 서울 (날짜: 2026-06-20, 링크: https://global6kforwater.com/frt/application/applicationOverview.do?CMPT_AREA_TYPE=6&utm_source=marathongo&utm_medium=MRG_01&utm_campaign=26Running6K)
+2026-04-23 03:00:03 [pool-2-thread-9] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://hoperun.kr/ (대회: 제2회 희망 서울 마라톤 | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-9] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 제2회 희망 서울 마라톤 (날짜: 2026-06-20, 링크: http://hoperun.kr/)
+2026-04-23 03:00:03 [pool-2-thread-1] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-6] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://www.supgil.com (대회: 2026 김해숲길마라톤 | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-6] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 김해숲길마라톤 (날짜: 2026-06-14, 링크: http://www.supgil.com)
+2026-04-23 03:00:03 [pool-2-thread-4] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-7] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://cjapplemarathon.com/index.asp (대회: 제25회 충주마라톤 | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-7] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 제25회 충주마라톤 (날짜: 2026-06-20, 링크: http://cjapplemarathon.com/index.asp)
+2026-04-23 03:00:03 [pool-2-thread-1] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://realhappyrun.kr/ (대회: 2026 참행복 마라톤 | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-1] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 참행복 마라톤 (날짜: 2026-06-21, 링크: http://realhappyrun.kr/)
+2026-04-23 03:00:03 [pool-2-thread-10] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-4] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://mara1080.com/event/cfa1bea4-b545-4df9-8ae1-5ce280ca0e3d (대회: 2026 보은 속리산 말티재 힐링 알몸 마라톤 | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-4] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 보은 속리산 말티재 힐링 알몸 마라톤 (날짜: 2026-06-21, 링크: http://mara1080.com/event/cfa1bea4-b545-4df9-8ae1-5ce280ca0e3d)
+2026-04-23 03:00:03 [pool-2-thread-9] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-3] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://www.runmp.kr (대회: 제22회 영덕 해변 전국마라톤 | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-3] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 제22회 영덕 해변 전국마라톤 (날짜: 2026-06-14, 링크: http://www.runmp.kr)
+2026-04-23 03:00:03 [pool-2-thread-6] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-8] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-7] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-10] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://bamseomrun.kr (대회: 2026 람사르습지 밤섬런 | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-10] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 람사르습지 밤섬런 (날짜: 2026-06-21, 링크: http://bamseomrun.kr)
+2026-04-23 03:00:03 [pool-2-thread-6] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://koreatrail.net (대회: 2026 소백산 죽령트레일런 | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-6] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 소백산 죽령트레일런 (날짜: 2026-06-21, 링크: http://koreatrail.net)
+2026-04-23 03:00:03 [pool-2-thread-7] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://cafe.daum.net/Kangmaclub/IZkA (대회: 제20회 강북구청장배 마라톤 | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-7] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 제20회 강북구청장배 마라톤 (날짜: 2026-06-28, 링크: http://cafe.daum.net/Kangmaclub/IZkA)
+2026-04-23 03:00:03 [pool-2-thread-1] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-9] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://koreatrail.net (대회: 소백산 죽령TrailRunnig | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-9] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 소백산 죽령TrailRunnig (날짜: 2026-06-21, 링크: http://koreatrail.net)
+2026-04-23 03:00:03 [pool-2-thread-4] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-3] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-5] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://wellmaderun.com (대회: 2026 웰메이드런 | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-5] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 웰메이드런 (날짜: 2026-06-20, 링크: http://wellmaderun.com)
+2026-04-23 03:00:03 [pool-2-thread-1] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://dhrun.kr (대회: 2026 전국블루베리마라톤축제 | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-1] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 전국블루베리마라톤축제 (날짜: 2026-06-28, 링크: http://dhrun.kr)
+2026-04-23 03:00:03 [pool-2-thread-2] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://www.irunman.kr (대회: 제16회 국민행복마라톤 | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-2] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 제16회 국민행복마라톤 (날짜: 2026-06-20, 링크: http://www.irunman.kr)
+2026-04-23 03:00:03 [pool-2-thread-6] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-3] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://seoulrun.kr/ (대회: 2026 서울런 | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-3] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 서울런 (날짜: 2026-06-28, 링크: http://seoulrun.kr/)
+2026-04-23 03:00:03 [pool-2-thread-9] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-7] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-10] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-9] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://www.ironrun.kr (대회: IRON RUN 2026 | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-9] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : IRON RUN 2026 (날짜: 2026-07-04, 링크: http://www.ironrun.kr)
+2026-04-23 03:00:03 [pool-2-thread-5] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-2] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-7] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://www.nowonmarathon.com (대회: 제10회 노원구청장배 겸 회장배마라톤 | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-8] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://bigstarrun.kr/ (대회: 2026 큰별 하프 마라톤 | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-7] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 제10회 노원구청장배 겸 회장배마라톤 (날짜: 2026-07-05, 링크: http://www.nowonmarathon.com)
+2026-04-23 03:00:03 [pool-2-thread-8] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 큰별 하프 마라톤 (날짜: 2026-06-27, 링크: http://bigstarrun.kr/)
+2026-04-23 03:00:03 [pool-2-thread-1] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-3] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-9] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-5] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://osk.run/ (대회: 2026 울릉도 국제 트레일러닝 | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-5] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 울릉도 국제 트레일러닝 (날짜: 2026-07-12, 링크: http://osk.run/)
+2026-04-23 03:00:03 [pool-2-thread-6] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://mara1080.com/event/3c31740e-986e-4cb8-a7e5-850a80d2a5fd (대회: 2026 전마협 하계 무료 훈련 마라톤 | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-6] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 전마협 하계 무료 훈련 마라톤 (날짜: 2026-07-04, 링크: http://mara1080.com/event/3c31740e-986e-4cb8-a7e5-850a80d2a5fd)
+2026-04-23 03:00:03 [pool-2-thread-10] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://koreatrail.net (대회: 제8회안산인왕산북악산TRAILRUN | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-10] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 제8회안산인왕산북악산TRAILRUN (날짜: 2026-07-05, 링크: http://koreatrail.net)
+2026-04-23 03:00:03 [pool-2-thread-2] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://www.bsama.co.kr/index.asp (대회: 제16회 태종대혹서기전국마라톤 | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-2] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 제16회 태종대혹서기전국마라톤 (날짜: 2026-07-19, 링크: http://www.bsama.co.kr/index.asp)
+2026-04-23 03:00:03 [pool-2-thread-3] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://www.nightracebusan.co.kr/ (대회: 2026 나이트런 부산 | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-3] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 나이트런 부산 (날짜: 2026-08-01, 링크: http://www.nightracebusan.co.kr/)
+2026-04-23 03:00:03 [pool-2-thread-8] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-4] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://runsongdo.co.kr (대회: 제1회 송도 이봉주 마라톤 | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-4] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 제1회 송도 이봉주 마라톤 (날짜: 2026-06-28, 링크: http://runsongdo.co.kr)
+2026-04-23 03:00:03 [pool-2-thread-7] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-6] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-5] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-10] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-3] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-2] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-7] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://jyd.creatorlink.net (대회: 영남알프스9봉 트레일 레이스 | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-7] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 영남알프스9봉 트레일 레이스 (날짜: 2026-08-15, 링크: http://jyd.creatorlink.net)
+2026-04-23 03:00:03 [pool-2-thread-1] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://koreatrail.net (대회: 2026 청계산.인릉산TrailRunn | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-1] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 청계산.인릉산TrailRunn (날짜: 2026-07-19, 링크: http://koreatrail.net)
+2026-04-23 03:00:03 [pool-2-thread-9] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://insiderun.me (대회: 2026 인사이더런 S | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-9] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 인사이더런 S (날짜: 2026-08-01, 링크: http://insiderun.me)
+2026-04-23 03:00:03 [pool-2-thread-4] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-10] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://www.wmac2026.com (대회: 2026 대구세계마스터즈 10km마라톤 | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-10] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 대구세계마스터즈 10km마라톤 (날짜: 2026-08-23, 링크: http://www.wmac2026.com)
+2026-04-23 03:00:03 [pool-2-thread-1] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-9] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-7] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-8] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : https://rocknrun.kr/coolvalleytrailrace_info (대회: 2026 쿨밸리트레일레이스 | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-8] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 쿨밸리트레일레이스 (날짜: 2026-08-02, 링크: https://rocknrun.kr/coolvalleytrailrace_info)
+2026-04-23 03:00:03 [pool-2-thread-5] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://www.runnerking.com (대회: 2026 금수산트레일러닝대회 | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-5] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 금수산트레일러닝대회 (날짜: 2026-08-23, 링크: http://www.runnerking.com)
+2026-04-23 03:00:03 [pool-2-thread-3] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://www.wmac2026.com (대회: 2026 대구세계마스터즈 하프마라톤대회 | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-3] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 대구세계마스터즈 하프마라톤대회 (날짜: 2026-08-30, 링크: http://www.wmac2026.com)
+2026-04-23 03:00:03 [pool-2-thread-6] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://www.koreatrail.net/home/main.php?link=event&einc=eapp&opp=20250820150217&csno=20191209143330 (대회: 제38회 지리산화대종주 Trail Run | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-6] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 제38회 지리산화대종주 Trail Run (날짜: 2026-08-15, 링크: http://www.koreatrail.net/home/main.php?link=event&einc=eapp&opp=20250820150217&csno=20191209143330)
+2026-04-23 03:00:03 [pool-2-thread-10] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-9] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://bonghwarun.kr (대회: 2026 봉화송이 전국마라톤 | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-9] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 봉화송이 전국마라톤 (날짜: 2026-09-06, 링크: http://bonghwarun.kr)
+2026-04-23 03:00:03 [pool-2-thread-8] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-1] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://sandrun.co.kr (대회: 2026 샌드런 IN 영덕 | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-1] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 샌드런 IN 영덕 (날짜: 2026-09-06, 링크: http://sandrun.co.kr)
+2026-04-23 03:00:03 [pool-2-thread-2] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://wmac2026.com/kr/ (대회: 2026 대구세계마스터즈육상경기대회 | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-2] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 대구세계마스터즈육상경기대회 (날짜: 2026-08-30, 링크: http://wmac2026.com/kr/)
+2026-04-23 03:00:03 [pool-2-thread-7] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://koreatrail.net (대회: 제24회 청광종주TRAILRUNNING | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-7] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 제24회 청광종주TRAILRUNNING (날짜: 2026-09-06, 링크: http://koreatrail.net)
+2026-04-23 03:00:03 [pool-2-thread-6] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-5] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-3] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-8] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://mara1080.com/event/9443583f-6577-466c-ab2f-43d1dbd820d4 (대회: 제2회 초록우산 런웨이 마라톤 | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-8] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 제2회 초록우산 런웨이 마라톤 (날짜: 2026-09-12, 링크: http://mara1080.com/event/9443583f-6577-466c-ab2f-43d1dbd820d4)
+2026-04-23 03:00:03 [pool-2-thread-9] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-4] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://dmzrun.kr (대회: 제23회 철원DMZ국제평화마라톤 | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-4] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 제23회 철원DMZ국제평화마라톤 (날짜: 2026-09-05, 링크: http://dmzrun.kr)
+2026-04-23 03:00:03 [pool-2-thread-6] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://yrun.co.kr (대회: 2026 양양 강변 전국 마라톤 | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-6] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 양양 강변 전국 마라톤 (날짜: 2026-09-12, 링크: http://yrun.co.kr)
+2026-04-23 03:00:03 [pool-2-thread-1] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-10] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://amarunsb.com/ (대회: 희망드림 제23회 새벽강변 국제마라톤 | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-10] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 희망드림 제23회 새벽강변 국제마라톤 (날짜: 2026-09-06, 링크: http://amarunsb.com/)
+2026-04-23 03:00:03 [pool-2-thread-9] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://www.ujrun.kr (대회: 2026 울진 금강송배 힐링마라톤 | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-9] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 울진 금강송배 힐링마라톤 (날짜: 2026-09-13, 링크: http://www.ujrun.kr)
+2026-04-23 03:00:03 [pool-2-thread-2] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-7] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-8] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-3] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://www.koreatrail.net/home/main.php?link=event&einc=eapp&opp=20250910133652&csno=20191227110239 (대회: 제14회 설악산공룡능선 UTMB CLIMBATHON | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-3] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 제14회 설악산공룡능선 UTMB CLIMBATHON (날짜: 2026-09-13, 링크: http://www.koreatrail.net/home/main.php?link=event&einc=eapp&opp=20250910133652&csno=20191227110239)
+2026-04-23 03:00:03 [pool-2-thread-6] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-2] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://rocknrun.kr (대회: 2026 장수트레일레이스 Fall | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-2] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 장수트레일레이스 Fall (날짜: 2026-09-19, 링크: http://rocknrun.kr)
+2026-04-23 03:00:03 [pool-2-thread-7] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://gprun.com/ (대회: 제19회 가평자라섬 전국마라톤 | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-7] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 제19회 가평자라섬 전국마라톤 (날짜: 2026-09-20, 링크: http://gprun.com/)
+2026-04-23 03:00:03 [pool-2-thread-4] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-10] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-9] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-8] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : https://global6kforwater.com/frt/application/applicationOverview.do?CMPT_AREA_TYPE=6&utm_source=marathongo&utm_medium=MRG_01&utm_campaign=26Running6K (대회: 2026 글로벌 6K 포 워터 부산 | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-8] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 글로벌 6K 포 워터 부산 (날짜: 2026-10-03, 링크: https://global6kforwater.com/frt/application/applicationOverview.do?CMPT_AREA_TYPE=6&utm_source=marathongo&utm_medium=MRG_01&utm_campaign=26Running6K)
+2026-04-23 03:00:03 [pool-2-thread-5] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://bbangtrailrun.co.kr (대회: 빵트레일런 2026 | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-5] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 빵트레일런 2026 (날짜: 2026-09-12, 링크: http://bbangtrailrun.co.kr)
+2026-04-23 03:00:03 [pool-2-thread-3] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-9] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://www (대회: 제20회 달서하프마라톤 | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-9] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 제20회 달서하프마라톤 (날짜: 2026-10-04, 링크: http://www)
+2026-04-23 03:00:03 [pool-2-thread-7] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-2] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-1] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://mara1080.com/event/2044eb82-fcdb-4e56-b79b-f3543a6a360d (대회: 2026 금산인삼축제 마라톤 | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-1] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 금산인삼축제 마라톤 (날짜: 2026-09-19, 링크: http://mara1080.com/event/2044eb82-fcdb-4e56-b79b-f3543a6a360d)
+2026-04-23 03:00:03 [pool-2-thread-8] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-2] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://www (대회: 2026 경포마라톤 | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-2] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 경포마라톤 (날짜: 2026-10-10, 링크: http://www)
+2026-04-23 03:00:03 [pool-2-thread-9] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-5] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-8] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://www.chultra.kr/ (대회: 제7회 천안삼거리 흥타령울트라마라톤 | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-8] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 제7회 천안삼거리 흥타령울트라마라톤 (날짜: 2026-10-10, 링크: http://www.chultra.kr/)
+2026-04-23 03:00:03 [pool-2-thread-1] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-4] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://isunshintrail.com (대회: 제2회 아산이순신 트레일 | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-4] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 제2회 아산이순신 트레일 (날짜: 2026-10-03, 링크: http://isunshintrail.com)
+2026-04-23 03:00:03 [pool-2-thread-6] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://mara1080.com/event/fcaa0bc8-1489-47c3-8fec-8e5a5c17284e (대회: 2026 서산 코스모스 황금들녘 마라톤 대회 | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-6] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 서산 코스모스 황금들녘 마라톤 대회 (날짜: 2026-10-03, 링크: http://mara1080.com/event/fcaa0bc8-1489-47c3-8fec-8e5a5c17284e)
+2026-04-23 03:00:03 [pool-2-thread-8] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-1] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : https://asiarun.kr (대회: 2026 아시아 오픈 마라톤 | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-1] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 아시아 오픈 마라톤 (날짜: 2026-10-18, 링크: https://asiarun.kr)
+2026-04-23 03:00:03 [pool-2-thread-10] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://www.admarathon.kr (대회: 2026 안동마라톤 | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-10] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 안동마라톤 (날짜: 2026-10-04, 링크: http://www.admarathon.kr)
+2026-04-23 03:00:03 [pool-2-thread-2] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-7] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://georun.kr/ko/ (대회: 제5회 무등산지오마라톤 | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-7] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 제5회 무등산지오마라톤 (날짜: 2026-10-10, 링크: http://georun.kr/ko/)
+2026-04-23 03:00:03 [pool-2-thread-4] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-6] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-10] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-1] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-7] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-3] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://amarunhs.com (대회: 제26회 홍성마라톤 | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-3] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 제26회 홍성마라톤 (날짜: 2026-10-09, 링크: http://amarunhs.com)
+2026-04-23 03:00:03 [pool-2-thread-5] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://race.cjsports.or.kr/ (대회: 제24회 청원생명쌀대청호마라톤 | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-5] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 제24회 청원생명쌀대청호마라톤 (날짜: 2026-10-17, 링크: http://race.cjsports.or.kr/)
+2026-04-23 03:00:03 [pool-2-thread-9] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://www.koreatrail.net/home/main.php?link=event&einc=eindex&csno=20190605121808&opp=20260203121910 (대회: 제10회 가을철 산불조심마라톤 | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-9] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 제10회 가을철 산불조심마라톤 (날짜: 2026-10-11, 링크: http://www.koreatrail.net/home/main.php?link=event&einc=eindex&csno=20190605121808&opp=20260203121910)
+2026-04-23 03:00:03 [pool-2-thread-2] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://csmarathon.co.kr/csmarathon/ (대회: 2026 청송사과트레일런 | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-10] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://pohangmarathon.com/ (대회: 2026 포항마라톤챔피언십 | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-2] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 청송사과트레일런 (날짜: 2026-10-25, 링크: http://csmarathon.co.kr/csmarathon/)
+2026-04-23 03:00:03 [pool-2-thread-10] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 포항마라톤챔피언십 (날짜: 2026-11-07, 링크: http://pohangmarathon.com/)
+2026-04-23 03:00:03 [pool-2-thread-5] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-3] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-9] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-10] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-8] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : https://www.facebook.com/jeonbuk.kr/posts/1441578457998057 (대회: 2026 GTWS 무주 트레일 | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-8] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 GTWS 무주 트레일 (날짜: 2026-10-24, 링크: https://www.facebook.com/jeonbuk.kr/posts/1441578457998057)
+2026-04-23 03:00:03 [pool-2-thread-2] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-4] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : https://runable.me/product/17639?comp=3402 (대회: 2026 jtbc 마라톤 | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-4] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 jtbc 마라톤 (날짜: 2026-11-01, 링크: https://runable.me/product/17639?comp=3402)
+2026-04-23 03:00:03 [pool-2-thread-1] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://koreatrail.net (대회: 제24회 대모산,구룡산 트레일런 | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-1] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 제24회 대모산,구룡산 트레일런 (날짜: 2026-11-15, 링크: http://koreatrail.net)
+2026-04-23 03:00:03 [pool-2-thread-6] INFO  c.d.login.service.MarathonService - >>> [공식 사이트 추출 성공] : http://runyc.kr (대회: 2026 영천댐 마라톤 | 마라톤GO)
+2026-04-23 03:00:03 [pool-2-thread-6] INFO  c.d.login.service.MarathonService - >>> [업서트 준비] : 2026 영천댐 마라톤 (날짜: 2026-11-07, 링크: http://runyc.kr)
+2026-04-23 03:00:03 [pool-2-thread-4] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-1] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-8] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [pool-2-thread-6] WARN  c.d.login.service.MarathonService - >>> [저장 실패] : 401 Unauthorized on POST request for "https://ismclnqslxnlsfmqjytc.supabase.co/rest/v1/marathons": [no body]
+2026-04-23 03:00:03 [scheduling-1] INFO  c.d.login.service.MarathonService - >>> [병렬 수집 완료]
