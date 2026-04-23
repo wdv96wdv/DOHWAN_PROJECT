@@ -8,6 +8,42 @@ import "../../assets/css/record.css";
 import { v4 as uuidv4 } from "uuid";
 import { Activity } from "lucide-react";
 
+const parsePaceToSeconds = (paceStr) => {
+  if (!paceStr) return 0;
+  const str = String(paceStr);
+  if (str.length <= 2) return Number(str);
+  const mins = Number(str.slice(0, str.length - 2));
+  const secs = Number(str.slice(-2));
+  return mins * 60 + secs;
+};
+
+const calculatePaceNum = (dist, sec) => {
+  if (!dist || !sec || dist <= 0 || sec <= 0) return null;
+  const secsPerKm = sec / dist;
+  const pMins = Math.floor(secsPerKm / 60);
+  const pSecs = Math.floor(secsPerKm % 60);
+  return parseInt(`${pMins}${pSecs.toString().padStart(2, '0')}`, 10);
+};
+
+const calculateDistance = (paceStr, sec) => {
+  if (!paceStr || !sec || sec <= 0) return null;
+  const pSecs = parsePaceToSeconds(paceStr);
+  if (pSecs <= 0) return null;
+  return (sec / pSecs).toFixed(2);
+};
+
+const calculateDuration = (dist, paceStr) => {
+  if (!dist || dist <= 0 || !paceStr) return null;
+  const pSecs = parsePaceToSeconds(paceStr);
+  if (pSecs <= 0) return null;
+  return Math.round(dist * pSecs);
+};
+
+const calculateCalories = (dist) => {
+  if (!dist || dist <= 0) return null;
+  return Math.round(dist * 65);
+};
+
 const getUserNoFromJWT = () => {
   const token = localStorage.getItem("jwt");
   if (!token) return null;
@@ -82,6 +118,19 @@ export default function RecordPage() {
       submitData.duration_sec = submitData.duration_sec ? parseInt(submitData.duration_sec, 10) : null;
       submitData.cadence = submitData.cadence ? parseInt(submitData.cadence, 10) : null;
       submitData.calories = submitData.calories ? parseInt(submitData.calories, 10) : null;
+
+      // 누락된 데이터 자동 계산 로직 (거리, 시간, 페이스 중 2개가 있으면 나머지 1개 계산)
+      if (submitData.distance_km > 0 && submitData.duration_sec > 0 && !submitData.pace_min_per_km) {
+        submitData.pace_min_per_km = calculatePaceNum(submitData.distance_km, submitData.duration_sec);
+      } else if (submitData.pace_min_per_km > 0 && submitData.duration_sec > 0 && !submitData.distance_km) {
+        submitData.distance_km = parseFloat(calculateDistance(String(submitData.pace_min_per_km), submitData.duration_sec));
+      } else if (submitData.distance_km > 0 && submitData.pace_min_per_km > 0 && !submitData.duration_sec) {
+        submitData.duration_sec = calculateDuration(submitData.distance_km, String(submitData.pace_min_per_km));
+      }
+
+      if (submitData.distance_km > 0 && !submitData.calories) {
+        submitData.calories = calculateCalories(submitData.distance_km);
+      }
 
       if (submitData.distance_km && submitData.duration_sec) {
         submitData.speed_kmh = submitData.distance_km / (submitData.duration_sec / 3600);
