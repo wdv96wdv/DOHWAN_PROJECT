@@ -64,34 +64,22 @@ const ShareCard = ({ record }) => {
       });
       
       const dataUrl = canvas.toDataURL('image/png');
-      const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
       const fileName = `dorunning-${record?.date?.split(' ')[0] || 'share'}.png`;
-      const file = new File([blob], fileName, { type: 'image/png' });
 
-      // 모바일 공유 API 시도
-      if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-        await navigator.share({
-          files: [file],
-          title: 'My Run Record',
-          text: 'Check out my run on DoRunning!'
+      const link = document.createElement('a');
+      link.download = fileName;
+      link.href = dataUrl;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      // 모바일인 경우 알림 추가
+      if (/Android|iPhone|iPad/i.test(navigator.userAgent)) {
+        Swal.fire({
+          title: "저장 완료",
+          text: "파일이 다운로드되었습니다. 갤러리에서 보이지 않는다면 '파일' 앱 또는 '다운로드' 폴더를 확인해주세요.",
+          icon: "info"
         });
-      } else {
-        // 데스크탑 또는 지원하지 않는 브라우저: 기존 다운로드 방식
-        const link = document.createElement('a');
-        link.download = fileName;
-        link.href = dataUrl;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        
-        // 모바일인 경우 알림 추가
-        if (/Android|iPhone|iPad/i.test(navigator.userAgent)) {
-          Swal.fire({
-            title: "저장 완료",
-            text: "파일이 다운로드되었습니다. 갤러리에서 보이지 않는다면 '파일' 앱 또는 '다운로드' 폴더를 확인해주세요.",
-            icon: "info"
-          });
-        }
       }
     } catch (err) {
       console.error("Export error:", err);

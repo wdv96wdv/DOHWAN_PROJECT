@@ -163,12 +163,12 @@ export default function RecordForm({ formData, setFormData, onSubmit, submitText
       <form onSubmit={onSubmit} className="auth-form">
         <div className="record-form-grid">
           <div className="form-group">
-            <label><Calendar size={14} /> 날짜 *</label>
+            <label><Calendar size={14} /> 날짜 및 시간 *</label>
             <input
               className="form-control"
-              type="date"
+              type="datetime-local"
               name="record_date"
-              value={formData.record_date ? formData.record_date.slice(0, 10) : ""}
+              value={formData.record_date ? (formData.record_date.length === 10 ? `${formData.record_date}T00:00` : formData.record_date.slice(0, 16)) : ""}
               onChange={(e) => setFormData((prev) => ({ ...prev, record_date: e.target.value }))}
               required
             />

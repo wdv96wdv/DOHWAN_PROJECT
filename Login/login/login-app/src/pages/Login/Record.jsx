@@ -31,7 +31,7 @@ export default function RecordPage() {
     cadence: "",
     calories: "",
     note: "",
-    record_date: new Date().toISOString().slice(0, 10),
+    record_date: new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 16),
   });
   const [editingId, setEditingId] = useState(null);
   const user_no = getUserNoFromJWT();
@@ -96,7 +96,8 @@ export default function RecordPage() {
         cadence: submitData.cadence,
         calories: submitData.calories,
         note: submitData.note,
-        recordDate: submitData.record_date.length === 10 ? `${submitData.record_date}T00:00:00` : submitData.record_date
+        recordDate: submitData.record_date.length === 10 ? `${submitData.record_date}T00:00:00` : 
+                    submitData.record_date.length === 16 ? `${submitData.record_date}:00` : submitData.record_date
       };
 
       if (editingId) {
@@ -143,7 +144,7 @@ export default function RecordPage() {
       // 폼 초기화
       setFormData({
         running_name: "", distance_km: "", duration_sec: "", pace_min_per_km: "",
-        cadence: "", calories: "", note: "", record_date: new Date().toISOString().slice(0, 10),
+        cadence: "", calories: "", note: "", record_date: new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 16),
       });
       setEditingId(null);
     } catch (err) {
@@ -161,7 +162,7 @@ export default function RecordPage() {
       cadence: record.cadence || "",
       calories: record.calories || "",
       note: record.note || "",
-      record_date: record.record_date?.slice(0, 10) || "",
+      record_date: record.record_date?.slice(0, 16) || "",
     });
     setEditingId(record.id);
     window.scrollTo({ top: 0, behavior: 'smooth' }); // 수정 시 폼이 있는 상단으로 이동

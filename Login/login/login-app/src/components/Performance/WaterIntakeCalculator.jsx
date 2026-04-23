@@ -13,7 +13,7 @@ const WaterIntakeCalculator = () => {
 
   useEffect(() => {
     if (!userInfo?.no) return;
-    
+
     const today = new Date().toISOString().split('T')[0];
     const savedData = localStorage.getItem(`water_${userInfo.no}_${today}`);
     if (savedData) {
@@ -35,11 +35,11 @@ const WaterIntakeCalculator = () => {
     const h = parseFloat(height);
     const w = parseFloat(weight);
     if (!h || !w) return;
-    
+
     const calculatedGoal = parseFloat(((h + w) / 100).toFixed(1));
     setGoal(calculatedGoal);
     setShowSetup(false);
-    
+
     localStorage.setItem(`water_setup_${userInfo.no}`, JSON.stringify({ h, w, g: calculatedGoal }));
   };
 
@@ -77,7 +77,7 @@ const WaterIntakeCalculator = () => {
             <input type="number" placeholder="Height" value={height} onChange={e => setHeight(e.target.value)} className="form-control" />
             <input type="number" placeholder="Weight" value={weight} onChange={e => setWeight(e.target.value)} className="form-control" />
           </div>
-          <button type="submit" className="btn-auth">SET GOAL</button>
+          <button type="submit" className="btn-auth">확인</button>
         </form>
       ) : (
         <div className="water-content">
@@ -107,7 +107,8 @@ const WaterIntakeCalculator = () => {
         </div>
       )}
 
-      <style dangerouslySetInnerHTML={{ __html: `
+      <style dangerouslySetInnerHTML={{
+        __html: `
         .hydration-tracker {
           min-height: 280px;
           display: flex;

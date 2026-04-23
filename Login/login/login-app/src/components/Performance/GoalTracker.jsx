@@ -41,7 +41,7 @@ const GoalTracker = () => {
     e.preventDefault();
     const newGoal = Number(tempGoal);
     if (isNaN(newGoal) || newGoal <= 0) return;
-    
+
     setGoal(newGoal);
     localStorage.setItem(`run_goal_${userInfo.no}`, newGoal);
     setIsEditing(false);
@@ -64,15 +64,15 @@ const GoalTracker = () => {
 
       {isEditing ? (
         <form onSubmit={handleGoalUpdate} className="goal-edit-form">
-          <input 
-            type="number" 
-            value={tempGoal} 
+          <input
+            type="number"
+            value={tempGoal}
             onChange={(e) => setTempGoal(e.target.value)}
             className="form-control"
-            placeholder="Set Goal (km)"
+            placeholder="목표를 설정해주세요"
             autoFocus
           />
-          <button type="submit" className="btn-auth">SAVE</button>
+          <button type="submit" className="btn-auth">확인</button>
         </form>
       ) : (
         <div className="goal-display">
@@ -80,7 +80,7 @@ const GoalTracker = () => {
             <span className="goal-current">{monthlyDistance.toFixed(1)}</span>
             <span className="goal-target">/ {goal} km</span>
           </div>
-          
+
           <div className="progress-container">
             <div className="progress-bar">
               <div className="progress-fill" style={{ width: `${progress}%` }}></div>
@@ -102,7 +102,8 @@ const GoalTracker = () => {
         </div>
       )}
 
-      <style dangerouslySetInnerHTML={{ __html: `
+      <style dangerouslySetInnerHTML={{
+        __html: `
         .goal-tracker-v2 {
           display: flex;
           flex-direction: column;
