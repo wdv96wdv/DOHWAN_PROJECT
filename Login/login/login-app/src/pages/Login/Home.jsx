@@ -20,6 +20,8 @@ const Home = () => {
   const navigate = useNavigate();
   const isLogin = useAuthStore(state => state.isLogin);
   const [upcomingMarathons, setUpcomingMarathons] = useState([]);
+  const [activeMarathonCount, setActiveMarathonCount] = useState(0);
+  const [appStats, setAppStats] = useState({ activeRunners: 5240, totalDistance: 14800 });
 
   const handleGetStarted = () => {
     if (isLogin === "true" || isLogin === true) {
@@ -75,11 +77,27 @@ const Home = () => {
               return false;
           });
 
+          setActiveMarathonCount(activeList.length);
+
           // 랜덤으로 7개 섞기
           const shuffled = activeList.sort(() => 0.5 - Math.random());
           setUpcomingMarathons(shuffled.slice(0, 7));
       })
       .catch(err => console.error("Failed to fetch marathons on home:", err));
+
+    // Fetch app stats
+    fetch(`${API_BASE_URL}/records/stats`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.status === 200 && data.data) {
+          // data.data.activeRunners / data.data.totalDistance
+          setAppStats({
+            activeRunners: data.data.activeRunners > 0 ? data.data.activeRunners : 5240,
+            totalDistance: data.data.totalDistance > 0 ? data.data.totalDistance : 14800
+          });
+        }
+      })
+      .catch(err => console.error("Failed to fetch app stats:", err));
   }, []);
 
   useEffect(() => {
@@ -216,18 +234,18 @@ const Home = () => {
         <div className="stats-grid">
           <div className="stat-card glass-glow">
             <Activity className="stat-icon" size={36} />
-            <h3><CountUp end={5240} duration={2.5} separator="," />+</h3>
+            <h3><CountUp end={appStats.activeRunners} duration={2.5} separator="," />+</h3>
             <p>활동 중인 러너</p>
           </div>
           <div className="stat-card glass-glow">
             <MapPin className="stat-icon" size={36} />
-            <h3><CountUp end={14800} duration={2.5} separator="," />km</h3>
+            <h3><CountUp end={appStats.totalDistance} duration={2.5} separator="," />km</h3>
             <p>총 누적 거리</p>
           </div>
           <div className="stat-card glass-glow">
             <Calendar className="stat-icon" size={36} />
-            <h3><CountUp end={98} duration={2.5} />%</h3>
-            <p>사용자 만족도</p>
+            <h3><CountUp end={activeMarathonCount} duration={2.5} />개</h3>
+            <p>접수 중인 대회</p>
           </div>
         </div>
       </section>

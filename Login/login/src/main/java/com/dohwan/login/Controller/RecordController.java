@@ -219,4 +219,23 @@ public class RecordController {
                     .body(ApiResponse.error(500, "서버 에러가 발생했습니다."));
         }
     }
+
+    // 앱 전체 통계 조회 (활동 중인 러너 및 총 누적 거리)
+    @GetMapping("/stats")
+    public ResponseEntity<ApiResponse<java.util.Map<String, Object>>> getAppStats() {
+        try {
+            Double totalDistance = recordRepository.getTotalDistance();
+            Long activeRunners = recordRepository.getTotalActiveRunners();
+            
+            java.util.Map<String, Object> stats = new java.util.HashMap<>();
+            stats.put("totalDistance", totalDistance != null ? Math.round(totalDistance) : 0);
+            stats.put("activeRunners", activeRunners != null ? activeRunners : 0);
+            
+            return ResponseEntity.ok(ApiResponse.success(stats));
+        } catch (Exception e) {
+            log.error("통계 조회 에러: ", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponse.error(500, "서버 에러가 발생했습니다."));
+        }
+    }
 }

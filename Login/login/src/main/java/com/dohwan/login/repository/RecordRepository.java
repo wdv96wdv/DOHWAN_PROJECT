@@ -52,4 +52,12 @@ public interface RecordRepository extends JpaRepository<Records, Long> {
             @Param("start") java.time.LocalDateTime start,
             @Param("end") java.time.LocalDateTime end
     );
+
+    // 총 누적 거리 조회
+    @Query("SELECT SUM(COALESCE(r.distanceKm, 0.0)) FROM Records r")
+    Double getTotalDistance();
+
+    // 활동 중인 러너 수 조회 (한 번이라도 기록이 있는 사용자 수)
+    @Query("SELECT COUNT(DISTINCT r.userNo) FROM Records r")
+    Long getTotalActiveRunners();
 }
