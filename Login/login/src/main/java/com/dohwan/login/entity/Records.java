@@ -7,6 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,9 +28,10 @@ public class Records {
     @Column(name = "no") // 컬럼 이름 지정
     private Long no; // 운동 기록 번호 (Primary Key)
 
+    @JsonProperty("id")
     @Column(name = "id", unique = true, updatable = false, nullable = false) // 유니크 키 제약조건
     @Builder.Default // Builder 패턴에서 기본값 지정
-    private String id = UUID.randomUUID().toString(); // 고유 식별자 (UUID)
+    private String uuid = UUID.randomUUID().toString(); // 고유 식별자 (UUID)
 
     @Column(name = "user_no") // 사용자 번호
     private Long userNo; // 사용자 번호 (FK)

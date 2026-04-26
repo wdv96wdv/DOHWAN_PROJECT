@@ -62,7 +62,7 @@ export const getRunRecords = async () => {
 
   // 프론트엔드 UI 형식으로 변환
   const formattedData = data.map(record => {
-    const d = record.recordDate ? new Date(record.recordDate) : null;
+    const d = (record.recordDate || record.record_date) ? new Date(record.recordDate || record.record_date) : null;
     let dateStr = null;
     if (d) {
       const year = d.getFullYear();

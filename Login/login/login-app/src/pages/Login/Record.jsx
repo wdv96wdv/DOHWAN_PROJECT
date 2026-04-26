@@ -81,12 +81,12 @@ export default function RecordPage() {
       const response = await api.get("/records");
       const list = (response.data.data || []).map(item => ({
         ...item,
-        running_name: item.runningName,
-        distance_km: item.distanceKm,
-        duration_sec: item.durationSec,
-        pace_min_per_km: item.paceMinPerKm,
-        speed_kmh: item.speedKmh,
-        record_date: item.recordDate
+        running_name: item.runningName || item.running_name,
+        distance_km: item.distanceKm || item.distance_km,
+        duration_sec: item.durationSec || item.duration_sec,
+        pace_min_per_km: item.paceMinPerKm || item.pace_min_per_km,
+        speed_kmh: item.speedKmh || item.speed_kmh,
+        record_date: item.recordDate || item.record_date
       }));
       setRecords(list);
     } catch (error) {

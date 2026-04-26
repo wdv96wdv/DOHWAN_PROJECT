@@ -28,17 +28,17 @@ public interface RecordRepository extends JpaRepository<Records, Long> {
             @Param("end") LocalDateTime end
     );
 
-    // UUID로 운동 기록 조회 (사용자 검증 포함 권장)
-    Optional<Records> findById(String id);
-
+    // UUID로 운동 기록 조회
+    Optional<Records> findByUuid(String uuid);
+    
     // UUID로 운동 기록 존재 여부 확인
-    boolean existsById(String id);
-
+    boolean existsByUuid(String uuid);
+    
     // UUID로 운동 기록 삭제
-    void deleteById(String id);
-
+    void deleteByUuid(String uuid);
+    
     // UUID 리스트로 여러 운동 기록 조회
-    List<Records> findByIdIn(List<String> ids);
+    List<Records> findByUuidIn(List<String> uuids);
 
     // 이달의 리더보드 조회 (Record와 UserEntity 조인, 거리 총합 기준 내림차순)
     // 이달의 리더보드 조회 (Record와 UserEntity, Profile 조인 불가 시 users 테이블 아바타 우선 사용, 없으면 빈 문자열 반환)

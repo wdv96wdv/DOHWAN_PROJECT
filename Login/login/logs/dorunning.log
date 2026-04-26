@@ -1,4 +1,5 @@
-2026-04-24 15:26:31 [restartedMain] INFO  com.dohwan.login.LoginApplication - Starting LoginApplication using Java 24.0.2 with PID 22068 (C:\web\Dohwan_project\Login\login\build\classes\java\main started by user in C:\web\Dohwan_project\Login\login)
-2026-04-24 15:26:31 [restartedMain] INFO  com.dohwan.login.LoginApplication - The following 1 profile is active: "prod"
-2026-04-24 15:26:31 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
-2026-04-24 15:26:31 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-04-27 00:15:19 [restartedMain] INFO  com.dohwan.login.LoginApplication - Starting LoginApplication using Java 24.0.2 with PID 12848 (C:\web\Dohwan_project\Login\login\build\classes\java\main started by user in C:\web\Dohwan_project\Login\login)
+2026-04-27 00:15:19 [restartedMain] INFO  com.dohwan.login.LoginApplication - The following 1 profile is active: "prod"
+2026-04-27 00:15:19 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-04-27 00:15:19 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-04-27 00:15:22 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.

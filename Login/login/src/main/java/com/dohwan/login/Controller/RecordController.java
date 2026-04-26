@@ -32,10 +32,18 @@ public class RecordController {
     // 모든 운동 기록 조회 (사용자별)
     @GetMapping
     public ResponseEntity<ApiResponse<List<Records>>> getAllRecords(@AuthenticationPrincipal CustomUser user) {
+        log.info(">>> [GET] /records - 모든 운동 기록 조회 요청 (User No: {})", user != null ? user.getUserNo() : "null");
         try {
+            if (user == null) {
+                log.warn(">>> [GET] /records - 사용자 인증 정보가 없습니다.");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(ApiResponse.error(401, "로그인이 필요합니다."));
+            }
             List<Records> records = recordRepository.findByUserNoOrderByCreatedAtDesc(user.getUserNo());
+            log.info(">>> [GET] /records - {}개의 기록을 찾았습니다.", records.size());
             return ResponseEntity.ok(ApiResponse.success(records));
         } catch (Exception e) {
+            log.error(">>> [GET] /records - 조회 중 에러 발생", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(ApiResponse.error(500, "서버 에러가 발생했습니다."));
         }
@@ -45,7 +53,7 @@ public class RecordController {
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<Records>> getRecordById(@PathVariable("id") String id) {
         try {
-            Optional<Records> record = recordRepository.findById(id);
+            Optional<Records> record = recordRepository.findByUuid(id);
             if (record.isPresent()) {
                 return ResponseEntity.ok(ApiResponse.success(record.get()));
             } else {
@@ -89,7 +97,7 @@ public class RecordController {
             @RequestBody Records recordDetails) {
         log.info("운동기록 수정 :  {}", id);
         try {
-            Optional<Records> optionalRecord = recordRepository.findById(id);
+            Optional<Records> optionalRecord = recordRepository.findByUuid(id);
             if (optionalRecord.isPresent()) {
                 Records record = optionalRecord.get();
                 
@@ -128,14 +136,14 @@ public class RecordController {
             @AuthenticationPrincipal CustomUser user,
             @PathVariable("id") String id) {
         try {
-            Optional<Records> optionalRecord = recordRepository.findById(id);
+            Optional<Records> optionalRecord = recordRepository.findByUuid(id);
             if (optionalRecord.isPresent()) {
                 // 본인 기록인지 확인
                 if (!optionalRecord.get().getUserNo().equals(user.getUserNo())) {
                     return ResponseEntity.status(HttpStatus.FORBIDDEN)
                             .body(ApiResponse.error(403, "권한이 없습니다."));
                 }
-                recordRepository.deleteById(id);
+                recordRepository.deleteByUuid(id);
                 return ResponseEntity.ok(ApiResponse.success("기록이 삭제되었습니다."));
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -197,7 +205,7 @@ public class RecordController {
     @PostMapping("/uuid/batch")
     public ResponseEntity<ApiResponse<List<Records>>> getRecordsByUuids(@RequestBody List<String> ids) {
         try {
-            List<Records> records = recordRepository.findByIdIn(ids);
+            List<Records> records = recordRepository.findByUuidIn(ids);
             return ResponseEntity.ok(ApiResponse.success(records));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
