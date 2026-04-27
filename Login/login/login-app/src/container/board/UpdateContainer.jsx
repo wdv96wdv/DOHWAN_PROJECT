@@ -5,6 +5,7 @@ import Swal from 'sweetalert2'
 import Update from '../../components/Board/Update'
 import * as boards from '../../apis/boards'
 import * as files from '../../apis/files'
+import { Helmet } from 'react-helmet-async'
 
 const UpdateContainer = () => {
   const { id } = useParams()
@@ -23,6 +24,11 @@ const UpdateContainer = () => {
       const resData = response.data.data
       setBoard(resData.board)
       setFileList(resData.fileList)
+
+      // 타이틀 강제 업데이트
+      if (resData.board && resData.board.title) {
+        document.title = `Dorunning | 커뮤니티 | 글수정 | ${resData.board.title}`;
+      }
     } catch (error) {
       console.error(error)
       Swal.fire({ icon: 'error', title: '게시글 조회 중 오류가 발생했습니다.' })
@@ -116,7 +122,13 @@ const UpdateContainer = () => {
   }
 
   return (
-    <Update
+    <>
+      <Helmet>
+        <title>Dorunning | 커뮤니티 | 글수정 | {board.title || '...'}</title>
+        <meta name="description" content="게시글 내용을 수정합니다." />
+        <meta property="og:title" content={`Dorunning | 커뮤니티 | 글수정 | ${board.title || '...'}`} />
+      </Helmet>
+      <Update
       board={board}
       fileList={fileList}
       onUpdate={onUpdate}
@@ -124,6 +136,7 @@ const UpdateContainer = () => {
       onDeleteFile={onDeleteFile}
       deleteCheckedFiles={deleteCheckedFiles}
     />
+    </>
   )
 }
 

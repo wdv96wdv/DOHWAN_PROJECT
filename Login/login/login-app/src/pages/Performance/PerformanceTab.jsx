@@ -32,9 +32,9 @@ const PerformanceTab = () => {
   return (
     <div className="performance-page">
       <Helmet>
-        <title>나의 러닝 기록 및 퍼포먼스 통계 - Dorunning</title>
+        <title>Dorunning | 퍼포먼스</title>
         <meta name="description" content="나의 누적 러닝 거리, 페이스, 소모 칼로리를 확인하고 체계적인 러닝 목표를 설정하세요. 당신의 성장을 차트로 한눈에 볼 수 있습니다." />
-        <meta property="og:title" content="나의 러닝 기록 및 퍼포먼스 통계 - Dorunning" />
+        <meta property="og:title" content="Dorunning | 퍼포먼스" />
         <meta property="og:description" content="나의 누적 러닝 거리, 페이스, 소모 칼로리를 확인하고 체계적인 러닝 목표를 설정하세요." />
         <link rel="canonical" href="https://dorunning.vercel.app/performance" />
       </Helmet>

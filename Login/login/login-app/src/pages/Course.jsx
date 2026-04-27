@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Helmet } from 'react-helmet-async';
 import RunningMap from "../components/Course/RunningMap";
 import { COURSE_LIST, REGION_LIST } from "../utils/courseData";
 import { Map, X, Info, Footprints, MapPin } from 'lucide-react';
@@ -22,6 +23,13 @@ const Course = () => {
 
   return (
     <div className="course-page" style={{ background: 'var(--bg-color)', minHeight: '100vh', padding: '120px 20px' }}>
+      <Helmet>
+        <title>Dorunning | 코스</title>
+        <meta name="description" content="전국의 아름다운 러닝 코스를 탐색하세요. 지역별, 난이도별 맞춤 코스 정보와 지도를 제공합니다." />
+        <meta property="og:title" content="Dorunning | 코스" />
+        <meta property="og:description" content="전국의 아름다운 러닝 코스를 탐색하세요." />
+        <link rel="canonical" href="https://dorunning.vercel.app/course" />
+      </Helmet>
       <header className="course-header" style={{ textAlign: 'center', marginBottom: '60px' }}>
         <h1 style={{ fontFamily: 'Orbitron', fontSize: '3rem', color: 'var(--text-primary)' }}>
           <Footprints size={40} style={{verticalAlign: 'middle', marginRight: '16px', color: '#00ffcc'}} /> 

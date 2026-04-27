@@ -3,6 +3,7 @@ import JoinForm from '../../components/Join/JoinForm'
 import { useNavigate } from 'react-router-dom'
 import * as auth from '../../apis/auth'
 import * as Swal from '../../apis/alert'
+import { Helmet } from 'react-helmet-async'
 
 const Join = () => {
 
@@ -42,6 +43,11 @@ const Join = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Dorunning | 회원가입</title>
+        <meta name="description" content="Dorunning 크루의 일원이 되어 나만의 러닝 여정을 시작하세요. 회원가입 후 다양한 서비스를 이용할 수 있습니다." />
+        <meta property="og:title" content="Dorunning | 회원가입" />
+      </Helmet>
       <div className="auth-page">
         <JoinForm join={ join } />
       </div>

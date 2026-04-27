@@ -54,8 +54,10 @@ const Contact = () => {
   return (
     <div className="info-page">
       <Helmet>
-        <title>고객 지원 및 문의하기 - Dorunning</title>
+        <title>Dorunning | 고객지원</title>
         <meta name="description" content="Dorunning 서비스에 대한 궁금한 점이나 제안 사항이 있으신가요? 언제든 메시지를 남겨주세요." />
+        <meta property="og:title" content="Dorunning | 고객지원" />
+        <meta property="og:description" content="Dorunning 서비스에 궁금한 점이나 제안 사항이 있으신가요?" />
         <link rel="canonical" href="https://dorunning.vercel.app/contact" />
       </Helmet>
       <header className="info-header">

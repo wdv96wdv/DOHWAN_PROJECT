@@ -128,9 +128,9 @@ export default function MarathonList() {
     return (
         <div className="marathon-page">
             <Helmet>
-                <title>전국 마라톤 대회 일정 및 접수 정보 - Dorunning</title>
+                <title>Dorunning | 마라톤일정</title>
                 <meta name="description" content="전국의 마라톤 대회 일정을 한눈에 확인하고 접수 기간을 놓치지 마세요. 서울, 부산, 대구 등 지역별 마라톤 정보를 제공합니다." />
-                <meta property="og:title" content="전국 마라톤 대회 일정 및 접수 정보 - Dorunning" />
+                <meta property="og:title" content="Dorunning | 마라톤일정" />
                 <meta property="og:description" content="전국의 마라톤 대회 일정을 한눈에 확인하고 접수 기간을 놓치지 마세요." />
                 <link rel="canonical" href="https://dorunning.vercel.app/marathon" />
             </Helmet>

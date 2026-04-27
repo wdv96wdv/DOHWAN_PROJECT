@@ -5,6 +5,7 @@ import useAuthStore from '../../store/useAuthStore';
 import * as auth from '../../apis/auth';
 import * as Swal from '../../apis/alert';
 import supabase from '../../utils/supabaseClient';
+import { Helmet } from 'react-helmet-async';
 
 const User = () => {
   const isLoading = useAuthStore(state => state.isLoading);
@@ -74,6 +75,11 @@ const User = () => {
 
   return (
     <div className="container">
+      <Helmet>
+        <title>Dorunning | 마이페이지</title>
+        <meta name="description" content="나의 프로필 정보를 수정하고 활동 내역을 확인하세요. 안전하게 개인정보를 관리할 수 있습니다." />
+        <meta property="og:title" content="Dorunning | 마이페이지" />
+      </Helmet>
       <UserForm
         userInfo={userInfo}
         updateUser={updateUser}

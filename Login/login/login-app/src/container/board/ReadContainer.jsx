@@ -23,6 +23,11 @@ const ReadContainer = () => {
     const resData = response.data.data
     setBoard(resData.board)
     setFileList(resData.fileList)
+
+    // 타이틀 강제 업데이트
+    if (resData.board && resData.board.title) {
+      document.title = `Dorunning | 커뮤니티 | ${resData.board.title}`;
+    }
   }
 
   const getComments = async () => {
@@ -128,9 +133,9 @@ const ReadContainer = () => {
   return (
     <>
       <Helmet>
-        <title>{board.title || '게시글'} - Dorunning 커뮤니티</title>
+        <title>Dorunning | 커뮤니티 | {board.title || '상세보기'}</title>
         <meta name="description" content={`${board.writer || '작성자'}님의 게시글: ${board.title}`} />
-        <meta property="og:title" content={`${board.title} - Dorunning`} />
+        <meta property="og:title" content={`Dorunning | 커뮤니티 | ${board.title || '상세보기'}`} />
         <meta property="og:description" content={board.content ? board.content.substring(0, 100).replace(/<[^>]*>?/gm, '') : 'Dorunning 커뮤니티 게시글입니다.'} />
         <meta property="og:type" content="article" />
       </Helmet>

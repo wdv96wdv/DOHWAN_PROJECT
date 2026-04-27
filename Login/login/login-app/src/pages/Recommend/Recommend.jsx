@@ -35,9 +35,9 @@ const Recommend = () => {
   return (
     <div className={styles.recommend}>
       <Helmet>
-        <title>AI 러닝화 추천 가이드 - Dorunning</title>
+        <title>Dorunning | 러닝화 추천</title>
         <meta name="description" content="나의 러닝 스타일과 목적에 딱 맞는 러닝화를 추천받으세요. 초보자부터 전문가용까지 맞춤형 정보를 제공합니다." />
-        <meta property="og:title" content="AI 러닝화 추천 가이드 - Dorunning" />
+        <meta property="og:title" content="Dorunning | 러닝화 추천" />
         <meta property="og:description" content="나의 러닝 스타일과 목적에 딱 맞는 러닝화를 추천받으세요." />
         <link rel="canonical" href="https://dorunning.vercel.app/recommend" />
       </Helmet>

@@ -49,44 +49,44 @@ const Home = () => {
     setLoadingMarathon(true);
     fetch(`${API_BASE_URL}/api/marathons`)
       .then(res => {
-          if (!res.ok) throw new Error("HTTP error!");
-          if (res.status === 204) return [];
-          return res.json();
+        if (!res.ok) throw new Error("HTTP error!");
+        if (res.status === 204) return [];
+        return res.json();
       })
       .then(data => {
-          const formatRawDate = (date) => {
-              if (Array.isArray(date)) {
-                  return `${date[0]}-${String(date[1]).padStart(2, '0')}-${String(date[2]).padStart(2, '0')}`;
-              }
-              return date;
-          };
+        const formatRawDate = (date) => {
+          if (Array.isArray(date)) {
+            return `${date[0]}-${String(date[1]).padStart(2, '0')}-${String(date[2]).padStart(2, '0')}`;
+          }
+          return date;
+        };
 
-          const today = new Date();
-          const kstOffset = 9 * 60 * 60 * 1000;
-          const kstDate = new Date(today.getTime() + kstOffset);
-          const todayStr = kstDate.toISOString().split('T')[0];
+        const today = new Date();
+        const kstOffset = 9 * 60 * 60 * 1000;
+        const kstDate = new Date(today.getTime() + kstOffset);
+        const todayStr = kstDate.toISOString().split('T')[0];
 
-          const activeList = data.map(m => ({
-              id: m.id,
-              title: m.title,
-              link: m.link,
-              location: m.location,
-              raceDate: formatRawDate(m.race_date),
-              startDate: formatRawDate(m.start_date),
-              endDate: formatRawDate(m.end_date),
-              type: Array.isArray(m.type) ? m.type : ["마라톤"],
-          })).filter(item => {
-              if (item.startDate && item.endDate) {
-                  return todayStr >= item.startDate && todayStr <= item.endDate;
-              }
-              return false;
-          });
+        const activeList = data.map(m => ({
+          id: m.id,
+          title: m.title,
+          link: m.link,
+          location: m.location,
+          raceDate: formatRawDate(m.race_date),
+          startDate: formatRawDate(m.start_date),
+          endDate: formatRawDate(m.end_date),
+          type: Array.isArray(m.type) ? m.type : ["마라톤"],
+        })).filter(item => {
+          if (item.startDate && item.endDate) {
+            return todayStr >= item.startDate && todayStr <= item.endDate;
+          }
+          return false;
+        });
 
-          setActiveMarathonCount(activeList.length);
+        setActiveMarathonCount(activeList.length);
 
-          // 랜덤으로 7개 섞기
-          const shuffled = activeList.sort(() => 0.5 - Math.random());
-          setUpcomingMarathons(shuffled.slice(0, 7));
+        // 랜덤으로 7개 섞기
+        const shuffled = activeList.sort(() => 0.5 - Math.random());
+        setUpcomingMarathons(shuffled.slice(0, 7));
       })
       .catch(err => console.error("Failed to fetch marathons on home:", err))
       .finally(() => setLoadingMarathon(false));
@@ -118,12 +118,12 @@ const Home = () => {
   return (
     <div className="home-page">
       <Helmet>
-        <title>Dorunning (두러닝) - 전국 마라톤 대회 일정 및 러닝 기록 관리</title>
-        <meta name="description" content="두러닝(Dorunning)에서 전국 마라톤 대회 일정 정보부터 나의 러닝 기록까지 한 번에 관리하세요! 스마트한 러너들의 프리미엄 커뮤니티." />
-        <meta property="og:title" content="Dorunning (두러닝) - 전국 마라톤 대회 일정 및 러닝 기록 관리" />
+        <title>Dorunning</title>
+        <meta name="description" content="Dorunning에서 전국 마라톤 대회 일정 정보부터 나의 러닝 기록까지 한 번에 관리하세요! 스마트한 러너들의 프리미엄 커뮤니티." />
+        <meta property="og:title" content="Dorunning" />
         <meta property="og:description" content="전국 마라톤 대회 일정 정보부터 나의 러닝 기록까지 한 번에 관리하세요!" />
         <link rel="canonical" href="https://dorunning.vercel.app/" />
-        
+
         {/* 네이버 사이트 이름 구조화 데이터 */}
         <script type="application/ld+json">
           {JSON.stringify({
@@ -162,16 +162,16 @@ const Home = () => {
       {/* Marathon Schedule Carousel */}
       <section className="marathon-carousel-section">
         <div className="home-section-header" data-aos="fade-up">
-           <div className="section-badge">ACCEPTING NOW</div>
-           <h2>현재 접수 중인 마라톤 일정</h2>
-           <p>당신의 도전을 기다리고 있는 다가오는 경기들을 확인하세요</p>
+          <div className="section-badge">ACCEPTING NOW</div>
+          <h2>현재 접수 중인 마라톤 일정</h2>
+          <p>당신의 도전을 기다리고 있는 다가오는 경기들을 확인하세요</p>
         </div>
-        
+
         {loadingMarathon ? (
           <div className="skeleton-grid-home">
-             {[1, 2, 3].map(i => (
-               <div key={i} className="marathon-slide"><Skeleton type="card" /></div>
-             ))}
+            {[1, 2, 3].map(i => (
+              <div key={i} className="marathon-slide"><Skeleton type="card" /></div>
+            ))}
           </div>
         ) : upcomingMarathons.length > 0 ? (
           <Swiper
@@ -201,15 +201,15 @@ const Home = () => {
               <SwiperSlide key={item.id || idx} className="marathon-slide">
                 <div className="marathon-card-glass">
                   <div className="marathon-card-header">
-                     <span className="marathon-location"><MapPin size={16}/> {item.location}</span>
-                     <span className="marathon-date"><Calendar size={16}/> {item.raceDate}</span>
+                    <span className="marathon-location"><MapPin size={16} /> {item.location}</span>
+                    <span className="marathon-date"><Calendar size={16} /> {item.raceDate}</span>
                   </div>
                   <h3>{item.title}</h3>
                   <div className="marathon-tags">
                     {item.type.map(t => <span key={t} className="marathon-tag">{t}</span>)}
                   </div>
                   <button className="marathon-link-btn" onClick={() => navigate(`/marathon/${item.id}`)}>
-                     상세정보 보기 <ChevronRight size={16} />
+                    상세정보 보기 <ChevronRight size={16} />
                   </button>
                 </div>
               </SwiperSlide>
@@ -233,7 +233,7 @@ const Home = () => {
             러닝화는 단순한 신발 그 이상입니다. 당신의 걸음걸이와 생체학적 특성을 분석하여 최고의 기량을 낼 수 있는 완벽한 파트너를 찾아드립니다.
           </p>
           <button className="btn-auth btn-feature" onClick={() => navigate("/recommend")}>
-            나에게 맞는 신발 찾기 <ArrowRight size={18} style={{marginLeft: '8px'}} />
+            나에게 맞는 신발 찾기 <ArrowRight size={18} style={{ marginLeft: '8px' }} />
           </button>
         </div>
         <div className="feature-media glass-media">
@@ -244,13 +244,13 @@ const Home = () => {
       {/* Community */}
       <section className="feature-section reverse" data-aos="fade-up">
         <div className="feature-text">
-           <div className="section-badge">GLOBAL COMMUNITY</div>
+          <div className="section-badge">GLOBAL COMMUNITY</div>
           <h2>당신과 같은 러너들과 함께</h2>
           <p>
             혼자 달리지 마세요. 수천 명의 러너들과 기록을 공유하고, 일상을 나누며 긍정적인 에너지를 얻으세요. 자유게시판부터 러닝 크루 인증까지 모든 것이 준비되어 있습니다.
           </p>
           <button className="btn-auth btn-feature" onClick={() => navigate("/boards")}>
-            커뮤니티 구경하기 <ArrowRight size={18} style={{marginLeft: '8px'}} />
+            커뮤니티 구경하기 <ArrowRight size={18} style={{ marginLeft: '8px' }} />
           </button>
         </div>
         <div className="feature-media glass-media">
@@ -281,13 +281,13 @@ const Home = () => {
       </section>
 
       <footer className="home-footer" data-aos="zoom-in">
-         <div className="footer-glass-box">
-             <h2 className="footer-title">READY TO RUN?</h2>
-             <p>지금 바로 로그인하고 나만의 러닝 리포트를 만들어보세요.</p>
-             <button className="btn-auth hero-btn primary-glow" onClick={handleGetStarted}>
-                여정 시작하기
-             </button>
-         </div>
+        <div className="footer-glass-box">
+          <h2 className="footer-title">READY TO RUN?</h2>
+          <p>지금 바로 로그인하고 나만의 러닝 리포트를 만들어보세요.</p>
+          <button className="btn-auth hero-btn primary-glow" onClick={handleGetStarted}>
+            여정 시작하기
+          </button>
+        </div>
       </footer>
     </div>
   );

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import '../assets/css/Calendar.css';
 import "../assets/css/auth.css";
 import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, Save, X, Activity } from 'lucide-react';
+import { Helmet } from 'react-helmet-async';
 
 const daysOfWeek = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 
@@ -54,6 +55,11 @@ const ExerciseCalendar = () => {
 
   return (
     <div className="calendar-page">
+      <Helmet>
+        <title>Dorunning | 캘린더</title>
+        <meta name="description" content="나의 러닝 스케줄과 활동 내역을 캘린더로 관리하세요. 매일의 성취를 한눈에 확인할 수 있습니다." />
+        <meta property="og:title" content="Dorunning | 캘린더" />
+      </Helmet>
       <header className="calendar-header">
         <h3 style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <CalendarIcon color="var(--primary)" />

@@ -6,6 +6,7 @@ import Loading from '../components/Common/Loading';
 import noImage from '../assets/img/no-image.png';
 import useAuthStore from '../store/useAuthStore';
 import api from '../apis/api';
+import { Helmet } from 'react-helmet-async';
 
 const EventPage = () => {
     const [leaderboard, setLeaderboard] = useState([]);
@@ -53,6 +54,13 @@ const EventPage = () => {
 
     return (
         <div className="event-page">
+            <Helmet>
+                <title>Dorunning | 챌린지</title>
+                <meta name="description" content="이달의 러닝 챌린지에 도전하고 명예의 전당에 이름을 올리세요. 다른 러너들과 함께 목표를 달성하며 즐겁게 달려보세요!" />
+                <meta property="og:title" content="Dorunning | 챌린지" />
+                <meta property="og:description" content="이달의 러닝 챌린지에 도전하고 명예의 전당에 이름을 올리세요." />
+                <link rel="canonical" href="https://dorunning.vercel.app/event" />
+            </Helmet>
             <header className="event-header">
                 <div className="pulse-circle"></div>
                 <h1><Trophy size={48} className="text-primary" style={{ verticalAlign: 'middle', marginRight: '16px' }} /> {currentMonth.toUpperCase()} CHALLENGE</h1>

@@ -8,6 +8,7 @@ import "../../assets/css/auth.css";
 import Swal from 'sweetalert2';
 import { Heart, ShoppingCart, Sparkles, Info } from 'lucide-react';
 import Loading from "../../components/Common/Loading";
+import { Helmet } from 'react-helmet-async';
 
 const RecommendResult = () => {
   const location = useLocation();
@@ -143,6 +144,13 @@ const RecommendResult = () => {
 
   return (
     <div className="wishlist-page">
+      <Helmet>
+        <title>Dorunning | 추천결과</title>
+        <meta name="description" content="당신에게 가장 잘 어울리는 러닝화 추천 결과입니다. 성능과 스타일을 모두 잡은 최적의 기어를 확인해보세요." />
+        <meta property="og:title" content="Dorunning | 추천결과" />
+        <meta property="og:description" content="당신에게 가장 잘 어울리는 러닝화 추천 결과입니다." />
+        <link rel="canonical" href="https://dorunning.vercel.app/recommend/result" />
+      </Helmet>
       <header className="wishlist-header">
         <h1><Sparkles size={40} color="var(--primary)" style={{verticalAlign: 'middle', marginRight: '16px'}} /> RECOMMENDATIONS</h1>
         <p>We found these running shoes matching your criteria.</p>

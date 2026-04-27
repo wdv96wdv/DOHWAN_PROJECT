@@ -7,6 +7,7 @@ import RecordList from "../../components/Record/RecordList";
 import "../../assets/css/record.css";
 import { v4 as uuidv4 } from "uuid";
 import { Activity } from "lucide-react";
+import { Helmet } from 'react-helmet-async';
 
 const parsePaceToSeconds = (paceStr) => {
   if (!paceStr) return 0;
@@ -145,8 +146,8 @@ export default function RecordPage() {
         cadence: submitData.cadence,
         calories: submitData.calories,
         note: submitData.note,
-        recordDate: submitData.record_date.length === 10 ? `${submitData.record_date}T00:00:00` : 
-                    submitData.record_date.length === 16 ? `${submitData.record_date}:00` : submitData.record_date
+        recordDate: submitData.record_date.length === 10 ? `${submitData.record_date}T00:00:00` :
+          submitData.record_date.length === 16 ? `${submitData.record_date}:00` : submitData.record_date
       };
 
       if (editingId) {
@@ -243,6 +244,13 @@ export default function RecordPage() {
 
   return (
     <div className="record-page">
+      <Helmet>
+        <title>Dorunning | 기록</title>
+        <meta name="description" content="나의 매일매일 러닝 기록을 체계적으로 저장하고 분석하세요. 거리, 시간, 페이스 통계를 한눈에 확인하며 성장의 즐거움을 느껴보세요." />
+        <meta property="og:title" content="Dorunning | 러닝기록" />
+        <meta property="og:description" content="나의 매일매일 러닝 기록을 체계적으로 저장하고 분석하세요." />
+        <link rel="canonical" href="https://dorunning.vercel.app/record" />
+      </Helmet>
       <header className="record-header">
         <h1><Activity size={40} style={{ verticalAlign: 'middle', marginRight: '16px', color: 'var(--primary)' }} /> RECORD</h1>
       </header>

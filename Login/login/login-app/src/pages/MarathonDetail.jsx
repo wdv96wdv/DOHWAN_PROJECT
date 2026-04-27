@@ -13,7 +13,6 @@ import {
   CheckCircle2
 } from 'lucide-react';
 import Loading from '../components/Common/Loading';
-import '../assets/css/marathon.css'; // 기존 스타일 활용 및 확장
 
 const MarathonDetail = () => {
     const { id } = useParams();
@@ -26,9 +25,14 @@ const MarathonDetail = () => {
         const fetchDetail = async () => {
             try {
                 setLoading(true);
-                const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+                const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
                 const response = await axios.get(`${API_BASE_URL}/api/marathons/${id}`);
                 setMarathon(response.data);
+                
+                // 보조 타이틀 설정
+                if (response.data && response.data.title) {
+                    document.title = `Dorunning | 마라톤일정 | ${response.data.title}`;
+                }
             } catch (err) {
                 console.error('상세 정보 로드 실패:', err);
                 setError('정보를 불러오지 못했습니다.');
@@ -39,11 +43,9 @@ const MarathonDetail = () => {
         fetchDetail();
     }, [id]);
 
-    if (loading) return <Loading text="대회 상세 정보를 불러오는 중..." />;
-    if (error || !marathon) return <div className="error-container">{error || '데이터가 없습니다.'}</div>;
-
     // D-Day 계산
     const calculateDDay = (targetDate) => {
+        if (!targetDate) return '';
         const today = new Date();
         const target = new Date(targetDate);
         const diff = target - today;
@@ -51,13 +53,41 @@ const MarathonDetail = () => {
         return days === 0 ? 'D-Day' : days > 0 ? `D-${days}` : `종료`;
     };
 
+    if (loading) {
+        return (
+            <div className="container marathon-detail-page">
+                <Helmet>
+                    <title>Dorunning | 마라톤일정 | 상세정보</title>
+                </Helmet>
+                <Loading text="대회 상세 정보를 불러오는 중..." />
+                <style dangerouslySetInnerHTML={{ __html: `
+                    .marathon-detail-page { padding: 40px 20px; max-width: 900px; margin: 0 auto; }
+                `}} />
+            </div>
+        );
+    }
+
+    if (error || !marathon) {
+        return (
+            <div className="container marathon-detail-page">
+                <Helmet>
+                    <title>Dorunning | 마라톤일정 | 에러</title>
+                </Helmet>
+                <div className="error-container">{error || '데이터가 없습니다.'}</div>
+                <style dangerouslySetInnerHTML={{ __html: `
+                    .marathon-detail-page { padding: 40px 20px; max-width: 900px; margin: 0 auto; }
+                `}} />
+            </div>
+        );
+    }
+
     const dDay = calculateDDay(marathon.race_date);
 
     return (
         <div className="container marathon-detail-page">
             <Helmet>
-                <title>{marathon.title} 일정 및 상세 정보 - Dorunning</title>
-                <meta name="description" content={`${marathon.location}에서 열리는 ${marathon.title}의 일정, 접수 방법, 종목 등 상세 정보를 확인하세요. 접수 기간: ${marathon.start_date} ~ ${marathon.end_date}`} />
+                <title>Dorunning | 마라톤일정 | {marathon.title}</title>
+                <meta name="description" content={`${marathon.location}에서 열리는 ${marathon.title}의 일정, 접수 방법, 종목 등 상세 정보를 확인하세요.`} />
                 
                 {/* Google Event Structured Data */}
                 <script type="application/ld+json">
@@ -96,13 +126,13 @@ const MarathonDetail = () => {
                 </script>
 
                 {/* Open Graph / KakaoTalk */}
-                <meta property="og:title" content={`${marathon.title} - 마라톤 일정`} />
+                <meta property="og:title" content={`Dorunning | 마라톤일정 | ${marathon.title}`} />
                 <meta property="og:description" content={`${marathon.race_date} ${marathon.location} 개최. 종목: ${marathon.type?.join(', ')}`} />
                 {marathon.poster_url && <meta property="og:image" content={marathon.poster_url} />}
                 <meta property="og:url" content={window.location.href} />
 
                 {/* Twitter */}
-                <meta name="twitter:title" content={marathon.title} />
+                <meta name="twitter:title" content={`Dorunning | 마라톤일정 | ${marathon.title}`} />
                 <meta name="twitter:description" content={`${marathon.race_date} ${marathon.location} 개최.`} />
                 {marathon.poster_url && <meta name="twitter:image" content={marathon.poster_url} />}
             </Helmet>
@@ -148,7 +178,7 @@ const MarathonDetail = () => {
                     </div>
                 </div>
 
-                {/* 2. 장소 정보 카드 (지도 등 확장 가능) */}
+                {/* 2. 공식 채널 카드 */}
                 <div className="detail-action-card glass-card">
                     <h3><LinkIcon size={20} /> 공식 채널</h3>
                     <p>대회 요강 확인 및 참가 신청은 공식 홈페이지를 이용해 주세요.</p>
@@ -162,6 +192,13 @@ const MarathonDetail = () => {
                     </a>
                 </div>
             </div>
+
+            {marathon.poster_url && (
+                <div className="poster-section glass-card" style={{ marginTop: '30px', padding: '40px' }}>
+                    <h3 style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '24px' }}><Award size={20} /> 대회 포스터</h3>
+                    <img src={marathon.poster_url} alt={`${marathon.title} 포스터`} style={{ width: '100%', borderRadius: '12px', display: 'block' }} />
+                </div>
+            )}
 
             <style dangerouslySetInnerHTML={{ __html: `
                 .marathon-detail-page { padding: 40px 20px; max-width: 900px; margin: 0 auto; }

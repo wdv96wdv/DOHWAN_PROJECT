@@ -8,8 +8,10 @@ const Privacy = () => {
   return (
     <div className="info-page">
       <Helmet>
-        <title>개인정보 처리방침 - Dorunning</title>
+        <title>Dorunning | 개인정보처리방침</title>
         <meta name="description" content="Dorunning의 개인정보 처리방침을 확인하세요. 사용자의 데이터를 안전하게 보호하고 투명하게 관리합니다." />
+        <meta property="og:title" content="Dorunning | 개인정보처리방침" />
+        <meta property="og:description" content="Dorunning의 개인정보 처리방침을 확인하세요." />
         <link rel="canonical" href="https://dorunning.vercel.app/privacy" />
       </Helmet>
       <header className="info-header">
