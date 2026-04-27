@@ -16,6 +16,8 @@ import useAuthStore from "../../store/useAuthStore";
 import "../../assets/css/home.css";
 import "../../assets/css/auth.css";
 import { ChevronRight, ArrowRight, Calendar, MapPin, Activity } from 'lucide-react';
+import Skeleton from "../../components/Common/Skeleton";
+import marathonPoster from "../../assets/img/marathon-poster.png";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -23,6 +25,7 @@ const Home = () => {
   const [upcomingMarathons, setUpcomingMarathons] = useState([]);
   const [activeMarathonCount, setActiveMarathonCount] = useState(0);
   const [appStats, setAppStats] = useState({ activeRunners: 5240, totalDistance: 14800 });
+  const [loadingMarathon, setLoadingMarathon] = useState(true);
 
   const handleGetStarted = () => {
     if (isLogin === "true" || isLogin === true) {
@@ -43,6 +46,7 @@ const Home = () => {
 
     // DB에서 실시간 마라톤 일정 가져와서 "접수중"인 메인 리스트 구성하기
     const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+    setLoadingMarathon(true);
     fetch(`${API_BASE_URL}/api/marathons`)
       .then(res => {
           if (!res.ok) throw new Error("HTTP error!");
@@ -84,7 +88,8 @@ const Home = () => {
           const shuffled = activeList.sort(() => 0.5 - Math.random());
           setUpcomingMarathons(shuffled.slice(0, 7));
       })
-      .catch(err => console.error("Failed to fetch marathons on home:", err));
+      .catch(err => console.error("Failed to fetch marathons on home:", err))
+      .finally(() => setLoadingMarathon(false));
 
     // Fetch app stats
     fetch(`${API_BASE_URL}/records/stats`)
@@ -132,7 +137,7 @@ const Home = () => {
       </Helmet>
       {/* Hero Section */}
       <section className="hero-section">
-        <video autoPlay loop muted className="hero-video" playsInline>
+        <video autoPlay loop muted className="hero-video" playsInline poster={marathonPoster}>
           <source src={marathon} type="video/mp4" />
         </video>
         <div className="hero-overlay-glass"></div>
@@ -162,7 +167,13 @@ const Home = () => {
            <p>당신의 도전을 기다리고 있는 다가오는 경기들을 확인하세요</p>
         </div>
         
-        {upcomingMarathons.length > 0 ? (
+        {loadingMarathon ? (
+          <div className="skeleton-grid-home">
+             {[1, 2, 3].map(i => (
+               <div key={i} className="marathon-slide"><Skeleton type="card" /></div>
+             ))}
+          </div>
+        ) : upcomingMarathons.length > 0 ? (
           <Swiper
             key={upcomingMarathons.length}
             effect={'coverflow'}
@@ -226,7 +237,7 @@ const Home = () => {
           </button>
         </div>
         <div className="feature-media glass-media">
-          <img src={recommend} alt="AI Shoe Recommendation" />
+          <img src={recommend} alt="AI Shoe Recommendation" loading="lazy" />
         </div>
       </section>
 
@@ -243,7 +254,7 @@ const Home = () => {
           </button>
         </div>
         <div className="feature-media glass-media">
-          <img src={community} alt="Runner Community" />
+          <img src={community} alt="Runner Community" loading="lazy" />
         </div>
       </section>
 

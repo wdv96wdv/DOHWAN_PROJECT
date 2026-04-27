@@ -14,11 +14,14 @@ import {
   LayoutGrid,
   List as ListIcon,
   Search,
-  MessageSquare
+  MessageSquare,
+  X
 } from 'lucide-react';
 import * as format from '../../utils/format';
 import Swal from 'sweetalert2';
 import useAuthStore from '../../store/useAuthStore';
+
+import Skeleton from '../Common/Skeleton';
 
 const List = ({ list = [], pagination, currentFilters }) => {
   const isLogin = useAuthStore(state => state.isLogin);
@@ -26,8 +29,46 @@ const List = ({ list = [], pagination, currentFilters }) => {
   const [pageList, setPageList] = useState([]);
   const [viewMode, setViewMode] = useState('list');
   const [searchInput, setSearchInput] = useState(currentFilters?.keyword || '');
+  const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState({ activeRunners: 0, popularKeywords: [] });
 
   const categories = ['전체', '자유', '정보', '코스추천', 'Q&A'];
+
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+  useEffect(() => {
+    if (list.length > 0 || (pagination && pagination.totalCount === 0)) {
+        setLoading(false);
+        // Extract keywords from current list categories
+        if (list.length > 0) {
+            const counts = {};
+            list.forEach(item => {
+                const type = item.type || '자유';
+                counts[type] = (counts[type] || 0) + 1;
+            });
+            const topKeywords = Object.entries(counts)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 2)
+                .map(([name]) => `#${name}`);
+            
+            setStats(prev => ({ ...prev, popularKeywords: topKeywords.length > 0 ? topKeywords : ['#러닝', '#마라톤'] }));
+        }
+    } else {
+        setLoading(true);
+    }
+  }, [list, pagination]);
+
+  useEffect(() => {
+    // Fetch real active runners from DB
+    fetch(`${API_BASE_URL}/records/stats`)
+      .then(res => res.json())
+      .then(data => {
+         if (data.data) {
+            setStats(prev => ({ ...prev, activeRunners: data.data.activeRunners }));
+         }
+      })
+      .catch(err => console.error("Failed to fetch community stats:", err));
+  }, []);
 
   useEffect(() => {
     createPageList();
@@ -43,7 +84,7 @@ const List = ({ list = [], pagination, currentFilters }) => {
 
     const debounceTimer = setTimeout(() => {
       navigate(`/boards?page=1&type=${encodeURIComponent(currentFilters?.type || '전체')}&keyword=${encodeURIComponent(searchInput)}`);
-    }, 400);
+    }, 500);
 
     return () => clearTimeout(debounceTimer);
   }, [searchInput, currentFilters?.type, navigate]);
@@ -74,7 +115,9 @@ const List = ({ list = [], pagination, currentFilters }) => {
         icon: 'info',
         title: 'Login Required',
         text: '게시글을 작성하려면 로그인이 필요합니다.',
-        confirmButtonColor: 'var(--primary)'
+        confirmButtonColor: 'var(--primary)',
+        background: 'var(--glass-bg)',
+        color: 'var(--text-primary)'
       });
     }
   };
@@ -91,24 +134,40 @@ const List = ({ list = [], pagination, currentFilters }) => {
           <div className="title-area">
             <span className="subtitle">DORUNNING COMMUNITY</span>
             <h1 className="main-title">COMMUNITY</h1>
-            <p className="description">함께 뛰고 소통하며 더욱 즐거운 러닝 라이프를 만들어가세요.</p>
+            <p className="description">전국의 러너들과 소중한 러닝 경험을 공유하세요.</p>
           </div>
 
           <div className="header-actions">
             <Link to="/boards/insert" className="premium-btn btn-write" onClick={handleWriteClick}>
               <Plus size={20} />
-              <span>새 글 쓰기</span>
+              <span>새 글 작성</span>
             </Link>
           </div>
         </div>
 
+        {/* Community Stats Quick View */}
+        <div className="community-stats-bar glass" style={{ marginBottom: '30px' }}>
+            <div className="stat-item">
+                <span className="stat-label">오늘의 새 글</span>
+                <span className="stat-value">{pagination?.totalCount > 10 ? '12+' : pagination?.totalCount || 0}</span>
+            </div>
+            <div className="stat-item">
+                <span className="stat-label">활발한 러너</span>
+                <span className="stat-value">{stats.activeRunners.toLocaleString()}명</span>
+            </div>
+            <div className="stat-item">
+                <span className="stat-label">인기 키워드</span>
+                <span className="stat-value">{stats.popularKeywords.join(' ')}</span>
+            </div>
+        </div>
+
         {/* Categories & Search Toolbar */}
         <div className="board-toolbar glass">
-          <div className="categories">
+          <div className="categories-segmented">
             {categories.map(cat => (
               <button
                 key={cat}
-                className={`category-item ${currentFilters?.type === cat ? 'active' : ''}`}
+                className={`category-segment ${currentFilters?.type === cat ? 'active' : ''}`}
                 onClick={() => handleCategoryClick(cat)}
               >
                 {cat}
@@ -121,27 +180,37 @@ const List = ({ list = [], pagination, currentFilters }) => {
               <button
                 className={`toggle-btn ${viewMode === 'list' ? 'active' : ''}`}
                 onClick={() => setViewMode('list')}
-                title="리스트 형태로 보기"
               >
                 <ListIcon size={18} />
               </button>
               <button
                 className={`toggle-btn ${viewMode === 'grid' ? 'active' : ''}`}
                 onClick={() => setViewMode('grid')}
-                title="그리드 형태로 보기"
               >
                 <LayoutGrid size={18} />
               </button>
             </div>
 
-            <form className="search-box" onSubmit={handleSearchSubmit}>
-              <Search size={18} className="search-icon" />
-              <input
-                type="text"
-                placeholder="검색어를 입력하세요..."
-                value={searchInput}
-                onChange={(e) => setSearchInput(e.target.value)}
-              />
+            <form className="search-box-premium" onSubmit={handleSearchSubmit}>
+              <div className="search-input-inner">
+                <Search size={18} className={`search-icon ${searchInput ? 'active' : ''}`} />
+                <input
+                  type="text"
+                  placeholder="무엇을 찾으시나요?"
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)}
+                />
+                {searchInput && (
+                  <button 
+                    type="button" 
+                    className="search-clear-btn"
+                    onClick={() => setSearchInput('')}
+                  >
+                    <X size={14} />
+                  </button>
+                )}
+                {!searchInput && <span className="search-shortcut">/</span>}
+              </div>
             </form>
           </div>
         </div>
@@ -149,22 +218,29 @@ const List = ({ list = [], pagination, currentFilters }) => {
 
       {/* Content Section */}
       <div className={`board-content-wrapper view-mode-${viewMode}`}>
-        {viewMode === 'list' && (
+        {viewMode === 'list' && !loading && list.length > 0 && (
           <div className="board-table-header">
             <div className="col-type">종류</div>
             <div className="col-thumb">이미지</div>
-            <div className="col-info">보드 정보</div>
+            <div className="col-info">제목</div>
             <div className="col-writer">작성자</div>
             <div className="col-date">날짜</div>
           </div>
         )}
 
         <div className={`board-list-container ${viewMode}`}>
-          {list.length === 0 ? (
+          {loading ? (
+             // Loading Skeletons
+             Array.from({ length: 5 }).map((_, i) => (
+                <div key={i} className={`board-item-row glass ${viewMode === 'grid' ? 'grid-item' : ''}`} style={{ padding: '20px' }}>
+                   <Skeleton type="list" />
+                </div>
+             ))
+          ) : list.length === 0 ? (
             <div className="empty-state glass">
               <Search size={48} />
-              <p>검색 결과가 없습니다.</p>
-              <span className="sub-text">새로운 소식을 가장 먼저 전해보세요!</span>
+              <p>원하는 검색 결과가 없습니다.</p>
+              <span className="sub-text">첫 번째 소식을 남겨보시는 건 어떨까요?</span>
             </div>
           ) : (
             list.map((board) => (
@@ -180,6 +256,7 @@ const List = ({ list = [], pagination, currentFilters }) => {
                     src={board.file?.filePath || noImage}
                     alt="thumb"
                     className="item-thumb"
+                    loading="lazy"
                   />
                 </div>
 
@@ -188,7 +265,8 @@ const List = ({ list = [], pagination, currentFilters }) => {
                     {board.title}
                     {board.commentCount > 0 && (
                       <span className="comment-count-inline">
-                        ({board.commentCount})
+                        <MessageSquare size={12} style={{ margin: '0 4px 0 8px' }} />
+                        {board.commentCount}
                       </span>
                     )}
                   </Link>
@@ -212,37 +290,39 @@ const List = ({ list = [], pagination, currentFilters }) => {
       </div>
 
       {/* Pagination */}
-      <footer className="board-footer">
-        <div className="pagination-area">
-          <div className="pagination premium-pagination">
-            <Link to={getPageUrl(pagination.first)} className="page-link">
-              <ChevronsLeft size={18} />
-            </Link>
-            <Link to={getPageUrl(pagination.prev)} className="page-link">
-              <ChevronLeft size={18} />
-            </Link>
+      {!loading && list.length > 0 && (
+        <footer className="board-footer">
+          <div className="pagination-area">
+            <div className="pagination premium-pagination">
+              <Link to={getPageUrl(pagination.first)} className="page-link">
+                <ChevronsLeft size={18} />
+              </Link>
+              <Link to={getPageUrl(pagination.prev)} className="page-link">
+                <ChevronLeft size={18} />
+              </Link>
 
-            <div className="page-numbers">
-              {pageList.map((page) => (
-                <Link
-                  key={page}
-                  to={getPageUrl(page)}
-                  className={`page-number ${page === Number(pagination.page) ? 'active' : ''}`}
-                >
-                  {page}
-                </Link>
-              ))}
+              <div className="page-numbers">
+                {pageList.map((page) => (
+                  <Link
+                    key={page}
+                    to={getPageUrl(page)}
+                    className={`page-number ${page === Number(pagination.page) ? 'active' : ''}`}
+                  >
+                    {page}
+                  </Link>
+                ))}
+              </div>
+
+              <Link to={getPageUrl(pagination.next)} className="page-link">
+                <ChevronRight size={18} />
+              </Link>
+              <Link to={getPageUrl(pagination.last)} className="page-link">
+                <ChevronsRight size={18} />
+              </Link>
             </div>
-
-            <Link to={getPageUrl(pagination.next)} className="page-link">
-              <ChevronRight size={18} />
-            </Link>
-            <Link to={getPageUrl(pagination.last)} className="page-link">
-              <ChevronsRight size={18} />
-            </Link>
           </div>
-        </div>
-      </footer>
+        </footer>
+      )}
     </div>
   );
 };

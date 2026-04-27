@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import "../assets/css/marathon.css";
 import "../assets/css/auth.css";
 import { Search, MapPin, Calendar, Footprints, RotateCcw, Award } from 'lucide-react';
-import Loading from '../components/Common/Loading';
+import Skeleton from "../components/Common/Skeleton";
 
 export default function MarathonList() {
     const defaultSearch = "";
@@ -22,6 +22,7 @@ export default function MarathonList() {
     // --- 1. 백엔드 API 호출 ---
     // MarathonList.js 내부 useEffect
     useEffect(() => {
+        setLoading(true);
         fetch(`${API_BASE_URL}/api/marathons`)
             .then(res => {
                 if (!res.ok) {
@@ -55,10 +56,11 @@ export default function MarathonList() {
                     };
                 });
                 setMarathons(formattedData);
-                setLoading(false);
             })
             .catch(err => {
                 console.error("데이터 로드 실패:", err);
+            })
+            .finally(() => {
                 setLoading(false);
             });
     }, []);
@@ -122,7 +124,6 @@ export default function MarathonList() {
 
             return matchText && matchType && matchStatus;
         });
-    if (loading) return <Loading text="마라톤 대회 일정 불러오는중..." />;
 
     return (
         <div className="marathon-page">
@@ -177,34 +178,41 @@ export default function MarathonList() {
             </div>
 
             <div className="marathon-grid">
-                {filtered.map(m => (
-                    <Link
-                        key={m.id || m.link}
-                        to={`/marathon/${m.id}`}
-                        className="marathon-card glass-card"
-                    >
-                        <div className={`m-badge ${statusClassMap[m.status]}`}>
-                            {m.status}
-                        </div>
+                {loading ? (
+                    // 로딩 중일 때 8개의 스켈레톤 카드 표시
+                    Array.from({ length: 8 }).map((_, i) => (
+                        <Skeleton key={i} type="card" />
+                    ))
+                ) : (
+                    filtered.map(m => (
+                        <Link
+                            key={m.id || m.link}
+                            to={`/marathon/${m.id}`}
+                            className="marathon-card glass-card"
+                        >
+                            <div className={`m-badge ${statusClassMap[m.status]}`}>
+                                {m.status}
+                            </div>
 
-                        <div className="m-title">{m.title}</div>
+                            <div className="m-title">{m.title}</div>
 
-                        <div className="m-info-group">
-                            <div className="m-info-item">
-                                <MapPin size={16} color="var(--primary)" />
-                                <span>{m.location}</span>
+                            <div className="m-info-group">
+                                <div className="m-info-item">
+                                    <MapPin size={16} color="var(--primary)" />
+                                    <span>{m.location}</span>
+                                </div>
+                                <div className="m-info-item">
+                                    <Calendar size={16} color="var(--primary)" />
+                                    <span>{m.raceDate}</span>
+                                </div>
+                                <div className="m-info-item" style={{ marginTop: '8px' }}>
+                                    <Footprints size={16} color="var(--text-muted)" />
+                                    <span style={{ fontWeight: 600 }}>{m.type.join(" / ")}</span>
+                                </div>
                             </div>
-                            <div className="m-info-item">
-                                <Calendar size={16} color="var(--primary)" />
-                                <span>{m.raceDate}</span>
-                            </div>
-                            <div className="m-info-item" style={{ marginTop: '8px' }}>
-                                <Footprints size={16} color="var(--text-muted)" />
-                                <span style={{ fontWeight: 600 }}>{m.type.join(" / ")}</span>
-                            </div>
-                        </div>
-                    </Link>
-                ))}
+                        </Link>
+                    ))
+                )}
             </div>
 
             {filtered.length === 0 && (

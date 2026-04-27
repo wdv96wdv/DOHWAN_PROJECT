@@ -154,6 +154,15 @@
   width: 320px;
 }
 
+.skeleton-grid-home {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  width: 100%;
+  padding: 20px 0;
+  overflow: hidden;
+}
+
 .marathon-card-glass {
   background: var(--glass-bg);
   backdrop-filter: var(--glass-blur);
