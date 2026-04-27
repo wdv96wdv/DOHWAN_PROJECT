@@ -113,11 +113,22 @@ const Home = () => {
   return (
     <div className="home-page">
       <Helmet>
-        <title>전국 마라톤 대회 일정 및 러닝 기록 관리 - Dorunning</title>
-        <meta name="description" content="전국 마라톤 대회 일정 정보부터 나의 러닝 기록까지 한 번에 관리하세요! Dorunning에서 스마트한 러닝 생활을 시작하세요." />
-        <meta property="og:title" content="전국 마라톤 대회 일정 및 러닝 기록 관리 - Dorunning" />
+        <title>Dorunning (두러닝) - 전국 마라톤 대회 일정 및 러닝 기록 관리</title>
+        <meta name="description" content="두러닝(Dorunning)에서 전국 마라톤 대회 일정 정보부터 나의 러닝 기록까지 한 번에 관리하세요! 스마트한 러너들의 프리미엄 커뮤니티." />
+        <meta property="og:title" content="Dorunning (두러닝) - 전국 마라톤 대회 일정 및 러닝 기록 관리" />
         <meta property="og:description" content="전국 마라톤 대회 일정 정보부터 나의 러닝 기록까지 한 번에 관리하세요!" />
         <link rel="canonical" href="https://dorunning.vercel.app/" />
+        
+        {/* 네이버 사이트 이름 구조화 데이터 */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "http://schema.org",
+            "@type": "WebSite",
+            "name": "Dorunning",
+            "alternateName": "두러닝",
+            "url": "https://dorunning.vercel.app"
+          })}
+        </script>
       </Helmet>
       {/* Hero Section */}
       <section className="hero-section">
