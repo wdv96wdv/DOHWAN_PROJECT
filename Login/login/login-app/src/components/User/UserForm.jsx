@@ -166,7 +166,7 @@ const UserForm = ({ userInfo = {}, updateUser, deleteUser, loginType }) => {
           </div>
           <div className="profile-info-brief">
             <h2 className="auth-title">{form.name || 'User'}</h2>
-            <p className="text-muted">{form.username}</p>
+            <p className="text-muted">{form.email}</p>
           </div>
           <Link to="/wishlist" className="btn-auth" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
             <Heart size={18} /> MY WISHLIST

@@ -50,7 +50,7 @@ const Header = ({ theme, toggleTheme }) => {
     <ul className="util-list">
       {isLogin ? (
         <li>
-          <button className="btn-logout" onClick={() => { logout(); closeMenu(); }}>
+          <button className="btn-logout" onClick={() => { logout(); closeMenu(); navigate('/') }}>
             <LogOut size={20} />
             <span>로그아웃</span>
           </button>
@@ -59,7 +59,6 @@ const Header = ({ theme, toggleTheme }) => {
         <>
           <li><Link to="/login" onClick={closeMenu}><LogIn size={20} /><span>로그인</span></Link></li>
           <li><Link to="/join" onClick={closeMenu}><UserPlus size={20} /><span>회원가입</span></Link></li>
-          <li><Link to="/about" onClick={closeMenu}><Info size={20} /><span>소개</span></Link></li>
         </>
       )}
     </ul>
