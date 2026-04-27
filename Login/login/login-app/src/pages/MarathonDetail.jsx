@@ -56,9 +56,45 @@ const MarathonDetail = () => {
     return (
         <div className="container marathon-detail-page">
             <Helmet>
-                <title>{marathon.title} - Dorunning</title>
-                <meta name="description" content={`${marathon.location}에서 열리는 ${marathon.title} 상세 정보입니다. 접수 기간: ${marathon.start_date} ~ ${marathon.end_date}`} />
+                <title>{marathon.title} 일정 및 상세 정보 - Dorunning</title>
+                <meta name="description" content={`${marathon.location}에서 열리는 ${marathon.title}의 일정, 접수 방법, 종목 등 상세 정보를 확인하세요. 접수 기간: ${marathon.start_date} ~ ${marathon.end_date}`} />
                 
+                {/* Google Event Structured Data */}
+                <script type="application/ld+json">
+                    {JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "Event",
+                        "name": marathon.title,
+                        "description": `${marathon.title} 마라톤 상세 정보, 일정, 장소 및 접수 안내`,
+                        "startDate": marathon.race_date,
+                        "endDate": marathon.race_date,
+                        "eventStatus": "https://schema.org/EventScheduled",
+                        "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+                        "location": {
+                            "@type": "Place",
+                            "name": marathon.location,
+                            "address": {
+                                "@type": "PostalAddress",
+                                "addressLocality": marathon.location,
+                                "addressRegion": marathon.location,
+                                "addressCountry": "KR"
+                            }
+                        },
+                        "image": marathon.poster_url || "https://dorunning.vercel.app/og-image.png",
+                        "offers": {
+                            "@type": "Offer",
+                            "url": window.location.href,
+                            "availability": "https://schema.org/InStock",
+                            "validFrom": marathon.start_date
+                        },
+                        "organizer": {
+                            "@type": "Organization",
+                            "name": "Dorunning",
+                            "url": "https://dorunning.vercel.app"
+                        }
+                    })}
+                </script>
+
                 {/* Open Graph / KakaoTalk */}
                 <meta property="og:title" content={`${marathon.title} - 마라톤 일정`} />
                 <meta property="og:description" content={`${marathon.race_date} ${marathon.location} 개최. 종목: ${marathon.type?.join(', ')}`} />

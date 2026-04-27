@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Helmet } from 'react-helmet-async';
 import recommend from "../../assets/img/recommend.jpg";
 import marathon from "../../assets/video/marathon.mp4";
 import community from "../../assets/img/community.png";
@@ -111,6 +112,13 @@ const Home = () => {
 
   return (
     <div className="home-page">
+      <Helmet>
+        <title>전국 마라톤 대회 일정 및 러닝 기록 관리 - Dorunning</title>
+        <meta name="description" content="전국 마라톤 대회 일정 정보부터 나의 러닝 기록까지 한 번에 관리하세요! Dorunning에서 스마트한 러닝 생활을 시작하세요." />
+        <meta property="og:title" content="전국 마라톤 대회 일정 및 러닝 기록 관리 - Dorunning" />
+        <meta property="og:description" content="전국 마라톤 대회 일정 정보부터 나의 러닝 기록까지 한 번에 관리하세요!" />
+        <link rel="canonical" href="https://dorunning.vercel.app/" />
+      </Helmet>
       {/* Hero Section */}
       <section className="hero-section">
         <video autoPlay loop muted className="hero-video" playsInline>

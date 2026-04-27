@@ -1,4 +1,5 @@
 import React from 'react';
+import { Helmet } from 'react-helmet-async';
 import runningImg from '../assets/img/aboutrunning.jpg'; 
 import "../assets/css/info.css";
 import "../assets/css/auth.css";
@@ -7,6 +8,13 @@ import { Info, Target, MessageCircle, ChevronRight, CheckCircle2 } from 'lucide-
 const About = () => {
   return (
     <div className="info-page">
+      <Helmet>
+        <title>Dorunning 소개 - 프리미엄 러닝 플랫폼</title>
+        <meta name="description" content="Dorunning의 미션과 핵심 서비스를 소개합니다. 전국 마라톤 정보, AI 신발 추천, 커뮤니티를 통해 러너들의 성장을 돕습니다." />
+        <meta property="og:title" content="Dorunning 소개 - 프리미엄 러닝 플랫폼" />
+        <meta property="og:description" content="Dorunning의 미션과 핵심 서비스를 소개합니다." />
+        <link rel="canonical" href="https://dorunning.vercel.app/about" />
+      </Helmet>
       <header className="info-header">
         <h1>ABOUT <span style={{color: 'var(--primary)'}}>DORUNNING</span></h1>
         <p>Empowering runners to track, connect, and thrive.</p>

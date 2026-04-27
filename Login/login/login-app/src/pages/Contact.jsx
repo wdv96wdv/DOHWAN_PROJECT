@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import "../assets/css/info.css";
 import "../assets/css/auth.css";
 import { Mail, Phone, Send, CheckCircle, MessageSquare, User, AtSign } from 'lucide-react';
@@ -52,6 +53,11 @@ const Contact = () => {
 
   return (
     <div className="info-page">
+      <Helmet>
+        <title>고객 지원 및 문의하기 - Dorunning</title>
+        <meta name="description" content="Dorunning 서비스에 대한 궁금한 점이나 제안 사항이 있으신가요? 언제든 메시지를 남겨주세요." />
+        <link rel="canonical" href="https://dorunning.vercel.app/contact" />
+      </Helmet>
       <header className="info-header">
         <h1>문의<span style={{color: 'var(--primary)'}}>하기</span></h1>
         <p>궁금한 점이 있으신가요? 메시지를 남겨주시면 정성껏 답변해 드리겠습니다.</p>

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Helmet } from 'react-helmet-async';
 import "../assets/css/info.css";
 import "../assets/css/auth.css";
 import { ShieldCheck, Eye, Lock, Mail, ExternalLink, Activity } from 'lucide-react';
@@ -6,6 +7,11 @@ import { ShieldCheck, Eye, Lock, Mail, ExternalLink, Activity } from 'lucide-rea
 const Privacy = () => {
   return (
     <div className="info-page">
+      <Helmet>
+        <title>개인정보 처리방침 - Dorunning</title>
+        <meta name="description" content="Dorunning의 개인정보 처리방침을 확인하세요. 사용자의 데이터를 안전하게 보호하고 투명하게 관리합니다." />
+        <link rel="canonical" href="https://dorunning.vercel.app/privacy" />
+      </Helmet>
       <header className="info-header">
         <h1>개인정보 <span style={{color: 'var(--primary)'}}>처리방침</span></h1>
         <p>여러분의 신뢰는 두러닝의 가장 소중한 자산입니다.</p>

@@ -219,7 +219,8 @@ public class RecordController {
         try {
             LocalDateTime now = LocalDateTime.now();
             LocalDateTime startOfMonth = now.withDayOfMonth(1).withHour(0).withMinute(0).withSecond(0).withNano(0);
-            List<com.dohwan.login.dto.LeaderboardDto> leaderboard = recordRepository.getMonthlyLeaderboard(startOfMonth, now);
+            LocalDateTime endOfRange = startOfMonth.plusMonths(1);
+            List<com.dohwan.login.dto.LeaderboardDto> leaderboard = recordRepository.getMonthlyLeaderboard(startOfMonth, endOfRange);
             return ResponseEntity.ok(ApiResponse.success(leaderboard));
         } catch (Exception e) {
             log.error("리더보드 조회 에러: ", e);

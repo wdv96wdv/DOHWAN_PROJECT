@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Helmet } from 'react-helmet-async';
 import styles from "../../assets/css/Recommend.module.css";
 import Swal from "sweetalert2";
 
@@ -33,6 +34,13 @@ const Recommend = () => {
 
   return (
     <div className={styles.recommend}>
+      <Helmet>
+        <title>AI 러닝화 추천 가이드 - Dorunning</title>
+        <meta name="description" content="나의 러닝 스타일과 목적에 딱 맞는 러닝화를 추천받으세요. 초보자부터 전문가용까지 맞춤형 정보를 제공합니다." />
+        <meta property="og:title" content="AI 러닝화 추천 가이드 - Dorunning" />
+        <meta property="og:description" content="나의 러닝 스타일과 목적에 딱 맞는 러닝화를 추천받으세요." />
+        <link rel="canonical" href="https://dorunning.vercel.app/recommend" />
+      </Helmet>
       <h1>러닝화 추천 받기</h1>
       <p>아래 질문에 답해주시면 당신에게 맞는 러닝화를 추천해드릴게요.</p>
 

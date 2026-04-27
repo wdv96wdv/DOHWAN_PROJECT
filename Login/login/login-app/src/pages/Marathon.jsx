@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom"; // 추가
+import { Link } from "react-router-dom";
+import { Helmet } from 'react-helmet-async';
 import "../assets/css/marathon.css";
 import "../assets/css/auth.css";
 import { Search, MapPin, Calendar, Footprints, RotateCcw, Award } from 'lucide-react';
@@ -125,6 +126,13 @@ export default function MarathonList() {
 
     return (
         <div className="marathon-page">
+            <Helmet>
+                <title>전국 마라톤 대회 일정 및 접수 정보 - Dorunning</title>
+                <meta name="description" content="전국의 마라톤 대회 일정을 한눈에 확인하고 접수 기간을 놓치지 마세요. 서울, 부산, 대구 등 지역별 마라톤 정보를 제공합니다." />
+                <meta property="og:title" content="전국 마라톤 대회 일정 및 접수 정보 - Dorunning" />
+                <meta property="og:description" content="전국의 마라톤 대회 일정을 한눈에 확인하고 접수 기간을 놓치지 마세요." />
+                <link rel="canonical" href="https://dorunning.vercel.app/marathon" />
+            </Helmet>
             <header className="marathon-header">
                 <h1><Award size={40} style={{ verticalAlign: 'middle', marginRight: '16px', color: 'var(--primary)' }} /> MARATHON EVENTS</h1>
             </header>
