@@ -8,15 +8,11 @@ export const login = async (username, password) => {
   try {
     const response = await api.post(`/login`, { username, password });
 
-    // 응답 헤더 로그 출력 (확인용)
-    console.log('응답 헤더:', response.headers)
-
     // Authorization 헤더에서 JWT 추출
     const authorization = response.headers['authorization'];
     if (authorization) {
       const token = authorization.replace('Bearer ', '');
       localStorage.setItem('jwt', token);
-      console.log('✅ JWT 저장 완료:', token);
     } else {
       console.warn('⚠️ JWT 없음:', response.data);
     }

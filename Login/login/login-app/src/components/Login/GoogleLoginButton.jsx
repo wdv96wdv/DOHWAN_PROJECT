@@ -27,7 +27,6 @@ const GoogleLoginButton = () => {
             const { token, userInfo } = response.data.data;
 
             loginWithSocial(token, userInfo, navigate); // ✅ LoginContext에 로그인 처리
-            console.log('✅ 로그인 성공:', user);
         } catch (error) {
             console.error('❌ 로그인 실패:', error);
         }

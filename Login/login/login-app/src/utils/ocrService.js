@@ -21,8 +21,6 @@ export const processNRCImage = async (imageFile) => {
  * 텍스트 패턴 매칭을 통한 데이터 파싱
  */
 const parseNRCText = (text) => {
-  console.log("OCR 원본 텍스트:\n", text);
-  
   // 텍스트 줄바꿈 유지하면서 줄별로 분리 및 시스템 영역(상단 3줄) 제외
   const lines = text.split("\n").filter(l => l.trim().length > 0);
   const bodyLines = lines.length > 4 ? lines.slice(3) : lines; 

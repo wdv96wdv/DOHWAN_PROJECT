@@ -17,8 +17,6 @@ const api = axios.create({
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('jwt');
-    // 로그로 토큰 확인
-    console.log("JWT Token: ", token);
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }

@@ -42,7 +42,6 @@ const RunInputForm = ({ onRecordSaved }) => {
         icon: 'success',
         confirmButtonText: '확인'
       });
-      console.log('응답:', res.data);
       
       // 폼 초기화
       setForm({

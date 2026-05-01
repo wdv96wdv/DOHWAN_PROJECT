@@ -33,7 +33,6 @@ export default function MarathonList() {
                 return res.json();
             })
             .then(data => {
-                console.log("Raw Data from Backend:", data); // 데이터 구조 확인용 로그
                 const formattedData = data.map(m => {
                     // 날짜가 배열 [2026, 3, 23] 형태로 올 경우를 대비한 처리
                     const formatRawDate = (date) => {

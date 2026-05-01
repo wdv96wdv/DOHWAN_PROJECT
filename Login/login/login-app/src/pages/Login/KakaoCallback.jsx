@@ -32,7 +32,6 @@ const KakaoCallback = () => {
 
             // 전역 상태에 로그인 정보 저장
             loginWithSocial(token, userInfo, navigate);
-            console.log('✅ 카카오 로그인 성공');
         } catch (error) {
             console.error('❌ 카카오 로그인 실패:', error);
             navigate('/login');
