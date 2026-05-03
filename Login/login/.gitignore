@@ -38,3 +38,6 @@ out/
 
 ### Gemini ###
 .gemini/
+
+### Logs ###
+logs/
