@@ -1,23 +1,23 @@
-2026-05-02 00:31:30 [restartedMain] INFO  com.dohwan.login.LoginApplication - Starting LoginApplication using Java 24.0.2 with PID 6856 (C:\web\Dohwan_project\Login\login\build\classes\java\main started by user in C:\web\Dohwan_project\Login\login)
-2026-05-02 00:31:30 [restartedMain] INFO  com.dohwan.login.LoginApplication - The following 1 profile is active: "prod"
-2026-05-02 00:31:30 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
-2026-05-02 00:31:30 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
-2026-05-02 00:31:32 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-05-02 00:31:32 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 495 ms. Found 11 JPA repository interfaces.
-2026-05-02 00:31:34 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
-2026-05-02 00:31:34 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
-2026-05-02 00:31:34 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.44]
-2026-05-02 00:31:34 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
-2026-05-02 00:31:34 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 3933 ms
-2026-05-02 00:31:34 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
-2026-05-02 00:31:34 [restartedMain] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.26.Final
-2026-05-02 00:31:35 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
-2026-05-02 00:31:35 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
-2026-05-02 00:31:35 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
-2026-05-02 00:31:36 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@27cb96e
-2026-05-02 00:31:36 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
-2026-05-02 00:31:36 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2026-05-02 00:31:36 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+2026-05-03 22:55:00 [restartedMain] INFO  com.dohwan.login.LoginApplication - Starting LoginApplication using Java 24.0.2 with PID 25224 (C:\web\Dohwan_project\Login\login\build\classes\java\main started by user in C:\web\Dohwan_project\Login\login)
+2026-05-03 22:55:00 [restartedMain] INFO  com.dohwan.login.LoginApplication - The following 1 profile is active: "prod"
+2026-05-03 22:55:00 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-05-03 22:55:00 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-05-03 22:55:02 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-03 22:55:02 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 390 ms. Found 11 JPA repository interfaces.
+2026-05-03 22:55:06 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-05-03 22:55:06 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-05-03 22:55:06 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.44]
+2026-05-03 22:55:06 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-05-03 22:55:06 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 5394 ms
+2026-05-03 22:55:06 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-05-03 22:55:06 [restartedMain] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.26.Final
+2026-05-03 22:55:06 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-05-03 22:55:07 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-03 22:55:07 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-05-03 22:55:08 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@65e349cf
+2026-05-03 22:55:08 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-05-03 22:55:08 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-05-03 22:55:08 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
 	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
 	Database driver: undefined/unknown
 	Database version: 17.6
@@ -25,113 +25,18 @@
 	Isolation level: undefined/unknown
 	Minimum pool size: undefined/unknown
 	Maximum pool size: undefined/unknown
-2026-05-02 00:31:38 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2026-05-02 00:31:38 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-05-02 00:31:39 [restartedMain] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
-2026-05-02 00:31:43 [restartedMain] INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page: class path resource [static/index.html]
-2026-05-02 00:31:43 [restartedMain] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name userDetailServiceImpl
-2026-05-02 00:31:43 [restartedMain] INFO  c.dohwan.login.config.SecurityConfig - CORS 설정 - Allowed Origins: [https://dorunning.vercel.app, http://localhost:5173, http://127.0.0.1:5173, http://localhost:3000, http://127.0.0.1:3000]
-2026-05-02 00:31:43 [restartedMain] INFO  c.dohwan.login.config.SecurityConfig - CORS 설정 - Allowed Methods: [GET, POST, PUT, DELETE, OPTIONS]
-2026-05-02 00:31:43 [restartedMain] INFO  c.dohwan.login.config.SecurityConfig - CORS 설정 - Allowed Headers: [Authorization, Content-Type, X-Requested-With, Accept, Origin, Access-Control-Request-Method, Access-Control-Request-Headers]
-2026-05-02 00:31:43 [restartedMain] INFO  c.dohwan.login.config.SecurityConfig - CORS 설정 - Exposed Headers: [Authorization]
-2026-05-02 00:31:43 [restartedMain] INFO  c.dohwan.login.config.SecurityConfig - CORS 설정 - Allow Credentials: true
-2026-05-02 00:31:43 [restartedMain] INFO  c.dohwan.login.config.SecurityConfig - CORS 설정 - CORS Configuration Source 등록 완료
-2026-05-02 00:31:44 [restartedMain] WARN  o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
-2026-05-02 00:31:44 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
-2026-05-02 00:31:44 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
-2026-05-02 00:31:44 [restartedMain] INFO  com.dohwan.login.LoginApplication - Started LoginApplication in 14.791 seconds (process running for 15.962)
-2026-05-02 00:31:50 [http-nio-8080-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
-2026-05-02 00:31:50 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
-2026-05-02 00:31:50 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 5 ms
-2026-05-02 00:31:50 [http-nio-8080-exec-1] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /records/stats from 0:0:0:0:0:0:0:1
-2026-05-02 00:31:50 [http-nio-8080-exec-1] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
-2026-05-02 00:31:50 [http-nio-8080-exec-1] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: null
-2026-05-02 00:31:50 [http-nio-8080-exec-2] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /api/marathons from 0:0:0:0:0:0:0:1
-2026-05-02 00:31:50 [http-nio-8080-exec-2] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
-2026-05-02 00:31:50 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
-2026-05-02 00:31:50 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /records/stats
-2026-05-02 00:31:50 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
-2026-05-02 00:31:50 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
-2026-05-02 00:31:50 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: null
-2026-05-02 00:31:50 [http-nio-8080-exec-2] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: null
-2026-05-02 00:31:50 [http-nio-8080-exec-2] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
-2026-05-02 00:31:50 [http-nio-8080-exec-2] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /api/marathons
-2026-05-02 00:31:50 [http-nio-8080-exec-2] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
-2026-05-02 00:31:50 [http-nio-8080-exec-2] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
-2026-05-02 00:31:50 [http-nio-8080-exec-2] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: null
-2026-05-02 00:31:50 [http-nio-8080-exec-2] INFO  c.d.l.Controller.MarathonController - >>> [GET] /marathons - 마라톤 목록 조회 요청
-2026-05-02 00:31:51 [http-nio-8080-exec-1] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
-2026-05-02 00:31:51 [http-nio-8080-exec-3] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /records/stats from 0:0:0:0:0:0:0:1
-2026-05-02 00:31:51 [http-nio-8080-exec-3] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
-2026-05-02 00:31:51 [http-nio-8080-exec-3] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: null
-2026-05-02 00:31:51 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
-2026-05-02 00:31:51 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /records/stats
-2026-05-02 00:31:51 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
-2026-05-02 00:31:51 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
-2026-05-02 00:31:51 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: null
-2026-05-02 00:31:51 [http-nio-8080-exec-3] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
-2026-05-02 00:31:52 [http-nio-8080-exec-7] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /api/marathons from 0:0:0:0:0:0:0:1
-2026-05-02 00:31:52 [http-nio-8080-exec-7] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
-2026-05-02 00:31:52 [http-nio-8080-exec-7] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: null
-2026-05-02 00:31:52 [http-nio-8080-exec-7] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
-2026-05-02 00:31:52 [http-nio-8080-exec-7] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /api/marathons
-2026-05-02 00:31:52 [http-nio-8080-exec-7] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
-2026-05-02 00:31:52 [http-nio-8080-exec-7] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
-2026-05-02 00:31:52 [http-nio-8080-exec-7] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: null
-2026-05-02 00:31:52 [http-nio-8080-exec-7] INFO  c.d.l.Controller.MarathonController - >>> [GET] /marathons - 마라톤 목록 조회 요청
-2026-05-02 00:31:52 [http-nio-8080-exec-2] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
-2026-05-02 00:31:53 [http-nio-8080-exec-7] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
-2026-05-02 00:34:17 [http-nio-8080-exec-6] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] POST /auth/kakao-login from 0:0:0:0:0:0:0:1
-2026-05-02 00:34:17 [http-nio-8080-exec-6] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
-2026-05-02 00:34:17 [http-nio-8080-exec-6] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: null
-2026-05-02 00:34:17 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
-2026-05-02 00:34:17 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /auth/kakao-login
-2026-05-02 00:34:17 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: POST
-2026-05-02 00:34:17 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
-2026-05-02 00:34:17 [http-nio-8080-exec-6] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: null
-2026-05-02 00:34:18 [http-nio-8080-exec-6] INFO  c.d.login.Controller.LoginController - 카카오 로그인 요청 - code: wneDLpVFLZY7-AM_mB-w8GiBRpijhdvDS2nRHSVyFIOGNGhMLzqOCQAAAAQKFwHPAAABneQtLfAp9hBbJybEWQ
-2026-05-02 00:34:18 [http-nio-8080-exec-6] INFO  c.d.login.Controller.LoginController - 카카오 설정 확인 - ClientId exists: true, RedirectUri: http://localhost:5173/login/kakao
-2026-05-02 00:34:18 [http-nio-8080-exec-6] INFO  c.d.login.Controller.LoginController - [보안검증] ClientID 길이: 32, 값: 5406...f34f
-2026-05-02 00:34:18 [http-nio-8080-exec-6] INFO  c.d.login.Controller.LoginController - [보안검증] ClientSecret 길이: 32, 값: UK1Q...esK4
-2026-05-02 00:34:18 [http-nio-8080-exec-6] INFO  c.d.login.Controller.LoginController - 카카오 Client Secret 포함하여 요청 전송 준비 완료
-2026-05-02 00:34:19 [http-nio-8080-exec-6] INFO  c.d.login.Controller.LoginController - 카카오 프로필 변환 완료 - Email: wdv96wdv@naver.com, Avatar: http://k.kakaocdn.net/dn/ho3fO/dJMcafGgsoC/hxkJdZJybKowjqGcRHbA31/img_640x640.jpg
-2026-05-02 00:34:19 [http-nio-8080-exec-6] INFO  c.d.login.Controller.LoginController - 소셜 로그인 처리 - email: wdv96wdv@naver.com, provider: kakao
-2026-05-02 00:34:19 [http-nio-8080-exec-6] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
-2026-05-02 00:34:20 [http-nio-8080-exec-1] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /records/stats from 0:0:0:0:0:0:0:1
-2026-05-02 00:34:20 [http-nio-8080-exec-10] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /api/marathons from 0:0:0:0:0:0:0:1
-2026-05-02 00:34:20 [http-nio-8080-exec-10] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
-2026-05-02 00:34:20 [http-nio-8080-exec-10] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: null
-2026-05-02 00:34:20 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
-2026-05-02 00:34:20 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /api/marathons
-2026-05-02 00:34:20 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
-2026-05-02 00:34:20 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
-2026-05-02 00:34:20 [http-nio-8080-exec-1] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
-2026-05-02 00:34:20 [http-nio-8080-exec-1] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: null
-2026-05-02 00:34:20 [http-nio-8080-exec-10] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: null
-2026-05-02 00:34:20 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
-2026-05-02 00:34:20 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /records/stats
-2026-05-02 00:34:20 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
-2026-05-02 00:34:20 [http-nio-8080-exec-10] INFO  c.d.l.Controller.MarathonController - >>> [GET] /marathons - 마라톤 목록 조회 요청
-2026-05-02 00:34:20 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
-2026-05-02 00:34:20 [http-nio-8080-exec-1] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: null
-2026-05-02 00:34:20 [http-nio-8080-exec-1] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
-2026-05-02 00:34:20 [http-nio-8080-exec-3] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /records/stats from 0:0:0:0:0:0:0:1
-2026-05-02 00:34:20 [http-nio-8080-exec-3] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
-2026-05-02 00:34:20 [http-nio-8080-exec-3] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: null
-2026-05-02 00:34:20 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
-2026-05-02 00:34:20 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /records/stats
-2026-05-02 00:34:20 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
-2026-05-02 00:34:20 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
-2026-05-02 00:34:20 [http-nio-8080-exec-3] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: null
-2026-05-02 00:34:20 [http-nio-8080-exec-3] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
-2026-05-02 00:34:20 [http-nio-8080-exec-10] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
-2026-05-02 00:34:20 [http-nio-8080-exec-2] INFO  c.d.l.security.filter.RequestLogger - >>>> [Request] GET /api/marathons from 0:0:0:0:0:0:0:1
-2026-05-02 00:34:20 [http-nio-8080-exec-2] INFO  c.d.l.security.filter.RequestLogger - Origin Header: http://localhost:5173
-2026-05-02 00:34:20 [http-nio-8080-exec-2] INFO  c.d.l.security.filter.RequestLogger - Authorization Header: null
-2026-05-02 00:34:20 [http-nio-8080-exec-2] INFO  c.d.l.s.filter.JwtRequestFilter - ::::: JwtRequestFilter.doFilterInternal 시작 :::::
-2026-05-02 00:34:20 [http-nio-8080-exec-2] INFO  c.d.l.s.filter.JwtRequestFilter - Request URI: /api/marathons
-2026-05-02 00:34:20 [http-nio-8080-exec-2] INFO  c.d.l.s.filter.JwtRequestFilter - Request Method: GET
-2026-05-02 00:34:20 [http-nio-8080-exec-2] INFO  c.d.l.s.filter.JwtRequestFilter - CORS Origin: http://localhost:5173
-2026-05-02 00:34:20 [http-nio-8080-exec-2] INFO  c.d.l.s.filter.JwtRequestFilter - Authorization Header: null
-2026-05-02 00:34:20 [http-nio-8080-exec-2] INFO  c.d.l.Controller.MarathonController - >>> [GET] /marathons - 마라톤 목록 조회 요청
-2026-05-02 00:34:20 [http-nio-8080-exec-2] INFO  c.d.l.security.filter.RequestLogger - <<<< [Response] status: 200
+2026-05-03 22:55:11 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-03 22:55:12 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-03 22:55:12 [restartedMain] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-05-03 22:55:18 [restartedMain] INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page: class path resource [static/index.html]
+2026-05-03 22:55:19 [restartedMain] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name userDetailServiceImpl
+2026-05-03 22:55:19 [restartedMain] INFO  c.dohwan.login.config.SecurityConfig - CORS 설정 - Allowed Origins: [https://dorunning.vercel.app, http://localhost:5173, http://127.0.0.1:5173, http://localhost:3000, http://127.0.0.1:3000]
+2026-05-03 22:55:19 [restartedMain] INFO  c.dohwan.login.config.SecurityConfig - CORS 설정 - Allowed Methods: [GET, POST, PUT, DELETE, OPTIONS]
+2026-05-03 22:55:19 [restartedMain] INFO  c.dohwan.login.config.SecurityConfig - CORS 설정 - Allowed Headers: [Authorization, Content-Type, X-Requested-With, Accept, Origin, Access-Control-Request-Method, Access-Control-Request-Headers]
+2026-05-03 22:55:19 [restartedMain] INFO  c.dohwan.login.config.SecurityConfig - CORS 설정 - Exposed Headers: [Authorization]
+2026-05-03 22:55:19 [restartedMain] INFO  c.dohwan.login.config.SecurityConfig - CORS 설정 - Allow Credentials: true
+2026-05-03 22:55:19 [restartedMain] INFO  c.dohwan.login.config.SecurityConfig - CORS 설정 - CORS Configuration Source 등록 완료
+2026-05-03 22:55:19 [restartedMain] WARN  o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2026-05-03 22:55:20 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2026-05-03 22:55:20 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-05-03 22:55:20 [restartedMain] INFO  com.dohwan.login.LoginApplication - Started LoginApplication in 20.763 seconds (process running for 21.672)
