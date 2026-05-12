@@ -16,32 +16,13 @@
   position: relative;
 }
 
-.pulse-circle {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100px;
-  height: 100px;
-  background: radial-gradient(circle, hsla(var(--primary-h), 100%, 50%, 0.2) 0%, transparent 70%);
-  border-radius: 50%;
-  animation: pulse 2s infinite;
-  z-index: -1;
-}
-
-@keyframes pulse {
-  0% { transform: translateX(-50%) scale(0.9); opacity: 0.8; }
-  50% { transform: translateX(-50%) scale(1.5); opacity: 0; }
-  100% { transform: translateX(-50%) scale(0.9); opacity: 0; }
-}
+/* Pulse circle removed for consistency */
 
 .event-header h1 {
-  font-family: 'Orbitron', 'Inter', sans-serif;
-  font-size: 3rem;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 2.5rem;
+  letter-spacing: 0.1em;
   color: var(--text-primary);
-  margin-bottom: 12px;
-  letter-spacing: -0.5px;
-  text-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
 
 .event-header p {

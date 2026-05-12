@@ -277,14 +277,31 @@
 
 .feature-media {
   flex: 1;
+}
+
+.glass-media {
   position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+
+.media-overlay-glow {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, hsla(var(--primary-h), 100%, 50%, 0.15) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 1;
 }
 
 .glass-media img {
   width: 100%;
-  border-radius: 32px;
-  box-shadow: 0 30px 60px rgba(0,0,0,0.2);
-  border: 1px solid var(--glass-border);
+  height: 100%;
+  object-fit: cover;
   transition: transform var(--transition-normal);
 }
 

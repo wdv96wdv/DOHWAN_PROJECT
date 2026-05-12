@@ -15,7 +15,8 @@ import {
   List as ListIcon,
   Search,
   MessageSquare,
-  X
+  X,
+  Users
 } from 'lucide-react';
 import * as format from '../../utils/format';
 import Swal from 'sweetalert2';
@@ -38,23 +39,23 @@ const List = ({ list = [], pagination, currentFilters }) => {
 
   useEffect(() => {
     if (list.length > 0 || (pagination && pagination.totalCount === 0)) {
-        setLoading(false);
-        // Extract keywords from current list categories
-        if (list.length > 0) {
-            const counts = {};
-            list.forEach(item => {
-                const type = item.type || '자유';
-                counts[type] = (counts[type] || 0) + 1;
-            });
-            const topKeywords = Object.entries(counts)
-                .sort((a, b) => b[1] - a[1])
-                .slice(0, 2)
-                .map(([name]) => `#${name}`);
-            
-            setStats(prev => ({ ...prev, popularKeywords: topKeywords.length > 0 ? topKeywords : ['#러닝', '#마라톤'] }));
-        }
+      setLoading(false);
+      // Extract keywords from current list categories
+      if (list.length > 0) {
+        const counts = {};
+        list.forEach(item => {
+          const type = item.type || '자유';
+          counts[type] = (counts[type] || 0) + 1;
+        });
+        const topKeywords = Object.entries(counts)
+          .sort((a, b) => b[1] - a[1])
+          .slice(0, 2)
+          .map(([name]) => `#${name}`);
+
+        setStats(prev => ({ ...prev, popularKeywords: topKeywords.length > 0 ? topKeywords : ['#러닝', '#마라톤'] }));
+      }
     } else {
-        setLoading(true);
+      setLoading(true);
     }
   }, [list, pagination]);
 
@@ -63,9 +64,9 @@ const List = ({ list = [], pagination, currentFilters }) => {
     fetch(`${API_BASE_URL}/records/stats`)
       .then(res => res.json())
       .then(data => {
-         if (data.data) {
-            setStats(prev => ({ ...prev, activeRunners: data.data.activeRunners }));
-         }
+        if (data.data) {
+          setStats(prev => ({ ...prev, activeRunners: data.data.activeRunners }));
+        }
       })
       .catch(err => console.error("Failed to fetch community stats:", err));
   }, []);
@@ -129,92 +130,86 @@ const List = ({ list = [], pagination, currentFilters }) => {
   return (
     <div className="board-page premium-board">
       {/* Header Section */}
-      <header className="board-index-header">
-        <div className="header-content">
-          <div className="title-area">
-            <span className="subtitle">DORUNNING COMMUNITY</span>
-            <h1 className="main-title">COMMUNITY</h1>
-            <p className="description">전국의 러너들과 소중한 러닝 경험을 공유하세요.</p>
-          </div>
-
-          <div className="header-actions">
-            <Link to="/boards/insert" className="premium-btn btn-write" onClick={handleWriteClick}>
-              <Plus size={20} />
-              <span>새 글 작성</span>
-            </Link>
-          </div>
-        </div>
-
-        {/* Community Stats Quick View */}
-        <div className="community-stats-bar glass" style={{ marginBottom: '30px' }}>
-            <div className="stat-item">
-                <span className="stat-label">오늘의 새 글</span>
-                <span className="stat-value">{pagination?.totalCount > 10 ? '12+' : pagination?.totalCount || 0}</span>
-            </div>
-            <div className="stat-item">
-                <span className="stat-label">활발한 러너</span>
-                <span className="stat-value">{stats.activeRunners.toLocaleString()}명</span>
-            </div>
-            <div className="stat-item">
-                <span className="stat-label">인기 키워드</span>
-                <span className="stat-value">{stats.popularKeywords.join(' ')}</span>
-            </div>
-        </div>
-
-        {/* Categories & Search Toolbar */}
-        <div className="board-toolbar glass">
-          <div className="categories-segmented">
-            {categories.map(cat => (
-              <button
-                key={cat}
-                className={`category-segment ${currentFilters?.type === cat ? 'active' : ''}`}
-                onClick={() => handleCategoryClick(cat)}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
-
-          <div className="toolbar-right">
-            <div className="view-toggle">
-              <button
-                className={`toggle-btn ${viewMode === 'list' ? 'active' : ''}`}
-                onClick={() => setViewMode('list')}
-              >
-                <ListIcon size={18} />
-              </button>
-              <button
-                className={`toggle-btn ${viewMode === 'grid' ? 'active' : ''}`}
-                onClick={() => setViewMode('grid')}
-              >
-                <LayoutGrid size={18} />
-              </button>
-            </div>
-
-            <form className="search-box-premium" onSubmit={handleSearchSubmit}>
-              <div className="search-input-inner">
-                <Search size={18} className={`search-icon ${searchInput ? 'active' : ''}`} />
-                <input
-                  type="text"
-                  placeholder="무엇을 찾으시나요?"
-                  value={searchInput}
-                  onChange={(e) => setSearchInput(e.target.value)}
-                />
-                {searchInput && (
-                  <button 
-                    type="button" 
-                    className="search-clear-btn"
-                    onClick={() => setSearchInput('')}
-                  >
-                    <X size={14} />
-                  </button>
-                )}
-                {!searchInput && <span className="search-shortcut">/</span>}
-              </div>
-            </form>
-          </div>
-        </div>
+      <header className="board-header" style={{ position: 'relative' }}>
+        <h1>
+          <Users size={40} style={{ verticalAlign: 'middle', marginRight: '16px', color: 'var(--primary)' }} />
+          COMMUNITY
+        </h1>
+        <Link to="/boards/insert" className="premium-btn btn-write" onClick={handleWriteClick} style={{ position: 'absolute', right: 0, bottom: '0', padding: '12px 24px', fontSize: '0.9rem' }}>
+          <Plus size={18} />
+          <span>글쓰기</span>
+        </Link>
       </header>
+
+      {/* Community Stats Quick View */}
+      <div className="community-stats-bar glass" style={{ marginBottom: '30px' }}>
+        <div className="stat-item">
+          <span className="stat-label">오늘의 새 글</span>
+          <span className="stat-value">{pagination?.totalCount > 10 ? '12+' : pagination?.totalCount || 0}</span>
+        </div>
+        <div className="stat-item">
+          <span className="stat-label">활발한 러너</span>
+          <span className="stat-value">{stats.activeRunners.toLocaleString()}명</span>
+        </div>
+        <div className="stat-item">
+          <span className="stat-label">인기 키워드</span>
+          <span className="stat-value">{stats.popularKeywords.join(' ')}</span>
+        </div>
+      </div>
+
+      {/* Categories & Search Toolbar */}
+      <div className="board-toolbar glass">
+        <div className="categories-segmented">
+          {categories.map(cat => (
+            <button
+              key={cat}
+              className={`category-segment ${currentFilters?.type === cat ? 'active' : ''}`}
+              onClick={() => handleCategoryClick(cat)}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+
+        <div className="toolbar-right">
+          <div className="view-toggle">
+            <button
+              className={`toggle-btn ${viewMode === 'list' ? 'active' : ''}`}
+              onClick={() => setViewMode('list')}
+            >
+              <ListIcon size={18} />
+            </button>
+            <button
+              className={`toggle-btn ${viewMode === 'grid' ? 'active' : ''}`}
+              onClick={() => setViewMode('grid')}
+            >
+              <LayoutGrid size={18} />
+            </button>
+          </div>
+
+          <form className="search-box-premium" onSubmit={handleSearchSubmit}>
+            <div className="search-input-inner">
+              <Search size={18} className={`search-icon ${searchInput ? 'active' : ''}`} />
+              <input
+                type="text"
+                placeholder="무엇을 찾으시나요?"
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+              />
+              {searchInput && (
+                <button
+                  type="button"
+                  className="search-clear-btn"
+                  onClick={() => setSearchInput('')}
+                >
+                  <X size={14} />
+                </button>
+              )}
+              {!searchInput && <span className="search-shortcut">/</span>}
+            </div>
+          </form>
+        </div>
+      </div>
 
       {/* Content Section */}
       <div className={`board-content-wrapper view-mode-${viewMode}`}>
@@ -230,12 +225,12 @@ const List = ({ list = [], pagination, currentFilters }) => {
 
         <div className={`board-list-container ${viewMode}`}>
           {loading ? (
-             // Loading Skeletons
-             Array.from({ length: 5 }).map((_, i) => (
-                <div key={i} className={`board-item-row glass ${viewMode === 'grid' ? 'grid-item' : ''}`} style={{ padding: '20px' }}>
-                   <Skeleton type="list" />
-                </div>
-             ))
+            // Loading Skeletons
+            Array.from({ length: 5 }).map((_, i) => (
+              <div key={i} className={`board-item-row glass ${viewMode === 'grid' ? 'grid-item' : ''}`} style={{ padding: '20px' }}>
+                <Skeleton type="list" />
+              </div>
+            ))
           ) : list.length === 0 ? (
             <div className="empty-state glass">
               <Search size={48} />

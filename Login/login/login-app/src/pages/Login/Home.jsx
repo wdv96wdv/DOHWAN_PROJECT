@@ -227,16 +227,17 @@ const Home = () => {
       {/* AI Shoe Guide */}
       <section className="feature-section" data-aos="fade-up">
         <div className="feature-text">
-          <div className="section-badge">NEXT-GEN TECH</div>
+          <div className="section-badge">ADVANCED AI ENGINE</div>
           <h2>AI SHOE GUIDE</h2>
           <p>
-            러닝화는 단순한 신발 그 이상입니다. 당신의 걸음걸이와 생체학적 특성을 분석하여 최고의 기량을 낼 수 있는 완벽한 파트너를 찾아드립니다.
+            러닝화는 단순한 신발 그 이상입니다. 당신의 보행 주기(Gait Cycle)와 생체학적 특성을 다각도로 분석하여 최상의 퍼포먼스를 낼 수 있는 완벽한 파트너를 정교하게 매칭해 드립니다.
           </p>
-          <button className="btn-auth btn-feature" onClick={() => navigate("/recommend")}>
-            나에게 맞는 신발 찾기 <ArrowRight size={18} style={{ marginLeft: '8px' }} />
+          <button className="btn-auth btn-feature primary-glow" onClick={() => navigate("/recommend")}>
+            분석 시작하기 <ArrowRight size={18} style={{ marginLeft: '8px' }} />
           </button>
         </div>
         <div className="feature-media glass-media">
+          <div className="media-overlay-glow"></div>
           <img src={recommend} alt="AI Shoe Recommendation" loading="lazy" />
         </div>
       </section>

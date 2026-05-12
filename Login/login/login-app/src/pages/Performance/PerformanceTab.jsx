@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { motion } from 'framer-motion';
 import RunRecordList from '../../components/Performance/RunRecordList';
-import RunStatsCard from '../../components/Performance/RunStatsCard';
+import PerformanceSummary from '../../components/Performance/PerformanceSummary';
 import RunTrendChart from '../../components/Performance/RunTrendChart';
+import RunnerProfileChart from '../../components/Performance/RunnerProfileChart';
 import GoalTracker from '../../components/Performance/GoalTracker';
 import ShareCard from '../../components/Performance/ShareCard';
 import { getRunRecords } from '../../apis/performance';
@@ -34,35 +36,67 @@ const PerformanceTab = () => {
       <Helmet>
         <title>Dorunning | 퍼포먼스</title>
         <meta name="description" content="나의 누적 러닝 거리, 페이스, 소모 칼로리를 확인하고 체계적인 러닝 목표를 설정하세요. 당신의 성장을 차트로 한눈에 볼 수 있습니다." />
-        <meta property="og:title" content="Dorunning | 퍼포먼스" />
-        <meta property="og:description" content="나의 누적 러닝 거리, 페이스, 소모 칼로리를 확인하고 체계적인 러닝 목표를 설정하세요." />
-        <link rel="canonical" href="https://dorunning.vercel.app/performance" />
       </Helmet>
+
       <header className="performance-header">
-        <h1><BarChart3 size={40} style={{verticalAlign: 'middle', marginRight: '16px', color: 'var(--primary)'}} /> PERFORMANCE</h1>
+        <h1>
+          <BarChart3 size={40} style={{ verticalAlign: 'middle', marginRight: '16px', color: 'var(--primary)' }} />
+          PERFORMANCE
+        </h1>
       </header>
 
-      <section>
-        <RunStatsCard refreshKey={refreshKey} />
-      </section>
+      <PerformanceSummary refreshKey={refreshKey} />
 
       <div className="charts-grid">
-        <RunTrendChart refreshKey={refreshKey} />
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.2 }}
+        >
+          <RunTrendChart refreshKey={refreshKey} />
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.3 }}
+        >
+          <RunnerProfileChart refreshKey={refreshKey} />
+        </motion.div>
       </div>
 
       <div className="widgets-grid">
-        <div className="widgets-left">
+        <motion.div
+          className="widgets-left"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+        >
           <GoalTracker />
           <WaterIntakeCalculator />
-        </div>
-        <div className="widgets-right">
+        </motion.div>
+
+        <motion.div
+          className="widgets-right"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.2 }}
+        >
           <ShareCard record={latestRecord} />
-        </div>
+        </motion.div>
       </div>
 
-      <section style={{marginTop: '48px'}}>
-        <RunRecordList refreshKey={refreshKey} />
-      </section>
+      <motion.section
+        style={{ marginTop: '48px' }}
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+      >
+        <RunRecordList refreshKey={refreshKey} onRefresh={refreshData} />
+      </motion.section>
     </div>
   );
 };
