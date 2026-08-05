@@ -49,6 +49,93 @@ public class RecordController {
         }
     }
 
+    @Autowired
+    private com.dohwan.login.repository.RecordReactionRepository reactionRepository;
+
+    // 소셜 피드: 전체 유저 기록 최신순 조회 (username 포함)
+    @GetMapping("/feed")
+    public ResponseEntity<ApiResponse<List<java.util.Map<String, Object>>>> getAllFeedRecords(@AuthenticationPrincipal CustomUser currentUser) {
+        try {
+            List<Object[]> rows = recordRepository.findAllFeedRecords();
+            List<java.util.Map<String, Object>> result = rows.stream().map(row -> {
+                Records r = (Records) row[0];
+                String username = (String) row[1];
+                String avatarUrl = (String) row[2];
+                
+                long likeCount = reactionRepository.countByRecordNo(r.getNo());
+                boolean isLiked = false;
+                if (currentUser != null) {
+                    isLiked = reactionRepository.existsByRecordNoAndUserNo(r.getNo(), currentUser.getUserNo());
+                }
+
+                java.util.Map<String, Object> item = new java.util.HashMap<>();
+                item.put("id", r.getUuid());
+                item.put("username", username);
+                item.put("avatarUrl", avatarUrl);
+                item.put("runningName", r.getRunningName());
+                item.put("date", r.getRecordDate() != null ? r.getRecordDate().toString() : "");
+                item.put("distanceKm", r.getDistanceKm());
+                item.put("durationSec", r.getDurationSec());
+                item.put("paceMinPerKm", r.getPaceMinPerKm());
+                item.put("calories", r.getCalories());
+                item.put("note", r.getNote());
+                item.put("reactionCount", likeCount);
+                item.put("liked", isLiked);
+                return item;
+            }).collect(java.util.stream.Collectors.toList());
+            return ResponseEntity.ok(ApiResponse.success(result));
+        } catch (Exception e) {
+            log.error(">>> [GET] /records/feed 오류", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponse.error(500, "서버 에러가 발생했습니다."));
+        }
+    }
+
+    // 소셜 피드 좋아요 토글 API
+    @PostMapping("/{uuid}/like")
+    public ResponseEntity<ApiResponse<java.util.Map<String, Object>>> toggleLike(
+            @AuthenticationPrincipal CustomUser user,
+            @PathVariable("uuid") String uuid) {
+        try {
+            if (user == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(ApiResponse.error(401, "로그인이 필요합니다."));
+            }
+            Optional<Records> optionalRecord = recordRepository.findByUuid(uuid);
+            if (optionalRecord.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(ApiResponse.error(404, "기록을 찾을 수 없습니다."));
+            }
+            Records record = optionalRecord.get();
+            Optional<com.dohwan.login.entity.RecordReaction> existingReaction =
+                    reactionRepository.findByRecordNoAndUserNo(record.getNo(), user.getUserNo());
+
+            boolean liked;
+            if (existingReaction.isPresent()) {
+                reactionRepository.delete(existingReaction.get());
+                liked = false;
+            } else {
+                com.dohwan.login.entity.RecordReaction newReaction = com.dohwan.login.entity.RecordReaction.builder()
+                        .record(record)
+                        .userNo(user.getUserNo())
+                        .build();
+                reactionRepository.save(newReaction);
+                liked = true;
+            }
+
+            long updatedCount = reactionRepository.countByRecordNo(record.getNo());
+            java.util.Map<String, Object> body = new java.util.HashMap<>();
+            body.put("liked", liked);
+            body.put("reactionCount", updatedCount);
+
+            return ResponseEntity.ok(ApiResponse.success(liked ? "좋아요를 눌렀습니다." : "좋아요를 취소했습니다.", body));
+        } catch (Exception e) {
+            log.error("좋아요 처리 실패", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponse.error(500, "서버 에러가 발생했습니다."));
+        }
+    }
+
     // 특정 운동 기록 조회 (UUID)
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<Records>> getRecordById(@PathVariable("id") String id) {

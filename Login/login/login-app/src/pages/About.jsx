@@ -10,7 +10,7 @@ const About = () => {
     <div className="info-page">
       <Helmet>
         <title>Dorunning | 소개</title>
-        <meta name="description" content="Dorunning의 미션과 핵심 서비스를 소개합니다. 전국 마라톤 정보, AI 신발 추천, 커뮤니티를 통해 러너들의 성장을 돕습니다." />
+        <meta name="description" content="Dorunning의 미션과 핵심 서비스를 소개합니다. 전국 마라톤 정보, 커뮤니티를 통해 러너들의 성장을 돕습니다." />
         <meta property="og:title" content="Dorunning | About" />
         <meta property="og:description" content="Dorunning의 미션과 핵심 서비스를 소개합니다." />
         <link rel="canonical" href="https://dorunning.vercel.app/about" />

@@ -52,7 +52,7 @@ const RunnerProfileChart = ({ refreshKey }) => {
     <div className="chart-container radar-container">
       <h3><UserCheck size={18} /> RUNNER PROFILE</h3>
       <div style={{ width: '100%', height: 350 }}>
-        <ResponsiveContainer width="100%" height="100%">
+        <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
           <RadarChart cx="50%" cy="50%" outerRadius="80%" data={profileData}>
             <PolarGrid stroke="var(--glass-border)" />
             <PolarAngleAxis dataKey="subject" tick={{ fill: 'var(--text-secondary)', fontSize: 12 }} />

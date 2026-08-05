@@ -6,7 +6,28 @@ export default defineConfig({
   plugins: [react()],
   build: {
     minify: 'esbuild',
-    target: 'esnext'
+    target: 'esnext',
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (id.includes('@ckeditor')) {
+              return 'vendor-ckeditor';
+            }
+            if (id.includes('leaflet') || id.includes('react-leaflet')) {
+              return 'vendor-leaflet';
+            }
+            if (id.includes('@supabase') || id.includes('firebase')) {
+              return 'vendor-db-sdk';
+            }
+            if (id.includes('@mui') || id.includes('@emotion')) {
+              return 'vendor-mui';
+            }
+            return 'vendor';
+          }
+        }
+      }
+    }
   },
   esbuild: {
     drop: ['console', 'debugger'],

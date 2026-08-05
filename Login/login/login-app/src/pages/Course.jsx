@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Helmet } from 'react-helmet-async';
-import RunningMap from "../components/Course/RunningMap";
+import LeafletMap from "../components/Course/LeafletMap";
 import { COURSE_LIST, REGION_LIST } from "../utils/courseData";
 import { Map, X, Info, Footprints, MapPin } from 'lucide-react';
 import "../assets/css/course.css";
@@ -86,7 +86,7 @@ const Course = () => {
               {openMaps.includes(course.id) && (
                 <div className="map-container fade-in">
                   <div style={{ height: '350px', background: '#000' }}>
-                    <RunningMap 
+                    <LeafletMap 
                        courseId={course.id} 
                        coords={course.coords} 
                        center={course.center} 

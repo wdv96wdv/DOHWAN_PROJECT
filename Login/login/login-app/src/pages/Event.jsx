@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import "../assets/css/event.css";
 import "../assets/css/auth.css";
 import { Trophy, Activity, TrendingUp, Info, UserCircle } from 'lucide-react';
@@ -12,6 +13,7 @@ const EventPage = () => {
     const [leaderboard, setLeaderboard] = useState([]);
     const [loading, setLoading] = useState(true);
     const userInfo = useAuthStore(state => state.userInfo);
+    const isLogin = useAuthStore(state => state.isLogin);
 
     useEffect(() => {
         api.get(`/records/leaderboard`)
@@ -69,7 +71,52 @@ const EventPage = () => {
                 <h2 className="leaderboard-title"><TrendingUp size={28} style={{ marginRight: '10px', verticalAlign: 'middle', color: 'var(--primary)' }} /> 월간 명예의 전당</h2>
 
                 {leaderboard.length === 0 ? (
-                    <div className="no-data"><Info size={32} /> 아직 이번 달 기록이 없습니다.<br />첫 번째 주인공이 되어보세요!</div>
+                    <div className="no-data-container">
+                        <div className="no-data-illustration">
+                            <svg width="180" height="180" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg" className="glowing-svg">
+                                <defs>
+                                    <linearGradient id="glowGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" stopColor="var(--primary)" stopOpacity="0.8" />
+                                        <stop offset="100%" stopColor="var(--accent)" stopOpacity="0.3" />
+                                    </linearGradient>
+                                    <linearGradient id="lineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                        <stop offset="0%" stopColor="var(--primary)" />
+                                        <stop offset="50%" stopColor="var(--accent)" />
+                                        <stop offset="100%" stopColor="var(--primary)" />
+                                    </linearGradient>
+                                    <filter id="glowFilter" x="-20%" y="-20%" width="140%" height="140%">
+                                        <feGaussianBlur stdDeviation="6" result="blur" />
+                                        <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                                    </filter>
+                                </defs>
+                                <circle cx="90" cy="90" r="70" stroke="url(#glowGrad)" strokeWidth="1" strokeDasharray="5 5" className="orbit-circle orbit-slow" />
+                                <circle cx="90" cy="90" r="55" stroke="url(#glowGrad)" strokeWidth="1.5" strokeDasharray="15 10" className="orbit-circle orbit-fast" />
+                                
+                                <circle cx="90" cy="90" r="35" fill="url(#glowGrad)" opacity="0.15" filter="url(#glowFilter)" className="pulse-bg" />
+
+                                <circle cx="35" cy="50" r="3" fill="var(--accent)" opacity="0.6" className="float-dot-1" />
+                                <circle cx="145" cy="130" r="4" fill="var(--primary)" opacity="0.7" className="float-dot-2" />
+                                <circle cx="140" cy="45" r="2" fill="var(--accent)" opacity="0.5" className="float-dot-3" />
+                                <circle cx="45" cy="125" r="3" fill="var(--primary)" opacity="0.4" className="float-dot-4" />
+
+                                <path d="M 50,110 C 70,80 110,80 130,110" stroke="url(#lineGrad)" strokeWidth="3" strokeLinecap="round" opacity="0.8" />
+                                <path d="M 40,120 C 65,95 115,95 140,120" stroke="url(#lineGrad)" strokeWidth="1.5" strokeLinecap="round" strokeDasharray="4 4" opacity="0.5" />
+
+                                <g transform="translate(62, 52)" filter="url(#glowFilter)" className="trophy-graphic">
+                                    <path d="M 12 6 C 12 1.5 44 1.5 44 6 C 44 26 34 32 28 36 L 28 44 L 38 44 C 40 44 40 48 38 48 L 18 48 C 16 48 16 44 18 44 L 28 44 L 28 36 C 22 32 12 26 12 6 Z" fill="url(#glowGrad)" stroke="var(--primary)" strokeWidth="1.5" />
+                                    <path d="M 12 12 L 4 12 C 2 12 2 20 6 22 L 12 22" stroke="var(--primary)" strokeWidth="1.5" strokeLinecap="round" fill="none" />
+                                    <path d="M 44 12 L 52 12 C 54 12 54 20 50 22 L 44 22" stroke="var(--primary)" strokeWidth="1.5" strokeLinecap="round" fill="none" />
+                                    <path d="M 28 12 L 28 20 M 24 16 L 32 16" stroke="#fff" strokeWidth="2" strokeLinecap="round" className="sparkle-anim" />
+                                </g>
+                            </svg>
+                        </div>
+                        <h3 className="no-data-title">첫 번째 주인공이 되어보세요!</h3>
+                        <p className="no-data-text">아직 이번 달 기록이 없습니다.<br />첫 발걸음을 내딛고 이달의 랭킹 1위를 차지해보세요!</p>
+                        <Link to={isLogin ? "/record" : "/login"} className="no-data-btn">
+                            <Activity size={18} />
+                            <span>지금 달리러 가기</span>
+                        </Link>
+                    </div>
                 ) : (
                     <>
                         {/* Podium Section for Top 3 */}

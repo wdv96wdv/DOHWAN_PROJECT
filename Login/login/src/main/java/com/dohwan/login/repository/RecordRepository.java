@@ -60,4 +60,8 @@ public interface RecordRepository extends JpaRepository<Records, Long> {
     // 활동 중인 러너 수 조회 (한 번이라도 기록이 있는 사용자 수)
     @Query("SELECT COUNT(DISTINCT r.userNo) FROM Records r")
     Long getTotalActiveRunners();
+
+    // 전체 피드 조회: 모든 사용자의 기록을 최신순으로, UserEntity JOIN으로 username 포함
+    @Query("SELECT r, u.username, u.avatarUrl FROM Records r JOIN UserEntity u ON r.userNo = u.no ORDER BY r.createdAt DESC")
+    List<Object[]> findAllFeedRecords();
 }

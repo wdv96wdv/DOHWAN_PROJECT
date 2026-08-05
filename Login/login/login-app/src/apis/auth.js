@@ -39,3 +39,8 @@ export const checkUsername = async (username) => {
     params: { username }
   });
 };
+
+// 토큰 갱신
+export const refreshToken = async () => {
+  return await api.post(`/auth/refresh`);
+};

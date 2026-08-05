@@ -77,7 +77,7 @@ public class SecurityConfig {
 				.requestMatchers("/api/wishlist/**").authenticated()
 				.requestMatchers("/admin/**").hasRole("ADMIN")
 				.requestMatchers("/manifest.json", "/auth/check-username", "/auth/social-login", "/auth/kakao-login").permitAll()
-				.requestMatchers("/error", "/marathons/**", "/api/marathons/**", "/api/naver-shopping/**", "/records/leaderboard", "/records/stats").permitAll()
+				.requestMatchers("/error", "/marathons/**", "/api/marathons/**", "/records/leaderboard", "/records/stats").permitAll()
 
 				.anyRequest().authenticated())
 				.exceptionHandling(exception -> exception

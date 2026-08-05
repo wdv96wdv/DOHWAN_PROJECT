@@ -120,3 +120,14 @@ ALTER TABLE files ENABLE ROW LEVEL SECURITY;
  -- 2026-04-20: 마라톤 포스터 이미지 URL 컬럼 추가
  ALTER TABLE marathons ADD COLUMN IF NOT EXISTS poster_url TEXT;
 
+  -- 2026-08-06: 실제 사용 중인 records 테이블 기반 소셜 좋아요 기능 스키마
+CREATE TABLE IF NOT EXISTS record_reaction (
+    id BIGSERIAL PRIMARY KEY,
+    record_no BIGINT NOT NULL,
+    user_no BIGINT NOT NULL,
+    reaction_type VARCHAR(50) DEFAULT 'LIKE',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (record_no) REFERENCES records(no) ON DELETE CASCADE,
+    FOREIGN KEY (user_no) REFERENCES users(no) ON DELETE CASCADE,
+    CONSTRAINT unique_record_user_reaction UNIQUE (record_no, user_no)
+);

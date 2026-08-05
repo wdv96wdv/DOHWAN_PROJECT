@@ -101,7 +101,6 @@ const WishlistPage = () => {
           <div className="empty-state">
             <PackageSearch size={64} style={{margin: '0 auto 24px', display: 'block'}} />
             <p>Your wishlist is empty.</p>
-            <button className="btn-auth" onClick={() => navigate('/recommend')} style={{marginTop: '24px'}}>FIND SHOES</button>
           </div>
         )}
       </div>

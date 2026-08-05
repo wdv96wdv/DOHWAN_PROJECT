@@ -22,8 +22,6 @@ const Readpage = lazy(() => import('../pages/board/Readpage'));
 const Updatepage = lazy(() => import('../pages/board/Updatepage'));
 const Marathon = lazy(() => import('../pages/Marathon'));
 const MarathonDetail = lazy(() => import('../pages/MarathonDetail')); // 추가
-const Recommend = lazy(() => import('../pages/Recommend/Recommend'));
-const RecommendResult = lazy(() => import('../pages/Recommend/RecommendResult'));
 const PerformanceTab = lazy(() => import('../pages/Performance/PerformanceTab'));
 const WishlistPage = lazy(() => import('../pages/WishlistPage'));
 
@@ -42,8 +40,6 @@ const AppRouter = ({ theme }) => {
         <Route path="/marathon" element={<Marathon />} />
         <Route path="/marathon/:id" element={<MarathonDetail />} /> {/* 상세 페이지 추가 */}
         <Route path="/performance" element={<PerformanceTab />} />
-        <Route path="/recommend" element={<Recommend />} />
-        <Route path="/recommend/result" element={<RecommendResult />} />
         <Route path="/about" element={<About />} />
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/contact" element={<Contact />} />

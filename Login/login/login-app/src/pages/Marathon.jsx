@@ -15,6 +15,7 @@ export default function MarathonList() {
     const [search, setSearch] = useState(defaultSearch);
     const [type, setType] = useState(defaultType);
     const [statusFilter, setStatusFilter] = useState(defaultStatus);
+    const [regionFilter, setRegionFilter] = useState("전체");
     const [loading, setLoading] = useState(true); // 로딩 상태 추가
 
     const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -89,6 +90,7 @@ export default function MarathonList() {
 
     const typeOptions = ["전체", "Full", "Half", "10Km", "5Km"];
     const statusOptions = ["전체", "접수대기", "접수중", "접수마감", "종료"];
+    const regionOptions = ["전체", "서울", "경기/인천", "강원", "충청", "전라", "경상", "제주"];
 
     const statusGroups = {
         "전체": [],
@@ -102,6 +104,7 @@ export default function MarathonList() {
         setSearch(defaultSearch);
         setType(defaultType);
         setStatusFilter(defaultStatus);
+        setRegionFilter("전체");
     };
 
     // --- 2. 필터링 로직 (marathons 상태값 사용) ---
@@ -121,7 +124,24 @@ export default function MarathonList() {
                 ? true
                 : statusGroups[statusFilter].includes(m.status);
 
-            return matchText && matchType && matchStatus;
+            // 4. 지역 필터
+            let matchRegion = true;
+            if (regionFilter !== "전체") {
+                const loc = m.location || "";
+                if (regionFilter === "경기/인천") {
+                    matchRegion = loc.includes("경기") || loc.includes("인천");
+                } else if (regionFilter === "충청") {
+                    matchRegion = loc.includes("충남") || loc.includes("충북") || loc.includes("대전") || loc.includes("세종") || loc.includes("충청");
+                } else if (regionFilter === "전라") {
+                    matchRegion = loc.includes("전남") || loc.includes("전북") || loc.includes("광주") || loc.includes("전라");
+                } else if (regionFilter === "경상") {
+                    matchRegion = loc.includes("경남") || loc.includes("경북") || loc.includes("부산") || loc.includes("대구") || loc.includes("울산") || loc.includes("경상");
+                } else {
+                    matchRegion = loc.includes(regionFilter);
+                }
+            }
+
+            return matchText && matchType && matchStatus && matchRegion;
         });
 
     return (
@@ -173,6 +193,20 @@ export default function MarathonList() {
                     <button className="btn-reset" onClick={resetFilters}>
                         <RotateCcw size={14} /> RESET
                     </button>
+                </div>
+                
+                <div className="status-row" style={{ marginTop: '12px', flexWrap: 'wrap' }}>
+                    <span style={{ fontSize: '0.9rem', color: 'var(--text-muted)', marginRight: '8px' }}>지역:</span>
+                    {regionOptions.map(r => (
+                        <button
+                            key={r}
+                            className={`status-btn ${regionFilter === r ? "active" : ""}`}
+                            style={{ padding: '6px 12px', fontSize: '0.85rem' }}
+                            onClick={() => setRegionFilter(r)}
+                        >
+                            {r}
+                        </button>
+                    ))}
                 </div>
             </div>
 

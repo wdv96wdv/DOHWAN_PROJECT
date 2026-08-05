@@ -146,6 +146,25 @@ const useAuthStore = create((set, get) => ({
       console.error('사용자 정보 업데이트 실패:', error);
     }
     return false;
+  },
+
+  updateToken: async () => {
+    try {
+      const response = await auth.refreshToken();
+      if (response.data && response.data.data && response.data.data.token) {
+        const newJwt = response.data.data.token;
+        const authorization = `Bearer ${newJwt}`;
+        
+        api.defaults.headers.common.Authorization = authorization;
+        Cookies.set("jwt", newJwt, { expires: 5 });
+        localStorage.setItem("jwt", newJwt);
+        return true;
+      }
+    } catch (error) {
+      console.error('토큰 갱신 실패:', error);
+      get().logoutSetting();
+    }
+    return false;
   }
 }));
 

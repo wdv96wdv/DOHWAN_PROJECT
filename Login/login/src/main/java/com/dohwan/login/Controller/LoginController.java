@@ -240,6 +240,34 @@ public class LoginController {
         }
     }
 
+    // ─── JWT 갱신 (세션 연장) ──────────────────────────────────────────
+
+    @PostMapping("/auth/refresh")
+    public ResponseEntity<ApiResponse<?>> refreshToken(@RequestHeader("Authorization") String authorization) {
+        try {
+            String jwt = authorization.substring(7);
+            byte[] key = jwtProps.getSecretKey().getBytes();
+            Jws<Claims> parsed = Jwts.parser()
+                    .verifyWith(Keys.hmacShaKeyFor(key))
+                    .build()
+                    .parseSignedClaims(jwt);
+
+            Claims claims = parsed.getPayload();
+            String username = claims.get("username", String.class);
+
+            UserEntity user = userRepository.findByUsernameWithAuth(username).orElse(null);
+            if (user == null) {
+                return ResponseEntity.status(401).body(ApiResponse.error(401, "유저 정보를 찾을 수 없습니다."));
+            }
+
+            String newJwt = buildJwt(user);
+            Users userDto = entityToDto(user);
+            return ResponseEntity.ok(ApiResponse.success(Map.of("token", newJwt, "userInfo", userDto)));
+        } catch (Exception e) {
+            return ResponseEntity.status(401).body(ApiResponse.error(401, "토큰 갱신 실패. 다시 로그인해주세요."));
+        }
+    }
+
     // ─── JWT 생성 헬퍼 ─────────────────────────────────────────────────
 
     private String buildJwt(UserEntity user) {
@@ -248,7 +276,7 @@ public class LoginController {
                 .collect(Collectors.toList());
 
         byte[] signingKey = jwtProps.getSecretKey().getBytes();
-        long day5Ms = 1000L * 60 * 60 * 24 * 5;
+        long expMs = 1000L * 60 * 60; // 1시간
 
         return Jwts.builder()
                 .signWith(Keys.hmacShaKeyFor(signingKey), Jwts.SIG.HS512)
@@ -257,7 +285,7 @@ public class LoginController {
                 .claim("id", user.getId())
                 .claim("rol", roles)
                 .claim("no", user.getNo())
-                .expiration(new Date(System.currentTimeMillis() + day5Ms))
+                .expiration(new Date(System.currentTimeMillis() + expMs))
                 .compact();
     }
 

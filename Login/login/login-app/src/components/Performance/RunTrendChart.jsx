@@ -80,7 +80,7 @@ const RunTrendChart = ({ refreshKey = 0 }) => {
 
       <div className="chart-container">
         <h3><TrendingUp size={18} /> DISTANCE TREND</h3>
-        <ResponsiveContainer width="100%" height={250}>
+        <ResponsiveContainer width="100%" height={250} minWidth={0} minHeight={0}>
           <AreaChart data={chartData}>
             <defs>
               <linearGradient id="colorDist" x1="0" y1="0" x2="0" y2="1">
@@ -108,7 +108,7 @@ const RunTrendChart = ({ refreshKey = 0 }) => {
 
       <div className="chart-container" style={{ marginTop: '24px' }}>
         <h3><Timer size={18} /> PACE TREND</h3>
-        <ResponsiveContainer width="100%" height={250}>
+        <ResponsiveContainer width="100%" height={250} minWidth={0} minHeight={0}>
           <LineChart data={chartData}>
             <CartesianGrid strokeDasharray="3 3" stroke="var(--glass-border)" vertical={false} />
             <XAxis dataKey="date" stroke="var(--text-muted)" fontSize={11} tickLine={false} axisLine={false} />

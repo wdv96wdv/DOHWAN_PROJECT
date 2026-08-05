@@ -27,7 +27,7 @@ public class JwtUtil {
 
     public String createToken(String id, String username, List<String> roles, Long no) {
         SecretKey shaKey = getShaKey();
-        int exp = 1000 * 60 * 60 * 24 * 5; // 5 days
+        int exp = 1000 * 60 * 60; // 1 hour (1시간)
         return Jwts.builder()
                 .signWith(shaKey, Jwts.SIG.HS512)
                 .header()

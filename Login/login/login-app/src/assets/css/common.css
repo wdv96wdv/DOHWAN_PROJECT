@@ -189,9 +189,25 @@ h4 {
   border-radius: var(--radius-md);
   font-weight: 600;
   box-shadow: 0 4px 14px 0 hsla(var(--primary-h), var(--primary-s), var(--primary-l), 0.39);
+  min-height: 48px; /* 모바일 터치 최소 영역 보장 */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .btn-primary:hover {
   background: var(--primary-dark);
   transform: translateY(-2px);
+}
+
+/* 모바일 추가 최적화 (터치 타겟 확대) */
+@media (max-width: 480px) {
+  button, a {
+    min-height: 44px;
+  }
+  .btn-primary {
+    width: 100%;
+    font-size: 1.1rem;
+    padding: 14px 20px;
+  }
 }
