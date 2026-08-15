@@ -209,10 +209,11 @@ const PerformanceTab = () => {
           ) : (
             socialFeed.map((record, idx) => (
               <motion.div
-                key={idx}
+                key={record.id || idx}
                 initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: idx * 0.05 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "50px" }}
+                transition={{ duration: 0.3 }}
               >
                 <FeedCard record={record} />
               </motion.div>

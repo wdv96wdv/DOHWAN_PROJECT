@@ -1,24 +1,39 @@
 import React, { useState } from 'react';
-import { Heart, MessageCircle, MapPin, Footprints, Flame } from 'lucide-react';
+import { Flame } from 'lucide-react';
 import useAuthStore from "../../store/useAuthStore";
-import api from "../../apis/api"; // Assuming there is an axios instance or similar. If not, use fetch.
+import api from "../../apis/api"; 
+import { formatPace } from "../../utils/formatters";
+import { toast } from 'react-toastify';
+import './FeedCard.css';
 
-export default function FeedCard({ record }) {
-    const { isLogin, userInfo } = useAuthStore();
+export default function FeedCard({ record, isLoading }) {
+    const { isLogin } = useAuthStore();
+    
+    // Skeleton UI for loading state
+    if (isLoading) {
+        return (
+            <div className="feed-card-container glass-card" style={{ padding: '16px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', marginBottom: '16px' }}>
+                    <div className="skeleton" style={{ width: '44px', height: '44px', borderRadius: '50%', marginRight: '12px', background: '#e0e0e0', animation: 'pulse 1.5s infinite' }}></div>
+                    <div>
+                        <div className="skeleton" style={{ width: '120px', height: '16px', background: '#e0e0e0', marginBottom: '6px', borderRadius: '4px', animation: 'pulse 1.5s infinite' }}></div>
+                        <div className="skeleton" style={{ width: '80px', height: '12px', background: '#e0e0e0', borderRadius: '4px', animation: 'pulse 1.5s infinite' }}></div>
+                    </div>
+                </div>
+                <div className="skeleton" style={{ width: '100%', height: '200px', background: '#e0e0e0', borderRadius: '8px', animation: 'pulse 1.5s infinite' }}></div>
+            </div>
+        );
+    }
+
+    if (!record) return null;
+
     const [likes, setLikes] = useState(record.reactionCount || 0);
     const [isLiked, setIsLiked] = useState(record.liked || false);
     const [isLiking, setIsLiking] = useState(false);
 
-    const formatPace = (pace) => {
-        if (!pace) return "0'00\"";
-        const mins = Math.floor(pace);
-        const secs = Math.round((pace - mins) * 60);
-        return `${mins}'${secs.toString().padStart(2, '0')}"`;
-    };
-
     const handleLike = async () => {
         if (!isLogin) {
-            alert("로그인이 필요합니다.");
+            toast.warn("로그인이 필요합니다.");
             return;
         }
         if (isLiking) return;
@@ -30,48 +45,36 @@ export default function FeedCard({ record }) {
             setIsLiked(newIsLiked);
             setLikes(prev => newIsLiked ? prev + 1 : prev - 1);
 
-            const token = localStorage.getItem('jwt');
-            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/records/${record.id || record.no}/like`, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-
-            if (!res.ok) {
-                throw new Error("Failed to toggle like");
-            }
+            // Use the axios instance which automatically attaches the JWT token
+            await api.post(`/records/${record.id || record.no}/like`);
+            
         } catch (error) {
             console.error("Like error:", error);
             // Revert on error
             setIsLiked(!isLiked);
             setLikes(prev => isLiked ? prev + 1 : prev - 1);
+            toast.error("좋아요 처리에 실패했습니다. 다시 시도해주세요.");
         } finally {
             setIsLiking(false);
         }
     };
 
     return (
-        <div className="feed-card glass-card" style={{ marginBottom: '24px', padding: 0, overflow: 'hidden' }}>
+        <div className="feed-card-container glass-card">
             {/* Header: User Info */}
-            <div className="feed-header" style={{ display: 'flex', alignItems: 'center', padding: '16px' }}>
-                <div style={{ marginRight: '12px', flexShrink: 0 }}>
+            <div className="feed-header">
+                <div className="feed-avatar-wrapper">
                     {record.avatarUrl
-                        ? <img src={record.avatarUrl} alt="avatar" style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover' }} />
-                        : <div style={{
-                            width: '40px', height: '40px', borderRadius: '50%',
-                            background: 'var(--primary)', color: '#fff',
-                            display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            fontWeight: 'bold', fontSize: '1.2rem'
-                          }}>
+                        ? <img src={record.avatarUrl} alt="avatar" className="feed-avatar-img" />
+                        : <div className="feed-avatar-placeholder">
                             {record.username ? record.username.charAt(0).toUpperCase() : 'U'}
                           </div>
                     }
                 </div>
                 <div>
-                    <div style={{ fontWeight: 'bold', fontSize: '1rem' }}>{record.username || 'Unknown Runner'}</div>
-                    <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-                        {record.runningName && <span style={{ marginRight: '8px' }}>🏃 {record.runningName}</span>}
+                    <div className="feed-username">{record.username || 'Unknown Runner'}</div>
+                    <div className="feed-meta">
+                        {record.runningName && <span className="feed-running-name">🏃 {record.runningName}</span>}
                         {record.date}
                     </div>
                 </div>
@@ -80,38 +83,39 @@ export default function FeedCard({ record }) {
             {/* Image (if exists) */}
             {record.imageUrl && (
                 <div className="feed-image">
-                    <img src={record.imageUrl} alt="Run log" style={{ width: '100%', maxHeight: '400px', objectFit: 'cover' }} />
+                    <img src={record.imageUrl} alt="Run log" loading="lazy" />
                 </div>
             )}
 
             {/* Body: Run Stats */}
-            <div className="feed-body" style={{ padding: '16px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '16px' }}>
+            <div className="feed-body">
+                <div className="feed-stats-row">
                     <div>
-                        <div style={{ fontSize: '2.5rem', fontWeight: '900', color: 'var(--primary)', lineHeight: '1' }}>
-                            {record.distanceKm?.toFixed(2)} <span style={{ fontSize: '1rem', color: 'var(--text-secondary)' }}>km</span>
+                        <div className="feed-distance-value">
+                            {record.distanceKm?.toFixed(2)} <span className="feed-distance-unit">km</span>
                         </div>
                     </div>
-                    <div style={{ textAlign: 'right' }}>
-                        <div style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>
+                    <div className="feed-time-pace">
+                        <div className="feed-duration">
                             {Math.floor(record.durationSec / 60)}:{String(record.durationSec % 60).padStart(2, '0')}
                         </div>
-                        <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>{formatPace(record.paceMinPerKm)} /km</div>
+                        <div className="feed-pace">{formatPace(record.paceMinPerKm)} /km</div>
                     </div>
                 </div>
 
                 {/* Actions */}
-                <div className="feed-actions" style={{ display: 'flex', gap: '16px', marginTop: '16px', paddingTop: '16px', borderTop: '1px solid var(--border-color)' }}>
+                <div className="feed-actions">
                     <button 
                         onClick={handleLike} 
-                        style={{ 
-                            display: 'flex', alignItems: 'center', gap: '6px', 
-                            color: isLiked ? '#ff4757' : 'var(--text-primary)',
-                            fontSize: '1rem',
-                            transition: 'color 0.2s'
-                        }}
+                        className={`btn-like ${isLiked ? 'liked' : ''}`}
+                        aria-label="Like this run"
                     >
-                        <Flame fill={isLiked ? '#ff4757' : 'none'} color={isLiked ? '#ff4757' : 'currentColor'} size={24} />
+                        <Flame 
+                            className="like-icon-anim"
+                            fill={isLiked ? '#ff4757' : 'none'} 
+                            color={isLiked ? '#ff4757' : 'currentColor'} 
+                            size={24} 
+                        />
                         <span style={{ fontWeight: 'bold' }}>{likes}</span>
                     </button>
                 </div>

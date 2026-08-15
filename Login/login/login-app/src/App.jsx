@@ -7,6 +7,8 @@ import AdBanner from './components/Common/AdBanner';
 import SessionTimer from './components/SessionTimer';
 import "./assets/css/common.css";
 import './App.css';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const App = () => {
   const [theme, setTheme] = useState('light');
@@ -23,6 +25,7 @@ const App = () => {
         </main>
         <AdBanner />
         <Footer />
+        <ToastContainer position="bottom-center" autoClose={3000} hideProgressBar={true} />
       </div>
     </BrowserRouter>
   );
