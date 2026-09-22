@@ -1,4 +1,21 @@
 {
+  "redirects": [
+    {
+      "source": "/marathon/",
+      "destination": "/marathon",
+      "permanent": true
+    },
+    {
+      "source": "/marathon/:id/",
+      "destination": "/marathon/:id",
+      "permanent": true
+    },
+    {
+      "source": "/about/",
+      "destination": "/about",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     {
       "source": "/api/(.*)",

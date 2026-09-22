@@ -3,6 +3,9 @@
  * routes to /api/seo so the first HTML response has the correct
  * title / description / canonical / OG tags.
  *
+ * Trailing-slash URLs on these routes get a 301 to the non-slash form first,
+ * so Google does not treat /marathon/ as a separate soft-404 document.
+ *
  * Normal browsers fall through to the Vite SPA (vercel.json → index.html).
  * Home `/` keeps the static index.html OG from the copy/positioning PR.
  *
@@ -15,19 +18,29 @@ const BOT_UA =
   /bot|crawl|slurp|spider|facebookexternalhit|facebot|twitterbot|linkedinbot|slackbot|discordbot|whatsapp|telegrambot|kakaotalk|kakaobot|line\/|naver|yeti|googlebot|bingbot|duckduckbot|baiduspider|yandex|sogou|exabot|ia_archiver|semrush|ahrefs|mj12bot|dotbot|bytespider|petalbot|applebot|storebot-google|google-inspectiontool|chrome-lighthouse|embedly|quora link preview|redditbot|pinterest|vkshare|w3c_validator|preview/i;
 
 export const config = {
-  matcher: ['/about', '/marathon', '/marathon/:path*'],
+  // Include trailing-slash variants so /marathon/ is handled (soft 404 in GSC)
+  matcher: [
+    '/about',
+    '/about/',
+    '/marathon',
+    '/marathon/',
+    '/marathon/:path*',
+  ],
 };
 
 export default function middleware(request) {
+  const url = new URL(request.url);
+  let pathname = url.pathname || '/';
+
+  // Always canonicalize trailing slash on matched routes (fixes Soft 404 on /marathon/)
+  if (pathname.length > 1 && pathname.endsWith('/')) {
+    url.pathname = pathname.slice(0, -1);
+    return Response.redirect(url.toString(), 301);
+  }
+
   const ua = request.headers.get('user-agent') || '';
   if (!BOT_UA.test(ua)) {
     return next();
-  }
-
-  const url = new URL(request.url);
-  let pathname = url.pathname || '/';
-  if (pathname.length > 1 && pathname.endsWith('/')) {
-    pathname = pathname.slice(0, -1);
   }
 
   // Only the routes we can serve useful meta for

@@ -21,3 +21,9 @@ Manual regen without a full build: `npm run sitemap` (updates `public/` only if 
 - `/` keeps the static `index.html` OG from the positioning copy PR.
 
 This is **not** full SSR. Follow-ups: more routes, JSON-LD in the bot shell, optional per-race OG images beyond `poster_url`.
+
+## Trailing slash (Soft 404)
+
+- GSC Soft 404 was on `https://dorunning.vercel.app/marathon/`.
+- `vercel.json` 301-redirects `/marathon/`, `/marathon/:id/`, `/about/` to the non-slash URL.
+- Middleware also 301s trailing slashes on matched routes before the bot rewrite.
