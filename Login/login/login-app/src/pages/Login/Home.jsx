@@ -17,6 +17,12 @@ import "../../assets/css/auth.css";
 import { ChevronRight, ArrowRight, Calendar, MapPin, Activity } from 'lucide-react';
 import Skeleton from "../../components/Common/Skeleton";
 import marathonPoster from "../../assets/img/marathon-poster.png";
+import {
+  normalizeMarathon,
+  isOpenRegistration,
+  compareByEndDateAsc,
+  getTodayKstStr,
+} from "../../utils/marathonHelpers";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -53,42 +59,16 @@ const Home = () => {
         return res.json();
       })
       .then(data => {
-        const formatRawDate = (date) => {
-          if (Array.isArray(date)) {
-            return `${date[0]}-${String(date[1]).padStart(2, '0')}-${String(date[2]).padStart(2, '0')}`;
-          }
-          return date;
-        };
-
-        const today = new Date();
-        const kstOffset = 9 * 60 * 60 * 1000;
-        const kstDate = new Date(today.getTime() + kstOffset);
-        const todayStr = kstDate.toISOString().split('T')[0];
-
-        const activeList = data.map(m => ({
-          id: m.id,
-          title: m.title,
-          link: m.link,
-          location: m.location,
-          raceDate: formatRawDate(m.race_date),
-          startDate: formatRawDate(m.start_date),
-          endDate: formatRawDate(m.end_date),
-          type: Array.isArray(m.type) ? m.type : ["마라톤"],
-        })).filter(item => {
-          if (item.startDate && item.endDate) {
-            return todayStr >= item.startDate && todayStr <= item.endDate;
-          }
-          return false;
-        });
+        const todayStr = getTodayKstStr();
+        // 지금 접수 중: 접수 기간 안 + 대회일 미경과 (과거/종료 제외)
+        const activeList = data
+          .map(normalizeMarathon)
+          .filter((item) => isOpenRegistration(item, todayStr));
 
         setActiveMarathonCount(activeList.length);
 
         // 접수 마감일이 가까운 순으로 정렬
-        const sorted = [...activeList].sort((a, b) => {
-          if (!a.endDate) return 1;
-          if (!b.endDate) return -1;
-          return a.endDate.localeCompare(b.endDate);
-        });
+        const sorted = [...activeList].sort(compareByEndDateAsc);
         setUpcomingMarathons(sorted.slice(0, 7));
       })
       .catch(err => console.error("Failed to fetch marathons on home:", err))

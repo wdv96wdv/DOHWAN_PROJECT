@@ -13,6 +13,7 @@ import {
   CheckCircle2
 } from 'lucide-react';
 import Loading from '../components/Common/Loading';
+import { normalizeMarathon, getMarathonStatus, getTodayKstStr } from '../utils/marathonHelpers';
 
 const MarathonDetail = () => {
     const { id } = useParams();
@@ -55,20 +56,8 @@ const MarathonDetail = () => {
 
     const getRegistrationBadge = (m) => {
         if (!m) return '';
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        const start = m.start_date ? new Date(m.start_date) : null;
-        const end = m.end_date ? new Date(m.end_date) : null;
-        const race = m.race_date ? new Date(m.race_date) : null;
-        if (race && today >= race) return '종료';
-        if (start && today < start) return '접수 예정';
-        if (start && end && today >= start && today <= end) {
-            const daysLeft = Math.ceil((end.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
-            if (daysLeft <= 7) return '마감 임박';
-            return '접수중';
-        }
-        if (end && today > end) return '종료';
-        return '';
+        const status = getMarathonStatus(normalizeMarathon(m), getTodayKstStr());
+        return status === '상태불명' ? '' : status;
     };
 
     if (loading) {
@@ -164,7 +153,7 @@ const MarathonDetail = () => {
                 <div className="header-content">
                     <div className="header-badges">
                         {regBadge && (
-                            <span className={`status-badge ${regBadge === '종료' ? 'status-closed' : 'status-active'}`}>
+                            <span className={`status-badge ${regBadge === '종료' || regBadge === '접수마감' ? 'status-closed' : 'status-active'}`}>
                                 {regBadge}
                             </span>
                         )}
