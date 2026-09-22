@@ -53,6 +53,24 @@ const MarathonDetail = () => {
         return days === 0 ? 'D-Day' : days > 0 ? `D-${days}` : `종료`;
     };
 
+    const getRegistrationBadge = (m) => {
+        if (!m) return '';
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const start = m.start_date ? new Date(m.start_date) : null;
+        const end = m.end_date ? new Date(m.end_date) : null;
+        const race = m.race_date ? new Date(m.race_date) : null;
+        if (race && today >= race) return '종료';
+        if (start && today < start) return '접수 예정';
+        if (start && end && today >= start && today <= end) {
+            const daysLeft = Math.ceil((end.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+            if (daysLeft <= 7) return '마감 임박';
+            return '접수중';
+        }
+        if (end && today > end) return '종료';
+        return '';
+    };
+
     if (loading) {
         return (
             <div className="container marathon-detail-page">
@@ -82,6 +100,7 @@ const MarathonDetail = () => {
     }
 
     const dDay = calculateDDay(marathon.race_date);
+    const regBadge = getRegistrationBadge(marathon);
 
     return (
         <div className="container marathon-detail-page">
@@ -143,10 +162,19 @@ const MarathonDetail = () => {
 
             <div className="marathon-detail-header glass-card">
                 <div className="header-content">
-                    <span className={`status-badge ${dDay.includes('-') ? 'status-active' : 'status-closed'}`}>
-                        {dDay}
-                    </span>
-                    <h1>{marathon.title}</h1>
+                    <div className="header-badges">
+                        {regBadge && (
+                            <span className={`status-badge ${regBadge === '종료' ? 'status-closed' : 'status-active'}`}>
+                                {regBadge}
+                            </span>
+                        )}
+                        {dDay && dDay !== '종료' && (
+                            <span className={`status-badge ${dDay.includes('-') || dDay === 'D-Day' ? 'status-active' : 'status-closed'}`}>
+                                {dDay}
+                            </span>
+                        )}
+                    </div>
+                    <h1>{marathon.title} · {marathon.race_date} · {marathon.location}</h1>
                     <div className="header-meta">
                         <span><MapPin size={18} /> {marathon.location}</span>
                         <span><Calendar size={18} /> {marathon.race_date}</span>
@@ -155,16 +183,16 @@ const MarathonDetail = () => {
             </div>
 
             <div className="marathon-detail-grid">
-                {/* 1. 핵심 정보 카드 */}
+                {/* 1. 한눈에 보기 */}
                 <div className="detail-info-card glass-card">
-                    <h3><Info size={20} /> 대회 상세 정보</h3>
+                    <h3><Info size={20} /> 한눈에 보기</h3>
                     <div className="info-list">
                         <div className="info-item">
-                            <label><Clock size={16} /> 접수 기간</label>
+                            <label><Clock size={16} /> 접수 안내</label>
                             <p>{marathon.start_date} ~ {marathon.end_date}</p>
                         </div>
                         <div className="info-item">
-                            <label><Award size={16} /> 참가 종목</label>
+                            <label><Award size={16} /> 종목·거리</label>
                             <div className="type-tags">
                                 {marathon.type && marathon.type.map((t, index) => (
                                     <span key={index} className="type-tag">{t}</span>
@@ -178,20 +206,24 @@ const MarathonDetail = () => {
                     </div>
                 </div>
 
-                {/* 2. 공식 채널 카드 */}
+                {/* 2. 공식 사이트 */}
                 <div className="detail-action-card glass-card">
-                    <h3><LinkIcon size={20} /> 공식 채널</h3>
-                    <p>대회 요강 확인 및 참가 신청은 공식 홈페이지를 이용해 주세요.</p>
+                    <h3><LinkIcon size={20} /> 공식 사이트</h3>
+                    <p>외부 사이트로 이동합니다. 신청 전 공식 페이지에서 일정을 다시 확인해 주세요.</p>
                     <a 
                         href={marathon.link} 
                         target="_blank" 
                         rel="noopener noreferrer"
                         className="external-link-btn"
                     >
-                        공식 홈페이지 바로가기 <LinkIcon size={16} />
+                        공식 사이트로 신청하기 <LinkIcon size={16} />
                     </a>
                 </div>
             </div>
+
+            <p className="trust-line">
+                일정·접수는 주최사 공지를 기준으로 하며, 변경될 수 있습니다. 신청 전 공식 페이지를 다시 확인해 주세요.
+            </p>
 
             {marathon.poster_url && (
                 <div className="poster-section glass-card" style={{ marginTop: '30px', padding: '40px' }}>
@@ -210,9 +242,11 @@ const MarathonDetail = () => {
                 .header-meta { display: flex; gap: 20px; color: var(--text-secondary); }
                 .header-meta span { display: flex; align-items: center; gap: 6px; }
 
+                .header-badges { display: flex; flex-wrap: wrap; gap: 8px; }
                 .status-badge { padding: 6px 14px; border-radius: 30px; font-size: 0.9rem; font-weight: 700; width: fit-content; }
                 .status-active { background: rgba(0, 123, 255, 0.15); color: #007bff; border: 1px solid rgba(0, 123, 255, 0.3); }
                 .status-closed { background: rgba(108, 117, 125, 0.1); color: #6c757d; }
+                .trust-line { margin-top: 24px; font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5; }
 
                 .marathon-detail-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 24px; }
                 

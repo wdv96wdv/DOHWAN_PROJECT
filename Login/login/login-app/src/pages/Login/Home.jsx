@@ -23,7 +23,7 @@ const Home = () => {
   const isLogin = useAuthStore(state => state.isLogin);
   const [upcomingMarathons, setUpcomingMarathons] = useState([]);
   const [activeMarathonCount, setActiveMarathonCount] = useState(0);
-  const [appStats, setAppStats] = useState({ activeRunners: 5240, totalDistance: 14800 });
+  const [appStats, setAppStats] = useState({ activeRunners: 0, totalDistance: 0 });
   const [loadingMarathon, setLoadingMarathon] = useState(true);
 
   const handleGetStarted = () => {
@@ -83,9 +83,13 @@ const Home = () => {
 
         setActiveMarathonCount(activeList.length);
 
-        // 랜덤으로 7개 섞기
-        const shuffled = activeList.sort(() => 0.5 - Math.random());
-        setUpcomingMarathons(shuffled.slice(0, 7));
+        // 접수 마감일이 가까운 순으로 정렬
+        const sorted = [...activeList].sort((a, b) => {
+          if (!a.endDate) return 1;
+          if (!b.endDate) return -1;
+          return a.endDate.localeCompare(b.endDate);
+        });
+        setUpcomingMarathons(sorted.slice(0, 7));
       })
       .catch(err => console.error("Failed to fetch marathons on home:", err))
       .finally(() => setLoadingMarathon(false));
@@ -97,8 +101,8 @@ const Home = () => {
         if (data.status === 200 && data.data) {
           // data.data.activeRunners / data.data.totalDistance
           setAppStats({
-            activeRunners: data.data.activeRunners > 0 ? data.data.activeRunners : 5240,
-            totalDistance: data.data.totalDistance > 0 ? data.data.totalDistance : 14800
+            activeRunners: data.data.activeRunners || 0,
+            totalDistance: data.data.totalDistance || 0
           });
         }
       })
@@ -117,10 +121,10 @@ const Home = () => {
   return (
     <div className="home-page">
       <Helmet>
-        <title>Dorunning</title>
-        <meta name="description" content="Dorunning에서 전국 마라톤 대회 일정 정보부터 나의 러닝 기록까지 한 번에 관리하세요! 스마트한 러너들의 프리미엄 커뮤니티." />
-        <meta property="og:title" content="Dorunning" />
-        <meta property="og:description" content="전국 마라톤 대회 일정 정보부터 나의 러닝 기록까지 한 번에 관리하세요!" />
+        <title>두러닝 – 전국 마라톤 대회 일정</title>
+        <meta name="description" content="두러닝은 전국 마라톤·러닝 대회 일정을 모으고, 신청 전에 필요한 정보를 한곳에서 확인하게 해 주는 러닝 허브입니다." />
+        <meta property="og:title" content="두러닝 – 전국 마라톤 대회 일정" />
+        <meta property="og:description" content="서울부터 지방까지, 다가오는 러닝 대회 일정과 접수 정보를 모았습니다." />
         <link rel="canonical" href="https://dorunning.vercel.app/" />
 
         {/* 네이버 사이트 이름 구조화 데이터 */}
@@ -141,18 +145,16 @@ const Home = () => {
         </video>
         <div className="hero-overlay-glass"></div>
         <div className="hero-content">
-          <div data-aos="fade-down" className="hero-badge">DORUNNING EXCLUSIVE</div>
-          <h1 data-aos="zoom-in" className="hero-title">RUN FORWARD</h1>
+          <h1 data-aos="zoom-in" className="hero-title">다음 대회, 놓치지 마세요</h1>
           <p data-aos="fade-up" data-aos-delay="200" className="hero-subtitle">
-            스스로의 한계를 넘어서는 순간. <br />
-            현대적인 러너들을 위한 프리미엄 트래킹 커뮤니티
+            전국 마라톤·하프·10K 일정을 모았습니다. 접수 기간, 거리, 지역까지 한곳에서 비교하세요.
           </p>
           <div data-aos="fade-up" data-aos-delay="400" className="hero-action-group">
-            <button className="btn-auth hero-btn primary-glow" onClick={handleGetStarted}>
-              지금 시작하기 <ArrowRight size={20} />
+            <button className="btn-auth hero-btn primary-glow" onClick={() => navigate("/marathon")}>
+              다가오는 대회 보기 <ArrowRight size={20} />
             </button>
             <button className="btn-auth outline hero-btn" onClick={() => navigate("/marathon")}>
-              마라톤 일정 보기
+              지역별 찾아보기
             </button>
           </div>
         </div>
@@ -161,9 +163,8 @@ const Home = () => {
       {/* Marathon Schedule Carousel */}
       <section className="marathon-carousel-section">
         <div className="home-section-header" data-aos="fade-up">
-          <div className="section-badge">ACCEPTING NOW</div>
-          <h2>현재 접수 중인 마라톤 일정</h2>
-          <p>당신의 도전을 기다리고 있는 다가오는 경기들을 확인하세요</p>
+          <h2>지금 접수 중인 대회</h2>
+          <p>접수 마감일이 가까운 순으로 보여 드립니다.</p>
         </div>
 
         {loadingMarathon ? (
@@ -217,8 +218,8 @@ const Home = () => {
         ) : (
           <div className="no-active-marathons" style={{ textAlign: 'center', padding: '60px 20px', color: 'var(--text-muted)' }}>
             <Calendar size={48} style={{ opacity: 0.5, marginBottom: '16px' }} />
-            <h3>현재 접수 중인 마라톤 대회가 없습니다.</h3>
-            <p>다음에 열릴 멋진 대회들을 기대해 주세요!</p>
+            <h3>지금 접수 중인 대회가 없습니다.</h3>
+            <p>필터를 넓히거나 다른 달을 확인해 보세요.</p>
           </div>
         )}
       </section>
@@ -226,10 +227,10 @@ const Home = () => {
       {/* Community */}
       <section className="feature-section reverse" data-aos="fade-up">
         <div className="feature-text">
-          <div className="section-badge">GLOBAL COMMUNITY</div>
+          <div className="section-badge">COMMUNITY</div>
           <h2>당신과 같은 러너들과 함께</h2>
           <p>
-            혼자 달리지 마세요. 수천 명의 러너들과 기록을 공유하고, 일상을 나누며 긍정적인 에너지를 얻으세요. 자유게시판부터 러닝 크루 인증까지 모든 것이 준비되어 있습니다.
+            혼자 달리지 마세요. 다른 러너들과 기록을 공유하고, 일상을 나누며 긍정적인 에너지를 얻으세요. 자유게시판부터 러닝 크루 인증까지 모든 것이 준비되어 있습니다.
           </p>
           <button className="btn-auth btn-feature" onClick={() => navigate("/boards")}>
             커뮤니티 구경하기 <ArrowRight size={18} style={{ marginLeft: '8px' }} />
@@ -242,7 +243,7 @@ const Home = () => {
 
       {/* Stats Section */}
       <section className="stats-section" data-aos="fade-up">
-        <h2 className="stats-title">EMPOWERING MILLIONS</h2>
+        <h2 className="stats-title">두러닝 현황</h2>
         <div className="stats-grid">
           <div className="stat-card glass-glow">
             <Activity className="stat-icon" size={36} />
@@ -264,10 +265,10 @@ const Home = () => {
 
       <footer className="home-footer" data-aos="zoom-in">
         <div className="footer-glass-box">
-          <h2 className="footer-title">READY TO RUN?</h2>
-          <p>지금 바로 로그인하고 나만의 러닝 리포트를 만들어보세요.</p>
+          <h2 className="footer-title">관심 대회만 모아 두세요</h2>
+          <p>위시리스트에 담아 두면 접수 시작·마감이 다가올 때 다시 찾기 쉽습니다.</p>
           <button className="btn-auth hero-btn primary-glow" onClick={handleGetStarted}>
-            여정 시작하기
+            무료로 시작하기
           </button>
         </div>
       </footer>

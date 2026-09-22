@@ -9,8 +9,8 @@ const Footer = () => {
         <div className="footer-info">
           <h4>DORUNNING</h4>
           <p className="footer-text">
-            러닝 기록 관리부터 마라톤 일정 확인까지, 
-            당신의 모든 러닝 여정을 함께하는 스마트 러닝 파트너입니다.
+            두러닝은 전국 마라톤·러닝 대회 일정을 모으고,
+            신청 전에 필요한 정보를 한곳에서 확인하게 해 주는 러닝 허브입니다.
           </p>
         </div>
         

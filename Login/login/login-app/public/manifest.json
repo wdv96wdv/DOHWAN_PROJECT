@@ -1,7 +1,7 @@
 {
   "short_name": "DoRunning",
   "name": "DoRunning App",
-  "description": "달리기 기록, 일정 관리, 커뮤니티 기능을 제공하는 DoRunning 앱",
+  "description": "전국 마라톤·러닝 대회 일정과 접수 정보를 모은 러닝 허브",
   "icons": [
     {
       "src": "/icon-192x192.png",
