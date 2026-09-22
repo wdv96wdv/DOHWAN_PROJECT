@@ -5,11 +5,19 @@ import "../assets/css/marathon.css";
 import "../assets/css/auth.css";
 import { Search, MapPin, Calendar, Footprints, RotateCcw, Award } from 'lucide-react';
 import Skeleton from "../components/Common/Skeleton";
+import {
+    normalizeMarathon,
+    getMarathonStatus,
+    compareUpcomingFirst,
+    getTodayKstStr,
+    STATUS_CLASS_MAP,
+    STATUS_FILTER_GROUPS,
+} from "../utils/marathonHelpers";
 
 export default function MarathonList() {
     const defaultSearch = "";
     const defaultType = "전체";
-    const defaultStatus = "전체"; // 기본값을 전체로 변경하여 데이터 확인 용이하게 설정
+    const defaultStatus = "전체"; // 전체 = upcoming(+접수마감) 기본; 종료는 상태 필터로만
 
     const [marathons, setMarathons] = useState([]); // API로 받아올 상태 추가
     const [search, setSearch] = useState(defaultSearch);
@@ -34,28 +42,7 @@ export default function MarathonList() {
                 return res.json();
             })
             .then(data => {
-                const formattedData = data.map(m => {
-                    // 날짜가 배열 [2026, 3, 23] 형태로 올 경우를 대비한 처리
-                    const formatRawDate = (date) => {
-                        if (Array.isArray(date)) {
-                            return `${date[0]}-${String(date[1]).padStart(2, '0')}-${String(date[2]).padStart(2, '0')}`;
-                        }
-                        return date; // 이미 문자열이면 그대로 반환
-                    };
-
-                    return {
-                        id: m.id,
-                        title: m.title,
-                        link: m.link,
-                        location: m.location,
-                        raceDate: formatRawDate(m.race_date),
-                        startDate: formatRawDate(m.start_date),
-                        endDate: formatRawDate(m.end_date),
-                        type: Array.isArray(m.type) ? m.type : ["마라톤"],
-                        firstComeFirstServed: m.is_first_come || false
-                    };
-                });
-                setMarathons(formattedData);
+                setMarathons(data.map(normalizeMarathon));
             })
             .catch(err => {
                 console.error("데이터 로드 실패:", err);
@@ -65,46 +52,14 @@ export default function MarathonList() {
             });
     }, []);
 
-    const getMarathonStatus = (marathon) => {
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        const start = new Date(marathon.startDate);
-        const end = new Date(marathon.endDate);
-        const race = new Date(marathon.raceDate);
-
-        if (today < start) return "접수 예정";
-        if (today >= start && today <= end) {
-            const msLeft = end.getTime() - today.getTime();
-            const daysLeft = Math.ceil(msLeft / (1000 * 60 * 60 * 24));
-            if (daysLeft <= 7) return "마감 임박";
-            return marathon.firstComeFirstServed ? "선착순 접수중" : "접수중";
-        }
-        if (today > end && today < race) return "접수마감";
-        if (today >= race) return "종료";
-        return "상태불명";
-    };
-
-    const statusClassMap = {
-        "접수 예정": "m-wait",
-        "접수중": "m-open",
-        "선착순 접수중": "m-firstcome",
-        "마감 임박": "m-firstcome",
-        "접수마감": "m-closed",
-        "종료": "m-finished",
-    };
+    const todayStr = getTodayKstStr();
+    const statusClassMap = STATUS_CLASS_MAP;
 
     const typeOptions = ["전체", "Full", "Half", "10Km", "5Km"];
     const statusOptions = ["전체", "접수 예정", "접수중", "마감 임박", "접수마감", "종료"];
     const regionOptions = ["전체", "서울", "경기/인천", "강원", "충청", "전라", "경상", "제주"];
 
-    const statusGroups = {
-        "전체": [],
-        "접수중": ["접수중", "선착순 접수중"],
-        "접수 예정": ["접수 예정"],
-        "마감 임박": ["마감 임박"],
-        "접수마감": ["접수마감"],
-        "종료": ["종료"],
-    };
+    const statusGroups = STATUS_FILTER_GROUPS;
 
     const resetFilters = () => {
         setSearch(defaultSearch);
@@ -115,7 +70,7 @@ export default function MarathonList() {
 
     // --- 2. 필터링 로직 (marathons 상태값 사용) ---
     const filtered = marathons
-        .map(m => ({ ...m, status: getMarathonStatus(m) }))
+        .map(m => ({ ...m, status: getMarathonStatus(m, todayStr) }))
         .filter(m => {
             // 1. 검색어 필터
             const matchText = (m.title + m.location).toLowerCase().includes(search.toLowerCase());
@@ -125,10 +80,13 @@ export default function MarathonList() {
                 ? true
                 : (m.type && m.type.some(t => t.toLowerCase().includes(type.toLowerCase())));
 
-            // 3. 상태 필터
-            const matchStatus = statusFilter === "전체"
-                ? true
-                : statusGroups[statusFilter].includes(m.status);
+            // 3. 상태 필터 — 기본(전체)에서는 종료/과거 대회 숨김; "종료" 필터로만 노출
+            let matchStatus = true;
+            if (statusFilter === "전체") {
+                matchStatus = m.status !== "종료";
+            } else {
+                matchStatus = (statusGroups[statusFilter] || []).includes(m.status);
+            }
 
             // 4. 지역 필터
             let matchRegion = true;
@@ -149,15 +107,8 @@ export default function MarathonList() {
 
             return matchText && matchType && matchStatus && matchRegion;
         })
-        // 기본 정렬: 다가오는 대회 우선, 종료는 아래로
-        .sort((a, b) => {
-            const aEnded = a.status === "종료";
-            const bEnded = b.status === "종료";
-            if (aEnded !== bEnded) return aEnded ? 1 : -1;
-            const aDate = a.raceDate || "";
-            const bDate = b.raceDate || "";
-            return aDate.localeCompare(bDate);
-        });
+        // 기본 정렬: 다가오는 대회 우선(raceDate), 종료는 아래로
+        .sort(compareUpcomingFirst);
 
     return (
         <div className="marathon-page">
