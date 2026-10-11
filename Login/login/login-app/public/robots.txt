@@ -1,6 +1,6 @@
 User-agent: *
 Allow: /
-# 검색 노출이 불필요한 페이지 차단
+# 검색 노출이 불필요한 비공개/회원 전용/수정 페이지 차단
 Disallow: /login
 Disallow: /join
 Disallow: /user
@@ -9,7 +9,7 @@ Disallow: /record
 Disallow: /admin
 Disallow: /boards/insert
 Disallow: /boards/update/
-Disallow: /recommend/result
+Disallow: /recommend
 
 User-agent: Yeti
 Allow: /

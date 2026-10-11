@@ -138,6 +138,7 @@ const ReadContainer = () => {
         <meta property="og:title" content={`Dorunning | 커뮤니티 | ${board.title || '상세보기'}`} />
         <meta property="og:description" content={board.content ? board.content.substring(0, 100).replace(/<[^>]*>?/gm, '') : 'Dorunning 커뮤니티 게시글입니다.'} />
         <meta property="og:type" content="article" />
+        <link rel="canonical" href={`https://dorunning.vercel.app/boards/${id}`} />
       </Helmet>
       <Read
         board={board}

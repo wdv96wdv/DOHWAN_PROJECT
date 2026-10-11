@@ -59,6 +59,7 @@ const ExerciseCalendar = () => {
         <title>Dorunning | 캘린더</title>
         <meta name="description" content="나의 러닝 스케줄과 활동 내역을 캘린더로 관리하세요. 매일의 성취를 한눈에 확인할 수 있습니다." />
         <meta property="og:title" content="Dorunning | 캘린더" />
+        <link rel="canonical" href="https://dorunning.vercel.app/calendar" />
       </Helmet>
       <header className="calendar-header">
         <h3 style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>

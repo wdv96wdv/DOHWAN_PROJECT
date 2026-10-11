@@ -5,6 +5,7 @@ import Footer from './components/Footer/Footer';
 import AppRouter from './router/AppRouter';
 import AdBanner from './components/Common/AdBanner';
 import SessionTimer from './components/SessionTimer';
+import CanonicalTag from './components/Common/CanonicalTag';
 import "./assets/css/common.css";
 import './App.css';
 import { ToastContainer } from 'react-toastify';
@@ -17,6 +18,7 @@ const App = () => {
 
   return (
     <BrowserRouter>
+      <CanonicalTag />
       <SessionTimer />
       <div className={`app ${theme}`}>
         <Header theme={theme} toggleTheme={toggleTheme} />

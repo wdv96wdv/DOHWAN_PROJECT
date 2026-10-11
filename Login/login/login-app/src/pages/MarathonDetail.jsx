@@ -88,6 +88,7 @@ const MarathonDetail = () => {
             <Helmet>
                 <title>Dorunning | 마라톤일정 | {marathon.title}</title>
                 <meta name="description" content={`${marathon.location}에서 열리는 ${marathon.title}의 일정, 접수 방법, 종목 등 상세 정보를 확인하세요.`} />
+                <link rel="canonical" href={`https://dorunning.vercel.app/marathon/${marathon.id}`} />
                 
                 {/* Google Event Structured Data */}
                 <script type="application/ld+json">

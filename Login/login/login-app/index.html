@@ -16,7 +16,6 @@
 
   <!-- Naver Site Verification -->
   <meta name="naver-site-verification" content="3f88e2a87b8076f4cda0dae7e3118723" />
-  <link rel="canonical" href="https://dorunning.vercel.app/" />
 
   <!-- Open Graph / KakaoTalk Preview -->
   <meta property="og:type" content="website" />
@@ -61,16 +60,20 @@
   <!-- End Google Tag Manager (noscript) -->
   <div id="root"></div>
   
-  <!-- SEO Content: This section is for search engine crawlers to understand the site content before JS loads. -->
-  <div style="display:none;">
-    <h1>두러닝 (Dorunning) - 전국 마라톤 대회 일정 및 러닝 기록 관리 플랫폼</h1>
-    <p>전국 주요 마라톤 대회 정보를 제공합니다: 서울 마라톤, JTBC 서울 마라톤 등 다양한 대회 일정을 확인하세요.</p>
-    <ul>
-      <li><a href="/marathon">마라톤 대회 일정 확인</a></li>
-      <li><a href="/boards">러닝 커뮤니티 및 후기</a></li>
-      <li><a href="/course">추천 러닝 코스</a></li>
-    </ul>
-  </div>
+  <!-- Fallback SEO content for non-JS crawlers -->
+  <noscript>
+    <div style="padding: 24px; font-family: sans-serif; line-height: 1.6;">
+      <h1>두러닝 (Dorunning) - 전국 마라톤 대회 일정 및 러닝 커뮤니티 플랫폼</h1>
+      <p>두러닝에서 전국의 주요 마라톤 대회 일정 정보, 접수 기간, 추천 러닝 코스 및 러너들의 생생한 후기를 확인하세요.</p>
+      <ul>
+        <li><a href="/marathon">전국 마라톤 대회 일정 확인</a></li>
+        <li><a href="/boards">러닝 커뮤니티 및 후기</a></li>
+        <li><a href="/course">추천 러닝 코스</a></li>
+        <li><a href="/calendar">러닝 캘린더</a></li>
+        <li><a href="/performance">러닝 페이스 및 퍼포먼스 계산기</a></li>
+      </ul>
+    </div>
+  </noscript>
 
   <script type="module" src="/src/main.jsx"></script>
 </body>

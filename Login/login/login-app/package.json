@@ -20,6 +20,8 @@
     "@mui/styled-engine": "^7.3.3",
     "@mui/styled-engine-sc": "^7.3.3",
     "@supabase/supabase-js": "^2.75.0",
+    "@tanstack/react-query": "^5.103.2",
+    "@tanstack/react-query-devtools": "^5.103.2",
     "aos": "^2.3.4",
     "axios": "^1.13.2",
     "cors": "^2.8.5",

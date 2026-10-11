@@ -24,6 +24,7 @@ const Marathon = lazy(() => import('../pages/Marathon'));
 const MarathonDetail = lazy(() => import('../pages/MarathonDetail')); // 추가
 const PerformanceTab = lazy(() => import('../pages/Performance/PerformanceTab'));
 const WishlistPage = lazy(() => import('../pages/WishlistPage'));
+const NotFound = lazy(() => import('../pages/NotFound'));
 
 const AppRouter = ({ theme }) => {
   return (
@@ -50,6 +51,7 @@ const AppRouter = ({ theme }) => {
         <Route path="/boards/insert" element={<Insertpage />} />
         <Route path="/boards/:id" element={<Readpage />} />
         <Route path="/boards/update/:id" element={<Updatepage />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Suspense>
   );
