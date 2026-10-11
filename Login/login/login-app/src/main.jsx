@@ -13,8 +13,16 @@ createRoot(document.getElementById('root')).render(
 )
 
 // =========================
-// 서비스워커 등록 (PWA)
+// 서비스워커 등록 (PWA) - 비활성화됨
 // =========================
+// 기존에 등록된 서비스 워커를 모두 제거하여 Ctrl+Shift+R 에러 방지
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then((registrations) => {
+    registrations.forEach((registration) => {
+      registration.unregister();
+    });
+  });
+}
 
 // if ('serviceWorker' in navigator) {
 //   window.addEventListener('load', () => {
