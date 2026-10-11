@@ -3,14 +3,14 @@ import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 import "../assets/css/info.css";
-import { 
-  ShieldCheck, 
-  Lock, 
-  Eye, 
-  ExternalLink, 
-  Mail, 
-  FileText, 
-  CheckCircle2, 
+import {
+  ShieldCheck,
+  Lock,
+  Eye,
+  ExternalLink,
+  Mail,
+  FileText,
+  CheckCircle2,
   AlertCircle,
   HelpCircle,
   Clock,
@@ -34,9 +34,9 @@ const Privacy = () => {
     <div className="info-page">
       <Helmet>
         <title>개인정보처리방침 | 두러닝 (Dorunning)</title>
-        <meta 
-          name="description" 
-          content="두러닝(Dorunning)의 개인정보처리방침입니다. 이용자의 소중한 개인정보를 안전하게 보호하고 처리하는 원칙과 절차를 투명하게 안내합니다." 
+        <meta
+          name="description"
+          content="두러닝(Dorunning)의 개인정보처리방침입니다. 이용자의 소중한 개인정보를 안전하게 보호하고 처리하는 원칙과 절차를 투명하게 안내합니다."
         />
         <meta property="og:title" content="두러닝 개인정보처리방침" />
         <meta property="og:description" content="두러닝의 개인정보 수집 목적, 보유 기간, 안전성 확보 조치 및 이용자 권리를 투명하게 공개합니다." />
@@ -44,7 +44,7 @@ const Privacy = () => {
       </Helmet>
 
       {/* 1. Header */}
-      <motion.header 
+      <motion.header
         className="info-header"
         initial="hidden"
         animate="visible"
@@ -57,7 +57,7 @@ const Privacy = () => {
           두러닝 <span className="highlight">개인정보처리방침</span>
         </h1>
         <p>
-          두러닝(Dorunning)은 이용자의 개인정보를 소중하게 생각하며, 「개인정보 보호법」 및 관련 법령을 철저히 준수하여 
+          두러닝(Dorunning)은 이용자의 개인정보를 소중하게 생각하며, 「개인정보 보호법」 및 관련 법령을 철저히 준수하여
           여러분의 데이터를 안전하게 보호하고 있습니다.
         </p>
         <div style={{ marginTop: '16px', display: 'inline-flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
@@ -66,7 +66,7 @@ const Privacy = () => {
       </motion.header>
 
       {/* 2. 3대 개인정보 보호 핵심 원칙 (Security Pillars) */}
-      <motion.div 
+      <motion.div
         className="security-pillars"
         initial="hidden"
         animate="visible"
@@ -141,7 +141,7 @@ const Privacy = () => {
         </div>
         <div className="article-content">
           <p>두러닝은 원활한 서비스 제공을 위해 회원가입 및 서비스 이용 시 다음과 같은 최소한의 개인정보를 수집하고 있습니다.</p>
-          
+
           <table className="policy-data-table">
             <thead>
               <tr>
@@ -261,7 +261,7 @@ const Privacy = () => {
           <p>
             두러닝은 이용자에게 개별적인 맞춤 서비스를 제공하고 웹사이트의 운영 비용을 충당하기 위해 이용 정보를 저장하고 수시로 불러오는 '쿠키(Cookie)'와 <strong>Google AdSense</strong> 광고 서비스를 사용합니다.
           </p>
-          
+
           <div className="adsense-box">
             <h4 style={{ margin: '0 0 10px', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '8px' }}>
               <ExternalLink size={18} color="var(--primary)" /> Google AdSense 광고 및 쿠키 정책 고지
@@ -272,18 +272,18 @@ const Privacy = () => {
               3. 이용자는 언제든지 Google의 광고 설정 또는 제3자 공급업체의 쿠키 사용을 해제할 수 있습니다.
             </p>
             <div className="adsense-links">
-              <a 
-                href="https://www.google.com/settings/ads" 
-                target="_blank" 
-                rel="noopener noreferrer" 
+              <a
+                href="https://www.google.com/settings/ads"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="adsense-btn"
               >
                 Google 맞춤 광고 설정 해제 <ExternalLink size={14} />
               </a>
-              <a 
-                href="https://policies.google.com/technologies/ads" 
-                target="_blank" 
-                rel="noopener noreferrer" 
+              <a
+                href="https://policies.google.com/technologies/ads"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="adsense-btn"
               >
                 Google 개인정보 보호 및 광고 약관 <ExternalLink size={14} />
@@ -335,7 +335,7 @@ const Privacy = () => {
             </div>
             <div className="officer-item">
               <span className="officer-label">문의 이메일</span>
-              <span className="officer-val">wdv96wdv@gmail.com</span>
+              <span className="officer-val">kimdohwan969@gmail.com</span>
             </div>
             <div className="officer-item">
               <span className="officer-label">온라인 고객센터</span>
@@ -358,8 +358,8 @@ const Privacy = () => {
         <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', marginBottom: '16px' }}>
           개인정보 처리에 대해 추가로 궁금한 점이 있으신가요?
         </p>
-        <Link 
-          to="/contact" 
+        <Link
+          to="/contact"
           style={{
             display: 'inline-flex',
             alignItems: 'center',
