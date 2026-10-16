@@ -16,6 +16,7 @@ import org.springframework.web.client.RestTemplate;
 import com.dohwan.login.repository.MarathonRepository;
 import com.dohwan.login.entity.Marathon;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
@@ -46,13 +47,23 @@ public class MarathonService {
 
     // --- 1. 데이터 조회 ---
     public List<Marathon> findAllMarathons() {
+        try {
+            // JPA로 DB에서 직접 최신순/오름차순 정렬 조회 (RLS/HTTP REST 제약 없음)
+            List<Marathon> list = marathonRepository.findAllByOrderByRaceDateAsc();
+            if (list != null && !list.isEmpty()) {
+                return list;
+            }
+        } catch (Exception e) {
+            log.warn(">>> [JPA 조회 실패, Supabase REST 폴백 시도] : {}", e.getMessage());
+        }
+
+        // 폴백: Supabase REST API 조회
         HttpHeaders headers = new HttpHeaders();
         headers.set("apikey", supabaseKey);
         headers.set("Authorization", "Bearer " + supabaseKey);
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
         try {
-            // 다가오는 날짜 순으로 정렬하여 조회
             String url = supabaseUrl + "/rest/v1/marathons?select=*&order=race_date.asc";
 
             ResponseEntity<List<Marathon>> response = restTemplate.exchange(
@@ -69,11 +80,20 @@ public class MarathonService {
             return new ArrayList<>(response.getBody());
         } catch (Exception e) {
             log.error(">>> [조회 실패] : {}", e.getMessage());
-            return new ArrayList<>(marathonRepository.findAllByOrderByRaceDateDesc());
+            return Collections.emptyList();
         }
     }
 
     public Optional<Marathon> findMarathonById(Long id) {
+        try {
+            Optional<Marathon> direct = marathonRepository.findById(id);
+            if (direct.isPresent()) {
+                return direct;
+            }
+        } catch (Exception e) {
+            log.warn(">>> [JPA 단건 조회 실패, REST 시도] : {}", e.getMessage());
+        }
+
         HttpHeaders headers = new HttpHeaders();
         headers.set("apikey", supabaseKey);
         headers.set("Authorization", "Bearer " + supabaseKey);
@@ -90,14 +110,14 @@ public class MarathonService {
             );
             List<Marathon> body = (response != null) ? response.getBody() : null;
             if (body == null || body.isEmpty()) {
-                return marathonRepository.findById(id);
+                return Optional.empty();
             }
 
             Marathon single = body.get(0);
             return Optional.ofNullable(single);
         } catch (Exception e) {
             log.error(">>> [단건 조회 실패] : {}", e.getMessage());
-            return marathonRepository.findById(id);
+            return Optional.empty();
         }
     }
 
@@ -273,18 +293,7 @@ public class MarathonService {
             }
         }
 
-        Map<String, Object> data = new HashMap<>();
-        data.put("title", title);
-        data.put("link", officialLink);
-        data.put("location", location);
-        data.put("race_date", raceDate);
-        data.put("start_date", startDate);
-        data.put("end_date", endDate);
-        data.put("type", typeSet.toArray(new String[0]));
-        data.put("is_first_come", isFirstCome);
-        data.put("poster_url", posterUrl);
-
-        sendToSupabase(data);
+        saveMarathon(title, officialLink, location, raceDate, startDate, endDate, typeSet, isFirstCome, posterUrl);
     }
 
     // 폴백 HTML 파서 (JSON이 없는 예외 케이스용)
@@ -359,15 +368,45 @@ public class MarathonService {
             }
         }
 
+        saveMarathon(cleanMarathonTitle(title), officialLink, extractLocation(allText), raceDate, startDate, endDate, typeSet, allText.contains("선착순"), posterUrl);
+    }
+
+    // --- 저장 핵심 로직 (JPA 직접 저장으로 RLS 우회 및 Supabase 영속화) ---
+    private void saveMarathon(String title, String officialLink, String location, String raceDateStr, String startDateStr, String endDateStr, Set<String> typeSet, boolean isFirstCome, String posterUrl) {
+        // 1. JPA 직접 저장: DB connection(postgres 계정)을 통해 Supabase REST RLS 제약 없이 직접 저장
+        try {
+            LocalDate raceDate = LocalDate.parse(raceDateStr);
+            LocalDate startDate = LocalDate.parse(startDateStr);
+            LocalDate endDate = LocalDate.parse(endDateStr);
+
+            Optional<Marathon> existing = marathonRepository.findByTitleAndRaceDate(title, raceDate);
+            Marathon marathon = existing.orElse(new Marathon());
+            marathon.setTitle(title);
+            marathon.setRaceDate(raceDate);
+            marathon.setStartDate(startDate);
+            marathon.setEndDate(endDate);
+            marathon.setLocation(location);
+            marathon.setLink(officialLink);
+            marathon.setType(new ArrayList<>(typeSet));
+            marathon.setFirstComeFirstServed(isFirstCome);
+            marathon.setPosterUrl(posterUrl);
+
+            marathonRepository.save(marathon);
+            log.info(">>> [DB 저장/갱신 완료] : {} ({})", title, raceDateStr);
+        } catch (Exception ex) {
+            log.warn(">>> [JPA 저장 실패] {} : {}", title, ex.getMessage());
+        }
+
+        // 2. Supabase REST API 호출
         Map<String, Object> data = new HashMap<>();
-        data.put("title", cleanMarathonTitle(title));
+        data.put("title", title);
         data.put("link", officialLink);
-        data.put("location", extractLocation(allText));
-        data.put("race_date", raceDate);
-        data.put("start_date", startDate);
-        data.put("end_date", endDate);
+        data.put("location", location);
+        data.put("race_date", raceDateStr);
+        data.put("start_date", startDateStr);
+        data.put("end_date", endDateStr);
         data.put("type", typeSet.toArray(new String[0]));
-        data.put("is_first_come", allText.contains("선착순"));
+        data.put("is_first_come", isFirstCome);
         data.put("poster_url", posterUrl);
 
         sendToSupabase(data);
@@ -413,9 +452,8 @@ public class MarathonService {
         try {
             String upsertUrl = supabaseUrl + "/rest/v1/marathons?on_conflict=title,race_date";
             restTemplate.postForEntity(upsertUrl, entity, String.class);
-            log.info(">>> [저장/갱신 완료] : {} ({})", data.get("title"), data.get("race_date"));
-        } catch (Exception e) {
-            log.warn(">>> [저장 실패] {} : {}", data.get("title"), e.getMessage());
+        } catch (Exception ignored) {
+            // RLS 등으로 인한 REST API 실패는 JPA 직접 저장이 처리하므로 무시
         }
     }
 }
