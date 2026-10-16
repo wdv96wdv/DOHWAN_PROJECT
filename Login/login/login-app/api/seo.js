@@ -49,8 +49,12 @@ function escapeAttr(s) {
   return escapeHtml(s).replace(/'/g, '&#39;');
 }
 
+function todayKst() {
+  return new Date(Date.now() + 9 * 60 * 60 * 1000).toISOString().slice(0, 10);
+}
+
 async function fetchMarathon(id) {
-  const url = `${SUPABASE_URL}/rest/v1/marathons?id=eq.${encodeURIComponent(id)}&select=id,title,location,race_date,type,poster_url`;
+  const url = `${SUPABASE_URL}/rest/v1/marathons?id=eq.${encodeURIComponent(id)}&select=id,title,location,race_date,start_date,end_date,type,poster_url,link`;
   const res = await fetch(url, {
     headers: {
       apikey: SUPABASE_KEY,
@@ -90,25 +94,27 @@ async function resolveMeta(pathname) {
     const id = detailMatch[1];
     if (!id || !String(id).trim()) {
       return {
-        title: 'Dorunning | 마라톤일정 | 상세정보',
-        description: '마라톤 대회 상세 정보',
-        ogTitle: 'Dorunning | 마라톤일정 | 상세정보',
-        ogDescription: '마라톤 대회 상세 정보',
+        notFound: true,
+        title: '페이지를 찾을 수 없습니다 | 두러닝',
+        description: '요청하신 마라톤 상세 페이지가 없습니다.',
+        ogTitle: '페이지를 찾을 수 없습니다 | 두러닝',
+        ogDescription: '요청하신 마라톤 상세 페이지가 없습니다.',
         ogImage: DEFAULT_OG_IMAGE,
         canonical: `${SITE}/marathon`,
-        h1: '마라톤 상세',
+        h1: '페이지를 찾을 수 없습니다',
       };
     }
     const m = await fetchMarathon(id);
     if (!m) {
       return {
-        title: 'Dorunning | 마라톤일정 | 상세정보',
-        description: '마라톤 대회 상세 정보를 확인할 수 있습니다.',
-        ogTitle: 'Dorunning | 마라톤일정 | 상세정보',
-        ogDescription: '마라톤 대회 상세 정보',
+        notFound: true,
+        title: '페이지를 찾을 수 없습니다 | 두러닝',
+        description: '요청하신 마라톤 대회 정보를 찾을 수 없습니다.',
+        ogTitle: '페이지를 찾을 수 없습니다 | 두러닝',
+        ogDescription: '요청하신 마라톤 대회 정보를 찾을 수 없습니다.',
         ogImage: DEFAULT_OG_IMAGE,
-        canonical,
-        h1: '마라톤 상세',
+        canonical: `${SITE}/marathon`,
+        h1: '페이지를 찾을 수 없습니다',
       };
     }
     const types = typeLabel(m.type);
@@ -124,9 +130,14 @@ async function resolveMeta(pathname) {
       ogDescription: ogDescription || description,
       ogImage: m.poster_url || DEFAULT_OG_IMAGE,
       canonical,
-      h1: [m.title, m.race_date, m.location].filter(Boolean).join(' · '),
+      h1: m.title || '마라톤 상세',
+      eventName: m.title,
       raceDate: m.race_date,
+      startDate: m.start_date,
+      endDate: m.end_date,
       location: m.location,
+      types,
+      officialLink: m.link,
     };
   }
 
@@ -142,6 +153,51 @@ async function resolveMeta(pathname) {
     canonical,
     h1: '두러닝 – 전국 마라톤 대회 일정',
   };
+}
+
+function articleHtml(meta) {
+  const rows = [];
+  if (meta.raceDate) rows.push(`<li>개최일: ${escapeHtml(meta.raceDate)}</li>`);
+  if (meta.location) rows.push(`<li>장소: ${escapeHtml(meta.location)}</li>`);
+  if (meta.types) rows.push(`<li>종목: ${escapeHtml(meta.types)}</li>`);
+  const official = meta.officialLink
+    ? `<p><a href="${escapeAttr(meta.officialLink)}">공식 접수/안내 페이지</a></p>`
+    : '';
+  return `<article data-seo-prerender="1">
+    <h1>${escapeHtml(meta.h1 || meta.title)}</h1>
+    <p>${escapeHtml(meta.description)}</p>
+    ${rows.length ? `<ul>${rows.join('')}</ul>` : ''}
+    ${official}
+    <p><a href="${escapeAttr(meta.canonical)}">두러닝에서 자세히 보기</a></p>
+  </article>`;
+}
+
+function eventJsonLd(meta) {
+  if (!meta.eventName || !meta.raceDate) return '';
+  const past = meta.raceDate < todayKst();
+  const payload = {
+    '@context': 'https://schema.org',
+    '@type': 'Event',
+    name: meta.eventName,
+    description: meta.description,
+    startDate: meta.raceDate,
+    endDate: meta.endDate || meta.raceDate,
+    eventStatus: past ? 'https://schema.org/EventCompleted' : 'https://schema.org/EventScheduled',
+    eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+    location: {
+      '@type': 'Place',
+      name: meta.location || '대한민국',
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: meta.location || '',
+        addressCountry: 'KR',
+      },
+    },
+    image: meta.ogImage,
+    url: meta.canonical,
+    organizer: { '@type': 'Organization', name: '두러닝', url: SITE },
+  };
+  return `<script type="application/ld+json">${JSON.stringify(payload)}</script>`;
 }
 
 function injectIntoHtml(html, meta) {
@@ -190,15 +246,25 @@ function injectIntoHtml(html, meta) {
     if (re.test(out)) out = out.replace(re, rep);
   }
 
-  // Crawler-visible body snippet (kept hidden for humans alongside existing SEO block)
-  const crawlerBlock = `<div style="display:none;" data-seo-prerender="1">
-    <h1>${escapeHtml(meta.h1 || meta.title)}</h1>
-    <p>${escapeHtml(meta.description)}</p>
-  </div>`;
+  const jsonLd = eventJsonLd(meta);
+  if (jsonLd) {
+    out = out.replace(/<\/head>/i, `${jsonLd}\n</head>`);
+  }
+
+  // Unique visible copy for crawlers. display:none is ignored for indexing.
+  const crawlerBlock = articleHtml(meta);
   if (/data-seo-prerender=["']1["']/.test(out)) {
-    out = out.replace(/<div[^>]*data-seo-prerender=["']1["'][^>]*>[\s\S]*?<\/div>/i, crawlerBlock);
+    out = out.replace(/<(div|article)[^>]*data-seo-prerender=["']1["'][^>]*>[\s\S]*?<\/\1>/i, crawlerBlock);
   } else if (/<div id=["']root["']><\/div>/i.test(out)) {
-    out = out.replace(/<div id=["']root["']><\/div>/i, `<div id="root"></div>\n  ${crawlerBlock}`);
+    out = out.replace(/<div id=["']root["']><\/div>/i, `${crawlerBlock}\n  <div id="root"></div>`);
+  }
+
+  const fallbackNoscript = `<!-- Fallback SEO content for non-JS crawlers -->
+  <noscript>
+    ${crawlerBlock}
+  </noscript>`;
+  if (/<!-- Fallback SEO content for non-JS crawlers -->[\s\S]*?<\/noscript>/i.test(out)) {
+    out = out.replace(/<!-- Fallback SEO content for non-JS crawlers -->[\s\S]*?<\/noscript>/i, fallbackNoscript);
   }
 
   return out;
@@ -232,8 +298,8 @@ function minimalHtml(meta) {
 </html>`;
 }
 
-async function buildSeoHtml(pathname, origin) {
-  const meta = await resolveMeta(pathname);
+async function buildSeoHtml(pathname, origin, resolvedMeta) {
+  const meta = resolvedMeta || (await resolveMeta(pathname));
   try {
     const indexUrl = new URL('/index.html', origin || SITE);
     const indexRes = await fetch(indexUrl.toString(), {
@@ -281,10 +347,11 @@ export default async function handler(req, res) {
   if (pathname.length > 1 && pathname.endsWith('/')) pathname = pathname.slice(0, -1);
 
   try {
-    const html = await buildSeoHtml(pathname, origin);
-    res.statusCode = 200;
+    const meta = await resolveMeta(pathname);
+    const html = await buildSeoHtml(pathname, origin, meta);
+    res.statusCode = meta.notFound ? 404 : 200;
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
-    res.setHeader('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=86400');
+    res.setHeader('Cache-Control', meta.notFound ? 'no-store' : 'public, s-maxage=300, stale-while-revalidate=86400');
     res.setHeader('X-Dorunning-SEO', '1');
     if (req.method === 'HEAD') {
       res.end();
