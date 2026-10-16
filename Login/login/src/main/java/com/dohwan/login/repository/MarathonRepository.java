@@ -15,6 +15,8 @@ public interface MarathonRepository extends JpaRepository<Marathon, Long> {
 
     List<Marathon> findAllByOrderByRaceDateDesc();
 
+    List<Marathon> findByRaceDateGreaterThanEqualOrderByRaceDateAsc(LocalDate fromDate);
+
     Optional<Marathon> findByTitleAndRaceDate(String title, LocalDate raceDate);
 
     List<Marathon> findByLocationContaining(String location);

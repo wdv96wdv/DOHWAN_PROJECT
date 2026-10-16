@@ -47,37 +47,53 @@ public class MarathonService {
 
     // --- 1. 데이터 조회 ---
     public List<Marathon> findAllMarathons() {
+        LocalDate today = LocalDate.now();
         try {
-            // JPA로 DB에서 직접 최신순/오름차순 정렬 조회 (RLS/HTTP REST 제약 없음)
-            List<Marathon> list = marathonRepository.findAllByOrderByRaceDateAsc();
+            // JPA로 오늘 이후 대회만 오름차순 조회 (과거 종료 대회 제외)
+            List<Marathon> list = marathonRepository.findByRaceDateGreaterThanEqualOrderByRaceDateAsc(today);
             if (list != null && !list.isEmpty()) {
+                log.info(">>> [JPA 조회 성공] 오늘({}) 이후 대회: {}개", today, list.size());
                 return list;
             }
+            log.warn(">>> [JPA 조회 결과 없음] 오늘 이후 대회 0개");
         } catch (Exception e) {
             log.warn(">>> [JPA 조회 실패, Supabase REST 폴백 시도] : {}", e.getMessage());
         }
 
-        // 폴백: Supabase REST API 조회
+        // 폴백: Supabase REST API 조회 (날짜 필터 + 페이지네이션으로 1000개 제한 우회)
         HttpHeaders headers = new HttpHeaders();
         headers.set("apikey", supabaseKey);
         headers.set("Authorization", "Bearer " + supabaseKey);
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
+        List<Marathon> allResults = new ArrayList<>();
+        int pageSize = 1000;
+        int offset = 0;
+
         try {
-            String url = supabaseUrl + "/rest/v1/marathons?select=*&order=race_date.asc";
+            while (true) {
+                String url = supabaseUrl + "/rest/v1/marathons?select=*"
+                    + "&race_date=gte." + today
+                    + "&order=race_date.asc"
+                    + "&limit=" + pageSize
+                    + "&offset=" + offset;
 
-            ResponseEntity<List<Marathon>> response = restTemplate.exchange(
-                url,
-                HttpMethod.GET,
-                entity,
-                new org.springframework.core.ParameterizedTypeReference<List<Marathon>>() {}
-            );
+                ResponseEntity<List<Marathon>> response = restTemplate.exchange(
+                    url,
+                    HttpMethod.GET,
+                    entity,
+                    new org.springframework.core.ParameterizedTypeReference<List<Marathon>>() {}
+                );
 
-            if (response == null || response.getBody() == null) {
-                return Collections.emptyList();
+                List<Marathon> page = (response != null) ? response.getBody() : null;
+                if (page == null || page.isEmpty()) break;
+
+                allResults.addAll(page);
+                if (page.size() < pageSize) break;
+                offset += pageSize;
             }
-
-            return new ArrayList<>(response.getBody());
+            log.info(">>> [Supabase REST 폴백] 오늘 이후 대회: {}개", allResults.size());
+            return allResults;
         } catch (Exception e) {
             log.error(">>> [조회 실패] : {}", e.getMessage());
             return Collections.emptyList();
