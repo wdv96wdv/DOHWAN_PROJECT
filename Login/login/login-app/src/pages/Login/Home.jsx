@@ -50,6 +50,7 @@ const Home = () => {
     });
 
     // Supabase 직접 호출 (오늘 이후 대회만, 접수중 필터)
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
     const SUPABASE_URL = 'https://ismclnqslxnlsfmqjytc.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_RWdFyo-SAjkjsNnQJC2JBw_jbX6bdXd';
     const todayStr = getTodayKstStr();
