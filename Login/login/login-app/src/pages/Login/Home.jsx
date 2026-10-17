@@ -49,18 +49,43 @@ const Home = () => {
       once: true,
     });
 
-    // DB에서 실시간 마라톤 일정 가져와서 "접수중"인 메인 리스트 구성하기
-    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+    // Supabase 직접 호출 (오늘 이후 대회만, 접수중 필터)
+    const SUPABASE_URL = 'https://ismclnqslxnlsfmqjytc.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_RWdFyo-SAjkjsNnQJC2JBw_jbX6bdXd';
+    const todayStr = getTodayKstStr();
+
     setLoadingMarathon(true);
-    fetch(`${API_BASE_URL}/api/marathons`)
-      .then(res => {
-        if (!res.ok) throw new Error("HTTP error!");
-        if (res.status === 204) return [];
-        return res.json();
+
+    const pageSize = 1000;
+    let allData = [];
+
+    const fetchPage = (offset) => {
+      const url = `${SUPABASE_URL}/rest/v1/marathons`
+        + `?select=id,title,location,race_date,start_date,end_date,type,link,is_first_come`
+        + `&race_date=gte.${todayStr}`
+        + `&order=race_date.asc`
+        + `&limit=${pageSize}&offset=${offset}`;
+
+      return fetch(url, {
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`,
+        },
       })
+        .then(res => {
+          if (!res.ok) throw new Error(`Supabase error: ${res.status}`);
+          return res.json();
+        })
+        .then(page => {
+          allData = allData.concat(page);
+          if (page.length === pageSize) return fetchPage(offset + pageSize);
+          return allData;
+        });
+    };
+
+    fetchPage(0)
       .then(data => {
-        const todayStr = getTodayKstStr();
-        // 지금 접수 중: 접수 기간 안 + 대회일 미경과 (과거/종료 제외)
+        // 지금 접수 중: 접수 기간 안 + 대회일 미경과
         const activeList = data
           .map(normalizeMarathon)
           .filter((item) => isOpenRegistration(item, todayStr));
