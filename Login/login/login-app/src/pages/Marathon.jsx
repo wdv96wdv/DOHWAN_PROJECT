@@ -26,21 +26,46 @@ export default function MarathonList() {
     const [regionFilter, setRegionFilter] = useState("전체");
     const [loading, setLoading] = useState(true); // 로딩 상태 추가
 
-    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+    const SUPABASE_URL = 'https://ismclnqslxnlsfmqjytc.supabase.co';
+    const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || 'sb_publishable_RWdFyo-SAjkjsNnQJC2JBw_jbX6bdXd';
 
-    // --- 1. 백엔드 API 호출 ---
-    // MarathonList.js 내부 useEffect
+    // --- 1. Supabase 직접 호출 (오늘 이후 대회만, 페이지네이션) ---
     useEffect(() => {
         setLoading(true);
-        fetch(`${API_BASE_URL}/api/marathons`)
+
+        const today = new Intl.DateTimeFormat('en-CA', {
+            timeZone: 'Asia/Seoul',
+            year: 'numeric', month: '2-digit', day: '2-digit',
+        }).format(new Date());
+
+        const pageSize = 1000;
+        let allData = [];
+
+        const fetchPage = (offset) => {
+            const url = `${SUPABASE_URL}/rest/v1/marathons`
+                + `?select=id,title,location,race_date,start_date,end_date,type,link,is_first_come`
+                + `&race_date=gte.${today}`
+                + `&order=race_date.asc`
+                + `&limit=${pageSize}&offset=${offset}`;
+
+            return fetch(url, {
+                headers: {
+                    'apikey': SUPABASE_KEY,
+                    'Authorization': `Bearer ${SUPABASE_KEY}`,
+                },
+            })
             .then(res => {
-                if (!res.ok) {
-                    throw new Error(`HTTP error! status: ${res.status}`);
-                }
-                // 응답이 204 No Content이거나 본문이 빌 경우 빈 배열 반환
-                if (res.status === 204) return [];
+                if (!res.ok) throw new Error(`Supabase error: ${res.status}`);
                 return res.json();
             })
+            .then(page => {
+                allData = allData.concat(page);
+                if (page.length === pageSize) return fetchPage(offset + pageSize);
+                return allData;
+            });
+        };
+
+        fetchPage(0)
             .then(data => {
                 setMarathons(data.map(normalizeMarathon));
             })
@@ -51,6 +76,7 @@ export default function MarathonList() {
                 setLoading(false);
             });
     }, []);
+
 
     const todayStr = getTodayKstStr();
     const statusClassMap = STATUS_CLASS_MAP;
