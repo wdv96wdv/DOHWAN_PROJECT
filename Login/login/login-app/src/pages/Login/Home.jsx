@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Helmet } from 'react-helmet-async';
 import marathon from "../../assets/video/marathon.mp4";
 import community from "../../assets/img/community.png";
@@ -156,12 +156,12 @@ const Home = () => {
             전국 마라톤·하프·10K 일정을 모았습니다. 접수 기간, 거리, 지역까지 한곳에서 비교하세요.
           </p>
           <div data-aos="fade-up" data-aos-delay="400" className="hero-action-group">
-            <button className="btn-auth hero-btn primary-glow" onClick={() => navigate("/marathon")}>
+            <Link to="/marathon" className="btn-auth hero-btn primary-glow">
               다가오는 대회 보기 <ArrowRight size={20} />
-            </button>
-            <button className="btn-auth outline hero-btn" onClick={() => navigate("/marathon")}>
+            </Link>
+            <Link to="/marathon" className="btn-auth outline hero-btn">
               지역별 찾아보기
-            </button>
+            </Link>
           </div>
         </div>
       </section>
@@ -214,9 +214,9 @@ const Home = () => {
                   <div className="marathon-tags">
                     {item.type.map(t => <span key={t} className="marathon-tag">{t}</span>)}
                   </div>
-                  <button className="marathon-link-btn" onClick={() => navigate(`/marathon/${item.id}`)}>
+                  <Link to={`/marathon/${item.id}`} className="marathon-link-btn">
                     상세정보 보기 <ChevronRight size={16} />
-                  </button>
+                  </Link>
                 </div>
               </SwiperSlide>
             ))}
@@ -238,9 +238,9 @@ const Home = () => {
           <p>
             혼자 달리지 마세요. 다른 러너들과 기록을 공유하고, 일상을 나누며 긍정적인 에너지를 얻으세요. 자유게시판부터 러닝 크루 인증까지 모든 것이 준비되어 있습니다.
           </p>
-          <button className="btn-auth btn-feature" onClick={() => navigate("/boards")}>
+          <Link to="/boards" className="btn-auth btn-feature">
             커뮤니티 구경하기 <ArrowRight size={18} style={{ marginLeft: '8px' }} />
-          </button>
+          </Link>
         </div>
         <div className="feature-media glass-media">
           <img src={community} alt="Runner Community" loading="lazy" />
@@ -273,9 +273,9 @@ const Home = () => {
         <div className="footer-glass-box">
           <h2 className="footer-title">관심 대회만 모아 두세요</h2>
           <p>위시리스트에 담아 두면 접수 시작·마감이 다가올 때 다시 찾기 쉽습니다.</p>
-          <button className="btn-auth hero-btn primary-glow" onClick={handleGetStarted}>
+          <Link to={isLogin === "true" || isLogin === true ? "/boards" : "/login"} className="btn-auth hero-btn primary-glow">
             무료로 시작하기
-          </button>
+          </Link>
         </div>
       </footer>
     </div>

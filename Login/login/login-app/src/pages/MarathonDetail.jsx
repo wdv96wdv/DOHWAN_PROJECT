@@ -32,7 +32,7 @@ const MarathonDetail = () => {
                 
                 // 보조 타이틀 설정
                 if (response.data && response.data.title) {
-                    document.title = `Dorunning | 마라톤일정 | ${response.data.title}`;
+                    document.title = `${response.data.title} 일정·접수·코스 정보 (공식링크) | 두러닝`;
                 }
             } catch (err) {
                 console.error('상세 정보 로드 실패:', err);
@@ -64,7 +64,7 @@ const MarathonDetail = () => {
         return (
             <div className="container marathon-detail-page">
                 <Helmet>
-                    <title>Dorunning | 마라톤일정 | 상세정보</title>
+                    <title>대회 정보 불러오는 중... | 두러닝</title>
                 </Helmet>
                 <Loading text="대회 상세 정보를 불러오는 중..." />
                 <style dangerouslySetInnerHTML={{ __html: `
@@ -78,7 +78,7 @@ const MarathonDetail = () => {
         return (
             <div className="container marathon-detail-page">
                 <Helmet>
-                    <title>Dorunning | 마라톤일정 | 에러</title>
+                    <title>대회 정보를 찾을 수 없습니다 | 두러닝</title>
                 </Helmet>
                 <div className="error-container">{error || '데이터가 없습니다.'}</div>
                 <style dangerouslySetInnerHTML={{ __html: `
@@ -90,21 +90,65 @@ const MarathonDetail = () => {
 
     const dDay = calculateDDay(marathon.race_date);
     const regBadge = getRegistrationBadge(marathon);
+    const typesStr = Array.isArray(marathon.type) ? marathon.type.filter(Boolean).join(', ') : (marathon.type || '');
+    const metaTitle = `${marathon.title} 일정·접수·코스 정보 (공식링크) | 두러닝`;
+
+    const descItems = [];
+    if (marathon.race_date) descItems.push(`개최일: ${marathon.race_date}`);
+    if (marathon.start_date || marathon.end_date) {
+        const regPeriod = [marathon.start_date, marathon.end_date].filter(Boolean).join(' ~ ');
+        descItems.push(`접수: ${regPeriod}`);
+    }
+    if (marathon.location) descItems.push(`장소: ${marathon.location}`);
+    if (typesStr) descItems.push(`종목: ${typesStr}`);
+
+    const descDetail = descItems.length ? `[${descItems.join(' | ')}] ` : '';
+    const metaDescription = `${descDetail}${marathon.title} 마라톤 상세 정보. 일정, 접수 방법, 코스 안내 및 공식 참가신청 링크를 두러닝에서 확인하세요.`;
+    const ogDesc = descItems.length ? descItems.join(' · ') : `${marathon.title} 대회 일정 및 공식 신청 안내`;
+    const ogImg = marathon.poster_url || "https://dorunning.vercel.app/og-image.png";
 
     return (
         <div className="container marathon-detail-page">
             <Helmet>
-                <title>Dorunning | 마라톤일정 | {marathon.title}</title>
-                <meta name="description" content={`${marathon.location}에서 열리는 ${marathon.title}의 일정, 접수 방법, 종목 등 상세 정보를 확인하세요.`} />
+                <title>{metaTitle}</title>
+                <meta name="description" content={metaDescription} />
                 <link rel="canonical" href={`https://dorunning.vercel.app/marathon/${marathon.id}`} />
                 
+                {/* Breadcrumb Structured Data */}
+                <script type="application/ld+json">
+                    {JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "BreadcrumbList",
+                        "itemListElement": [
+                            {
+                                "@type": "ListItem",
+                                "position": 1,
+                                "name": "두러닝",
+                                "item": "https://dorunning.vercel.app"
+                            },
+                            {
+                                "@type": "ListItem",
+                                "position": 2,
+                                "name": "마라톤 일정",
+                                "item": "https://dorunning.vercel.app/marathon"
+                            },
+                            {
+                                "@type": "ListItem",
+                                "position": 3,
+                                "name": marathon.title,
+                                "item": `https://dorunning.vercel.app/marathon/${marathon.id}`
+                            }
+                        ]
+                    })}
+                </script>
+
                 {/* Google Event Structured Data */}
                 <script type="application/ld+json">
                     {JSON.stringify({
                         "@context": "https://schema.org",
                         "@type": "Event",
                         "name": marathon.title,
-                        "description": `${marathon.title} 마라톤 상세 정보, 일정, 장소 및 접수 안내`,
+                        "description": metaDescription,
                         "startDate": marathon.race_date,
                         "endDate": marathon.race_date,
                         "eventStatus": "https://schema.org/EventScheduled",
@@ -119,31 +163,31 @@ const MarathonDetail = () => {
                                 "addressCountry": "KR"
                             }
                         },
-                        "image": marathon.poster_url || "https://dorunning.vercel.app/og-image.png",
+                        "image": ogImg,
                         "offers": {
                             "@type": "Offer",
-                            "url": window.location.href,
+                            "url": marathon.link || window.location.href,
                             "availability": "https://schema.org/InStock",
                             "validFrom": marathon.start_date
                         },
                         "organizer": {
                             "@type": "Organization",
-                            "name": "Dorunning",
+                            "name": "두러닝",
                             "url": "https://dorunning.vercel.app"
                         }
                     })}
                 </script>
 
                 {/* Open Graph / KakaoTalk */}
-                <meta property="og:title" content={`Dorunning | 마라톤일정 | ${marathon.title}`} />
-                <meta property="og:description" content={`${marathon.race_date} ${marathon.location} 개최. 종목: ${marathon.type?.join(', ')}`} />
-                {marathon.poster_url && <meta property="og:image" content={marathon.poster_url} />}
+                <meta property="og:title" content={metaTitle} />
+                <meta property="og:description" content={ogDesc} />
+                <meta property="og:image" content={ogImg} />
                 <meta property="og:url" content={window.location.href} />
 
                 {/* Twitter */}
-                <meta name="twitter:title" content={`Dorunning | 마라톤일정 | ${marathon.title}`} />
-                <meta name="twitter:description" content={`${marathon.race_date} ${marathon.location} 개최.`} />
-                {marathon.poster_url && <meta name="twitter:image" content={marathon.poster_url} />}
+                <meta name="twitter:title" content={metaTitle} />
+                <meta name="twitter:description" content={ogDesc} />
+                <meta name="twitter:image" content={ogImg} />
             </Helmet>
 
             <button className="back-btn" onClick={() => navigate(-1)}>

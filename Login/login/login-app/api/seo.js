@@ -20,20 +20,20 @@ const SUPABASE_KEY = 'sb_publishable_RWdFyo-SAjkjsNnQJC2JBw_jbX6bdXd';
 
 const STATIC_META = {
   '/about': {
-    title: '두러닝 소개 | 두러닝',
+    title: '두러닝 소개 | 전국 마라톤 정보 허브',
     description:
-      '두러닝은 전국 마라톤·러닝 대회 일정을 모으고, 신청 전에 필요한 정보를 한곳에서 확인하게 해 주는 러닝 허브입니다.',
-    ogTitle: '두러닝 – 전국 마라톤 대회 일정',
+      '두러닝은 전국 마라톤·러닝 대회 일정을 모으고, 접수 전 필요한 정보와 공식 신청 링크를 한곳에서 제공하는 러너 전용 플랫폼입니다.',
+    ogTitle: '두러닝 – 전국 마라톤 대회 일정 및 러닝 허브',
     ogDescription:
       '서울부터 지방까지, 다가오는 러닝 대회 일정과 접수 정보를 모았습니다.',
   },
   '/marathon': {
-    title: '전국 마라톤·러닝 대회 일정 | 두러닝',
+    title: '전국 마라톤 일정·접수 D-Day 캘린더 (2026) | 두러닝',
     description:
-      '지역·거리·접수 상태로 필터하세요. 상세에서 공식 신청 페이지로 바로 이동합니다.',
-    ogTitle: '두러닝 – 전국 마라톤 대회 일정',
+      '2026 전국 마라톤·러닝 대회 일정 총정리. 서울·수도권 및 지방 지역별, 거리별(10K·하프·풀) 실시간 접수 상태와 공식 신청 링크를 한곳에서 확인하세요.',
+    ogTitle: '전국 마라톤 일정·접수 D-Day 캘린더 | 두러닝',
     ogDescription:
-      '서울부터 지방까지, 다가오는 러닝 대회 일정과 접수 정보를 모았습니다.',
+      '2026 다가오는 전국 마라톤 대회 일정, 실시간 접수 현황, 공식 신청 링크 총정리.',
   },
 };
 
@@ -118,16 +118,29 @@ async function resolveMeta(pathname) {
       };
     }
     const types = typeLabel(m.type);
-    const title = `Dorunning | 마라톤일정 | ${m.title}`;
-    const description = `${m.location || ''}에서 열리는 ${m.title}의 일정, 접수 방법, 종목 등 상세 정보를 확인하세요.`;
-    const ogDescription = [m.race_date, m.location ? `${m.location} 개최` : null, types ? `종목: ${types}` : null]
-      .filter(Boolean)
-      .join(' ');
+    const title = `${m.title} 일정·접수·코스 정보 (공식링크) | 두러닝`;
+
+    const descItems = [];
+    if (m.race_date) descItems.push(`개최일: ${m.race_date}`);
+    if (m.start_date || m.end_date) {
+      const regPeriod = [m.start_date, m.end_date].filter(Boolean).join(' ~ ');
+      descItems.push(`접수: ${regPeriod}`);
+    }
+    if (m.location) descItems.push(`장소: ${m.location}`);
+    if (types) descItems.push(`종목: ${types}`);
+
+    const descDetail = descItems.length ? `[${descItems.join(' | ')}] ` : '';
+    const description = `${descDetail}${m.title} 마라톤 상세 정보. 일정, 접수 방법, 코스 안내 및 공식 참가신청 링크를 두러닝에서 확인하세요.`;
+
+    const ogDescription = descItems.length
+      ? descItems.join(' · ')
+      : `${m.title} 대회 일정 및 공식 신청 안내`;
+
     return {
       title,
       description,
       ogTitle: title,
-      ogDescription: ogDescription || description,
+      ogDescription,
       ogImage: m.poster_url || DEFAULT_OG_IMAGE,
       canonical,
       h1: m.title || '마라톤 상세',
@@ -200,6 +213,35 @@ function eventJsonLd(meta) {
   return `<script type="application/ld+json">${JSON.stringify(payload)}</script>`;
 }
 
+function breadcrumbJsonLd(meta) {
+  if (!meta.eventName) return '';
+  const payload = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: '두러닝',
+        item: SITE,
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: '마라톤 일정',
+        item: `${SITE}/marathon`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: meta.eventName,
+        item: meta.canonical,
+      },
+    ],
+  };
+  return `<script type="application/ld+json">${JSON.stringify(payload)}</script>`;
+}
+
 function injectIntoHtml(html, meta) {
   let out = html;
 
@@ -249,6 +291,10 @@ function injectIntoHtml(html, meta) {
   const jsonLd = eventJsonLd(meta);
   if (jsonLd) {
     out = out.replace(/<\/head>/i, `${jsonLd}\n</head>`);
+  }
+  const breadcrumbLd = breadcrumbJsonLd(meta);
+  if (breadcrumbLd) {
+    out = out.replace(/<\/head>/i, `${breadcrumbLd}\n</head>`);
   }
 
   // Unique visible copy for crawlers. display:none is ignored for indexing.

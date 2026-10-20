@@ -139,10 +139,10 @@ export default function MarathonList() {
     return (
         <div className="marathon-page">
             <Helmet>
-                <title>전국 마라톤·러닝 대회 일정 | 두러닝</title>
-                <meta name="description" content="지역·거리·접수 상태로 필터하세요. 상세에서 공식 신청 페이지로 바로 이동합니다." />
-                <meta property="og:title" content="두러닝 – 전국 마라톤 대회 일정" />
-                <meta property="og:description" content="서울부터 지방까지, 다가오는 러닝 대회 일정과 접수 정보를 모았습니다." />
+                <title>전국 마라톤 일정·접수 D-Day 캘린더 (2026) | 두러닝</title>
+                <meta name="description" content="2026 전국 마라톤·러닝 대회 일정 총정리. 서울·수도권 및 지방 지역별, 거리별(10K·하프·풀) 실시간 접수 상태와 공식 신청 링크를 한곳에서 확인하세요." />
+                <meta property="og:title" content="전국 마라톤 일정·접수 D-Day 캘린더 | 두러닝" />
+                <meta property="og:description" content="2026 다가오는 전국 마라톤 대회 일정, 실시간 접수 현황, 공식 신청 링크 총정리." />
                 <link rel="canonical" href="https://dorunning.vercel.app/marathon" />
             </Helmet>
             <header className="marathon-header">

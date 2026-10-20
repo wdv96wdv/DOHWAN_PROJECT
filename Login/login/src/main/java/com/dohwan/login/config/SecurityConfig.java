@@ -12,8 +12,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 // AntPathRequestMatcher 제거됨
@@ -76,8 +74,11 @@ public class SecurityConfig {
 				.requestMatchers("/login", "/users", "/join", "/contact", "/", "/boards/**").permitAll()
 				.requestMatchers("/api/wishlist/**").authenticated()
 				.requestMatchers("/admin/**").hasRole("ADMIN")
-				.requestMatchers("/manifest.json", "/auth/check-username", "/auth/social-login", "/auth/kakao-login").permitAll()
-				.requestMatchers("/error", "/marathons/**", "/api/marathons/**", "/records/leaderboard", "/records/stats").permitAll()
+				.requestMatchers("/manifest.json", "/auth/check-username", "/auth/social-login", "/auth/kakao-login")
+				.permitAll()
+				.requestMatchers("/error", "/marathons/**", "/api/marathons/**", "/records/leaderboard",
+						"/records/stats")
+				.permitAll()
 
 				.anyRequest().authenticated())
 				.exceptionHandling(exception -> exception
