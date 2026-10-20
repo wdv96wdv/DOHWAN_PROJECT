@@ -11,14 +11,15 @@
 ========================= */
 .hero-section {
   position: relative;
-  height: 100vh;
+  min-height: 100vh;
+  padding: 120px 0 80px;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
   overflow: hidden;
   z-index: 1;
-  background: #ffffff;
+  background: #f8fafc;
 }
 
 .hero-video {
@@ -28,65 +29,74 @@
   height: 100%;
   object-fit: cover;
   z-index: 1;
-  /* 비디오를 밝게 처리 */
-  opacity: 0.25; 
-  filter: contrast(1.1) grayscale(0.2);
+  opacity: 0.28; 
+  filter: contrast(1.1) brightness(0.95);
 }
 
-.hero-overlay-aurora {
+.hero-overlay-aurora,
+.hero-overlay-glass {
   position: absolute;
   inset: 0;
   z-index: 2;
   background: 
-    radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.15) 0%, transparent 50%),
-    linear-gradient(180deg, rgba(248,250,252,0) 0%, rgba(248,250,252,1) 100%);
+    radial-gradient(circle at 50% 35%, rgba(59, 130, 246, 0.16) 0%, transparent 60%),
+    radial-gradient(circle at 85% 75%, rgba(168, 85, 247, 0.12) 0%, transparent 50%),
+    linear-gradient(180deg, rgba(248, 250, 252, 0.4) 0%, rgba(248, 250, 252, 0.85) 70%, #f8fafc 100%);
+  backdrop-filter: blur(1px);
 }
 
 .hero-content {
   position: relative;
   z-index: 3;
   max-width: 900px;
-  padding: 0 20px;
+  padding: 0 24px;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
 .hero-badge {
-  font-size: 0.8rem;
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.82rem;
   font-weight: 800;
-  letter-spacing: 0.3em;
+  letter-spacing: 0.25em;
   color: #2563eb;
-  background: rgba(59, 130, 246, 0.15);
-  padding: 8px 20px;
-  border-radius: 30px;
+  background: rgba(59, 130, 246, 0.1);
+  padding: 8px 22px;
+  border-radius: 9999px;
   margin-bottom: 24px;
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(59, 130, 246, 0.3);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(59, 130, 246, 0.25);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.08);
   text-transform: uppercase;
 }
 
 .hero-title {
-  font-family: 'Outfit', sans-serif;
-  font-size: 6.5rem;
+  display: inline-block;
+  font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 5.2rem;
   font-weight: 900;
-  background: linear-gradient(135deg, #0f172a 0%, #3b82f6 100%);
+  background: linear-gradient(135deg, #0f172a 20%, #1e40af 60%, #3b82f6 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   margin-bottom: 16px;
-  letter-spacing: -0.02em;
-  line-height: 1;
-  text-shadow: 0 10px 30px rgba(59, 130, 246, 0.15);
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+  padding: 0.05em 0.08em 0.18em;
+  filter: drop-shadow(0 4px 16px rgba(59, 130, 246, 0.15));
+  word-break: keep-all;
 }
 
 .hero-subtitle {
-  font-size: 1.3rem;
+  font-size: 1.25rem;
   color: #475569;
-  margin-bottom: 50px;
-  line-height: 1.6;
+  margin-bottom: 44px;
+  line-height: 1.65;
   font-weight: 500;
-  max-width: 600px;
+  max-width: 620px;
+  word-break: keep-all;
 }
 
 .hero-action-group {
@@ -496,7 +506,7 @@
    Responsive
 ========================= */
 @media (max-width: 1024px) {
-  .hero-title { font-size: 5rem; }
+  .hero-title { font-size: 4.2rem; }
   .feature-section, .feature-section.reverse {
     flex-direction: column;
     text-align: center;
@@ -508,9 +518,18 @@
 }
 
 @media (max-width: 768px) {
-  .hero-title { font-size: 3.5rem; }
+  .hero-section { min-height: 85vh; padding: 100px 0 60px; }
+  .hero-title { font-size: 3.2rem; }
+  .hero-subtitle { font-size: 1.05rem; margin-bottom: 32px; }
   .stats-grid { grid-template-columns: 1fr; gap: 24px; }
   .stat-card h3 { font-size: 3.5rem; }
   .home-section-header h2 { font-size: 2.8rem; }
   .footer-title { font-size: 2.8rem; }
+}
+
+@media (max-width: 480px) {
+  .hero-title { font-size: 2.5rem; }
+  .hero-badge { font-size: 0.75rem; letter-spacing: 0.2em; padding: 6px 16px; margin-bottom: 18px; }
+  .hero-action-group { width: 100%; flex-direction: column; gap: 12px; }
+  .hero-btn { width: 100%; padding: 14px 20px; font-size: 1rem; }
 }

@@ -149,9 +149,10 @@ const Home = () => {
         <video autoPlay loop muted className="hero-video" playsInline poster={marathonPoster}>
           <source src={marathon} type="video/mp4" />
         </video>
-        <div className="hero-overlay-glass"></div>
+        <div className="hero-overlay-aurora"></div>
         <div className="hero-content">
-          <h1 data-aos="zoom-in" className="hero-title">Doruuning</h1>
+          <span className="hero-badge" data-aos="fade-down">KOREA MARATHON HUB</span>
+          <h1 data-aos="zoom-in" className="hero-title">Dorunning</h1>
           <p data-aos="fade-up" data-aos-delay="200" className="hero-subtitle">
             전국 마라톤·하프·10K 일정을 모았습니다. 접수 기간, 거리, 지역까지 한곳에서 비교하세요.
           </p>
