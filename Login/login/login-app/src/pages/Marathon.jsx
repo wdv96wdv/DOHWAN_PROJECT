@@ -10,6 +10,7 @@ import {
     getMarathonStatus,
     compareUpcomingFirst,
     getTodayKstStr,
+    getTwoMonthsAgoKstStr,
     STATUS_CLASS_MAP,
     STATUS_FILTER_GROUPS,
 } from "../utils/marathonHelpers";
@@ -17,7 +18,7 @@ import {
 export default function MarathonList() {
     const defaultSearch = "";
     const defaultType = "전체";
-    const defaultStatus = "전체"; // 전체 = upcoming(+접수마감) 기본; 종료는 상태 필터로만
+    const defaultStatus = "전체"; // 전체 = 예정 및 2달 이내 종료 대회 포함 전체 목록
 
     const [marathons, setMarathons] = useState([]); // API로 받아올 상태 추가
     const [search, setSearch] = useState(defaultSearch);
@@ -29,22 +30,19 @@ export default function MarathonList() {
     const SUPABASE_URL = 'https://ismclnqslxnlsfmqjytc.supabase.co';
     const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || 'sb_publishable_RWdFyo-SAjkjsNnQJC2JBw_jbX6bdXd';
 
-    // --- 1. Supabase 직접 호출 (오늘 이후 대회만, 페이지네이션) ---
+    // --- 1. Supabase 직접 호출 (종료 2달 이내 및 향후 대회, 페이지네이션) ---
     useEffect(() => {
         setLoading(true);
 
-        const today = new Intl.DateTimeFormat('en-CA', {
-            timeZone: 'Asia/Seoul',
-            year: 'numeric', month: '2-digit', day: '2-digit',
-        }).format(new Date());
+        const twoMonthsAgo = getTwoMonthsAgoKstStr();
 
         const pageSize = 1000;
         let allData = [];
 
         const fetchPage = (offset) => {
             const url = `${SUPABASE_URL}/rest/v1/marathons`
-                + `?select=id,title,location,race_date,start_date,end_date,type,link,is_first_come`
-                + `&race_date=gte.${today}`
+                + `?select=id,title,location,race_date,start_date,end_date,type,link,is_first_come,poster_url`
+                + `&race_date=gte.${twoMonthsAgo}`
                 + `&order=race_date.asc`
                 + `&limit=${pageSize}&offset=${offset}`;
 
@@ -79,6 +77,7 @@ export default function MarathonList() {
 
 
     const todayStr = getTodayKstStr();
+    const twoMonthsAgoStr = getTwoMonthsAgoKstStr();
     const statusClassMap = STATUS_CLASS_MAP;
 
     const typeOptions = ["전체", "Full", "Half", "10Km", "5Km"];
@@ -98,6 +97,11 @@ export default function MarathonList() {
     const filtered = marathons
         .map(m => ({ ...m, status: getMarathonStatus(m, todayStr) }))
         .filter(m => {
+            // 0. 종료된 지 2달 넘은 대회는 제외
+            if (m.raceDate && m.raceDate < twoMonthsAgoStr) {
+                return false;
+            }
+
             // 1. 검색어 필터
             const matchText = (m.title + m.location).toLowerCase().includes(search.toLowerCase());
 
@@ -106,11 +110,9 @@ export default function MarathonList() {
                 ? true
                 : (m.type && m.type.some(t => t.toLowerCase().includes(type.toLowerCase())));
 
-            // 3. 상태 필터 — 기본(전체)에서는 종료/과거 대회 숨김; "종료" 필터로만 노출
+            // 3. 상태 필터 — 기본(전체)에서는 2달 이내 종료 대회 포함 노출; 특정 상태 선택 시 해당 상태만 노출
             let matchStatus = true;
-            if (statusFilter === "전체") {
-                matchStatus = m.status !== "종료";
-            } else {
+            if (statusFilter !== "전체") {
                 matchStatus = (statusGroups[statusFilter] || []).includes(m.status);
             }
 

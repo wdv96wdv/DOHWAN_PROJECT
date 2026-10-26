@@ -87,7 +87,7 @@ async function generateSitemap() {
   // 종료된 지 오래된 대회는 사이트맵에서 빼서 크롤 예산을 예정/최근 대회에 집중
   const marathons = await fetchAllRows('marathons', 'id, created_at, race_date, poster_url');
   const today = todayKst();
-  const keepAfter = daysAgoKst(45);
+  const keepAfter = daysAgoKst(60); // 종료 후 2달(60일)까지 사이트맵 유지
   const validMarathons = (marathons || []).filter(m => hasValidId(m.id));
   const sitemapMarathons = validMarathons.filter(m => {
     if (!m.race_date) return true;

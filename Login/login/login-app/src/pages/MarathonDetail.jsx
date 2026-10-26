@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import axios from 'axios';
 import { 
@@ -9,40 +9,144 @@ import {
   ArrowLeft, 
   Clock, 
   Award, 
-  Info,
-  CheckCircle2
+  Info, 
+  CheckCircle2, 
+  Share2, 
+  ExternalLink, 
+  Sparkles, 
+  Maximize2, 
+  X, 
+  AlertCircle, 
+  ChevronRight, 
+  Check, 
+  Flame, 
+  Footprints,
+  Compass
 } from 'lucide-react';
 import Loading from '../components/Common/Loading';
-import { normalizeMarathon, getMarathonStatus, getTodayKstStr } from '../utils/marathonHelpers';
+import { 
+  normalizeMarathon, 
+  getMarathonStatus, 
+  getTodayKstStr, 
+  STATUS_CLASS_MAP 
+} from '../utils/marathonHelpers';
+import '../assets/css/marathon-detail.css';
+
+const SUPABASE_URL = 'https://ismclnqslxnlsfmqjytc.supabase.co';
+const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || 'sb_publishable_RWdFyo-SAjkjsNnQJC2JBw_jbX6bdXd';
 
 const MarathonDetail = () => {
     const { id } = useParams();
     const navigate = useNavigate();
+
     const [marathon, setMarathon] = useState(null);
+    const [relatedMarathons, setRelatedMarathons] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [isPosterModalOpen, setIsPosterModalOpen] = useState(false);
+    const [copied, setCopied] = useState(false);
 
     useEffect(() => {
+        window.scrollTo(0, 0);
         const fetchDetail = async () => {
             try {
                 setLoading(true);
+                setError(null);
+
+                // 1순위: Supabase REST API 직접 조회 (초고속 로딩, 콜드스타트 없음)
+                const url = `${SUPABASE_URL}/rest/v1/marathons?id=eq.${encodeURIComponent(id)}&select=*`;
+                const res = await fetch(url, {
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': `Bearer ${SUPABASE_KEY}`,
+                    }
+                });
+
+                if (res.ok) {
+                    const rows = await res.json();
+                    if (rows && rows.length > 0) {
+                        const mData = rows[0];
+                        setMarathon(mData);
+                        if (mData.title) {
+                            document.title = `${mData.title} 일정·접수·코스 정보 (공식링크) | 두러닝`;
+                        }
+                        fetchRelated(mData);
+                        setLoading(false);
+                        return;
+                    }
+                }
+
+                // 2순위: 백엔드 API 폴백
                 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
                 const response = await axios.get(`${API_BASE_URL}/api/marathons/${id}`);
                 setMarathon(response.data);
-                
-                // 보조 타이틀 설정
                 if (response.data && response.data.title) {
                     document.title = `${response.data.title} 일정·접수·코스 정보 (공식링크) | 두러닝`;
                 }
+                fetchRelated(response.data);
             } catch (err) {
                 console.error('상세 정보 로드 실패:', err);
-                setError('정보를 불러오지 못했습니다.');
+                setError('대회 정보를 불러오지 못했습니다.');
             } finally {
                 setLoading(false);
             }
         };
+
         fetchDetail();
     }, [id]);
+
+    // 연관/추천 대회 조회 (3개)
+    const fetchRelated = async (currentM) => {
+        try {
+            const todayStr = getTodayKstStr();
+            let queryUrl = `${SUPABASE_URL}/rest/v1/marathons?id=neq.${currentM.id}&race_date=gte.${todayStr}&order=race_date.asc&limit=3`;
+            if (currentM.location && currentM.location !== '전국') {
+                queryUrl += `&location=like.*${encodeURIComponent(currentM.location)}*`;
+            }
+
+            let rRes = await fetch(queryUrl, {
+                headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+            });
+
+            if (rRes.ok) {
+                let rList = await rRes.json();
+                if (rList && rList.length > 0) {
+                    setRelatedMarathons(rList.map(normalizeMarathon));
+                    return;
+                }
+            }
+
+            // 폴백: 지역 무관 가장 가까운 대회 3개
+            const fallbackUrl = `${SUPABASE_URL}/rest/v1/marathons?id=neq.${currentM.id}&race_date=gte.${todayStr}&order=race_date.asc&limit=3`;
+            const fbRes = await fetch(fallbackUrl, {
+                headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+            });
+            if (fbRes.ok) {
+                const fbList = await fbRes.json();
+                setRelatedMarathons(fbList.map(normalizeMarathon));
+            }
+        } catch (e) {
+            // 추천 에러는 무시
+        }
+    };
+
+    // 요일 포함 날짜 포맷팅
+    const formatDateWithDay = (dateStr) => {
+        if (!dateStr) return '-';
+        const days = ['일', '월', '화', '수', '목', '금', '토'];
+        const d = new Date(dateStr);
+        if (isNaN(d.getTime())) return dateStr;
+        return `${dateStr} (${days[d.getDay()]})`;
+    };
+
+    // 기간 일수 계산
+    const getPeriodDays = (start, end) => {
+        if (!start || !end) return '';
+        const s = new Date(start);
+        const e = new Date(end);
+        const diff = Math.round((e - s) / (1000 * 60 * 60 * 24)) + 1;
+        return diff > 0 ? ` (총 ${diff}일간)` : '';
+    };
 
     // D-Day 계산
     const calculateDDay = (targetDate) => {
@@ -54,43 +158,72 @@ const MarathonDetail = () => {
         return days === 0 ? 'D-Day' : days > 0 ? `D-${days}` : `종료`;
     };
 
-    const getRegistrationBadge = (m) => {
-        if (!m) return '';
-        const status = getMarathonStatus(normalizeMarathon(m), getTodayKstStr());
-        return status === '상태불명' ? '' : status;
+    // 링크 복사 핸들러
+    const handleShare = () => {
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(window.location.href);
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+        }
+    };
+
+    // 구글 캘린더 등록 링크
+    const getGoogleCalendarUrl = (m) => {
+        if (!m?.race_date) return '#';
+        const dStr = m.race_date.replace(/-/g, '');
+        const next = new Date(m.race_date);
+        next.setDate(next.getDate() + 1);
+        const nextStr = next.toISOString().slice(0, 10).replace(/-/g, '');
+        const title = encodeURIComponent(`[마라톤] ${m.title}`);
+        const location = encodeURIComponent(m.location || '대한민국');
+        const details = encodeURIComponent(`두러닝 마라톤 일정 상세:\n${window.location.href}\n공식 참가 링크: ${m.link || ''}`);
+        return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${dStr}/${nextStr}&details=${details}&location=${location}`;
     };
 
     if (loading) {
         return (
-            <div className="container marathon-detail-page">
+            <div className="marathon-detail-container">
                 <Helmet>
                     <title>대회 정보 불러오는 중... | 두러닝</title>
                 </Helmet>
-                <Loading text="대회 상세 정보를 불러오는 중..." />
-                <style dangerouslySetInnerHTML={{ __html: `
-                    .marathon-detail-page { padding: 40px 20px; max-width: 900px; margin: 0 auto; }
-                `}} />
+                <div style={{ padding: '120px 0', textAlign: 'center' }}>
+                    <Loading text="대회 상세 정보를 안전하게 불러오고 있습니다..." />
+                </div>
             </div>
         );
     }
 
     if (error || !marathon) {
         return (
-            <div className="container marathon-detail-page">
+            <div className="marathon-detail-container">
                 <Helmet>
                     <title>대회 정보를 찾을 수 없습니다 | 두러닝</title>
                 </Helmet>
-                <div className="error-container">{error || '데이터가 없습니다.'}</div>
-                <style dangerouslySetInnerHTML={{ __html: `
-                    .marathon-detail-page { padding: 40px 20px; max-width: 900px; margin: 0 auto; }
-                `}} />
+                <div style={{ textAlign: 'center', padding: '100px 0' }}>
+                    <AlertCircle size={48} style={{ color: '#ef4444', margin: '0 auto 16px' }} />
+                    <h2 style={{ fontSize: '1.5rem', marginBottom: '8px' }}>대회 정보를 찾을 수 없습니다</h2>
+                    <p style={{ color: 'var(--text-muted)', marginBottom: '24px' }}>
+                        존재하지 않거나 삭제된 대회 일정입니다.
+                    </p>
+                    <button className="cta-btn-primary" onClick={() => navigate('/marathon')}>
+                        마라톤 전체 목록으로 가기
+                    </button>
+                </div>
             </div>
         );
     }
 
+    const todayStr = getTodayKstStr();
+    const normalized = normalizeMarathon(marathon);
+    const regStatus = getMarathonStatus(normalized, todayStr);
+    const statusClass = STATUS_CLASS_MAP[regStatus] || 'm-wait';
     const dDay = calculateDDay(marathon.race_date);
-    const regBadge = getRegistrationBadge(marathon);
-    const typesStr = Array.isArray(marathon.type) ? marathon.type.filter(Boolean).join(', ') : (marathon.type || '');
+
+    const types = Array.isArray(marathon.type) 
+        ? marathon.type.filter(Boolean) 
+        : (marathon.type ? [marathon.type] : ['마라톤']);
+
+    const typesStr = types.join(', ');
     const metaTitle = `${marathon.title} 일정·접수·코스 정보 (공식링크) | 두러닝`;
 
     const descItems = [];
@@ -107,37 +240,27 @@ const MarathonDetail = () => {
     const ogDesc = descItems.length ? descItems.join(' · ') : `${marathon.title} 대회 일정 및 공식 신청 안내`;
     const ogImg = marathon.poster_url || "https://dorunning.vercel.app/og-image.png";
 
+    // 타임라인 단계 계산
+    const hasStarted = marathon.start_date && todayStr >= marathon.start_date;
+    const hasRegClosed = marathon.end_date && todayStr > marathon.end_date;
+    const hasRaceFinished = marathon.race_date && todayStr >= marathon.race_date;
+
     return (
-        <div className="container marathon-detail-page">
+        <div className="marathon-detail-container">
             <Helmet>
                 <title>{metaTitle}</title>
                 <meta name="description" content={metaDescription} />
                 <link rel="canonical" href={`https://dorunning.vercel.app/marathon/${marathon.id}`} />
-                
+
                 {/* Breadcrumb Structured Data */}
                 <script type="application/ld+json">
                     {JSON.stringify({
                         "@context": "https://schema.org",
                         "@type": "BreadcrumbList",
                         "itemListElement": [
-                            {
-                                "@type": "ListItem",
-                                "position": 1,
-                                "name": "두러닝",
-                                "item": "https://dorunning.vercel.app"
-                            },
-                            {
-                                "@type": "ListItem",
-                                "position": 2,
-                                "name": "마라톤 일정",
-                                "item": "https://dorunning.vercel.app/marathon"
-                            },
-                            {
-                                "@type": "ListItem",
-                                "position": 3,
-                                "name": marathon.title,
-                                "item": `https://dorunning.vercel.app/marathon/${marathon.id}`
-                            }
+                            { "@type": "ListItem", "position": 1, "name": "두러닝", "item": "https://dorunning.vercel.app" },
+                            { "@type": "ListItem", "position": 2, "name": "마라톤 일정", "item": "https://dorunning.vercel.app/marathon" },
+                            { "@type": "ListItem", "position": 3, "name": marathon.title, "item": `https://dorunning.vercel.app/marathon/${marathon.id}` }
                         ]
                     })}
                 </script>
@@ -151,7 +274,7 @@ const MarathonDetail = () => {
                         "description": metaDescription,
                         "startDate": marathon.race_date,
                         "endDate": marathon.race_date,
-                        "eventStatus": "https://schema.org/EventScheduled",
+                        "eventStatus": hasRaceFinished ? "https://schema.org/EventCompleted" : "https://schema.org/EventScheduled",
                         "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
                         "location": {
                             "@type": "Place",
@@ -167,7 +290,7 @@ const MarathonDetail = () => {
                         "offers": {
                             "@type": "Offer",
                             "url": marathon.link || window.location.href,
-                            "availability": "https://schema.org/InStock",
+                            "availability": hasRegClosed ? "https://schema.org/Discontinued" : "https://schema.org/InStock",
                             "validFrom": marathon.start_date
                         },
                         "organizer": {
@@ -178,7 +301,7 @@ const MarathonDetail = () => {
                     })}
                 </script>
 
-                {/* Open Graph / KakaoTalk */}
+                {/* Open Graph */}
                 <meta property="og:title" content={metaTitle} />
                 <meta property="og:description" content={ogDesc} />
                 <meta property="og:image" content={ogImg} />
@@ -190,119 +313,376 @@ const MarathonDetail = () => {
                 <meta name="twitter:image" content={ogImg} />
             </Helmet>
 
-            <button className="back-btn" onClick={() => navigate(-1)}>
-                <ArrowLeft size={20} /> 뒤로가기
-            </button>
+            {/* Top Navigation */}
+            <nav className="detail-top-nav">
+                <button className="detail-back-btn" onClick={() => navigate('/marathon')}>
+                    <ArrowLeft size={18} /> 목록으로 돌아가기
+                </button>
+                <div className="detail-breadcrumbs">
+                    <Link to="/">홈</Link>
+                    <ChevronRight size={14} />
+                    <Link to="/marathon">마라톤 일정</Link>
+                    <ChevronRight size={14} />
+                    <span className="current">{marathon.location || '전국'}</span>
+                </div>
+            </nav>
 
-            <div className="marathon-detail-header glass-card">
-                <div className="header-content">
-                    <div className="header-badges">
-                        {regBadge && (
-                            <span className={`status-badge ${regBadge === '종료' || regBadge === '접수마감' ? 'status-closed' : 'status-active'}`}>
-                                {regBadge}
-                            </span>
-                        )}
-                        {dDay && dDay !== '종료' && (
-                            <span className={`status-badge ${dDay.includes('-') || dDay === 'D-Day' ? 'status-active' : 'status-closed'}`}>
-                                {dDay}
-                            </span>
+            {/* Hero Banner Section */}
+            <section className="detail-hero-card">
+                {marathon.poster_url && (
+                    <div 
+                        className="hero-backdrop-glow" 
+                        style={{ backgroundImage: `url(${marathon.poster_url})` }} 
+                    />
+                )}
+
+                <div className="hero-inner-layout">
+                    {/* Left: Poster Image Showcase */}
+                    <div 
+                        className="hero-poster-wrapper"
+                        onClick={() => marathon.poster_url && setIsPosterModalOpen(true)}
+                        title={marathon.poster_url ? "클릭하여 포스터 크게보기" : undefined}
+                    >
+                        {marathon.poster_url ? (
+                            <>
+                                <img 
+                                    src={marathon.poster_url} 
+                                    alt={`${marathon.title} 포스터`}
+                                    className="hero-poster-img"
+                                    loading="eager"
+                                />
+                                <div className="poster-enlarge-overlay">
+                                    <Maximize2 size={24} />
+                                    <span>포스터 원본 크게보기</span>
+                                </div>
+                            </>
+                        ) : (
+                            <div className="hero-poster-placeholder">
+                                <div className="placeholder-icon-circle">
+                                    <Award size={36} />
+                                </div>
+                                <div>
+                                    <p style={{ fontWeight: 700, color: 'var(--text-primary)', marginBottom: '4px' }}>
+                                        {marathon.title}
+                                    </p>
+                                    <p style={{ fontSize: '0.8rem' }}>공식 포스터 준비 중</p>
+                                </div>
+                            </div>
                         )}
                     </div>
-                    <h1>{marathon.title} · {marathon.race_date} · {marathon.location}</h1>
-                    <div className="header-meta">
-                        <span><MapPin size={18} /> {marathon.location}</span>
-                        <span><Calendar size={18} /> {marathon.race_date}</span>
+
+                    {/* Right: Event Information & Action */}
+                    <div className="hero-content">
+                        <div className="hero-badges-row">
+                            <span className={`badge-status ${statusClass}`}>
+                                <Flame size={14} /> {regStatus}
+                            </span>
+                            {dDay && (
+                                <span className="badge-dday">
+                                    {dDay}
+                                </span>
+                            )}
+                            <span className="badge-tag-pill">
+                                {marathon.is_first_come ? '⚡ 선착순 마감' : '📝 일반 접수'}
+                            </span>
+                        </div>
+
+                        <h1 className="hero-title">{marathon.title}</h1>
+
+                        <div className="hero-meta-strip">
+                            <div className="meta-strip-item">
+                                <div className="meta-icon-box">
+                                    <Calendar size={18} />
+                                </div>
+                                <div className="meta-strip-text">
+                                    <span className="meta-strip-label">대회 개최일</span>
+                                    <span className="meta-strip-val">{formatDateWithDay(marathon.race_date)}</span>
+                                </div>
+                            </div>
+
+                            <div className="meta-strip-item">
+                                <div className="meta-icon-box">
+                                    <MapPin size={18} />
+                                </div>
+                                <div className="meta-strip-text">
+                                    <span className="meta-strip-label">개최 지역</span>
+                                    <span className="meta-strip-val">{marathon.location || '전국'}</span>
+                                </div>
+                            </div>
+
+                            <div className="meta-strip-item">
+                                <div className="meta-icon-box">
+                                    <Footprints size={18} />
+                                </div>
+                                <div className="meta-strip-text">
+                                    <span className="meta-strip-label">참가 코스</span>
+                                    <span className="meta-strip-val">{types.join(' · ')}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="hero-action-buttons">
+                            {marathon.link && (
+                                <a 
+                                    href={marathon.link} 
+                                    target="_blank" 
+                                    rel="noopener noreferrer"
+                                    className="cta-btn-primary"
+                                >
+                                    공식 홈페이지 참가신청 <ExternalLink size={18} />
+                                </a>
+                            )}
+                            <a 
+                                href={getGoogleCalendarUrl(marathon)}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="cta-btn-secondary"
+                                title="구글 캘린더에 일정 추가"
+                            >
+                                <Calendar size={18} /> 캘린더에 등록
+                            </a>
+                            <button 
+                                className="cta-btn-secondary" 
+                                onClick={handleShare}
+                                title="페이지 링크 복사"
+                            >
+                                {copied ? <Check size={18} color="#10b981" /> : <Share2 size={18} />}
+                                {copied ? '복사 완료!' : '공유하기'}
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <div className="marathon-detail-grid">
-                {/* 1. 한눈에 보기 */}
-                <div className="detail-info-card glass-card">
-                    <h3><Info size={20} /> 한눈에 보기</h3>
-                    <div className="info-list">
-                        <div className="info-item">
-                            <label><Clock size={16} /> 접수 안내</label>
-                            <p>{marathon.start_date} ~ {marathon.end_date}</p>
+            {/* Timeline Progress Bar Card */}
+            <section className="timeline-card">
+                <div className="timeline-title-row">
+                    <h3><Clock size={20} /> 대회 진행 타임라인</h3>
+                    <span className="timeline-status-tag">
+                        {hasRaceFinished ? '대회 종료' : hasRegClosed ? '대회 준비 중' : hasStarted ? '접수 진행 중' : '접수 예정'}
+                    </span>
+                </div>
+
+                <div className="timeline-steps-track">
+                    {/* Step 1: 접수 시작 */}
+                    <div className={`timeline-step-node ${hasStarted ? 'completed' : 'current'}`}>
+                        <div className="step-circle">1</div>
+                        <span className="step-info-label">접수 시작</span>
+                        <span className="step-info-date">{marathon.start_date || '미정'}</span>
+                    </div>
+
+                    {/* Step 2: 접수 마감 */}
+                    <div className={`timeline-step-node ${hasRegClosed ? 'completed' : (hasStarted ? 'current' : '')}`}>
+                        <div className="step-circle">2</div>
+                        <span className="step-info-label">접수 마감</span>
+                        <span className="step-info-date">{marathon.end_date || '미정'}</span>
+                    </div>
+
+                    {/* Step 3: 대회 개최 */}
+                    <div className={`timeline-step-node ${hasRaceFinished ? 'completed' : (hasRegClosed ? 'current' : '')}`}>
+                        <div className="step-circle">3</div>
+                        <span className="step-info-label">대회 당일</span>
+                        <span className="step-info-date">{marathon.race_date || '미정'}</span>
+                    </div>
+                </div>
+            </section>
+
+            {/* Main Content 2-Column Grid */}
+            <div className="detail-main-grid">
+                {/* Left Column: Comprehensive Details */}
+                <div className="detail-left-col">
+                    {/* 1. 종합 안내 */}
+                    <div className="content-card-box">
+                        <h2 className="card-heading-title">
+                            <Info size={22} /> 대회 종합 안내
+                        </h2>
+                        <div className="details-kv-table">
+                            <div className="details-kv-row">
+                                <span className="kv-key"><Calendar size={16} /> 개최 일시</span>
+                                <span className="kv-value">{formatDateWithDay(marathon.race_date)}</span>
+                            </div>
+                            <div className="details-kv-row">
+                                <span className="kv-key"><Clock size={16} /> 접수 기간</span>
+                                <span className="kv-value">
+                                    {marathon.start_date && marathon.end_date 
+                                        ? `${marathon.start_date} ~ ${marathon.end_date}${getPeriodDays(marathon.start_date, marathon.end_date)}`
+                                        : '주최사 공식 공지 참조'}
+                                </span>
+                            </div>
+                            <div className="details-kv-row">
+                                <span className="kv-key"><MapPin size={16} /> 개최 장소</span>
+                                <span className="kv-value">{marathon.location || '전국'} (상세 코스는 공식 안내 참조)</span>
+                            </div>
+                            <div className="details-kv-row">
+                                <span className="kv-key"><Award size={16} /> 종목 코스</span>
+                                <div className="type-pills-list">
+                                    {types.map((t, idx) => (
+                                        <span key={idx} className="type-pill">{t}</span>
+                                    ))}
+                                </div>
+                            </div>
+                            <div className="details-kv-row">
+                                <span className="kv-key"><CheckCircle2 size={16} /> 참가 방식</span>
+                                <span className="kv-value">
+                                    {marathon.is_first_come ? '선착순 조기 마감 대회 (빠른 접수 권장)' : '일반 모집 접수'}
+                                </span>
+                            </div>
                         </div>
-                        <div className="info-item">
-                            <label><Award size={16} /> 종목·거리</label>
-                            <div className="type-tags">
-                                {marathon.type && marathon.type.map((t, index) => (
-                                    <span key={index} className="type-tag">{t}</span>
+                    </div>
+
+                    {/* 2. 코스별 완주 가이드 */}
+                    <div className="content-card-box">
+                        <h2 className="card-heading-title">
+                            <Compass size={22} /> 종목별 코스 가이드
+                        </h2>
+                        <div className="course-guides-grid">
+                            {types.map((t, idx) => {
+                                const lower = t.toLowerCase();
+                                let dist = '마라톤 코스';
+                                let desc = '자신의 페이스에 맞춰 안전하고 즐겁게 완주를 목표로 달려보세요.';
+                                if (lower.includes('full') || lower.includes('풀')) {
+                                    dist = '42.195 km';
+                                    desc = '철저한 장거리 지속주(LSD) 훈련과 에너지젤 보충 및 페이스 배분이 핵심입니다.';
+                                } else if (lower.includes('half') || lower.includes('하프')) {
+                                    dist = '21.0975 km';
+                                    desc = '러너들이 가장 선호하는 거리로, 중반 이후 일정한 크루즈 페이스 유지가 중요합니다.';
+                                } else if (lower.includes('10k') || lower.includes('10')) {
+                                    dist = '10.0 km';
+                                    desc = '입문자부터 기록 단축 러너까지 가장 대중적인 코스로 시원한 스피드를 즐기기 좋습니다.';
+                                } else if (lower.includes('5k') || lower.includes('5')) {
+                                    dist = '5.0 km';
+                                    desc = '러닝을 처음 시작하는 비기너나 가족, 친구와 가볍게 펀런하기 가장 좋은 코스입니다.';
+                                }
+                                return (
+                                    <div key={idx} className="course-guide-item">
+                                        <div className="course-badge-name">
+                                            {t}
+                                            <span className="course-badge-dist">{dist}</span>
+                                        </div>
+                                        <p className="course-guide-desc">{desc}</p>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+
+                    {/* 3. 러너 대회 준비 체크리스트 */}
+                    <div className="content-card-box">
+                        <h2 className="card-heading-title">
+                            <Sparkles size={22} /> 러너 대회 완주 체크리스트
+                        </h2>
+                        <div className="checklist-container">
+                            <div className="checklist-step-box">
+                                <span className="checklist-badge">대회 1주 전</span>
+                                <p className="checklist-desc-list">
+                                    배번호 및 기념품 수령 확인, 레이스 데이에 신을 검증된 러닝화 점검, 과도한 강훈련 대신 컨디션 조절(테이퍼링).
+                                </p>
+                            </div>
+                            <div className="checklist-step-box">
+                                <span className="checklist-badge">대회 전날</span>
+                                <p className="checklist-desc-list">
+                                    신분증 및 배번호 핀 부착, 탄수화물 위주의 식사(카보로딩), 충분한 수분 섭취 및 최소 7시간 이상의 숙면 취하기.
+                                </p>
+                            </div>
+                            <div className="checklist-step-box">
+                                <span className="checklist-badge">대회 당일</span>
+                                <p className="checklist-desc-list">
+                                    출발 1시간 30분 전 대회장 도착, 가벼운 조깅과 동적 스트레칭, 물품 보관 후 출발 20분 전 출발선 대기.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* 4. 안내 및 유의사항 */}
+                    <div className="detail-trust-box">
+                        <AlertCircle size={22} style={{ flexShrink: 0, marginTop: '2px' }} />
+                        <div className="trust-box-text">
+                            <strong>참가 신청 전 확인 안내</strong><br />
+                            대회 일정, 코스 구성, 기념품 및 접수 마감 시간은 주최·주관사의 사정에 따라 예고 없이 변경될 수 있습니다. 
+                            참가 신청 및 결제 전 반드시 아래 공식 홈페이지의 최신 공지사항을 확인해 주시기 바랍니다.
+                        </div>
+                    </div>
+                </div>
+
+                {/* Right Column: Sticky Action & Related Widget */}
+                <aside className="detail-sidebar">
+                    {/* Official Hub Card */}
+                    <div className="sidebar-action-card">
+                        <h3 className="sidebar-title">
+                            <LinkIcon size={18} /> 공식 참가 신청
+                        </h3>
+                        <p className="sidebar-desc">
+                            공식 주최사 웹사이트로 연결됩니다. 참가 요강 및 코스도를 확인 후 접수하세요.
+                        </p>
+                        {marathon.link ? (
+                            <a 
+                                href={marathon.link} 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                className="sidebar-cta-btn"
+                            >
+                                공식 사이트 바로가기 <ExternalLink size={18} />
+                            </a>
+                        ) : (
+                            <button className="sidebar-cta-btn" disabled style={{ opacity: 0.6, cursor: 'not-allowed' }}>
+                                공식 접수 링크 준비 중
+                            </button>
+                        )}
+                    </div>
+
+                    {/* Related Marathons Widget */}
+                    {relatedMarathons.length > 0 && (
+                        <div className="related-widget">
+                            <h3 className="sidebar-title">
+                                <Award size={18} /> 함께 둘러보는 대회
+                            </h3>
+                            <div className="related-list">
+                                {relatedMarathons.map((rm) => (
+                                    <Link 
+                                        key={rm.id} 
+                                        to={`/marathon/${rm.id}`}
+                                        className="related-item-link"
+                                    >
+                                        <div className="related-item-info">
+                                            <span className="related-item-title">{rm.title}</span>
+                                            <span className="related-item-date">
+                                                <Calendar size={12} /> {rm.raceDate} · {rm.location}
+                                            </span>
+                                        </div>
+                                        <ChevronRight size={16} style={{ color: 'var(--text-muted)' }} />
+                                    </Link>
                                 ))}
                             </div>
                         </div>
-                        <div className="info-item">
-                            <label><CheckCircle2 size={16} /> 신청 방식</label>
-                            <p>{marathon.is_first_come ? '선착순 접수' : '일반 접수'}</p>
-                        </div>
-                    </div>
-                </div>
-
-                {/* 2. 공식 사이트 */}
-                <div className="detail-action-card glass-card">
-                    <h3><LinkIcon size={20} /> 공식 사이트</h3>
-                    <p>외부 사이트로 이동합니다. 신청 전 공식 페이지에서 일정을 다시 확인해 주세요.</p>
-                    <a 
-                        href={marathon.link} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="external-link-btn"
-                    >
-                        공식 사이트로 신청하기 <LinkIcon size={16} />
-                    </a>
-                </div>
+                    )}
+                </aside>
             </div>
 
-            <p className="trust-line">
-                일정·접수는 주최사 공지를 기준으로 하며, 변경될 수 있습니다. 신청 전 공식 페이지를 다시 확인해 주세요.
-            </p>
-
-            {marathon.poster_url && (
-                <div className="poster-section glass-card" style={{ marginTop: '30px', padding: '40px' }}>
-                    <h3 style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '24px' }}><Award size={20} /> 대회 포스터</h3>
-                    <img src={marathon.poster_url} alt={`${marathon.title} 포스터`} style={{ width: '100%', borderRadius: '12px', display: 'block' }} />
+            {/* Poster Fullscreen Modal */}
+            {isPosterModalOpen && marathon.poster_url && (
+                <div 
+                    className="poster-modal-backdrop"
+                    onClick={() => setIsPosterModalOpen(false)}
+                >
+                    <div 
+                        className="poster-modal-content"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <button 
+                            className="poster-modal-close-btn"
+                            onClick={() => setIsPosterModalOpen(false)}
+                            title="닫기"
+                        >
+                            <X size={20} />
+                        </button>
+                        <img 
+                            src={marathon.poster_url} 
+                            alt={`${marathon.title} 포스터 원본`}
+                            className="poster-modal-img" 
+                        />
+                    </div>
                 </div>
             )}
-
-            <style dangerouslySetInnerHTML={{ __html: `
-                .marathon-detail-page { padding: 40px 20px; max-width: 900px; margin: 0 auto; }
-                .back-btn { display: flex; align-items: center; gap: 8px; background: none; border: none; color: var(--text-secondary); cursor: pointer; margin-bottom: 24px; font-weight: 500; transition: color 0.2s; }
-                .back-btn:hover { color: var(--primary); }
-                
-                .marathon-detail-header { padding: 40px; margin-bottom: 30px; border-radius: 20px; }
-                .header-content h1 { font-size: 2.5rem; margin: 15px 0; color: var(--text-primary); line-height: 1.2; }
-                .header-meta { display: flex; gap: 20px; color: var(--text-secondary); }
-                .header-meta span { display: flex; align-items: center; gap: 6px; }
-
-                .header-badges { display: flex; flex-wrap: wrap; gap: 8px; }
-                .status-badge { padding: 6px 14px; border-radius: 30px; font-size: 0.9rem; font-weight: 700; width: fit-content; }
-                .status-active { background: rgba(0, 123, 255, 0.15); color: #007bff; border: 1px solid rgba(0, 123, 255, 0.3); }
-                .status-closed { background: rgba(108, 117, 125, 0.1); color: #6c757d; }
-                .trust-line { margin-top: 24px; font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5; }
-
-                .marathon-detail-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 24px; }
-                
-                .detail-info-card, .detail-action-card { padding: 30px; border-radius: 20px; }
-                .detail-info-card h3, .detail-action-card h3 { display: flex; align-items: center; gap: 10px; margin-bottom: 24px; font-size: 1.25rem; }
-
-                .info-list { display: flex; flex-direction: column; gap: 20px; }
-                .info-item label { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 6px; }
-                .info-item p { font-size: 1.1rem; font-weight: 500; }
-
-                .type-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
-                .type-tag { background: var(--bg-secondary); padding: 4px 12px; border-radius: 6px; font-size: 0.85rem; border: 1px solid var(--border-color); }
-
-                .external-link-btn { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 16px; background: var(--primary); color: white; border-radius: 12px; text-decoration: none; font-weight: 600; margin-top: 20px; transition: transform 0.2s, background 0.2s; }
-                .external-link-btn:hover { background: var(--primary-dark); transform: translateY(-2px); }
-
-                @media (max-width: 768px) {
-                    .marathon-detail-grid { grid-template-columns: 1fr; }
-                    .header-content h1 { font-size: 1.8rem; }
-                    .marathon-detail-header { padding: 24px; }
-                }
-            `}} />
         </div>
     );
 };

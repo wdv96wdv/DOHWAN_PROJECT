@@ -301,11 +301,16 @@ public class MarathonService {
 
         // 포스터 이미지
         String posterUrl = null;
-        Element ogImg = detailDoc.selectFirst("meta[property=og:image]");
-        if (ogImg != null) {
-            String content = ogImg.attr("content");
-            if (content != null && !content.isEmpty() && !content.contains("thumbnail.png")) {
-                posterUrl = content;
+        String raceDetailUrl = raceDetail.path("raceDetailUrl").asText("").trim();
+        if (!raceDetailUrl.isEmpty()) {
+            posterUrl = "https://marathongo.co.kr/assets/image/race/domestic/" + raceDetailUrl + ".webp";
+        } else {
+            Element ogImg = detailDoc.selectFirst("meta[property=og:image]");
+            if (ogImg != null) {
+                String content = ogImg.attr("content");
+                if (content != null && !content.isEmpty() && !content.contains("thumbnail.png")) {
+                    posterUrl = content;
+                }
             }
         }
 

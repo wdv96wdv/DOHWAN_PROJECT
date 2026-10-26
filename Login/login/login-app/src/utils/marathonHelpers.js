@@ -30,6 +30,25 @@ export function getTodayKstStr(now = new Date()) {
   }).format(now);
 }
 
+/** Date exactly 2 months ago in Asia/Seoul as YYYY-MM-DD. Clamped to valid month end. */
+export function getTwoMonthsAgoKstStr(now = new Date()) {
+  const kstToday = getTodayKstStr(now);
+  const [year, month, day] = kstToday.split('-').map(Number);
+
+  let targetYear = year;
+  let targetMonth = month - 2;
+  if (targetMonth < 1) {
+    targetYear -= 1;
+    targetMonth += 12;
+  }
+
+  // Last day of targetMonth
+  const maxDays = new Date(Date.UTC(targetYear, targetMonth, 0)).getUTCDate();
+  const targetDay = Math.min(day, maxDays);
+
+  return `${targetYear}-${String(targetMonth).padStart(2, '0')}-${String(targetDay).padStart(2, '0')}`;
+}
+
 /** Map API marathon payload to listing/home shape. */
 export function normalizeMarathon(m) {
   return {
@@ -42,6 +61,7 @@ export function normalizeMarathon(m) {
     endDate: formatRawDate(m.end_date ?? m.endDate),
     type: Array.isArray(m.type) ? m.type : ['마라톤'],
     firstComeFirstServed: Boolean(m.is_first_come ?? m.firstComeFirstServed),
+    posterUrl: m.poster_url ?? m.posterUrl ?? null,
   };
 }
 
@@ -99,14 +119,17 @@ function parseKstDateOnly(yyyyMmDd) {
   return Date.UTC(Number(m[1]), Number(m[2]) - 1, Number(m[3]), 12);
 }
 
-/** Default listing sort: non-종료 first, then raceDate ascending; 종료 last (by raceDate). */
+/** Default listing sort: non-종료 first (raceDate asc), then 종료 (most recent raceDate desc). */
 export function compareUpcomingFirst(a, b) {
   const aEnded = a.status === '종료' || isPastRace(a);
   const bEnded = b.status === '종료' || isPastRace(b);
   if (aEnded !== bEnded) return aEnded ? 1 : -1;
   const aDate = a.raceDate || '';
   const bDate = b.raceDate || '';
-  return aDate.localeCompare(bDate);
+  if (aEnded && bEnded) {
+    return bDate.localeCompare(aDate); // 종료된 대회는 최신순 정렬
+  }
+  return aDate.localeCompare(bDate); // 다가오는 대회는 빠른 순 정렬
 }
 
 /** Open-reg carousel: nearest registration deadline first. */
