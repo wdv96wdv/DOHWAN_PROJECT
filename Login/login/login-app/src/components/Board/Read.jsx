@@ -311,11 +311,18 @@ const Read = ({
           border-bottom: 2px solid var(--border-color);
         }
         @media (max-width: 768px) {
-          .premium-read .read-container { padding: 30px; }
-          .read-title { font-size: 2.2rem !important; }
-          .read-meta-info { flex-direction: column; align-items: flex-start; gap: 24px; }
+          .premium-read .read-container { padding: 24px 20px; }
+          .read-title { font-size: 1.8rem !important; }
+          .read-meta-info { flex-direction: column; align-items: flex-start; gap: 20px; }
           .meta-group { flex-direction: column; align-items: flex-start; gap: 12px; }
           .owner-actions { width: 100%; justify-content: flex-end; }
+        }
+        @media (max-width: 480px) {
+          .premium-read .read-container { padding: 18px 12px; }
+          .read-title { font-size: 1.4rem !important; margin-bottom: 20px !important; }
+          .read-meta-info { padding: 14px 0; gap: 14px; }
+          .content-viewer { padding: 20px 0; font-size: 0.98rem; }
+          .premium-attachments { padding: 18px 14px; margin-top: 36px; border-radius: var(--radius-lg); }
         }
       `}</style>
     </div>

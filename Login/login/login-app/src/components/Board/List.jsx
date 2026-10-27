@@ -130,12 +130,12 @@ const List = ({ list = [], pagination, currentFilters }) => {
   return (
     <div className="board-page premium-board">
       {/* Header Section */}
-      <header className="board-header" style={{ position: 'relative' }}>
-        <h1>
-          <Users size={40} style={{ verticalAlign: 'middle', marginRight: '16px', color: 'var(--primary)' }} />
-          COMMUNITY
-        </h1>
-        <Link to="/boards/insert" className="premium-btn btn-write" onClick={handleWriteClick} style={{ position: 'absolute', right: 0, bottom: '0', padding: '12px 24px', fontSize: '0.9rem' }}>
+      <header className="board-header">
+        <div className="board-header-title">
+          <Users className="board-header-icon" />
+          <h1>COMMUNITY</h1>
+        </div>
+        <Link to="/boards/insert" className="premium-btn btn-write" onClick={handleWriteClick}>
           <Plus size={18} />
           <span>글쓰기</span>
         </Link>

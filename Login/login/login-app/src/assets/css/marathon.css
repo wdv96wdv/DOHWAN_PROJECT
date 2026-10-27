@@ -17,8 +17,22 @@
 }
 
 @media (max-width: 768px) {
+  .marathon-page {
+    padding: 20px 14px 50px;
+  }
+
+  .marathon-header {
+    margin-bottom: 24px;
+  }
+
   .marathon-header h1 {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
+  }
+
+  .marathon-filters {
+    padding: 16px 12px;
+    margin-bottom: 24px;
+    gap: 14px;
   }
 }
 

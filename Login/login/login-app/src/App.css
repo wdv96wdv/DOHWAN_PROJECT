@@ -13,6 +13,12 @@
   padding-top: 80px; /* Header height */
 }
 
+@media (max-width: 1024px) {
+  .content {
+    padding-top: 64px;
+  }
+}
+
 /* Page transitions / animations can go here */
 .fade-in {
   animation: fadeIn 0.5s ease-out;

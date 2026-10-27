@@ -1,6 +1,7 @@
 .course-page {
   max-width: 1200px;
   margin: 0 auto;
+  padding: 40px 20px 80px;
 }
 
 /* ==================
@@ -8,18 +9,18 @@
 ================== */
 .course-header {
   text-align: center;
-  margin-bottom: 64px;
+  margin-bottom: 48px;
 }
 
 .course-header h1 {
   font-family: 'Orbitron', sans-serif;
   font-size: 2.5rem;
   color: var(--text-primary);
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
 .course-header p {
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   color: var(--text-muted);
 }
 
@@ -272,8 +273,29 @@
   100% { box-shadow: 0 0 10px rgba(0, 255, 204, 0.5); }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
+  .course-page {
+    padding: 20px 14px 60px;
+  }
+
+  .course-header {
+    margin-bottom: 28px;
+  }
+
+  .course-header h1 {
+    font-size: 1.6rem;
+  }
+
+  .course-header p {
+    font-size: 0.9rem;
+  }
+
+  .region-filter-container {
+    margin-top: 24px;
+  }
+
   .course-grid {
     grid-template-columns: 1fr;
+    gap: 20px;
   }
 }
