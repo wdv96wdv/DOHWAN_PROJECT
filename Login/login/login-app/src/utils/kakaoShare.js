@@ -5,8 +5,8 @@
 
 export const getKakaoJsKey = () => {
     return (
+        import.meta.env.VITE_KAKAO_JS_KEY ||
         import.meta.env.VITE_KAKAO_MAP_CLIENT_ID ||
-        import.meta.env.VITE_KAKAO_CLIENT_ID ||
         '6596ccd29e4ca043d50a362864c260c9'
     );
 };
