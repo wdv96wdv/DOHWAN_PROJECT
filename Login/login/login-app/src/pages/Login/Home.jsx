@@ -130,7 +130,7 @@ const Home = () => {
         <meta name="description" content="두러닝은 전국 마라톤·러닝 대회 일정을 모으고, 신청 전에 필요한 정보를 한곳에서 확인하게 해 주는 러닝 허브입니다." />
         <meta property="og:title" content="두러닝 – 전국 마라톤 대회 일정" />
         <meta property="og:description" content="서울부터 지방까지, 다가오는 러닝 대회 일정과 접수 정보를 모았습니다." />
-        <link rel="canonical" href="https://dorunning.vercel.app/" />
+        <link rel="canonical" href="https://dorunning.app/" />
 
         {/* 네이버 사이트 이름 구조화 데이터 */}
         <script type="application/ld+json">
@@ -139,7 +139,7 @@ const Home = () => {
             "@type": "WebSite",
             "name": "Dorunning",
             "alternateName": "두러닝",
-            "url": "https://dorunning.vercel.app"
+            "url": "https://dorunning.app"
           })}
         </script>
       </Helmet>

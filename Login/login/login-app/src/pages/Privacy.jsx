@@ -40,7 +40,7 @@ const Privacy = () => {
         />
         <meta property="og:title" content="두러닝 개인정보처리방침" />
         <meta property="og:description" content="두러닝의 개인정보 수집 목적, 보유 기간, 안전성 확보 조치 및 이용자 권리를 투명하게 공개합니다." />
-        <link rel="canonical" href="https://dorunning.vercel.app/privacy" />
+        <link rel="canonical" href="https://dorunning.app/privacy" />
       </Helmet>
 
       {/* 1. Header */}

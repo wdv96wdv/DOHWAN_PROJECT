@@ -61,7 +61,7 @@ const EventPage = () => {
                 <meta name="description" content="이달의 러닝 챌린지에 도전하고 명예의 전당에 이름을 올리세요. 다른 러너들과 함께 목표를 달성하며 즐겁게 달려보세요!" />
                 <meta property="og:title" content="Dorunning | 챌린지" />
                 <meta property="og:description" content="이달의 러닝 챌린지에 도전하고 명예의 전당에 이름을 올리세요." />
-                <link rel="canonical" href="https://dorunning.vercel.app/event" />
+                <link rel="canonical" href="https://dorunning.app/event" />
             </Helmet>
             <header className="event-header">
                 <h1><Trophy size={40} style={{ verticalAlign: 'middle', marginRight: '16px', color: 'var(--primary)' }} /> {currentMonth.toUpperCase()} CHALLENGE</h1>

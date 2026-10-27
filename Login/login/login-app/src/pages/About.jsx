@@ -39,8 +39,8 @@ const About = () => {
         />
         <meta property="og:title" content="두러닝 소개 (About) – 모든 러너의 한 걸음이 시작되는 곳" />
         <meta property="og:description" content="전국 마라톤 대회 일정부터 코스 분석, 페이스 계산, 커뮤니티까지 함께 달립니다." />
-        <meta property="og:image" content="https://dorunning.vercel.app/og-image.png" />
-        <link rel="canonical" href="https://dorunning.vercel.app/about" />
+        <meta property="og:image" content="https://dorunning.app/og-image.png" />
+        <link rel="canonical" href="https://dorunning.app/about" />
       </Helmet>
 
       {/* 1. Hero Header */}

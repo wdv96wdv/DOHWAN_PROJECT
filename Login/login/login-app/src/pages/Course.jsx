@@ -28,7 +28,7 @@ const Course = () => {
         <meta name="description" content="전국의 아름다운 러닝 코스를 탐색하세요. 지역별, 난이도별 맞춤 코스 정보와 지도를 제공합니다." />
         <meta property="og:title" content="Dorunning | 코스" />
         <meta property="og:description" content="전국의 아름다운 러닝 코스를 탐색하세요." />
-        <link rel="canonical" href="https://dorunning.vercel.app/course" />
+        <link rel="canonical" href="https://dorunning.app/course" />
       </Helmet>
       <header className="course-header" style={{ textAlign: 'center', marginBottom: '60px' }}>
         <h1 style={{ fontFamily: 'Orbitron', fontSize: '3rem', color: 'var(--text-primary)' }}>

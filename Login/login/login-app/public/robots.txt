@@ -14,4 +14,4 @@ Disallow: /recommend
 User-agent: Yeti
 Allow: /
 
-Sitemap: https://dorunning.vercel.app/sitemap.xml
+Sitemap: https://dorunning.app/sitemap.xml

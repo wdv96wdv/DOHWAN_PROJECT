@@ -1,9 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from 'react-helmet-async';
 import "../assets/css/marathon.css";
 import "../assets/css/auth.css";
-import { Search, MapPin, Calendar, Footprints, RotateCcw, Award } from 'lucide-react';
+import { 
+    Search, 
+    MapPin, 
+    Calendar, 
+    Footprints, 
+    RotateCcw, 
+    Award,
+    ChevronLeft,
+    ChevronRight,
+    ChevronsLeft,
+    ChevronsRight
+} from 'lucide-react';
 import Skeleton from "../components/Common/Skeleton";
 import {
     normalizeMarathon,
@@ -26,6 +37,9 @@ export default function MarathonList() {
     const [statusFilter, setStatusFilter] = useState(defaultStatus);
     const [regionFilter, setRegionFilter] = useState("전체");
     const [loading, setLoading] = useState(true); // 로딩 상태 추가
+    const [currentPage, setCurrentPage] = useState(1);
+    const [pageSize, setPageSize] = useState(12);
+    const listTopRef = useRef(null);
 
     const SUPABASE_URL = 'https://ismclnqslxnlsfmqjytc.supabase.co';
     const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || 'sb_publishable_RWdFyo-SAjkjsNnQJC2JBw_jbX6bdXd';
@@ -138,6 +152,41 @@ export default function MarathonList() {
         // 기본 정렬: 다가오는 대회 우선(raceDate), 종료는 아래로
         .sort(compareUpcomingFirst);
 
+    // 필터 조건 변경 시 1페이지로 리셋
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [search, type, statusFilter, regionFilter, pageSize]);
+
+    // 페이징 계산
+    const totalCount = filtered.length;
+    const totalPages = Math.ceil(totalCount / pageSize) || 1;
+    const startIndex = (currentPage - 1) * pageSize;
+    const paginatedList = filtered.slice(startIndex, startIndex + pageSize);
+
+    // 페이지 변경 핸들러 (목록 상단으로 부드럽게 스크롤)
+    const handlePageChange = (newPage) => {
+        if (newPage < 1 || newPage > totalPages || newPage === currentPage) return;
+        setCurrentPage(newPage);
+        if (listTopRef.current) {
+            listTopRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    };
+
+    // 5개 단위 페이지 번호 리스트 계산
+    const getPageNumbers = () => {
+        const maxPages = 5;
+        let start = Math.max(1, currentPage - Math.floor(maxPages / 2));
+        let end = Math.min(totalPages, start + maxPages - 1);
+        if (end - start + 1 < maxPages) {
+            start = Math.max(1, end - maxPages + 1);
+        }
+        const pages = [];
+        for (let i = start; i <= end; i++) {
+            pages.push(i);
+        }
+        return pages;
+    };
+
     return (
         <div className="marathon-page">
             <Helmet>
@@ -145,7 +194,7 @@ export default function MarathonList() {
                 <meta name="description" content="2026 전국 마라톤·러닝 대회 일정 총정리. 서울·수도권 및 지방 지역별, 거리별(10K·하프·풀) 실시간 접수 상태와 공식 신청 링크를 한곳에서 확인하세요." />
                 <meta property="og:title" content="전국 마라톤 일정·접수 D-Day 캘린더 | 두러닝" />
                 <meta property="og:description" content="2026 다가오는 전국 마라톤 대회 일정, 실시간 접수 현황, 공식 신청 링크 총정리." />
-                <link rel="canonical" href="https://dorunning.vercel.app/marathon" />
+                <link rel="canonical" href="https://dorunning.app/marathon" />
             </Helmet>
             <header className="marathon-header">
                 <h1><Award size={40} style={{ verticalAlign: 'middle', marginRight: '16px', color: 'var(--primary)' }} /> 전국 마라톤·러닝 대회 일정</h1>
@@ -207,6 +256,31 @@ export default function MarathonList() {
                 </div>
             </div>
 
+            {/* 상단 툴바 (총 대회 수 & 페이지당 개수 선택) */}
+            <div className="marathon-toolbar" ref={listTopRef}>
+                <div className="toolbar-count">
+                    총 <strong className="count-number">{totalCount}</strong>개의 마라톤 대회
+                    {totalCount > 0 && (
+                        <span className="toolbar-page-info">
+                            ({currentPage} / {totalPages} 페이지)
+                        </span>
+                    )}
+                </div>
+                <div className="toolbar-size-select">
+                    <label htmlFor="pageSizeSelect">목록 보기:</label>
+                    <select
+                        id="pageSizeSelect"
+                        value={pageSize}
+                        onChange={(e) => setPageSize(Number(e.target.value))}
+                        className="page-size-dropdown"
+                    >
+                        <option value={12}>12개씩</option>
+                        <option value={24}>24개씩</option>
+                        <option value={36}>36개씩</option>
+                    </select>
+                </div>
+            </div>
+
             <div className="marathon-grid">
                 {loading ? (
                     // 로딩 중일 때 8개의 스켈레톤 카드 표시
@@ -214,7 +288,7 @@ export default function MarathonList() {
                         <Skeleton key={i} type="card" />
                     ))
                 ) : (
-                    filtered.map(m => (
+                    paginatedList.map(m => (
                         <Link
                             key={m.id || m.link}
                             to={`/marathon/${m.id}`}
@@ -245,7 +319,63 @@ export default function MarathonList() {
                 )}
             </div>
 
-            {!loading && filtered.length === 0 && (
+            {/* 페이지네이션 컨트롤 바 */}
+            {!loading && totalPages > 1 && (
+                <div className="marathon-pagination-area">
+                    <button
+                        type="button"
+                        className="page-nav-btn"
+                        onClick={() => handlePageChange(1)}
+                        disabled={currentPage === 1}
+                        title="첫 페이지"
+                    >
+                        <ChevronsLeft size={16} />
+                    </button>
+                    <button
+                        type="button"
+                        className="page-nav-btn"
+                        onClick={() => handlePageChange(currentPage - 1)}
+                        disabled={currentPage === 1}
+                        title="이전 페이지"
+                    >
+                        <ChevronLeft size={16} />
+                    </button>
+
+                    <div className="page-numbers-group">
+                        {getPageNumbers().map(p => (
+                            <button
+                                key={p}
+                                type="button"
+                                className={`page-num-btn ${currentPage === p ? 'active' : ''}`}
+                                onClick={() => handlePageChange(p)}
+                            >
+                                {p}
+                            </button>
+                        ))}
+                    </div>
+
+                    <button
+                        type="button"
+                        className="page-nav-btn"
+                        onClick={() => handlePageChange(currentPage + 1)}
+                        disabled={currentPage === totalPages}
+                        title="다음 페이지"
+                    >
+                        <ChevronRight size={16} />
+                    </button>
+                    <button
+                        type="button"
+                        className="page-nav-btn"
+                        onClick={() => handlePageChange(totalPages)}
+                        disabled={currentPage === totalPages}
+                        title="마지막 페이지"
+                    >
+                        <ChevronsRight size={16} />
+                    </button>
+                </div>
+            )}
+
+            {!loading && totalCount === 0 && (
                 <div style={{ textAlign: 'center', padding: '100px 0', opacity: 0.5 }}>
                     <Search size={48} style={{ margin: '0 auto 16px' }} />
                     <h3>조건에 맞는 대회가 없습니다. 필터를 넓히거나 다른 달을 확인해 보세요.</h3>

@@ -10,7 +10,7 @@ const Listpage = () => {
         <meta name="description" content="러닝 팁, 대회 후기, 장비 리뷰 등 러너들과 다양한 이야기를 나누어보세요. 함께 달리는 즐거움을 공유하는 커뮤니티입니다." />
         <meta property="og:title" content="Dorunning | 커뮤니티" />
         <meta property="og:description" content="러너들과 함께 다양한 러닝 이야기를 나누어보세요." />
-        <link rel="canonical" href="https://dorunning.vercel.app/boards" />
+        <link rel="canonical" href="https://dorunning.app/boards" />
       </Helmet>
       <ListContainer/>
     </>

@@ -249,7 +249,7 @@ export default function RecordPage() {
         <meta name="description" content="나의 매일매일 러닝 기록을 체계적으로 저장하고 분석하세요. 거리, 시간, 페이스 통계를 한눈에 확인하며 성장의 즐거움을 느껴보세요." />
         <meta property="og:title" content="Dorunning | 러닝기록" />
         <meta property="og:description" content="나의 매일매일 러닝 기록을 체계적으로 저장하고 분석하세요." />
-        <link rel="canonical" href="https://dorunning.vercel.app/record" />
+        <link rel="canonical" href="https://dorunning.app/record" />
       </Helmet>
       <header className="record-header">
         <h1><Activity size={40} style={{ verticalAlign: 'middle', marginRight: '16px', color: 'var(--primary)' }} /> RECORD</h1>

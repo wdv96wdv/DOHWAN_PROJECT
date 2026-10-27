@@ -10,6 +10,7 @@ import GoalTracker from '../../components/Performance/GoalTracker';
 import ShareCard from '../../components/Performance/ShareCard';
 import { getRunRecords } from '../../apis/performance';
 import WaterIntakeCalculator from '../../components/Performance/WaterIntakeCalculator';
+import PaceCalculator from '../../components/Marathon/PaceCalculator';
 import FeedCard from '../../components/Record/FeedCard';
 import "../../assets/css/performance.css";
 import { BarChart3, Users, User, PlusCircle } from 'lucide-react';
@@ -154,8 +155,18 @@ const PerformanceTab = () => {
             </motion.div>
           </div>
 
+          {/* 목표 페이스 & 스플릿 계산기 도구 */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.15 }}
+          >
+            <PaceCalculator initialDistance="10 km" />
+          </motion.div>
+
           <motion.section
-            style={{ marginTop: '48px' }}
+            style={{ marginTop: '32px' }}
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}

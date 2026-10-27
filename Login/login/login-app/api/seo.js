@@ -13,7 +13,7 @@
  * minimal document if fetch fails.
  */
 
-const SITE = 'https://dorunning.vercel.app';
+const SITE = 'https://dorunning.app';
 const DEFAULT_OG_IMAGE = `${SITE}/og-image.png`;
 const SUPABASE_URL = 'https://ismclnqslxnlsfmqjytc.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_RWdFyo-SAjkjsNnQJC2JBw_jbX6bdXd';
@@ -372,7 +372,7 @@ export default async function handler(req, res) {
     return;
   }
 
-  const host = req.headers['x-forwarded-host'] || req.headers.host || 'dorunning.vercel.app';
+  const host = req.headers['x-forwarded-host'] || req.headers.host || 'dorunning.app';
   const proto = req.headers['x-forwarded-proto'] || 'https';
   const origin = `${proto}://${host}`;
 

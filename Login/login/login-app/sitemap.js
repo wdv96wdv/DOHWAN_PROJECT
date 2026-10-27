@@ -8,7 +8,7 @@ const supabaseUrl = 'https://ismclnqslxnlsfmqjytc.supabase.co';
 const supabaseKey = 'sb_publishable_RWdFyo-SAjkjsNnQJC2JBw_jbX6bdXd';
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-const HOSTNAME = 'https://dorunning.vercel.app';
+const HOSTNAME = 'https://dorunning.app';
 
 /** robots.txt 차단 경로 및 삭제된 페이지 - 사이트맵 제외 */
 const ROBOTS_DISALLOW = new Set([

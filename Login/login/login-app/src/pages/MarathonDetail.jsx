@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import axios from 'axios';
@@ -18,12 +18,18 @@ import {
   X, 
   AlertCircle, 
   ChevronRight, 
+  ChevronDown,
   Check, 
   Flame, 
   Footprints,
-  Compass
+  Compass,
+  MessageCircle,
+  Download
 } from 'lucide-react';
+import Swal from 'sweetalert2';
 import Loading from '../components/Common/Loading';
+import { shareKakaoMarathon } from '../utils/kakaoShare';
+import { downloadIcsCalendar, getGoogleCalendarUrl } from '../utils/calendarExport';
 import { 
   normalizeMarathon, 
   getMarathonStatus, 
@@ -44,7 +50,9 @@ const MarathonDetail = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [isPosterModalOpen, setIsPosterModalOpen] = useState(false);
+    const [isCalendarModalOpen, setIsCalendarModalOpen] = useState(false);
     const [copied, setCopied] = useState(false);
+    const [liveCountdown, setLiveCountdown] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0, isLive: false });
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -158,26 +166,88 @@ const MarathonDetail = () => {
         return days === 0 ? 'D-Day' : days > 0 ? `D-${days}` : `종료`;
     };
 
+    // 실시간 라이브 초 단위 카운트다운 타이머
+    useEffect(() => {
+        if (!marathon?.race_date) return;
+        // 대회 당일 오전 08:30 기준
+        const targetTime = new Date(`${marathon.race_date}T08:30:00+09:00`).getTime();
+        
+        const updateCountdown = () => {
+            const now = Date.now();
+            const diff = targetTime - now;
+            if (diff <= 0) {
+                setLiveCountdown({ days: 0, hours: 0, minutes: 0, seconds: 0, isLive: false });
+                return;
+            }
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            setLiveCountdown({ days, hours, minutes, seconds, isLive: true });
+        };
+
+        updateCountdown();
+        const intervalId = setInterval(updateCountdown, 1000);
+        return () => clearInterval(intervalId);
+    }, [marathon?.race_date]);
+
     // 링크 복사 핸들러
     const handleShare = () => {
         if (navigator.clipboard) {
             navigator.clipboard.writeText(window.location.href);
             setCopied(true);
             setTimeout(() => setCopied(false), 2000);
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'success',
+                title: '대회 상세 링크가 복사되었습니다!',
+                showConfirmButton: false,
+                timer: 2000
+            });
         }
     };
 
-    // 구글 캘린더 등록 링크
-    const getGoogleCalendarUrl = (m) => {
-        if (!m?.race_date) return '#';
-        const dStr = m.race_date.replace(/-/g, '');
-        const next = new Date(m.race_date);
-        next.setDate(next.getDate() + 1);
-        const nextStr = next.toISOString().slice(0, 10).replace(/-/g, '');
-        const title = encodeURIComponent(`[마라톤] ${m.title}`);
-        const location = encodeURIComponent(m.location || '대한민국');
-        const details = encodeURIComponent(`두러닝 마라톤 일정 상세:\n${window.location.href}\n공식 참가 링크: ${m.link || ''}`);
-        return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${dStr}/${nextStr}&details=${details}&location=${location}`;
+    // 카카오톡 원클릭 카드 공유 핸들러
+    const handleKakaoShare = async () => {
+        if (!marathon) return;
+        const currentDDay = calculateDDay(marathon.race_date);
+        const res = await shareKakaoMarathon({
+            title: marathon.title,
+            raceDate: marathon.race_date,
+            location: marathon.location,
+            types: marathon.type,
+            dDay: currentDDay,
+            posterUrl: marathon.poster_url,
+            pageUrl: window.location.href
+        });
+
+        if (!res.success) {
+            handleShare();
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'info',
+                title: '카카오톡 연동 확인 중 링크가 클립보드에 복사되었습니다.',
+                showConfirmButton: false,
+                timer: 2500
+            });
+        }
+    };
+
+    // 애플 / 스마트폰 (.ics) 캘린더 파일 다운로드 핸들러
+    const handleDownloadIcs = () => {
+        if (!marathon) return;
+        const success = downloadIcsCalendar(marathon);
+        if (success) {
+            Swal.fire({
+                title: '캘린더 일정 파일 (.ics) 저장 완료',
+                html: '<p style="font-size:0.95rem; color:#475569; margin-top:8px;">다운로드된 <strong>.ics 파일</strong>을 열면 아이폰/갤럭시/PC 캘린더에 마라톤 대회가 즉시 등록됩니다.<br><br><span style="color:#2563eb; font-weight:600;">✨ 대회 1일 전 아침 리마인더 알림 자동 설정 포함</span></p>',
+                icon: 'success',
+                confirmButtonColor: '#2563eb',
+                confirmButtonText: '확인'
+            });
+        }
     };
 
     if (loading) {
@@ -238,7 +308,7 @@ const MarathonDetail = () => {
     const descDetail = descItems.length ? `[${descItems.join(' | ')}] ` : '';
     const metaDescription = `${descDetail}${marathon.title} 마라톤 상세 정보. 일정, 접수 방법, 코스 안내 및 공식 참가신청 링크를 두러닝에서 확인하세요.`;
     const ogDesc = descItems.length ? descItems.join(' · ') : `${marathon.title} 대회 일정 및 공식 신청 안내`;
-    const ogImg = marathon.poster_url || "https://dorunning.vercel.app/og-image.png";
+    const ogImg = marathon.poster_url || "https://dorunning.app/og-image.png";
 
     // 타임라인 단계 계산
     const hasStarted = marathon.start_date && todayStr >= marathon.start_date;
@@ -250,7 +320,7 @@ const MarathonDetail = () => {
             <Helmet>
                 <title>{metaTitle}</title>
                 <meta name="description" content={metaDescription} />
-                <link rel="canonical" href={`https://dorunning.vercel.app/marathon/${marathon.id}`} />
+                <link rel="canonical" href={`https://dorunning.app/marathon/${marathon.id}`} />
 
                 {/* Breadcrumb Structured Data */}
                 <script type="application/ld+json">
@@ -258,9 +328,9 @@ const MarathonDetail = () => {
                         "@context": "https://schema.org",
                         "@type": "BreadcrumbList",
                         "itemListElement": [
-                            { "@type": "ListItem", "position": 1, "name": "두러닝", "item": "https://dorunning.vercel.app" },
-                            { "@type": "ListItem", "position": 2, "name": "마라톤 일정", "item": "https://dorunning.vercel.app/marathon" },
-                            { "@type": "ListItem", "position": 3, "name": marathon.title, "item": `https://dorunning.vercel.app/marathon/${marathon.id}` }
+                            { "@type": "ListItem", "position": 1, "name": "두러닝", "item": "https://dorunning.app" },
+                            { "@type": "ListItem", "position": 2, "name": "마라톤 일정", "item": "https://dorunning.app/marathon" },
+                            { "@type": "ListItem", "position": 3, "name": marathon.title, "item": `https://dorunning.app/marathon/${marathon.id}` }
                         ]
                     })}
                 </script>
@@ -296,7 +366,7 @@ const MarathonDetail = () => {
                         "organizer": {
                             "@type": "Organization",
                             "name": "두러닝",
-                            "url": "https://dorunning.vercel.app"
+                            "url": "https://dorunning.app"
                         }
                     })}
                 </script>
@@ -382,6 +452,16 @@ const MarathonDetail = () => {
                                     {dDay}
                                 </span>
                             )}
+                            {/* 실시간 초단위 카운트다운 타이머 배지 */}
+                            {liveCountdown.isLive && (
+                                <span className="badge-live-countdown" title="대회 당일까지 남은 시간">
+                                    <span className="live-pulse-dot" />
+                                    <Clock size={13} />
+                                    <span>
+                                        <strong>{liveCountdown.days}일</strong> {String(liveCountdown.hours).padStart(2, '0')}:{String(liveCountdown.minutes).padStart(2, '0')}:{String(liveCountdown.seconds).padStart(2, '0')} 남음
+                                    </span>
+                                </span>
+                            )}
                             <span className="badge-tag-pill">
                                 {marathon.is_first_come ? '⚡ 선착순 마감' : '📝 일반 접수'}
                             </span>
@@ -422,7 +502,8 @@ const MarathonDetail = () => {
                         </div>
 
                         <div className="hero-action-buttons">
-                            {marathon.link && (
+                            {/* 1. 메인 공식 접수 CTA */}
+                            {marathon.link ? (
                                 <a 
                                     href={marathon.link} 
                                     target="_blank" 
@@ -431,24 +512,44 @@ const MarathonDetail = () => {
                                 >
                                     공식 홈페이지 참가신청 <ExternalLink size={18} />
                                 </a>
+                            ) : (
+                                <button className="cta-btn-primary" disabled style={{ opacity: 0.6, cursor: 'not-allowed' }}>
+                                    공식 접수 링크 준비 중
+                                </button>
                             )}
-                            <a 
-                                href={getGoogleCalendarUrl(marathon)}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="cta-btn-secondary"
-                                title="구글 캘린더에 일정 추가"
-                            >
-                                <Calendar size={18} /> 캘린더에 등록
-                            </a>
-                            <button 
-                                className="cta-btn-secondary" 
-                                onClick={handleShare}
-                                title="페이지 링크 복사"
-                            >
-                                {copied ? <Check size={18} color="#10b981" /> : <Share2 size={18} />}
-                                {copied ? '복사 완료!' : '공유하기'}
-                            </button>
+
+                            {/* 2. 유틸리티 3종 버튼 그리드 (카카오 공유, 캘린더 등록, 링크 복사) */}
+                            <div className="hero-sub-actions-grid">
+                                <button 
+                                    type="button"
+                                    className="cta-btn-kakao"
+                                    onClick={handleKakaoShare}
+                                    title="카카오톡 단톡방 및 친구에게 대회 안내 카드 공유"
+                                >
+                                    <MessageCircle size={18} fill="#191919" strokeWidth={0} />
+                                    <span>카카오톡 공유</span>
+                                </button>
+
+                                <button 
+                                    type="button"
+                                    className="cta-btn-secondary"
+                                    onClick={() => setIsCalendarModalOpen(true)}
+                                    title="마라톤 일정을 캘린더에 추가"
+                                >
+                                    <Calendar size={18} />
+                                    <span>캘린더 등록</span>
+                                </button>
+
+                                <button 
+                                    type="button"
+                                    className="cta-btn-secondary" 
+                                    onClick={handleShare}
+                                    title="대회 페이지 링크 복사"
+                                >
+                                    {copied ? <Check size={18} color="#10b981" /> : <Share2 size={18} />}
+                                    <span>{copied ? '복사 완료!' : '링크 복사'}</span>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -680,6 +781,72 @@ const MarathonDetail = () => {
                             alt={`${marathon.title} 포스터 원본`}
                             className="poster-modal-img" 
                         />
+                    </div>
+                </div>
+            )}
+
+            {/* Calendar Integration Modal (모바일 & 데스크톱 완벽 대응) */}
+            {isCalendarModalOpen && (
+                <div 
+                    className="cal-modal-backdrop"
+                    onClick={() => setIsCalendarModalOpen(false)}
+                >
+                    <div 
+                        className="cal-modal-content"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <div className="cal-modal-header">
+                            <div className="cal-modal-title-group">
+                                <Calendar size={22} className="cal-modal-icon" />
+                                <h3>마라톤 일정 캘린더 등록</h3>
+                            </div>
+                            <button 
+                                className="cal-modal-close-btn"
+                                onClick={() => setIsCalendarModalOpen(false)}
+                                title="닫기"
+                            >
+                                <X size={20} />
+                            </button>
+                        </div>
+                        
+                        <p className="cal-modal-desc">
+                            대회 일정을 캘린더에 등록하여 접수 마감과 대회 당일을 놓치지 마세요.
+                        </p>
+
+                        <div className="cal-modal-options">
+                            <a 
+                                href={getGoogleCalendarUrl(marathon)}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="cal-modal-option-btn google"
+                                onClick={() => setIsCalendarModalOpen(false)}
+                            >
+                                <div className="cal-opt-badge google">G</div>
+                                <div className="cal-opt-text">
+                                    <strong>구글 캘린더에 등록</strong>
+                                    <small>구글 웹 캘린더 새 창에서 바로 추가</small>
+                                </div>
+                                <ExternalLink size={16} className="cal-opt-arrow" />
+                            </a>
+
+                            <button 
+                                type="button"
+                                className="cal-modal-option-btn ics"
+                                onClick={() => {
+                                    setIsCalendarModalOpen(false);
+                                    handleDownloadIcs();
+                                }}
+                            >
+                                <div className="cal-opt-badge ics">
+                                    <Download size={18} />
+                                </div>
+                                <div className="cal-opt-text">
+                                    <strong>애플 / 스마트폰 캘린더 (.ics)</strong>
+                                    <small>아이폰/갤럭시 기본 캘린더 자동 등록 (D-1 알림 포함)</small>
+                                </div>
+                                <ChevronRight size={18} className="cal-opt-arrow" />
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}

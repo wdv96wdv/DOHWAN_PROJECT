@@ -71,7 +71,7 @@ const Contact = () => {
         <meta name="description" content="Dorunning 서비스에 대한 궁금한 점이나 제안 사항이 있으신가요? 언제든 메시지를 남겨주세요." />
         <meta property="og:title" content="Dorunning | 고객지원" />
         <meta property="og:description" content="Dorunning 서비스에 궁금한 점이나 제안 사항이 있으신가요?" />
-        <link rel="canonical" href="https://dorunning.vercel.app/contact" />
+        <link rel="canonical" href="https://dorunning.app/contact" />
       </Helmet>
       <header className="info-header">
         <h1>문의<span style={{ color: 'var(--primary)' }}>하기</span></h1>
