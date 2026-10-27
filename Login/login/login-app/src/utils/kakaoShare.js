@@ -93,7 +93,7 @@ export const shareKakaoMarathon = async ({
         const targetUrl = pageUrl || window.location.href;
         const imageUrl = posterUrl && posterUrl.startsWith('http')
             ? posterUrl
-            : 'https://dorunning.app/og-image.png';
+            : 'https://www.dorunning.app/og-image.png';
 
         const typesText = Array.isArray(types) ? types.join(', ') : (types || '마라톤');
         const descLines = [];
@@ -124,8 +124,8 @@ export const shareKakaoMarathon = async ({
                 {
                     title: '전국 마라톤 일정 보기',
                     link: {
-                        mobileWebUrl: 'https://dorunning.app/marathon',
-                        webUrl: 'https://dorunning.app/marathon',
+                        mobileWebUrl: 'https://www.dorunning.app/marathon',
+                        webUrl: 'https://www.dorunning.app/marathon',
                     },
                 },
             ],
