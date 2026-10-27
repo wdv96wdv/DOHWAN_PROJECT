@@ -115,6 +115,8 @@ public class SecurityConfig {
 		// 실제 프론트 도메인 및 로컬 환경 허용
 		List<String> allowedOrigins = List.of(
 				"https://dorunning.vercel.app",
+				"https://dorunning.app",
+				"https://www.dorunning.app",
 				"http://localhost:5173",
 				"http://127.0.0.1:5173",
 				"http://localhost:3000",
