@@ -103,17 +103,25 @@ export const shareKakaoMarathon = async ({
             : 'https://www.dorunning.app/og-image.png';
 
         const typesText = Array.isArray(types) ? types.join(', ') : (types || '마라톤');
-        const descLines = [];
-        if (raceDate) descLines.push(`📅 일시: ${raceDate}`);
-        if (location) descLines.push(`📍 장소: ${location}`);
-        if (typesText) descLines.push(`🏃 종목: ${typesText}`);
-        if (dDay) descLines.push(`⏳ ${dDay}`);
+        
+        // 카카오톡 피드 카드 높이 제한(2줄)에 맞춰 핵심 정보를 2줄로 압축 (잘림 방지)
+        const line1Parts = [];
+        if (raceDate) {
+            line1Parts.push(`📅 ${raceDate}${dDay ? ` (${dDay})` : ''}`);
+        }
+        if (location) {
+            line1Parts.push(`📍 ${location}`);
+        }
+        const line1 = line1Parts.join(' · ');
+        const line2 = typesText ? `🏃 종목: ${typesText}` : '';
+
+        const description = [line1, line2].filter(Boolean).join('\n');
 
         window.Kakao.Share.sendDefault({
             objectType: 'feed',
             content: {
                 title: `[두러닝] ${title}`,
-                description: descLines.join('\n'),
+                description: description,
                 imageUrl: imageUrl,
                 link: {
                     mobileWebUrl: targetUrl,
