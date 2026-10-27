@@ -176,7 +176,7 @@ function articleHtml(meta) {
   const official = meta.officialLink
     ? `<p><a href="${escapeAttr(meta.officialLink)}">공식 접수/안내 페이지</a></p>`
     : '';
-  return `<article data-seo-prerender="1">
+  return `<article data-seo-prerender="1" style="display:none !important;" aria-hidden="true">
     <h1>${escapeHtml(meta.h1 || meta.title)}</h1>
     <p>${escapeHtml(meta.description)}</p>
     ${rows.length ? `<ul>${rows.join('')}</ul>` : ''}

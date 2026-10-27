@@ -910,6 +910,20 @@
     padding: 16px 14px 60px;
   }
 
+  .detail-top-nav {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .detail-breadcrumbs {
+    font-size: 0.8rem;
+    width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
   .detail-hero-card {
     padding: 20px 16px;
     border-radius: 18px;

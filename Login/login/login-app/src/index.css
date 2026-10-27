@@ -1,3 +1,14 @@
 ul { list-style-type: none; }
 a { text-decoration: none; color: black; }
 .link { background-color: transparent; color: black; border: none; font-size: var(--font-size-main); }
+
+/* Prevent crawler SEO prerender markup from ever rendering visibly */
+[data-seo-prerender="1"],
+article[data-seo-prerender] {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  overflow: hidden !important;
+  position: absolute !important;
+  pointer-events: none !important;
+}

@@ -4,6 +4,11 @@ import { HelmetProvider } from 'react-helmet-async'
 import './index.css'
 import App from './App.jsx'
 
+// SEO 프리렌더링 블록이 DOM에 존재할 경우 브라우저 렌더링 시 깔끔하게 제거
+if (typeof document !== 'undefined') {
+  document.querySelectorAll('[data-seo-prerender]').forEach((el) => el.remove());
+}
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <HelmetProvider>

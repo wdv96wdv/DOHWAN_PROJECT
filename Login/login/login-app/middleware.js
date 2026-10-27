@@ -13,9 +13,13 @@
  */
 import { next, rewrite } from '@vercel/edge';
 
-// Kakao / Facebook / Twitter / Naver / Google + common link-preview agents
+// Crawlers only (Kakao scrap bot, Facebook, Twitter, Yeti, Google, etc.)
+// CAUTION: Do NOT match general in-app browser UAs (e.g. 'KAKAOTALK', 'NAVER') as bots!
+// Kakao scrap bot uses 'kakaotalk-scrap', whereas Kakao in-app browser uses 'KAKAOTALK'.
+// Naver search bot uses 'Yeti', whereas Naver app browser uses 'NAVER(inapp...)'.
 const BOT_UA =
-  /bot|crawl|slurp|spider|facebookexternalhit|facebot|twitterbot|linkedinbot|slackbot|discordbot|whatsapp|telegrambot|kakaotalk|kakaobot|line\/|naver|yeti|googlebot|bingbot|duckduckbot|baiduspider|yandex|sogou|exabot|ia_archiver|semrush|ahrefs|mj12bot|dotbot|bytespider|petalbot|applebot|storebot-google|google-inspectiontool|chrome-lighthouse|embedly|quora link preview|redditbot|pinterest|vkshare|w3c_validator|preview/i;
+  /bot|crawl|slurp|spider|facebookexternalhit|facebot|twitterbot|linkedinbot|slackbot|discordbot|whatsapp|telegrambot|kakaotalk-scrap|kakaostory|kakaobot|yeti|googlebot|bingbot|duckduckbot|baiduspider|yandex|sogou|exabot|ia_archiver|semrush|ahrefs|mj12bot|dotbot|bytespider|petalbot|applebot|storebot-google|google-inspectiontool|chrome-lighthouse|embedly|quora link preview|redditbot|pinterest|vkshare|w3c_validator|preview/i;
+
 
 export const config = {
   // Include trailing-slash variants so /marathon/ is handled (soft 404 in GSC)
