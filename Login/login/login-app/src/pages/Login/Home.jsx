@@ -13,7 +13,7 @@ import "swiper/css/pagination";
 import { EffectCoverflow, Pagination, Autoplay } from "swiper/modules";
 import useAuthStore from "../../store/useAuthStore";
 import "../../assets/css/home.css";
-import { ChevronRight, ArrowRight, Calendar, MapPin, Activity } from 'lucide-react';
+import { ChevronRight, ArrowRight, Calendar, MapPin, Activity, BookOpen } from 'lucide-react';
 import Skeleton from "../../components/Common/Skeleton";
 import marathonPoster from "../../assets/img/marathon-poster.png";
 import {
@@ -244,6 +244,34 @@ const Home = () => {
         </div>
         <div className="feature-media glass-media">
           <img src={community} alt="Runner Community" loading="lazy" />
+        </div>
+      </section>
+
+      {/* Running Guide Magazine Section */}
+      <section className="feature-section" data-aos="fade-up">
+        <div className="feature-text">
+          <div className="section-badge">MAGAZINE & TIPS</div>
+          <h2>완주를 위한 러닝 가이드</h2>
+          <p>
+            런린이 10K 첫 완주 훈련 플랜, 내 발에 맞는 러닝화 고르는 법, 대회 3일 전 카보로딩 식단과 에너지젤 섭취 요령까지 — 마라톤 코치들이 검증한 실전 가이드를 지금 읽어보세요.
+          </p>
+          <Link to="/guide" className="btn-feature">
+            러닝 가이드 읽기 <ArrowRight size={18} style={{ marginLeft: '8px' }} />
+          </Link>
+        </div>
+        <div className="feature-media glass-media" style={{ display: 'flex', flexDirection: 'column', gap: '12px', padding: '24px' }}>
+          <div style={{ padding: '16px 20px', borderRadius: '12px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)' }}>
+            <h4 style={{ color: 'var(--primary)', marginBottom: '4px' }}>🏃 10K 완주 8주 플랜</h4>
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', margin: 0 }}>걷기와 달리기를 점진적으로 결합하여 부상 없이 첫 피니시 라인을 통과하는 법</p>
+          </div>
+          <div style={{ padding: '16px 20px', borderRadius: '12px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)' }}>
+            <h4 style={{ color: 'var(--primary)', marginBottom: '4px' }}>👟 러닝화 선택 가이드</h4>
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', margin: 0 }}>데일리 쿠션화부터 카본 레이싱화까지 내 주법에 맞는 신발 찾는 기준</p>
+          </div>
+          <div style={{ padding: '16px 20px', borderRadius: '12px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)' }}>
+            <h4 style={{ color: 'var(--primary)', marginBottom: '4px' }}>🍌 D-7 카보로딩 식단</h4>
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', margin: 0 }}>30km 벽을 넘기 위한 복합 탄수화물 로딩과 대회 당일 아침 식사법</p>
+          </div>
         </div>
       </section>
 

@@ -19,6 +19,7 @@ const Footer = () => {
           <div className="footer-links">
             <Link to="/about">소개</Link>
             <Link to="/marathon">마라톤</Link>
+            <Link to="/guide">러닝 가이드</Link>
             <Link to="/course">코스</Link>
           </div>
         </div>

@@ -2,6 +2,7 @@ import { SitemapStream, streamToPromise } from 'sitemap';
 import { writeFileSync, existsSync, copyFileSync } from 'fs';
 import { resolve } from 'path';
 import { createClient } from '@supabase/supabase-js';
+import { GUIDE_ARTICLES } from './src/utils/guideData.js';
 
 // Supabase 설정
 const supabaseUrl = 'https://ismclnqslxnlsfmqjytc.supabase.co';
@@ -73,6 +74,7 @@ async function generateSitemap() {
   const staticLinks = [
     { url: '/', changefreq: 'daily', priority: 1.0 },
     { url: '/marathon', changefreq: 'daily', priority: 0.9 },
+    { url: '/guide', changefreq: 'daily', priority: 0.9 },
     { url: '/boards', changefreq: 'daily', priority: 0.8 },
     { url: '/course', changefreq: 'weekly', priority: 0.8 },
     { url: '/event', changefreq: 'weekly', priority: 0.8 },
@@ -117,7 +119,15 @@ async function generateSitemap() {
     }))
     .filter(l => !isDisallowed(l.url));
 
-  const allLinks = [...staticLinks, ...marathonLinks, ...boardLinks];
+  // 3. 러닝 가이드 & 매거진 칼럼
+  const guideLinks = (GUIDE_ARTICLES || []).map(a => ({
+    url: `/guide/${a.id}`,
+    changefreq: 'weekly',
+    priority: 0.8,
+    lastmod: a.date,
+  }));
+
+  const allLinks = [...staticLinks, ...guideLinks, ...marathonLinks, ...boardLinks];
 
   const stream = new SitemapStream({ hostname: HOSTNAME });
   allLinks.forEach(link => stream.write(link));

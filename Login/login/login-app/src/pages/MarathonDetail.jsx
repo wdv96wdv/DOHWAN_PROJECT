@@ -24,7 +24,10 @@ import {
   Footprints,
   Compass,
   MessageCircle,
-  Download
+  Download,
+  Activity,
+  Zap,
+  ShieldCheck
 } from 'lucide-react';
 import Swal from 'sweetalert2';
 import Loading from '../components/Common/Loading';
@@ -700,7 +703,61 @@ const MarathonDetail = () => {
                         </div>
                     </div>
 
-                    {/* 4. 안내 및 유의사항 */}
+                    {/* 4. 코스 페이스 배분 & 완주 전략 */}
+                    <div className="content-card-box">
+                        <h2 className="card-heading-title">
+                            <Activity size={22} /> 코스 페이스 배분 & 완주 전략
+                        </h2>
+                        <div className="checklist-container">
+                            <div className="checklist-step-box">
+                                <span className="checklist-badge">초반 (0 ~ 5km)</span>
+                                <p className="checklist-desc-list">
+                                    <strong>오버페이스 절대 금지:</strong> 대회장의 뜨거운 열기와 인파에 휩쓸리지 않고 목표 페이스보다 10~15초 늦게 차분히 출발하여 심박수를 안정시킵니다.
+                                </p>
+                            </div>
+                            <div className="checklist-step-box">
+                                <span className="checklist-badge">중반 (5 ~ 15km / 하프·풀)</span>
+                                <p className="checklist-desc-list">
+                                    <strong>크루즈 페이스 유지:</strong> 호흡과 보폭을 일정하게 정렬하고 5km마다 설치된 급수대에서 목마름을 느끼기 전에 소량씩 수분을 규칙적으로 섭취합니다.
+                                </p>
+                            </div>
+                            <div className="checklist-step-box">
+                                <span className="checklist-badge">후반 (라스트 구간)</span>
+                                <p className="checklist-desc-list">
+                                    <strong>네거티브 스플릿 도전:</strong> 남아있는 체력을 바탕으로 턱을 당기고 팔치기를 의식하며 일정한 리듬을 유지해 피니시 라인까지 안정적으로 골인합니다.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* 5. 레이스 영양 & 수분 보충 가이드 */}
+                    <div className="content-card-box">
+                        <h2 className="card-heading-title">
+                            <Zap size={22} /> 레이스 영양 & 수분 보충 가이드
+                        </h2>
+                        <div className="checklist-container">
+                            <div className="checklist-step-box">
+                                <span className="checklist-badge">대회 3일 전</span>
+                                <p className="checklist-desc-list">
+                                    <strong>글리코겐 저장(카보로딩):</strong> 자극적인 음식과 기름진 식사를 피하고 쌀밥, 바나나, 고구마 등 복합 탄수화물 비중을 식단의 70%까지 늘립니다.
+                                </p>
+                            </div>
+                            <div className="checklist-step-box">
+                                <span className="checklist-badge">대회 당일 아침</span>
+                                <p className="checklist-desc-list">
+                                    <strong>출발 3~4시간 전 식사:</strong> 소화가 쉬운 떡이나 베이글, 바나나 위주로 가볍게 식사하고 출발 1시간 전까지 미온수 300~500ml를 나누어 마십니다.
+                                </p>
+                            </div>
+                            <div className="checklist-step-box">
+                                <span className="checklist-badge">레이스 중 보충</span>
+                                <p className="checklist-desc-list">
+                                    <strong>에너지젤 타이밍:</strong> 하프/풀코스 주자는 10km, 20km, 30km 지점 급수대 직전에 에너지젤을 섭취하고 물과 함께 넘겨 체내 흡수율을 높입니다.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* 6. 안내 및 유의사항 */}
                     <div className="detail-trust-box">
                         <AlertCircle size={22} style={{ flexShrink: 0, marginTop: '2px' }} />
                         <div className="trust-box-text">

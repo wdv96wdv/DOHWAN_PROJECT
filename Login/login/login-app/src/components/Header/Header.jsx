@@ -9,6 +9,7 @@ import {
   Map,
   Activity,
   Trophy,
+  BookOpen,
   TrendingUp,
   Gift,
   MessageSquare,
@@ -37,9 +38,10 @@ const Header = ({ theme, toggleTheme }) => {
   const NavItems = () => (
     <ul className="nav-list">
       <li><Link to="/course" onClick={closeMenu}><Map size={20} /><span>코스</span></Link></li>
-      <li><Link to={isLogin ? "/record" : "/login"} onClick={closeMenu}><Activity size={20} /><span>기록</span></Link></li>
+      <li><Link to="/record" onClick={closeMenu}><Activity size={20} /><span>기록</span></Link></li>
       <li><Link to="/marathon" onClick={closeMenu}><Trophy size={20} /><span>마라톤 일정</span></Link></li>
-      <li><Link to={isLogin ? "/performance" : "/login"} onClick={closeMenu}><TrendingUp size={20} /><span>퍼포먼스</span></Link></li>
+      <li><Link to="/guide" onClick={closeMenu}><BookOpen size={20} /><span>가이드</span></Link></li>
+      <li><Link to="/performance" onClick={closeMenu}><TrendingUp size={20} /><span>퍼포먼스</span></Link></li>
       <li><Link to="/event" onClick={closeMenu}><Gift size={20} /><span>챌린지</span></Link></li>
       <li><Link to="/boards" onClick={closeMenu}><MessageSquare size={20} /><span>커뮤니티</span></Link></li>
       {isAdmin && <li><Link to="/admin" onClick={closeMenu}><ShieldCheck size={20} /><span>관리자</span></Link></li>}

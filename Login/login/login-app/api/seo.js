@@ -27,6 +27,14 @@ const STATIC_META = {
     ogDescription:
       '서울부터 지방까지, 다가오는 러닝 대회 일정과 접수 정보를 모았습니다.',
   },
+  '/guide': {
+    title: '러닝 가이드 & 마라톤 훈련 팁 매거진 | 두러닝',
+    description:
+      '런린이 10K 완주 훈련 플랜, 러닝화 추천 가이드, 마라톤 카보로딩 식단, 에너지젤 섭취법, 부상 예방까지 러너를 위한 전문 정보를 만나보세요.',
+    ogTitle: '러닝 가이드 & 마라톤 훈련 팁 매거진 | 두러닝',
+    ogDescription:
+      '완주를 꿈꾸는 모든 러너를 위한 체계적인 마라톤 훈련과 기어 가이드.',
+  },
   '/marathon': {
     title: '전국 마라톤 일정·접수 D-Day 캘린더 (2026) | 두러닝',
     description:
@@ -154,6 +162,20 @@ async function resolveMeta(pathname) {
     };
   }
 
+  const guideMatch = pathname.match(/^\/guide\/([^/]+)\/?$/);
+  if (guideMatch) {
+    const gid = guideMatch[1];
+    return {
+      title: '러닝 가이드 & 마라톤 훈련 팁 매거진 | 두러닝',
+      description: '런린이 10K 완주 훈련 플랜, 러닝화 추천 가이드, 마라톤 카보로딩 식단, 에너지젤 섭취법, 부상 예방까지 러너를 위한 전문 정보를 만나보세요.',
+      ogTitle: '러닝 가이드 & 마라톤 훈련 팁 매거진 | 두러닝',
+      ogDescription: '완주를 꿈꾸는 모든 러너를 위한 체계적인 마라톤 훈련과 기어 가이드.',
+      ogImage: DEFAULT_OG_IMAGE,
+      canonical,
+      h1: '러너를 위한 실전 완주 가이드',
+    };
+  }
+
   // Unknown path under this handler — fall back to home-ish meta for safety
   return {
     title: '두러닝 – 전국 마라톤 대회 일정',
@@ -176,12 +198,18 @@ function articleHtml(meta) {
   const official = meta.officialLink
     ? `<p><a href="${escapeAttr(meta.officialLink)}">공식 접수/안내 페이지</a></p>`
     : '';
-  return `<article data-seo-prerender="1" style="display:none !important;" aria-hidden="true">
+  return `<article data-seo-prerender="1" class="seo-bot-summary" style="max-width: 800px; margin: 32px auto; padding: 24px; font-family: sans-serif; line-height: 1.8; color: #1e293b;">
     <h1>${escapeHtml(meta.h1 || meta.title)}</h1>
     <p>${escapeHtml(meta.description)}</p>
     ${rows.length ? `<ul>${rows.join('')}</ul>` : ''}
     ${official}
-    <p><a href="${escapeAttr(meta.canonical)}">두러닝에서 자세히 보기</a></p>
+    <h2>러너를 위한 코스 공략 & 페이스 가이드</h2>
+    <p>성공적인 완주를 위해 초반 5km 구간에서는 주변 분위기에 휩쓸려 오버페이스를 하지 않도록 목표 페이스보다 10~15초 늦게 출발하는 것이 중요합니다. 5km마다 마련된 공식 급수대에서는 갈증을 느끼기 전에 소량씩 수분을 섭취하고, 중반 이후 호흡과 팔치기 리듬을 일정하게 유지하며 체력을 배분하세요.</p>
+    
+    <h2>레이스 전후 영양 섭취 및 컨디션 관리</h2>
+    <p>대회 3일 전부터는 밥, 바나나, 고구마 등 복합 탄수화물 위주의 식단(카보로딩)으로 글리코겐을 충분히 저장하고, 대회 당일 아침에는 출발 3~4시간 전 소화가 쉬운 식사를 마칩니다. 대회 종료 후에는 10분간의 쿨다운 조깅과 정적 스트레칭으로 젖산을 배출하고 단백질과 전해질을 신속히 보충해 부상을 예방하세요.</p>
+    
+    <p><a href="${escapeAttr(meta.canonical)}">두러닝(Dorunning)에서 대회 상세 일정 및 실시간 D-Day 확인하기</a></p>
   </article>`;
 }
 

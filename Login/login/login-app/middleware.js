@@ -29,6 +29,9 @@ export const config = {
     '/marathon',
     '/marathon/',
     '/marathon/:path*',
+    '/guide',
+    '/guide/',
+    '/guide/:path*',
   ],
 };
 
@@ -51,7 +54,9 @@ export default function middleware(request) {
   const isAbout = pathname === '/about';
   const isList = pathname === '/marathon';
   const isDetail = /^\/marathon\/[^/]+$/.test(pathname);
-  if (!isAbout && !isList && !isDetail) {
+  const isGuide = pathname === '/guide';
+  const isGuideDetail = /^\/guide\/[^/]+$/.test(pathname);
+  if (!isAbout && !isList && !isDetail && !isGuide && !isGuideDetail) {
     return next();
   }
 

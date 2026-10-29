@@ -25,6 +25,8 @@ const Marathon = lazy(() => import('../pages/Marathon'));
 const MarathonDetail = lazy(() => import('../pages/MarathonDetail')); // 추가
 const PerformanceTab = lazy(() => import('../pages/Performance/PerformanceTab'));
 const WishlistPage = lazy(() => import('../pages/WishlistPage'));
+const GuideList = lazy(() => import('../pages/Guide/GuideList'));
+const GuideDetail = lazy(() => import('../pages/Guide/GuideDetail'));
 const NotFound = lazy(() => import('../pages/NotFound'));
 
 const AppRouter = ({ theme }) => {
@@ -41,6 +43,8 @@ const AppRouter = ({ theme }) => {
         {/* <Route path="/calendar" element={<Calendar />} /> */}
         <Route path="/marathon" element={<Marathon />} />
         <Route path="/marathon/:id" element={<MarathonDetail />} /> {/* 상세 페이지 추가 */}
+        <Route path="/guide" element={<GuideList />} />
+        <Route path="/guide/:id" element={<GuideDetail />} />
         <Route path="/performance" element={<ProtectedRoute message="퍼포먼스 페이지는 로그인 후 이용 가능합니다."><PerformanceTab /></ProtectedRoute>} />
         <Route path="/about" element={<About />} />
         <Route path="/privacy" element={<Privacy />} />
