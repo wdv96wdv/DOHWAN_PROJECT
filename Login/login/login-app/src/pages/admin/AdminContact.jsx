@@ -1,17 +1,51 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import "../../assets/css/board.css";
 import "../../assets/css/auth.css";
 import Swal from "sweetalert2"; 
 import { ShieldAlert, Trash2, Mail, User, MessageSquare } from 'lucide-react';
 import Loading from "../../components/Common/Loading";
+import useAuthStore from "../../store/useAuthStore";
 
 const AdminContact = () => {
+  const isLogin = useAuthStore(state => state.isLogin);
+  const roles = useAuthStore(state => state.roles);
+  const navigate = useNavigate();
+  const hasAlerted = useRef(false);
   const [contacts, setContacts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   const token = localStorage.getItem("jwt");
+
+  // 비로그인 / 비관리자 접근 차단
+  useEffect(() => {
+    if (hasAlerted.current) return;
+
+    if (!isLogin) {
+      hasAlerted.current = true;
+      Swal.fire({
+        icon: 'warning',
+        title: '로그인이 필요합니다',
+        text: '관리자 페이지는 로그인 후 이용 가능합니다.',
+        confirmButtonColor: 'var(--primary)',
+        confirmButtonText: '확인'
+      }).then(() => navigate('/', { replace: true }));
+      return;
+    }
+
+    if (!roles?.isAdmin) {
+      hasAlerted.current = true;
+      Swal.fire({
+        icon: 'error',
+        title: '접근 제한',
+        text: '관리자 권한이 필요합니다.',
+        confirmButtonColor: 'var(--primary)',
+        confirmButtonText: '확인'
+      }).then(() => navigate('/', { replace: true }));
+    }
+  }, [isLogin, roles, navigate]);
 
   const fetchContacts = async () => {
     try {
@@ -59,8 +93,14 @@ const AdminContact = () => {
   };
 
   useEffect(() => {
-    fetchContacts();
-  }, []);
+    if (isLogin && roles?.isAdmin) {
+      fetchContacts();
+    }
+  }, [isLogin, roles]);
+
+  if (!isLogin || !roles?.isAdmin) {
+    return null;
+  }
 
   if (loading) return (
     <div style={{ padding: '100px 0' }}>

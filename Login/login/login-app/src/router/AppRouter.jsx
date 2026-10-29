@@ -1,6 +1,7 @@
 import React, { Suspense, lazy } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Loading from '../components/Common/Loading';
+import ProtectedRoute from '../components/Common/ProtectedRoute';
 
 // Lazy loaded components
 const Home = lazy(() => import('../pages/Login/Home'));
@@ -34,23 +35,23 @@ const AppRouter = ({ theme }) => {
         <Route path="/login" element={<Login />} />
         <Route path="/login/kakao" element={<KakaoCallback />} />
         <Route path="/join" element={<Join />} />
-        <Route path="/user" element={<User />} />
-        <Route path="/wishlist" element={<WishlistPage />} />
-        <Route path="/admin" element={<AdminContact />} />
+        <Route path="/user" element={<ProtectedRoute message="마이페이지는 로그인 후 이용 가능합니다."><User /></ProtectedRoute>} />
+        <Route path="/wishlist" element={<ProtectedRoute message="위시리스트는 로그인 후 이용 가능합니다."><WishlistPage /></ProtectedRoute>} />
+        <Route path="/admin" element={<ProtectedRoute adminOnly={true} message="관리자 권한이 필요합니다."><AdminContact /></ProtectedRoute>} />
         {/* <Route path="/calendar" element={<Calendar />} /> */}
         <Route path="/marathon" element={<Marathon />} />
         <Route path="/marathon/:id" element={<MarathonDetail />} /> {/* 상세 페이지 추가 */}
-        <Route path="/performance" element={<PerformanceTab />} />
+        <Route path="/performance" element={<ProtectedRoute message="퍼포먼스 페이지는 로그인 후 이용 가능합니다."><PerformanceTab /></ProtectedRoute>} />
         <Route path="/about" element={<About />} />
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/contact" element={<Contact />} />
-        <Route path="/record" element={<Record />} />
+        <Route path="/record" element={<ProtectedRoute message="기록 페이지는 로그인 후 이용 가능합니다."><Record /></ProtectedRoute>} />
         <Route path="/course" element={<Course />} />
         <Route path="/event" element={<Event />} />
         <Route path="/boards" element={<Listpage />} />
-        <Route path="/boards/insert" element={<Insertpage />} />
+        <Route path="/boards/insert" element={<ProtectedRoute message="게시글 작성은 로그인 후 이용 가능합니다."><Insertpage /></ProtectedRoute>} />
         <Route path="/boards/:id" element={<Readpage />} />
-        <Route path="/boards/update/:id" element={<Updatepage />} />
+        <Route path="/boards/update/:id" element={<ProtectedRoute message="게시글 수정은 로그인 후 이용 가능합니다."><Updatepage /></ProtectedRoute>} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Suspense>

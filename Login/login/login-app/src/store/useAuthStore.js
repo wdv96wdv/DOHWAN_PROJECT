@@ -6,7 +6,7 @@ import Cookies from 'js-cookie';
 import supabase from '../utils/supabaseClient';
 
 const useAuthStore = create((set, get) => ({
-  isLoading: true,
+  isLoading: false,
   isLogin: localStorage.getItem("isLogin") === "true",
   userInfo: localStorage.getItem("userInfo") && localStorage.getItem("userInfo") !== "undefined"
     ? JSON.parse(localStorage.getItem("userInfo"))

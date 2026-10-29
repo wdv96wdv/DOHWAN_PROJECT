@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { getWishlist, deleteWishlist } from '../apis/wishlist';
 import useAuthStore from '../store/useAuthStore';
 import { useNavigate } from 'react-router-dom';
@@ -10,23 +10,29 @@ import Loading from '../components/Common/Loading';
 import { Helmet } from 'react-helmet-async';
 
 const WishlistPage = () => {
-  const userInfo = useAuthStore(state => state.userInfo);
+  const isLogin = useAuthStore(state => state.isLogin);
   const navigate = useNavigate();
+  const hasAlerted = useRef(false);
   const [wishlistItems, setWishlistItems] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // 비로그인 접근 차단 (URL 직접 접근 방지)
   useEffect(() => {
-    if (!userInfo) {
+    if (!isLogin && !hasAlerted.current) {
+      hasAlerted.current = true;
       Swal.fire({
         icon: 'warning',
-        title: 'Login Required',
-        text: 'Please login to use the wishlist.',
+        title: '로그인이 필요합니다',
+        text: '위시리스트는 로그인 후 이용 가능합니다.',
         confirmButtonColor: 'var(--primary)',
+        confirmButtonText: '확인'
       }).then(() => {
-        navigate("/login");
+        navigate('/', { replace: true });
       });
       return;
     }
+
+    if (!isLogin) return;
 
     setLoading(true);
     getWishlist()
@@ -39,7 +45,7 @@ const WishlistPage = () => {
         console.error("Failed to fetch wishlist:", error);
         setLoading(false);
       });
-  }, [userInfo, navigate]);
+  }, [isLogin, navigate]);
 
   const handleDeleteWishlistItem = async (productId) => {
     try {
@@ -49,11 +55,15 @@ const WishlistPage = () => {
       console.error("Error deleting from wishlist:", error);
       Swal.fire({
         icon: 'error',
-        title: 'Error',
-        text: 'Failed to update wishlist.',
+        title: '오류',
+        text: '위시리스트 삭제에 실패했습니다.',
       });
     }
   };
+
+  if (!isLogin) {
+    return null;
+  }
 
   return (
     <div className="wishlist-page">

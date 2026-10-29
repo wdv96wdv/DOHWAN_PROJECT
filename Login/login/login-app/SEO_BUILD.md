@@ -24,6 +24,6 @@ This is **not** full SSR. Follow-ups: more routes, JSON-LD in the bot shell, opt
 
 ## Trailing slash (Soft 404)
 
-- GSC Soft 404 was on `https://dorunning.vercel.app/marathon/`.
+- GSC Soft 404 was on `https://dorunning.app/marathon/`.
 - `vercel.json` 301-redirects `/marathon/`, `/marathon/:id/`, `/about/` to the non-slash URL.
 - Middleware also 301s trailing slashes on matched routes before the bot rewrite.

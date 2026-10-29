@@ -1,20 +1,36 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 import UserForm from '../../components/User/UserForm';
 import useAuthStore from '../../store/useAuthStore';
 import * as auth from '../../apis/auth';
-import * as Swal from '../../apis/alert';
-import supabase from '../../utils/supabaseClient';
+import * as SwalAlert from '../../apis/alert';
 import { Helmet } from 'react-helmet-async';
 
 const User = () => {
-  const isLoading = useAuthStore(state => state.isLoading);
   const isLogin = useAuthStore(state => state.isLogin);
-  const roles = useAuthStore(state => state.roles);
   const logout = useAuthStore(state => state.logout);
   const userInfo = useAuthStore(state => state.userInfo);
   const updateUserInfo = useAuthStore(state => state.updateUserInfo);
   const navigate = useNavigate();
+  const hasAlerted = useRef(false);
+
+  // 비로그인 접근 차단 (URL 직접 접근 방지: 경고 알럿 후 메인 이동)
+  useEffect(() => {
+    if (!isLogin && !hasAlerted.current) {
+      hasAlerted.current = true;
+      Swal.fire({
+        icon: 'warning',
+        title: '로그인이 필요합니다',
+        text: '마이페이지는 로그인 후 이용 가능합니다.',
+        confirmButtonColor: 'var(--primary)',
+        confirmButtonText: '확인'
+      }).then(() => {
+        navigate('/', { replace: true });
+      });
+    }
+  }, [isLogin, navigate]);
+
   // 회원 정보 수정
   const updateUser = async (form) => {
     const { username, name, email, avatarUrl, bio,
@@ -30,22 +46,22 @@ const User = () => {
       });
 
       if (response.status !== 200) {
-        Swal.alert('회원정보 수정 실패', '회원 정보 수정에 실패했습니다.', 'error');
+        SwalAlert.alert('회원정보 수정 실패', '회원 정보 수정에 실패했습니다.', 'error');
         return;
       }
 
       if (isPasswordChange) {
-        Swal.alert('회원정보 수정 성공', '비밀번호가 변경되어 로그아웃 후 다시 로그인해주세요.', 'success', () => logout(true));
+        SwalAlert.alert('회원정보 수정 성공', '비밀번호가 변경되어 로그아웃 후 다시 로그인해주세요.', 'success', () => logout(true));
       } else {
         // 전역 상태 갱신 (헤더 아바타 등 즉시 반영)
         await updateUserInfo();
-        Swal.alert('회원정보 수정 성공', '정보가 정상적으로 수정되었습니다.', 'success');
+        SwalAlert.alert('회원정보 수정 성공', '정보가 정상적으로 수정되었습니다.', 'success');
         navigate('/');
       }
 
     } catch (error) {
       console.error('회원정보 수정 중 에러:', error);
-      Swal.alert('회원정보 수정 실패', '예기치 못한 오류가 발생했습니다.', 'error');
+      SwalAlert.alert('회원정보 수정 실패', '예기치 못한 오류가 발생했습니다.', 'error');
     }
   };
 
@@ -54,24 +70,20 @@ const User = () => {
     try {
       const response = await auth.remove(username);
       if (response?.status === 200) {
-        Swal.alert('회원탈퇴 성공', '그동안 감사했습니다🙋‍♀️', 'success', () => logout(true));
+        SwalAlert.alert('회원탈퇴 성공', '그동안 감사했습니다🙋‍♀️', 'success', () => logout(true));
         navigate('/');
       } else {
-        Swal.alert('회원탈퇴 실패', '나갈 땐 마음대로 안 됩니다.', 'error');
+        SwalAlert.alert('회원탈퇴 실패', '나갈 땐 마음대로 안 됩니다.', 'error');
       }
     } catch (error) {
       console.error('회원 탈퇴 처리 중 에러:', error);
-      Swal.alert('회원탈퇴 실패', '예기치 못한 오류가 발생했습니다.', 'error');
+      SwalAlert.alert('회원탈퇴 실패', '예기치 못한 오류가 발생했습니다.', 'error');
     }
   };
 
-  // 로그인 체크
-  useEffect(() => {
-    if (isLoading) return;
-    if (!isLogin || !roles?.isUser) {
-      navigate('/login');
-    }
-  }, [isLoading, isLogin, roles, navigate]);
+  if (!isLogin) {
+    return null;
+  }
 
   return (
     <div className="container">

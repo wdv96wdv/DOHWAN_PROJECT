@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom"; // ✅ 페이지 이동을 위해 추가
 import Swal from "sweetalert2";
 import api from "../../apis/api";
+import useAuthStore from "../../store/useAuthStore";
 import RecordForm from "../../components/Record/RecordForm";
 import RecordList from "../../components/Record/RecordList";
 import "../../assets/css/record.css";
@@ -59,6 +60,9 @@ const getUserNoFromJWT = () => {
 
 export default function RecordPage() {
   const navigate = useNavigate(); // ✅ 네비게이트 훅 선언
+  const isLogin = useAuthStore(state => state.isLogin);
+  const hasAlerted = useRef(false);
+
   const [records, setRecords] = useState([]);
   const [formData, setFormData] = useState({
     running_name: "",
@@ -73,9 +77,25 @@ export default function RecordPage() {
   const [editingId, setEditingId] = useState(null);
   const user_no = getUserNoFromJWT();
 
+  // 비로그인 접근 차단 (URL 직접 접근 방지)
   useEffect(() => {
-    if (user_no) fetchRecords();
-  }, [user_no]);
+    if (!isLogin && !hasAlerted.current) {
+      hasAlerted.current = true;
+      Swal.fire({
+        icon: 'warning',
+        title: '로그인이 필요합니다',
+        text: '기록 페이지는 로그인 후 이용 가능합니다.',
+        confirmButtonColor: 'var(--primary)',
+        confirmButtonText: '확인'
+      }).then(() => {
+        navigate('/', { replace: true });
+      });
+    }
+  }, [isLogin, navigate]);
+
+  useEffect(() => {
+    if (isLogin && user_no) fetchRecords();
+  }, [isLogin, user_no]);
 
   const fetchRecords = async () => {
     try {
@@ -241,6 +261,10 @@ export default function RecordPage() {
       Swal.fire("오류", "삭제에 실패했습니다.", "error");
     }
   };
+
+  if (!isLogin) {
+    return null;
+  }
 
   return (
     <div className="record-page">

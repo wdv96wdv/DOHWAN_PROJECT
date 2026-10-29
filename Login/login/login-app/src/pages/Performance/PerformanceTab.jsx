@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 import useAuthStore from '../../store/useAuthStore';
 import RunRecordList from '../../components/Performance/RunRecordList';
 import PerformanceSummary from '../../components/Performance/PerformanceSummary';
@@ -19,7 +20,7 @@ import { BarChart3, Users, User, PlusCircle } from 'lucide-react';
 const PerformanceTab = () => {
   const navigate = useNavigate();
   const isLogin = useAuthStore(state => state.isLogin);
-  const isLoading = useAuthStore(state => state.isLoading);
+  const hasAlerted = useRef(false);
 
   const [latestRecord, setLatestRecord] = useState(null);
   const [refreshKey, setRefreshKey] = useState(0);
@@ -27,13 +28,21 @@ const PerformanceTab = () => {
   const [socialFeed, setSocialFeed] = useState([]);
   const [feedLoading, setFeedLoading] = useState(false);
 
-  // 비로그인 접근 차단 (URL 직접 접근 방지)
+  // 비로그인 접근 차단 (URL 직접 접근 방지: 경고 알럿 표시 후 메인으로 리다이렉트)
   useEffect(() => {
-    if (isLoading) return;
-    if (!isLogin) {
-      navigate('/login', { replace: true });
+    if (!isLogin && !hasAlerted.current) {
+      hasAlerted.current = true;
+      Swal.fire({
+        icon: 'warning',
+        title: '로그인이 필요합니다',
+        text: '퍼포먼스 페이지는 로그인 후 이용 가능합니다.',
+        confirmButtonColor: 'var(--primary)',
+        confirmButtonText: '확인'
+      }).then(() => {
+        navigate('/', { replace: true });
+      });
     }
-  }, [isLoading, isLogin, navigate]);
+  }, [isLogin, navigate]);
 
   const refreshData = () => {
     setRefreshKey(prev => prev + 1);
@@ -97,7 +106,7 @@ const PerformanceTab = () => {
     gap: '8px'
   });
 
-  if (isLoading || !isLogin) {
+  if (!isLogin) {
     return null;
   }
 
@@ -106,7 +115,7 @@ const PerformanceTab = () => {
       <Helmet>
         <title>Dorunning | 퍼포먼스</title>
         <meta name="description" content="나의 누적 러닝 거리, 페이스, 소모 칼로리를 확인하고 체계적인 러닝 목표를 설정하세요. 당신의 성장을 차트로 한눈에 볼 수 있습니다." />
-        <link rel="canonical" href="https://dorunning.vercel.app/performance" />
+        <link rel="canonical" href="https://dorunning.app/performance" />
       </Helmet>
 
       <header className="performance-header">
