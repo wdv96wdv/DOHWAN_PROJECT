@@ -76,8 +76,6 @@ async function generateSitemap() {
     { url: '/boards', changefreq: 'daily', priority: 0.8 },
     { url: '/course', changefreq: 'weekly', priority: 0.8 },
     { url: '/event', changefreq: 'weekly', priority: 0.8 },
-    { url: '/performance', changefreq: 'weekly', priority: 0.8 },
-    { url: '/calendar', changefreq: 'weekly', priority: 0.7 },
     { url: '/about', changefreq: 'monthly', priority: 0.7 },
     { url: '/contact', changefreq: 'monthly', priority: 0.6 },
     { url: '/privacy', changefreq: 'monthly', priority: 0.3 },

@@ -5,6 +5,7 @@ import com.dohwan.login.entity.Goal;
 import com.dohwan.login.service.GoalService;
 import com.dohwan.login.common.ApiResponse;
 import com.dohwan.login.dto.CustomUser;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -25,11 +26,17 @@ public class GoalController {
     public ResponseEntity<ApiResponse<Goal>> saveGoal(
             @AuthenticationPrincipal CustomUser user,
             @RequestBody GoalDto dto) {
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.error(401, "로그인이 필요합니다."));
+        }
         return ResponseEntity.ok(ApiResponse.success(service.saveGoal(dto, user.getUserNo())));
     }
 
     @GetMapping
     public ResponseEntity<ApiResponse<List<Goal>>> getGoals(@AuthenticationPrincipal CustomUser user) {
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.error(401, "로그인이 필요합니다."));
+        }
         return ResponseEntity.ok(ApiResponse.success(service.getGoals(user.getUserNo())));
     }
 
@@ -38,6 +45,9 @@ public class GoalController {
             @AuthenticationPrincipal CustomUser user,
             @PathVariable Long id,
             @RequestBody GoalDto dto) {
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.error(401, "로그인이 필요합니다."));
+        }
         return ResponseEntity.ok(ApiResponse.success(service.updateGoal(id, dto, user.getUserNo())));
     }
 
@@ -45,6 +55,9 @@ public class GoalController {
     public ResponseEntity<ApiResponse<Void>> deleteGoal(
             @AuthenticationPrincipal CustomUser user,
             @PathVariable Long id) {
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.error(401, "로그인이 필요합니다."));
+        }
         service.deleteGoal(id, user.getUserNo());
         return ResponseEntity.ok(ApiResponse.success("목표가 삭제되었습니다."));
     }

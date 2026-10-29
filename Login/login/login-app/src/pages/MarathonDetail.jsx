@@ -360,8 +360,14 @@ const MarathonDetail = () => {
                         "offers": {
                             "@type": "Offer",
                             "url": marathon.link || window.location.href,
+                            "price": "0",
+                            "priceCurrency": "KRW",
                             "availability": hasRegClosed ? "https://schema.org/Discontinued" : "https://schema.org/InStock",
                             "validFrom": marathon.start_date
+                        },
+                        "performer": {
+                            "@type": "PerformingGroup",
+                            "name": "대회 참가자 및 러너"
                         },
                         "organizer": {
                             "@type": "Organization",

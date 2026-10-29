@@ -55,6 +55,10 @@ public class RecordController {
     // 소셜 피드: 전체 유저 기록 최신순 조회 (username 포함)
     @GetMapping("/feed")
     public ResponseEntity<ApiResponse<List<java.util.Map<String, Object>>>> getAllFeedRecords(@AuthenticationPrincipal CustomUser currentUser) {
+        if (currentUser == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(ApiResponse.error(401, "로그인이 필요합니다."));
+        }
         try {
             List<Object[]> rows = recordRepository.findAllFeedRecords();
             List<java.util.Map<String, Object>> result = rows.stream().map(row -> {

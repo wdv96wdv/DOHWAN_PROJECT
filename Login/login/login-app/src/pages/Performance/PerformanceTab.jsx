@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import useAuthStore from '../../store/useAuthStore';
 import RunRecordList from '../../components/Performance/RunRecordList';
 import PerformanceSummary from '../../components/Performance/PerformanceSummary';
 import RunTrendChart from '../../components/Performance/RunTrendChart';
@@ -16,11 +17,23 @@ import "../../assets/css/performance.css";
 import { BarChart3, Users, User, PlusCircle } from 'lucide-react';
 
 const PerformanceTab = () => {
+  const navigate = useNavigate();
+  const isLogin = useAuthStore(state => state.isLogin);
+  const isLoading = useAuthStore(state => state.isLoading);
+
   const [latestRecord, setLatestRecord] = useState(null);
   const [refreshKey, setRefreshKey] = useState(0);
   const [activeTab, setActiveTab] = useState('my'); // 'my' | 'feed'
   const [socialFeed, setSocialFeed] = useState([]);
   const [feedLoading, setFeedLoading] = useState(false);
+
+  // 비로그인 접근 차단 (URL 직접 접근 방지)
+  useEffect(() => {
+    if (isLoading) return;
+    if (!isLogin) {
+      navigate('/login', { replace: true });
+    }
+  }, [isLoading, isLogin, navigate]);
 
   const refreshData = () => {
     setRefreshKey(prev => prev + 1);
@@ -28,6 +41,7 @@ const PerformanceTab = () => {
 
   // 내 기록 최신화
   useEffect(() => {
+    if (!isLogin) return;
     getRunRecords()
       .then((res) => {
         const sorted = [...res.data].sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
@@ -36,11 +50,11 @@ const PerformanceTab = () => {
       .catch((err) => {
         console.error('Failed to fetch records:', err);
       });
-  }, [refreshKey]);
+  }, [refreshKey, isLogin]);
 
   // 전체 소셜 피드 데이터 로드 (records/feed 전용 API)
   useEffect(() => {
-    if (activeTab !== 'feed') return;
+    if (activeTab !== 'feed' || !isLogin) return;
     setFeedLoading(true);
     const token = localStorage.getItem('jwt');
     fetch(`${import.meta.env.VITE_API_BASE_URL}/records/feed`, {
@@ -66,7 +80,7 @@ const PerformanceTab = () => {
       })
       .catch(() => setSocialFeed([]))
       .finally(() => setFeedLoading(false));
-  }, [activeTab]);
+  }, [activeTab, isLogin]);
 
   const tabStyle = (tab) => ({
     padding: '10px 28px',
@@ -82,6 +96,10 @@ const PerformanceTab = () => {
     alignItems: 'center',
     gap: '8px'
   });
+
+  if (isLoading || !isLogin) {
+    return null;
+  }
 
   return (
     <div className="performance-page">

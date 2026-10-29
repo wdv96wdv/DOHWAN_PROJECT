@@ -15,7 +15,7 @@ const About = lazy(() => import('../pages/About'));
 const Privacy = lazy(() => import('../pages/Privacy'));
 const Contact = lazy(() => import('../pages/Contact'));
 const AdminContact = lazy(() => import("../pages/admin/AdminContact"));
-const Calendar = lazy(() => import('../pages/Calendar'));
+// const Calendar = lazy(() => import('../pages/Calendar')); // 현재 미사용으로 비활성화
 const Listpage = lazy(() => import('../pages/board/Listpage'));
 const Insertpage = lazy(() => import('../pages/board/Insertpage'));
 const Readpage = lazy(() => import('../pages/board/Readpage'));
@@ -37,7 +37,7 @@ const AppRouter = ({ theme }) => {
         <Route path="/user" element={<User />} />
         <Route path="/wishlist" element={<WishlistPage />} />
         <Route path="/admin" element={<AdminContact />} />
-        <Route path="/calendar" element={<Calendar />} />
+        {/* <Route path="/calendar" element={<Calendar />} /> */}
         <Route path="/marathon" element={<Marathon />} />
         <Route path="/marathon/:id" element={<MarathonDetail />} /> {/* 상세 페이지 추가 */}
         <Route path="/performance" element={<PerformanceTab />} />

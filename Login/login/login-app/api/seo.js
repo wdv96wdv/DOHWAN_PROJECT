@@ -188,6 +188,7 @@ function articleHtml(meta) {
 function eventJsonLd(meta) {
   if (!meta.eventName || !meta.raceDate) return '';
   const past = meta.raceDate < todayKst();
+  const regClosed = meta.endDate ? meta.endDate < todayKst() : past;
   const payload = {
     '@context': 'https://schema.org',
     '@type': 'Event',
@@ -208,6 +209,18 @@ function eventJsonLd(meta) {
     },
     image: meta.ogImage,
     url: meta.canonical,
+    offers: {
+      '@type': 'Offer',
+      url: meta.officialLink || meta.canonical,
+      price: '0',
+      priceCurrency: 'KRW',
+      availability: regClosed ? 'https://schema.org/Discontinued' : 'https://schema.org/InStock',
+      ...(meta.startDate ? { validFrom: meta.startDate } : {}),
+    },
+    performer: {
+      '@type': 'PerformingGroup',
+      name: '대회 참가자 및 러너',
+    },
     organizer: { '@type': 'Organization', name: '두러닝', url: SITE },
   };
   return `<script type="application/ld+json">${JSON.stringify(payload)}</script>`;
