@@ -18,3 +18,11 @@ alter table marathons enable row level security;
 -- 4) 관리자 계정 지정 (현재 ROLE_ADMIN 계정이 없습니다)
 --    '본인아이디'를 users.username 값으로 바꿔서 실행한 뒤, 사이트에서 로그아웃 후 다시 로그인하세요.
 -- insert into user_auth (username, auth) values ('본인아이디', 'ROLE_ADMIN');
+
+-- 5) 포스터 전용 Storage 버킷 (2026-11-02 Supabase에 이미 적용됨, 다시 실행해도 안전)
+--    - 공개 읽기, WebP만 허용, 파일당 2MB 제한
+--    - storage.objects에 이 버킷용 정책을 만들지 않았으므로 anon/authenticated는 업로드/삭제 불가.
+--      업로드와 삭제는 서비스 키(SUPABASE_SERVICE_KEY)를 가진 Spring 서버만 할 수 있습니다.
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values ('posters', 'posters', true, 2097152, array['image/webp'])
+on conflict (id) do nothing;

@@ -6,14 +6,14 @@ import '../../assets/css/auth.css';
 import '../../assets/css/admin-marathon.css';
 import Loading from '../../components/Common/Loading';
 import * as marathonApi from '../../apis/marathons';
-import { uploadFileToSupabase } from '../../apis/files';
+import { compressToWebp, formatBytes } from '../../utils/imageToWebp';
 
 const REGIONS = [
   '서울', '경기', '인천', '강원', '충북', '충남', '대전', '세종',
   '전북', '전남', '광주', '경북', '경남', '대구', '울산', '부산', '제주', '전국',
 ];
 const TYPES = ['Full', 'Half', '10Km', '5Km'];
-const MAX_POSTER_BYTES = 5 * 1024 * 1024; // 5MB
+const MAX_INPUT_BYTES = 20 * 1024 * 1024; // 원본은 20MB까지 (업로드 전에 WebP로 압축된다)
 
 const emptyForm = {
   title: '',
@@ -36,6 +36,9 @@ const AdminMarathon = () => {
   const [editingId, setEditingId] = useState(null);
   const [posterFile, setPosterFile] = useState(null);
   const [posterPreview, setPosterPreview] = useState('');
+  const [posterInfo, setPosterInfo] = useState('');
+  const [compressing, setCompressing] = useState(false);
+  const uploadedRef = useRef({ file: null, url: '' }); // 같은 파일을 다시 올리지 않기 위한 기록
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -88,10 +91,12 @@ const AdminMarathon = () => {
     setEditingId(null);
     setPosterFile(null);
     setPosterPreview('');
+    setPosterInfo('');
+    uploadedRef.current = { file: null, url: '' };
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
-  const handlePosterChange = (e) => {
+  const handlePosterChange = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
     if (!file.type.startsWith('image/')) {
@@ -99,17 +104,33 @@ const AdminMarathon = () => {
       e.target.value = '';
       return;
     }
-    if (file.size > MAX_POSTER_BYTES) {
-      Swal.fire('파일이 너무 큽니다', '포스터는 5MB 이하만 올릴 수 있습니다.', 'warning');
+    if (file.size > MAX_INPUT_BYTES) {
+      Swal.fire('파일이 너무 큽니다', '원본 이미지는 20MB 이하만 선택할 수 있습니다.', 'warning');
       e.target.value = '';
       return;
     }
-    setPosterFile(file);
+
+    try {
+      setCompressing(true);
+      const result = await compressToWebp(file);
+      setPosterFile(result.file);
+      setPosterInfo(
+        `WebP로 압축됨: ${formatBytes(result.originalSize)} → ${formatBytes(result.size)} (${result.width}×${result.height})`
+      );
+    } catch (err) {
+      console.error(err);
+      Swal.fire('이미지 처리 실패', err?.message || '이미지를 변환하지 못했습니다.', 'error');
+      e.target.value = '';
+    } finally {
+      setCompressing(false);
+    }
   };
 
   const clearPoster = () => {
     setPosterFile(null);
     setPosterPreview('');
+    setPosterInfo('');
+    uploadedRef.current = { file: null, url: '' };
     setField('poster_url', '');
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
@@ -144,8 +165,14 @@ const AdminMarathon = () => {
 
       let posterUrl = form.poster_url || '';
       if (posterFile) {
-        const { fileUrl } = await uploadFileToSupabase(posterFile, 'marathon-posters');
-        posterUrl = fileUrl;
+        if (uploadedRef.current.file === posterFile && uploadedRef.current.url) {
+          // 저장에 실패해서 다시 시도하는 경우: 이미 올린 파일을 재사용
+          posterUrl = uploadedRef.current.url;
+        } else {
+          const res = await marathonApi.uploadPoster(posterFile);
+          posterUrl = res.data.url;
+          uploadedRef.current = { file: posterFile, url: posterUrl };
+        }
       }
 
       const payload = {
@@ -193,6 +220,8 @@ const AdminMarathon = () => {
     });
     setPosterFile(null);
     setPosterPreview('');
+    setPosterInfo('');
+    uploadedRef.current = { file: null, url: '' };
     if (fileInputRef.current) fileInputRef.current.value = '';
     formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
@@ -360,15 +389,16 @@ const AdminMarathon = () => {
           </label>
 
           <div className="form-group am-span-2">
-            <label>포스터 (직접 업로드, 5MB 이하)</label>
+            <label>포스터 (올리면 자동으로 WebP로 압축돼요)</label>
             <div className="am-poster-row">
               <label className="am-upload-btn">
-                <ImagePlus size={16} /> 이미지 선택
+                <ImagePlus size={16} /> {compressing ? '압축 중...' : '이미지 선택'}
                 <input
                   ref={fileInputRef}
                   type="file"
                   accept="image/*"
                   onChange={handlePosterChange}
+                  disabled={compressing}
                   hidden
                 />
               </label>
@@ -385,10 +415,11 @@ const AdminMarathon = () => {
                 </>
               )}
             </div>
+            {posterInfo && <p className="am-hint" style={{ margin: '4px 0 0' }}>{posterInfo}</p>}
           </div>
 
           <div className="am-actions am-span-2">
-            <button type="submit" className="btn-auth" disabled={submitting}>
+            <button type="submit" className="btn-auth" disabled={submitting || compressing}>
               <Save size={16} style={{ marginRight: 8, verticalAlign: 'text-bottom' }} />
               {submitting ? '저장 중...' : editingId ? '수정 저장' : '등록하기'}
             </button>

@@ -13,3 +13,10 @@ export const adminUpdate = (id, payload) => api.put(`/admin/marathons/${id}`, pa
 
 // 삭제
 export const adminRemove = (id) => api.delete(`/admin/marathons/${id}`);
+
+// 포스터 업로드: WebP로 압축한 파일을 보내면 공개 URL({ url })을 돌려준다
+export const uploadPoster = (file) => {
+  const formData = new FormData();
+  formData.append('file', file);
+  return api.post('/admin/marathons/poster', formData, { timeout: 30000 });
+};

@@ -12,6 +12,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
@@ -32,6 +34,7 @@ public class MarathonService {
 
     private final RestTemplate restTemplate;
     private final MarathonRepository marathonRepository;
+    private final PosterStorageService posterStorage;
 
     @Value("${supabase.url}")
     private String supabaseUrl;
@@ -39,9 +42,11 @@ public class MarathonService {
     @Value("${supabase.key}")
     private String supabaseKey;
 
-    public MarathonService(RestTemplate restTemplate, MarathonRepository marathonRepository) {
+    public MarathonService(RestTemplate restTemplate, MarathonRepository marathonRepository,
+            PosterStorageService posterStorage) {
         this.restTemplate = restTemplate;
         this.marathonRepository = marathonRepository;
+        this.posterStorage = posterStorage;
     }
 
     // --- 1. 공개 조회 ---
@@ -158,19 +163,40 @@ public class MarathonService {
     public Marathon update(Long id, MarathonRequest req) {
         Marathon m = marathonRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 대회입니다. id=" + id));
+        String oldPoster = m.getPosterUrl();
         apply(m, req, id);
         Marathon saved = marathonRepository.save(m);
+        if (oldPoster != null && !oldPoster.equals(saved.getPosterUrl())) {
+            deleteFileAfterCommit(oldPoster); // 교체/제거된 포스터 파일 정리
+        }
         log.info(">>> [마라톤 수정] id={} title={}", saved.getId(), saved.getTitle());
         return saved;
     }
 
     @Transactional
     public void delete(Long id) {
-        if (!marathonRepository.existsById(id)) {
-            throw new IllegalArgumentException("존재하지 않는 대회입니다. id=" + id);
-        }
+        Marathon m = marathonRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 대회입니다. id=" + id));
+        String poster = m.getPosterUrl();
         marathonRepository.deleteById(id);
+        deleteFileAfterCommit(poster);
         log.info(">>> [마라톤 삭제] id={}", id);
+    }
+
+    /** DB 변경이 커밋된 뒤에만 Storage 파일을 지운다 (롤백됐는데 파일만 사라지는 것을 방지) */
+    private void deleteFileAfterCommit(String url) {
+        if (url == null)
+            return;
+        if (TransactionSynchronizationManager.isSynchronizationActive()) {
+            TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+                @Override
+                public void afterCommit() {
+                    posterStorage.deleteQuietly(url);
+                }
+            });
+        } else {
+            posterStorage.deleteQuietly(url);
+        }
     }
 
     /** 요청값 검증 후 엔티티에 반영. selfId는 수정 시 자기 자신을 중복 검사에서 제외하기 위한 값 */
@@ -228,9 +254,9 @@ public class MarathonService {
             throw new IllegalArgumentException("링크는 http:// 또는 https:// 로 시작해야 합니다.");
         }
 
-        // 포스터는 우리 Supabase Storage에 직접 올린 파일만 허용 (외부 이미지 URL 금지)
+        // 포스터는 우리 'posters' 버킷에 올린 파일만 허용 (외부 이미지 URL 금지)
         String posterUrl = trimToNull(req.getPosterUrl());
-        if (posterUrl != null && !posterUrl.startsWith(supabaseUrl + "/storage/v1/object/public/")) {
+        if (posterUrl != null && !posterStorage.isOwnPosterUrl(posterUrl)) {
             throw new IllegalArgumentException("포스터는 직접 업로드한 이미지만 사용할 수 있습니다.");
         }
 
