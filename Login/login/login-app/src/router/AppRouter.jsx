@@ -16,6 +16,7 @@ const About = lazy(() => import('../pages/About'));
 const Privacy = lazy(() => import('../pages/Privacy'));
 const Contact = lazy(() => import('../pages/Contact'));
 const AdminContact = lazy(() => import("../pages/admin/AdminContact"));
+const AdminMarathon = lazy(() => import("../pages/admin/AdminMarathon"));
 // const Calendar = lazy(() => import('../pages/Calendar')); // 현재 미사용으로 비활성화
 const Listpage = lazy(() => import('../pages/board/Listpage'));
 const Insertpage = lazy(() => import('../pages/board/Insertpage'));
@@ -40,6 +41,7 @@ const AppRouter = ({ theme }) => {
         <Route path="/user" element={<ProtectedRoute message="마이페이지는 로그인 후 이용 가능합니다."><User /></ProtectedRoute>} />
         <Route path="/wishlist" element={<ProtectedRoute message="위시리스트는 로그인 후 이용 가능합니다."><WishlistPage /></ProtectedRoute>} />
         <Route path="/admin" element={<ProtectedRoute adminOnly={true} message="관리자 권한이 필요합니다."><AdminContact /></ProtectedRoute>} />
+        <Route path="/admin/marathon" element={<ProtectedRoute adminOnly={true} message="관리자 권한이 필요합니다."><AdminMarathon /></ProtectedRoute>} />
         {/* <Route path="/calendar" element={<Calendar />} /> */}
         <Route path="/marathon" element={<Marathon />} />
         <Route path="/marathon/:id" element={<MarathonDetail />} /> {/* 상세 페이지 추가 */}

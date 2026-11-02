@@ -58,4 +58,9 @@ public class Marathon {
     @JsonProperty("poster_url")
     @Column(name = "poster_url")
     private String posterUrl;
+
+    // 등록 경로: legacy(과거 크롤링 데이터) / admin(관리자 직접 등록)
+    @JsonProperty("source_type")
+    @Column(name = "source_type")
+    private String sourceType;
 }

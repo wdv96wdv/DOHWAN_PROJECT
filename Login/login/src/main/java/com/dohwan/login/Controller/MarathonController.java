@@ -25,12 +25,6 @@ public class MarathonController {
         return ResponseEntity.ok("pong");
     }
 
-    @GetMapping("/crawl")
-    public ResponseEntity<String> triggerCrawl() {
-        marathonService.crawlMarathonData();
-        return ResponseEntity.ok("크롤링 완료");
-    }
-
     @GetMapping
     public ResponseEntity<List<Marathon>> getAllMarathons() {
         log.info(">>> [GET] /marathons - 마라톤 목록 조회 요청");

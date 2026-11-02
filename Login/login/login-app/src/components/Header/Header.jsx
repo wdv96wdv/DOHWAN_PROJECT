@@ -14,6 +14,7 @@ import {
   Gift,
   MessageSquare,
   ShieldCheck,
+  CalendarPlus,
   User,
   LogOut,
   LogIn,
@@ -44,6 +45,7 @@ const Header = ({ theme, toggleTheme }) => {
       <li><Link to="/performance" onClick={closeMenu}><TrendingUp size={20} /><span>퍼포먼스</span></Link></li>
       <li><Link to="/event" onClick={closeMenu}><Gift size={20} /><span>챌린지</span></Link></li>
       <li><Link to="/boards" onClick={closeMenu}><MessageSquare size={20} /><span>커뮤니티</span></Link></li>
+      {isAdmin && <li><Link to="/admin/marathon" onClick={closeMenu}><CalendarPlus size={20} /><span>마라톤 등록</span></Link></li>}
       {isAdmin && <li><Link to="/admin" onClick={closeMenu}><ShieldCheck size={20} /><span>관리자</span></Link></li>}
     </ul>
   );
