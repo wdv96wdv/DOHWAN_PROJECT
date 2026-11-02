@@ -70,14 +70,25 @@ public class SecurityConfig {
 
 		// 요청 권한 설정
 		http.authorizeHttpRequests(auth -> auth
-				.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // ✅ preflight 허용
-				.requestMatchers("/login", "/users", "/join", "/contact", "/", "/boards/**").permitAll()
+				.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+				// 인증 없이 허용
+				.requestMatchers("/login", "/join", "/contact", "/",
+						"/manifest.json", "/error",
+						"/auth/check-username", "/auth/social-login", "/auth/kakao-login")
+				.permitAll()
+				.requestMatchers(HttpMethod.POST, "/users").permitAll() // 회원가입만 공개
+				.requestMatchers(HttpMethod.GET, "/records/stats").permitAll()
+				.requestMatchers(HttpMethod.GET, "/boards/**", "/marathons/**", "/api/marathons/**").permitAll()
+
+				// 인증 필요
 				.requestMatchers("/api/wishlist/**").authenticated()
 				.requestMatchers("/admin/**").hasRole("ADMIN")
-				.requestMatchers("/manifest.json", "/auth/check-username", "/auth/social-login", "/auth/kakao-login")
-				.permitAll()
-				.requestMatchers("/error", "/marathons/**", "/api/marathons/**").permitAll()
 				.requestMatchers("/records/**", "/run/**").authenticated()
+
+				// 마라톤 등록·수정·삭제는 관리자만 (실제 사용 방식에 맞게 조정)
+				.requestMatchers(HttpMethod.POST, "/marathons/**", "/api/marathons/**").hasRole("ADMIN")
+				.requestMatchers(HttpMethod.PUT, "/marathons/**", "/api/marathons/**").hasRole("ADMIN")
+				.requestMatchers(HttpMethod.DELETE, "/marathons/**", "/api/marathons/**").hasRole("ADMIN")
 
 				.anyRequest().authenticated())
 				.exceptionHandling(exception -> exception
