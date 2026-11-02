@@ -174,7 +174,6 @@ export default function MarathonRegister() {
         link: validLink,
         is_first_come: form.isFirstCome,
         poster_url: finalPosterUrl || null,
-        source: 'manual', // 직접 등록한 데이터 표시
       };
 
       const { data, error } = await supabase

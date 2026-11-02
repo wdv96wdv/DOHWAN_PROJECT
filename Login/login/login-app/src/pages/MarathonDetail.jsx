@@ -60,9 +60,7 @@ const MarathonDetail = () => {
     useEffect(() => {
         window.scrollTo(0, 0);
         const fetchDetail = async () => {
-            setError('대회 정보 데이터베이스 개편 및 점검이 진행 중입니다.');
-            setLoading(false);
-            return;
+            try {
                 setError(null);
 
                 // 1순위: Supabase REST API 직접 조회 (초고속 로딩, 콜드스타트 없음)
