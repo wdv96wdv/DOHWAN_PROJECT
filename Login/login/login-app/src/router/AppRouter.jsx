@@ -23,6 +23,7 @@ const Readpage = lazy(() => import('../pages/board/Readpage'));
 const Updatepage = lazy(() => import('../pages/board/Updatepage'));
 const Marathon = lazy(() => import('../pages/Marathon'));
 const MarathonDetail = lazy(() => import('../pages/MarathonDetail')); // 추가
+const MarathonRegister = lazy(() => import('../pages/MarathonRegister')); // 마라톤 신규 등록
 const PerformanceTab = lazy(() => import('../pages/Performance/PerformanceTab'));
 const WishlistPage = lazy(() => import('../pages/WishlistPage'));
 const GuideList = lazy(() => import('../pages/Guide/GuideList'));
@@ -42,6 +43,7 @@ const AppRouter = ({ theme }) => {
         <Route path="/admin" element={<ProtectedRoute adminOnly={true} message="관리자 권한이 필요합니다."><AdminContact /></ProtectedRoute>} />
         {/* <Route path="/calendar" element={<Calendar />} /> */}
         <Route path="/marathon" element={<Marathon />} />
+        <Route path="/marathon/register" element={<MarathonRegister />} />
         <Route path="/marathon/:id" element={<MarathonDetail />} /> {/* 상세 페이지 추가 */}
         <Route path="/guide" element={<GuideList />} />
         <Route path="/guide/:id" element={<GuideDetail />} />

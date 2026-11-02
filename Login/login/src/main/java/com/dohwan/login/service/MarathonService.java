@@ -45,194 +45,35 @@ public class MarathonService {
         this.marathonRepository = marathonRepository;
     }
 
-    // --- 1. 데이터 조회 ---
+    // --- 1. 데이터 조회 (임시 비활성화: 신규 공식 데이터 수집 파이프라인 개편 준비) ---
     public List<Marathon> findAllMarathons() {
-        LocalDate today = LocalDate.now();
-        try {
-            // JPA로 오늘 이후 대회만 오름차순 조회 (과거 종료 대회 제외)
-            List<Marathon> list = marathonRepository.findByRaceDateGreaterThanEqualOrderByRaceDateAsc(today);
-            if (list != null && !list.isEmpty()) {
-                log.info(">>> [JPA 조회 성공] 오늘({}) 이후 대회: {}개", today, list.size());
-                return list;
-            }
-            log.warn(">>> [JPA 조회 결과 없음] 오늘 이후 대회 0개");
-        } catch (Exception e) {
-            log.warn(">>> [JPA 조회 실패, Supabase REST 폴백 시도] : {}", e.getMessage());
-        }
-
-        // 폴백: Supabase REST API 조회 (날짜 필터 + 페이지네이션으로 1000개 제한 우회)
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("apikey", supabaseKey);
-        headers.set("Authorization", "Bearer " + supabaseKey);
-        HttpEntity<String> entity = new HttpEntity<>(headers);
-
-        List<Marathon> allResults = new ArrayList<>();
-        int pageSize = 1000;
-        int offset = 0;
-
-        try {
-            while (true) {
-                String url = supabaseUrl + "/rest/v1/marathons?select=*"
-                    + "&race_date=gte." + today
-                    + "&order=race_date.asc"
-                    + "&limit=" + pageSize
-                    + "&offset=" + offset;
-
-                ResponseEntity<List<Marathon>> response = restTemplate.exchange(
-                    url,
-                    HttpMethod.GET,
-                    entity,
-                    new org.springframework.core.ParameterizedTypeReference<List<Marathon>>() {}
-                );
-
-                List<Marathon> page = (response != null) ? response.getBody() : null;
-                if (page == null || page.isEmpty()) break;
-
-                allResults.addAll(page);
-                if (page.size() < pageSize) break;
-                offset += pageSize;
-            }
-            log.info(">>> [Supabase REST 폴백] 오늘 이후 대회: {}개", allResults.size());
-            return allResults;
-        } catch (Exception e) {
-            log.error(">>> [조회 실패] : {}", e.getMessage());
-            return Collections.emptyList();
-        }
+        log.info(">>> [안내] 마라톤 데이터베이스 개편 작업 중으로 목록 조회가 임시 비활성화(숨김)되었습니다.");
+        return Collections.emptyList();
     }
 
     public Optional<Marathon> findMarathonById(Long id) {
-        try {
-            Optional<Marathon> direct = marathonRepository.findById(id);
-            if (direct.isPresent()) {
-                return direct;
-            }
-        } catch (Exception e) {
-            log.warn(">>> [JPA 단건 조회 실패, REST 시도] : {}", e.getMessage());
-        }
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("apikey", supabaseKey);
-        headers.set("Authorization", "Bearer " + supabaseKey);
-        HttpEntity<String> entity = new HttpEntity<>(headers);
-
-        try {
-            String url = supabaseUrl + "/rest/v1/marathons?id=eq." + id + "&select=*";
-
-            ResponseEntity<List<Marathon>> response = restTemplate.exchange(
-                url,
-                HttpMethod.GET,
-                entity,
-                new org.springframework.core.ParameterizedTypeReference<List<Marathon>>() {}
-            );
-            List<Marathon> body = (response != null) ? response.getBody() : null;
-            if (body == null || body.isEmpty()) {
-                return Optional.empty();
-            }
-
-            Marathon single = body.get(0);
-            return Optional.ofNullable(single);
-        } catch (Exception e) {
-            log.error(">>> [단건 조회 실패] : {}", e.getMessage());
-            return Optional.empty();
-        }
+        log.info(">>> [안내] 마라톤 데이터베이스 개편 작업 중으로 상세 조회가 임시 비활성화(숨김)되었습니다.");
+        return Optional.empty();
     }
 
-    // --- 2. 데이터 수집 (사이트맵 + 상세페이지 정밀 JSON 파싱) ---
-    @Scheduled(cron = "0 0 3 * * *") // 매일 새벽 3시에 실행
+    // --- 신규 마라톤 직접 등록 (자체 서비스 파이프라인) ---
+    public Marathon registerMarathon(Marathon marathon) {
+        Marathon saved = marathonRepository.save(marathon);
+        log.info(">>> [신규 마라톤 등록 성공] ID: {}, Title: {}", saved.getId(), saved.getTitle());
+        return saved;
+    }
+
+    // --- 2. 데이터 수집 (크롤링 전면 중단/비활성화 처리) ---
+    // 외부 마라톤 사이트(마라톤go 등) 크롤링이 즉각 중단되었습니다.
+    // @Scheduled(cron = "0 0 3 * * *")
     public void crawlMarathonData() {
-        log.info(">>> [정밀 수집 시작] 마라톤GO 데이터 크롤링...");
-        Set<String> allDetailUrls = new LinkedHashSet<>();
-
-        // 1. 현재 메인/일정 페이지의 최신 등록 대회 수집
-        try {
-            String baseUrl = "https://marathongo.co.kr/raceSchedule/domestic";
-            Document listDoc = Jsoup.connect(baseUrl)
-                    .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
-                    .timeout(30000).get();
-
-            Elements links = listDoc.select("a[href*=/raceDetail/]");
-            for (Element el : links) {
-                String href = el.attr("abs:href");
-                if (href != null && !href.isEmpty()) {
-                    allDetailUrls.add(href);
-                }
-            }
-            log.info(">>> 메인 일정 페이지 수집 URL: {}개", allDetailUrls.size());
-        } catch (Exception e) {
-            log.warn(">>> [메인 일정 수집 실패] : {}", e.getMessage());
-        }
-
-        // 2. 사이트맵(sitemap.xml)에서 전체 국내 마라톤 대회 URL 추가 수집 (누락 방지)
-        try {
-            String sitemapUrl = "https://marathongo.co.kr/sitemap.xml";
-            Document sitemapDoc = Jsoup.connect(sitemapUrl)
-                    .parser(org.jsoup.parser.Parser.xmlParser())
-                    .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
-                    .timeout(30000).get();
-
-            Elements locs = sitemapDoc.select("loc");
-            int sitemapCount = 0;
-            for (Element loc : locs) {
-                String u = loc.text().trim();
-                if (u.contains("/raceDetail/domestic/")) {
-                    // 과거 오래된 연도(2021~2024년 이전)는 제외하여 현재/다가오는 대회 위주로 집중 수집
-                    boolean isOld = u.contains("2021") || u.contains("2022") || u.contains("2023") || u.contains("2024");
-                    if (!isOld) {
-                        allDetailUrls.add(u);
-                        sitemapCount++;
-                    }
-                }
-            }
-            log.info(">>> 사이트맵 추가 URL: {}개 (총 대상 URL: {}개)", sitemapCount, allDetailUrls.size());
-        } catch (Exception e) {
-            log.warn(">>> [사이트맵 수집 실패] : {}", e.getMessage());
-        }
-
-        if (allDetailUrls.isEmpty()) {
-            log.warn(">>> 수집 대상 URL이 없습니다.");
-            return;
-        }
-
-        try {
-            List<CompletableFuture<Void>> futures = allDetailUrls.stream()
-                    .map(url -> CompletableFuture.runAsync(() -> processDetailPage(url), executor))
-                    .collect(Collectors.toList());
-
-            CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
-            log.info(">>> [정밀 수집 완료] 총 {}개 대회 처리됨", allDetailUrls.size());
-        } catch (Exception e) {
-            log.error(">>> [크롤링 대기 중 에러] : {}", e.getMessage());
-        }
+        log.warn(">>> [알림] 마라톤 외부 사이트 크롤링 기능이 중단(비활성화)되었습니다. 아무 동작도 수행하지 않습니다.");
     }
 
-    // 상세 페이지 개별 처리 로직
+    // 상세 페이지 개별 처리 로직 (중단)
     private void processDetailPage(String detailUrl) {
-        try {
-            Document detailDoc = Jsoup.connect(detailUrl)
-                    .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
-                    .timeout(15000).get();
-
-            // 1순위: 마라톤GO의 Next.js 원본 정밀 데이터(__NEXT_DATA__) 추출
-            Element nextDataEl = detailDoc.selectFirst("script#__NEXT_DATA__");
-            if (nextDataEl != null && !nextDataEl.data().isEmpty()) {
-                try {
-                    JsonNode rootNode = objectMapper.readTree(nextDataEl.data());
-                    JsonNode raceDetail = rootNode.path("props").path("pageProps").path("raceDetail");
-                    if (raceDetail != null && !raceDetail.isMissingNode() && !raceDetail.isNull()) {
-                        processFromRaceDetailJson(raceDetail, detailDoc, detailUrl);
-                        return;
-                    }
-                } catch (Exception ex) {
-                    log.warn(">>> [__NEXT_DATA__ JSON 파싱 실패, HTML 파서 폴백] {} : {}", detailUrl, ex.getMessage());
-                }
-            }
-
-            // 2순위 폴백: JSON이 없을 경우 HTML 직접 파싱
-            processFromHtml(detailDoc, detailUrl);
-
-        } catch (Exception e) {
-            log.warn(">>> [상세 분석 실패] {} : {}", detailUrl, e.getMessage());
-        }
+        // 크롤링 중단으로 인한 비활성화
+        return;
     }
 
     // __NEXT_DATA__ 내부의 정확한 raceDetail JSON 객체 파싱

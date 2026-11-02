@@ -19,7 +19,8 @@ import {
   LogIn,
   UserPlus,
   Info,
-  UserCircle
+  UserCircle,
+  CalendarPlus
 } from 'lucide-react';
 
 const Header = ({ theme, toggleTheme }) => {
@@ -40,6 +41,7 @@ const Header = ({ theme, toggleTheme }) => {
       <li><Link to="/course" onClick={closeMenu}><Map size={20} /><span>코스</span></Link></li>
       <li><Link to="/record" onClick={closeMenu}><Activity size={20} /><span>기록</span></Link></li>
       <li><Link to="/marathon" onClick={closeMenu}><Trophy size={20} /><span>마라톤 일정</span></Link></li>
+      <li><Link to="/marathon/register" onClick={closeMenu}><CalendarPlus size={20} /><span>마라톤 등록</span></Link></li>
       <li><Link to="/guide" onClick={closeMenu}><BookOpen size={20} /><span>가이드</span></Link></li>
       <li><Link to="/performance" onClick={closeMenu}><TrendingUp size={20} /><span>퍼포먼스</span></Link></li>
       <li><Link to="/event" onClick={closeMenu}><Gift size={20} /><span>챌린지</span></Link></li>

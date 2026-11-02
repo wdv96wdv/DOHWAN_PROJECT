@@ -27,8 +27,8 @@ public class MarathonController {
 
     @GetMapping("/crawl")
     public ResponseEntity<String> triggerCrawl() {
-        marathonService.crawlMarathonData();
-        return ResponseEntity.ok("크롤링 완료");
+        log.warn(">>> [크롤링 요청 거부] 외부 사이트 크롤링이 중단되었습니다.");
+        return ResponseEntity.ok("크롤링 기능이 중단되었습니다.");
     }
 
     @GetMapping
@@ -36,6 +36,13 @@ public class MarathonController {
         log.info(">>> [GET] /marathons - 마라톤 목록 조회 요청");
         List<Marathon> marathons = marathonService.findAllMarathons();
         return ResponseEntity.ok(marathons);
+    }
+
+    @PostMapping
+    public ResponseEntity<Marathon> registerMarathon(@RequestBody Marathon marathon) {
+        log.info(">>> [POST] /marathons - 마라톤 신규 등록 요청: {}", marathon.getTitle());
+        Marathon saved = marathonService.registerMarathon(marathon);
+        return ResponseEntity.ok(saved);
     }
 
     @GetMapping("/{id}")

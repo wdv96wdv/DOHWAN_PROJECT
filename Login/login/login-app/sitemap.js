@@ -19,6 +19,7 @@ const ROBOTS_DISALLOW = new Set([
   '/wishlist',
   '/record',
   '/admin',
+  '/marathon/register',
   '/boards/insert',
   '/recommend',
   '/recommend/result',
@@ -49,22 +50,27 @@ function daysAgoKst(days) {
 }
 
 async function fetchAllRows(table, columns) {
-  const pageSize = 1000;
-  const all = [];
-  for (let from = 0; ; from += pageSize) {
-    const { data, error } = await supabase
-      .from(table)
-      .select(columns)
-      .range(from, from + pageSize - 1);
-    if (error) {
-      console.warn(`${table} fetch warning:`, error.message);
-      break;
+  try {
+    const pageSize = 1000;
+    const all = [];
+    for (let from = 0; ; from += pageSize) {
+      const { data, error } = await supabase
+        .from(table)
+        .select(columns)
+        .range(from, from + pageSize - 1);
+      if (error) {
+        console.warn(`${table} fetch warning:`, error.message);
+        break;
+      }
+      if (!data?.length) break;
+      all.push(...data);
+      if (data.length < pageSize) break;
     }
-    if (!data?.length) break;
-    all.push(...data);
-    if (data.length < pageSize) break;
+    return all;
+  } catch (err) {
+    console.warn(`${table} fetch caught:`, err?.message || err);
+    return [];
   }
-  return all;
 }
 
 async function generateSitemap() {
@@ -83,8 +89,8 @@ async function generateSitemap() {
     { url: '/privacy', changefreq: 'monthly', priority: 0.3 },
   ].filter(l => !isDisallowed(l.url));
 
-  // 1. 마라톤 데이터
-  // 종료된 지 오래된 대회는 사이트맵에서 빼서 크롤 예산을 예정/최근 대회에 집중
+  // 1. 마라톤 데이터 (신규 데이터 수집 및 개편 작업 진행 중으로 사이트맵에서 임시 제외)
+  /*
   const marathons = await fetchAllRows('marathons', 'id, created_at, race_date, poster_url');
   const today = todayKst();
   const keepAfter = daysAgoKst(60); // 종료 후 2달(60일)까지 사이트맵 유지
@@ -105,6 +111,8 @@ async function generateSitemap() {
       img: m.poster_url ? [{ url: m.poster_url }] : undefined,
     };
   });
+  */
+  const marathonLinks = [];
 
   // 2. 게시판 데이터
   const boards = await fetchAllRows('boards', 'id, created_at');

@@ -3,12 +3,12 @@ import { Link } from "react-router-dom";
 import { Helmet } from 'react-helmet-async';
 import "../assets/css/marathon.css";
 import "../assets/css/auth.css";
-import { 
-    Search, 
-    MapPin, 
-    Calendar, 
-    Footprints, 
-    RotateCcw, 
+import {
+    Search,
+    MapPin,
+    Calendar,
+    Footprints,
+    RotateCcw,
     Award,
     ChevronLeft,
     ChevronRight,
@@ -44,21 +44,28 @@ export default function MarathonList() {
     const SUPABASE_URL = 'https://ismclnqslxnlsfmqjytc.supabase.co';
     const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || 'sb_publishable_RWdFyo-SAjkjsNnQJC2JBw_jbX6bdXd';
 
-    // --- 1. Supabase 직접 호출 (종료 2달 이내 및 향후 대회, 페이지네이션) ---
-    useEffect(() => {
-        setLoading(true);
+    // Fisher-Yates 셔플 (페이지 진입 시 1회 랜덤 정렬)
+    const shuffleArray = (arr) => {
+        const a = [...arr];
+        for (let i = a.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [a[i], a[j]] = [a[j], a[i]];
+        }
+        return a;
+    };
 
+    // --- 1. Supabase 직접 호출 (종료 2달 이내 및 향후 대회) ---
+    useEffect(() => {
         const twoMonthsAgo = getTwoMonthsAgoKstStr();
 
-        const pageSize = 1000;
+        const fetchSize = 1000;
         let allData = [];
 
         const fetchPage = (offset) => {
             const url = `${SUPABASE_URL}/rest/v1/marathons`
                 + `?select=id,title,location,race_date,start_date,end_date,type,link,is_first_come,poster_url`
                 + `&race_date=gte.${twoMonthsAgo}`
-                + `&order=race_date.asc`
-                + `&limit=${pageSize}&offset=${offset}`;
+                + `&limit=${fetchSize}&offset=${offset}`;
 
             return fetch(url, {
                 headers: {
@@ -66,23 +73,24 @@ export default function MarathonList() {
                     'Authorization': `Bearer ${SUPABASE_KEY}`,
                 },
             })
-            .then(res => {
-                if (!res.ok) throw new Error(`Supabase error: ${res.status}`);
-                return res.json();
-            })
-            .then(page => {
-                allData = allData.concat(page);
-                if (page.length === pageSize) return fetchPage(offset + pageSize);
-                return allData;
-            });
+                .then(res => {
+                    if (!res.ok) throw new Error(`Supabase error: ${res.status}`);
+                    return res.json();
+                })
+                .then(page => {
+                    allData = allData.concat(page);
+                    if (page.length === fetchSize) return fetchPage(offset + fetchSize);
+                    return allData;
+                });
         };
 
         fetchPage(0)
             .then(data => {
-                setMarathons(data.map(normalizeMarathon));
+                // 랜덤 셔플 적용 — 페이지 새로고침 시마다 순서가 바뀜
+                setMarathons(shuffleArray(data.map(normalizeMarathon)));
             })
             .catch(err => {
-                console.error("데이터 로드 실패:", err);
+                console.error('데이터 로드 실패:', err);
             })
             .finally(() => {
                 setLoading(false);
@@ -240,7 +248,7 @@ export default function MarathonList() {
                         <RotateCcw size={14} /> 초기화
                     </button>
                 </div>
-                
+
                 <div className="status-row" style={{ marginTop: '12px', flexWrap: 'wrap' }}>
                     <span style={{ fontSize: '0.9rem', color: 'var(--text-muted)', marginRight: '8px' }}>지역:</span>
                     {regionOptions.map(r => (
@@ -287,6 +295,28 @@ export default function MarathonList() {
                     Array.from({ length: 8 }).map((_, i) => (
                         <Skeleton key={i} type="card" />
                     ))
+                ) : paginatedList.length === 0 ? (
+                    <div className="glass-card" style={{ gridColumn: '1 / -1', padding: '60px 24px', textAlign: 'center', margin: '20px 0' }}>
+                        <h2 style={{ fontSize: '1.4rem', fontWeight: 700, marginBottom: '12px', color: 'var(--text-main)' }}>
+                            2026 전국 마라톤 대회 데이터베이스 정비 안내
+                        </h2>
+                        <p style={{ color: 'var(--text-muted)', lineHeight: '1.8', maxWidth: '600px', margin: '0 auto 24px auto', fontSize: '1rem' }}>
+                            더욱 정확하고 신뢰할 수 있는 공식 마라톤 대회 정보를 제공하기 위해<br />
+                            데이터 파이프라인 및 제휴 검증 개편 작업이 진행되고 있습니다.<br />
+                            새롭게 정돈된 2026/2027 대회 일정으로 곧 업데이트될 예정입니다.
+                        </p>
+                        <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
+                            <Link to="/marathon/register" className="btn-primary" style={{ padding: '10px 22px', borderRadius: '8px', textDecoration: 'none', background: '#10b981' }}>
+                                + 새 마라톤 일정 직접 등록하기
+                            </Link>
+                            <Link to="/guide" className="btn-secondary" style={{ padding: '10px 22px', borderRadius: '8px', textDecoration: 'none' }}>
+                                러닝 가이드 & 훈련 팁 보기
+                            </Link>
+                            <Link to="/course" className="btn-secondary" style={{ padding: '10px 22px', borderRadius: '8px', textDecoration: 'none' }}>
+                                전국 러닝 코스 둘러보기
+                            </Link>
+                        </div>
+                    </div>
                 ) : (
                     paginatedList.map(m => (
                         <Link

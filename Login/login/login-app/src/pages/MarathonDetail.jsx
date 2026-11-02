@@ -60,8 +60,9 @@ const MarathonDetail = () => {
     useEffect(() => {
         window.scrollTo(0, 0);
         const fetchDetail = async () => {
-            try {
-                setLoading(true);
+            setError('대회 정보 데이터베이스 개편 및 점검이 진행 중입니다.');
+            setLoading(false);
+            return;
                 setError(null);
 
                 // 1순위: Supabase REST API 직접 조회 (초고속 로딩, 콜드스타트 없음)
@@ -270,17 +271,25 @@ const MarathonDetail = () => {
         return (
             <div className="marathon-detail-container">
                 <Helmet>
-                    <title>대회 정보를 찾을 수 없습니다 | 두러닝</title>
+                    <title>대회 정보 업데이트 안내 | 두러닝</title>
                 </Helmet>
                 <div style={{ textAlign: 'center', padding: '100px 0' }}>
-                    <AlertCircle size={48} style={{ color: '#ef4444', margin: '0 auto 16px' }} />
-                    <h2 style={{ fontSize: '1.5rem', marginBottom: '8px' }}>대회 정보를 찾을 수 없습니다</h2>
-                    <p style={{ color: 'var(--text-muted)', marginBottom: '24px' }}>
-                        존재하지 않거나 삭제된 대회 일정입니다.
+                    <div style={{ fontSize: '3rem', marginBottom: '16px' }}>🏃‍♂️✨</div>
+                    <h2 style={{ fontSize: '1.5rem', marginBottom: '12px', fontWeight: 700, color: 'var(--text-main)' }}>
+                        마라톤 대회 정보 정비 및 업데이트 안내
+                    </h2>
+                    <p style={{ color: 'var(--text-muted)', marginBottom: '28px', lineHeight: '1.8', maxWidth: '540px', margin: '0 auto 28px' }}>
+                        더욱 정확하고 신뢰할 수 있는 공식 마라톤 대회 정보를 제공하기 위해<br />
+                        데이터베이스 개편 작업이 진행되고 있습니다. 곧 새로운 일정으로 찾아뵙겠습니다.
                     </p>
-                    <button className="cta-btn-primary" onClick={() => navigate('/marathon')}>
-                        마라톤 전체 목록으로 가기
-                    </button>
+                    <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
+                        <button className="cta-btn-primary" onClick={() => navigate('/guide')}>
+                            러닝 가이드 팁 보기
+                        </button>
+                        <button className="cta-btn-secondary" onClick={() => navigate('/')}>
+                            홈으로 가기
+                        </button>
+                    </div>
                 </div>
             </div>
         );

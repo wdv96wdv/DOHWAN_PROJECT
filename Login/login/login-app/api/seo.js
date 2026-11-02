@@ -62,17 +62,8 @@ function todayKst() {
 }
 
 async function fetchMarathon(id) {
-  const url = `${SUPABASE_URL}/rest/v1/marathons?id=eq.${encodeURIComponent(id)}&select=id,title,location,race_date,start_date,end_date,type,poster_url,link`;
-  const res = await fetch(url, {
-    headers: {
-      apikey: SUPABASE_KEY,
-      Authorization: `Bearer ${SUPABASE_KEY}`,
-      Accept: 'application/json',
-    },
-  });
-  if (!res.ok) return null;
-  const rows = await res.json();
-  return Array.isArray(rows) && rows[0] ? rows[0] : null;
+  // 마라톤 DB 점검 및 개편 작업으로 외부 Supabase 조회 일시 중단
+  return null;
 }
 
 function typeLabel(type) {
@@ -116,55 +107,19 @@ async function resolveMeta(pathname) {
     if (!m) {
       return {
         notFound: true,
-        title: '페이지를 찾을 수 없습니다 | 두러닝',
-        description: '요청하신 마라톤 대회 정보를 찾을 수 없습니다.',
-        ogTitle: '페이지를 찾을 수 없습니다 | 두러닝',
-        ogDescription: '요청하신 마라톤 대회 정보를 찾을 수 없습니다.',
+        title: '대회 정보 준비 중 | 두러닝',
+        description: '현재 신규 마라톤 데이터 개편 작업이 진행 중입니다.',
+        ogTitle: '대회 정보 준비 중 | 두러닝',
+        ogDescription: '현재 신규 마라톤 데이터 개편 작업이 진행 중입니다.',
         ogImage: DEFAULT_OG_IMAGE,
         canonical: `${SITE}/marathon`,
-        h1: '페이지를 찾을 수 없습니다',
+        h1: '대회 정보 준비 중',
       };
     }
-    const types = typeLabel(m.type);
-    const title = `${m.title} 일정·접수·코스 정보 (공식링크) | 두러닝`;
-
-    const descItems = [];
-    if (m.race_date) descItems.push(`개최일: ${m.race_date}`);
-    if (m.start_date || m.end_date) {
-      const regPeriod = [m.start_date, m.end_date].filter(Boolean).join(' ~ ');
-      descItems.push(`접수: ${regPeriod}`);
-    }
-    if (m.location) descItems.push(`장소: ${m.location}`);
-    if (types) descItems.push(`종목: ${types}`);
-
-    const descDetail = descItems.length ? `[${descItems.join(' | ')}] ` : '';
-    const description = `${descDetail}${m.title} 마라톤 상세 정보. 일정, 접수 방법, 코스 안내 및 공식 참가신청 링크를 두러닝에서 확인하세요.`;
-
-    const ogDescription = descItems.length
-      ? descItems.join(' · ')
-      : `${m.title} 대회 일정 및 공식 신청 안내`;
-
-    return {
-      title,
-      description,
-      ogTitle: title,
-      ogDescription,
-      ogImage: m.poster_url || DEFAULT_OG_IMAGE,
-      canonical,
-      h1: m.title || '마라톤 상세',
-      eventName: m.title,
-      raceDate: m.race_date,
-      startDate: m.start_date,
-      endDate: m.end_date,
-      location: m.location,
-      types,
-      officialLink: m.link,
-    };
   }
 
   const guideMatch = pathname.match(/^\/guide\/([^/]+)\/?$/);
   if (guideMatch) {
-    const gid = guideMatch[1];
     return {
       title: '러닝 가이드 & 마라톤 훈련 팁 매거진 | 두러닝',
       description: '런린이 10K 완주 훈련 플랜, 러닝화 추천 가이드, 마라톤 카보로딩 식단, 에너지젤 섭취법, 부상 예방까지 러너를 위한 전문 정보를 만나보세요.',
@@ -191,96 +146,15 @@ async function resolveMeta(pathname) {
 }
 
 function articleHtml(meta) {
-  const rows = [];
-  if (meta.raceDate) rows.push(`<li>개최일: ${escapeHtml(meta.raceDate)}</li>`);
-  if (meta.location) rows.push(`<li>장소: ${escapeHtml(meta.location)}</li>`);
-  if (meta.types) rows.push(`<li>종목: ${escapeHtml(meta.types)}</li>`);
-  const official = meta.officialLink
-    ? `<p><a href="${escapeAttr(meta.officialLink)}">공식 접수/안내 페이지</a></p>`
-    : '';
   return `<article data-seo-prerender="1" class="seo-bot-summary" style="max-width: 800px; margin: 32px auto; padding: 24px; font-family: sans-serif; line-height: 1.8; color: #1e293b;">
     <h1>${escapeHtml(meta.h1 || meta.title)}</h1>
     <p>${escapeHtml(meta.description)}</p>
-    ${rows.length ? `<ul>${rows.join('')}</ul>` : ''}
-    ${official}
     <h2>러너를 위한 코스 공략 & 페이스 가이드</h2>
     <p>성공적인 완주를 위해 초반 5km 구간에서는 주변 분위기에 휩쓸려 오버페이스를 하지 않도록 목표 페이스보다 10~15초 늦게 출발하는 것이 중요합니다. 5km마다 마련된 공식 급수대에서는 갈증을 느끼기 전에 소량씩 수분을 섭취하고, 중반 이후 호흡과 팔치기 리듬을 일정하게 유지하며 체력을 배분하세요.</p>
-    
     <h2>레이스 전후 영양 섭취 및 컨디션 관리</h2>
-    <p>대회 3일 전부터는 밥, 바나나, 고구마 등 복합 탄수화물 위주의 식단(카보로딩)으로 글리코겐을 충분히 저장하고, 대회 당일 아침에는 출발 3~4시간 전 소화가 쉬운 식사를 마칩니다. 대회 종료 후에는 10분간의 쿨다운 조깅과 정적 스트레칭으로 젖산을 배출하고 단백질과 전해질을 신속히 보충해 부상을 예방하세요.</p>
-    
-    <p><a href="${escapeAttr(meta.canonical)}">두러닝(Dorunning)에서 대회 상세 일정 및 실시간 D-Day 확인하기</a></p>
+    <p>대회 3일 전부터는 복합 탄수화물 위주의 식단(카보로딩)으로 글리코겐을 충분히 저장하고, 대회 당일 아침에는 출발 3~4시간 전 소화가 쉬운 식사를 마칩니다. 대회 종료 후에는 10분간의 쿨다운 조깅과 정적 스트레칭으로 젖산을 배출하고 단백질과 전해질을 신속히 보충해 부상을 예방하세요.</p>
+    <p><a href="${escapeAttr(meta.canonical)}">두러닝(Dorunning)에서 러닝 가이드 확인하기</a></p>
   </article>`;
-}
-
-function eventJsonLd(meta) {
-  if (!meta.eventName || !meta.raceDate) return '';
-  const past = meta.raceDate < todayKst();
-  const regClosed = meta.endDate ? meta.endDate < todayKst() : past;
-  const payload = {
-    '@context': 'https://schema.org',
-    '@type': 'Event',
-    name: meta.eventName,
-    description: meta.description,
-    startDate: meta.raceDate,
-    endDate: meta.endDate || meta.raceDate,
-    eventStatus: past ? 'https://schema.org/EventCompleted' : 'https://schema.org/EventScheduled',
-    eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
-    location: {
-      '@type': 'Place',
-      name: meta.location || '대한민국',
-      address: {
-        '@type': 'PostalAddress',
-        addressLocality: meta.location || '',
-        addressCountry: 'KR',
-      },
-    },
-    image: meta.ogImage,
-    url: meta.canonical,
-    offers: {
-      '@type': 'Offer',
-      url: meta.officialLink || meta.canonical,
-      price: '0',
-      priceCurrency: 'KRW',
-      availability: regClosed ? 'https://schema.org/Discontinued' : 'https://schema.org/InStock',
-      ...(meta.startDate ? { validFrom: meta.startDate } : {}),
-    },
-    performer: {
-      '@type': 'PerformingGroup',
-      name: '대회 참가자 및 러너',
-    },
-    organizer: { '@type': 'Organization', name: '두러닝', url: SITE },
-  };
-  return `<script type="application/ld+json">${JSON.stringify(payload)}</script>`;
-}
-
-function breadcrumbJsonLd(meta) {
-  if (!meta.eventName) return '';
-  const payload = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      {
-        '@type': 'ListItem',
-        position: 1,
-        name: '두러닝',
-        item: SITE,
-      },
-      {
-        '@type': 'ListItem',
-        position: 2,
-        name: '마라톤 일정',
-        item: `${SITE}/marathon`,
-      },
-      {
-        '@type': 'ListItem',
-        position: 3,
-        name: meta.eventName,
-        item: meta.canonical,
-      },
-    ],
-  };
-  return `<script type="application/ld+json">${JSON.stringify(payload)}</script>`;
 }
 
 function injectIntoHtml(html, meta) {
@@ -329,29 +203,11 @@ function injectIntoHtml(html, meta) {
     if (re.test(out)) out = out.replace(re, rep);
   }
 
-  const jsonLd = eventJsonLd(meta);
-  if (jsonLd) {
-    out = out.replace(/<\/head>/i, `${jsonLd}\n</head>`);
-  }
-  const breadcrumbLd = breadcrumbJsonLd(meta);
-  if (breadcrumbLd) {
-    out = out.replace(/<\/head>/i, `${breadcrumbLd}\n</head>`);
-  }
-
-  // Unique visible copy for crawlers. display:none is ignored for indexing.
   const crawlerBlock = articleHtml(meta);
   if (/data-seo-prerender=["']1["']/.test(out)) {
     out = out.replace(/<(div|article)[^>]*data-seo-prerender=["']1["'][^>]*>[\s\S]*?<\/\1>/i, crawlerBlock);
   } else if (/<div id=["']root["']><\/div>/i.test(out)) {
     out = out.replace(/<div id=["']root["']><\/div>/i, `${crawlerBlock}\n  <div id="root"></div>`);
-  }
-
-  const fallbackNoscript = `<!-- Fallback SEO content for non-JS crawlers -->
-  <noscript>
-    ${crawlerBlock}
-  </noscript>`;
-  if (/<!-- Fallback SEO content for non-JS crawlers -->[\s\S]*?<\/noscript>/i.test(out)) {
-    out = out.replace(/<!-- Fallback SEO content for non-JS crawlers -->[\s\S]*?<\/noscript>/i, fallbackNoscript);
   }
 
   return out;
@@ -371,10 +227,6 @@ function minimalHtml(meta) {
   <meta property="og:title" content="${escapeAttr(meta.ogTitle)}" />
   <meta property="og:description" content="${escapeAttr(meta.ogDescription)}" />
   <meta property="og:image" content="${escapeAttr(meta.ogImage)}" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="${escapeAttr(meta.ogTitle)}" />
-  <meta name="twitter:description" content="${escapeAttr(meta.ogDescription)}" />
-  <meta name="twitter:image" content="${escapeAttr(meta.ogImage)}" />
 </head>
 <body>
   <h1>${escapeHtml(meta.h1 || meta.title)}</h1>
@@ -394,7 +246,6 @@ async function buildSeoHtml(pathname, origin, resolvedMeta) {
     });
     if (indexRes.ok) {
       const html = await indexRes.text();
-      // Avoid recursive loops if somehow we got the seo endpoint
       if (html && html.includes('<div id="root"')) {
         return injectIntoHtml(html, meta);
       }
@@ -421,7 +272,6 @@ export default async function handler(req, res) {
   try {
     const u = new URL(req.url, origin);
     pathname = u.searchParams.get('path') || u.pathname || '/';
-    // Strip /api/seo prefix if called without ?path=
     if (pathname.startsWith('/api/seo')) {
       pathname = u.searchParams.get('path') || '/';
     }
@@ -429,7 +279,6 @@ export default async function handler(req, res) {
     pathname = '/';
   }
 
-  // Normalize
   if (!pathname.startsWith('/')) pathname = `/${pathname}`;
   if (pathname.length > 1 && pathname.endsWith('/')) pathname = pathname.slice(0, -1);
 
@@ -453,5 +302,4 @@ export default async function handler(req, res) {
   }
 }
 
-// Named exports for middleware (bundlers that can import this file)
 export { buildSeoHtml, resolveMeta, injectIntoHtml };

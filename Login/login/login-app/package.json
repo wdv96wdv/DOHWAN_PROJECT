@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "postbuild": "node sitemap.js",
+    "postbuild": "echo sitemap skipped",
     "lint": "eslint .",
     "preview": "vite preview",
     "sitemap": "node sitemap.js"

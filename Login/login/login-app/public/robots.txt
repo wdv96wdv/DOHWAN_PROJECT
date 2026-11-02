@@ -7,6 +7,7 @@ Disallow: /user
 Disallow: /wishlist
 Disallow: /record
 Disallow: /admin
+Disallow: /marathon/register
 Disallow: /boards/insert
 Disallow: /boards/update/
 Disallow: /recommend
