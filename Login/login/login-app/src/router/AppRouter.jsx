@@ -24,6 +24,7 @@ const Updatepage = lazy(() => import('../pages/board/Updatepage'));
 const Marathon = lazy(() => import('../pages/Marathon'));
 const MarathonDetail = lazy(() => import('../pages/MarathonDetail')); // 추가
 const MarathonRegister = lazy(() => import('../pages/MarathonRegister')); // 마라톤 신규 등록
+const MarathonEdit = lazy(() => import('../pages/MarathonEdit')); // 마라톤 수정
 const PerformanceTab = lazy(() => import('../pages/Performance/PerformanceTab'));
 const WishlistPage = lazy(() => import('../pages/WishlistPage'));
 const GuideList = lazy(() => import('../pages/Guide/GuideList'));

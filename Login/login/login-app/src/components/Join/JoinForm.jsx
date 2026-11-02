@@ -33,7 +33,7 @@ const JoinForm = ({ join }) => {
       const res = await checkUsername(username);
       // ApiResponse 구조상 res.data.data.exists로 접근해야 함
       const exists = res.data.data?.exists;
-      
+
       if (exists) {
         Swal.alert('중복된 아이디입니다.', '다른 아이디를 입력해주세요.', 'warning');
         setIsAvailable(false);
@@ -67,9 +67,17 @@ const JoinForm = ({ join }) => {
 
     setLoading(true);
     try {
-      await join({ username, password, name, email });
+      await join({ username, password, name, email: email.trim().toLowerCase() });
     } catch (err) {
       console.error(err);
+      const status = err?.response?.status;
+      const serverMsg = err?.response?.data?.message;
+
+      if (status === 400 || status === 409) {
+        Swal.alert('가입 실패', serverMsg || '이미 사용 중인 이메일이거나 입력값이 올바르지 않습니다.', 'warning');
+      } else {
+        Swal.alert('가입 실패', '서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.', 'error');
+      }
     } finally {
       setLoading(false);
     }
