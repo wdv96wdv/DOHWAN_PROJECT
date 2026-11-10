@@ -100,7 +100,10 @@ const AdminContact = () => {
     const body = encodeURIComponent(
       `안녕하세요, ${contact.name}님.\n\n두러닝 운영팀입니다.\n문의해 주신 내용에 대해 답변드립니다.\n\n---\n원본 문의:\n${contact.message}\n---\n\n답변:\n\n\n감사합니다.\n두러닝 운영팀 드림`
     );
-    window.open(`mailto:${contact.email}?subject=${subject}&body=${body}`, '_blank');
+    // window.open + mailto 조합은 빈 탭이 남는 문제가 있어 <a> 클릭 방식 사용
+    const link = document.createElement('a');
+    link.href = `mailto:${contact.email}?subject=${subject}&body=${body}`;
+    link.click();
   };
 
   useEffect(() => {
