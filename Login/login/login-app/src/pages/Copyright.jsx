@@ -31,11 +31,11 @@ const Copyright = () => {
             <div className="section-icon"><FileText size={20} /></div>
             <h2>1. 서비스 목적</h2>
             <p>
-              두러닝(DoRunning, dorunning.app)은 전국 마라톤·러닝 대회의 일정, 접수 정보, 코스 안내 등을 
+              두러닝(DoRunning, dorunning.app)은 전국 마라톤·러닝 대회의 일정, 접수 정보, 코스 안내 등을
               한곳에 모아 러너들에게 제공하는 <strong>정보 제공 및 대회 홍보 목적</strong>의 플랫폼입니다.
             </p>
             <p>
-              본 사이트에 게시되는 모든 대회 관련 콘텐츠는 해당 대회의 홍보 및 참가 독려를 위한 것이며, 
+              본 사이트에 게시되는 모든 대회 관련 콘텐츠는 해당 대회의 홍보 및 참가 독려를 위한 것이며,
               상업적 목적의 무단 도용이 아닌 <strong>공익적 정보 전달</strong>을 목적으로 합니다.
             </p>
           </section>
@@ -81,15 +81,15 @@ const Copyright = () => {
             <div className="section-icon"><AlertTriangle size={20} /></div>
             <h2>3. 이미지 삭제 및 수정 요청</h2>
             <p>
-              본 사이트에 게시된 콘텐츠(포스터, 이미지, 대회 정보 등)에 대해 저작권 문제가 있거나 
+              본 사이트에 게시된 콘텐츠(포스터, 이미지, 대회 정보 등)에 대해 저작권 문제가 있거나
               삭제·수정을 원하시는 경우, 아래 방법으로 연락해 주시면 <strong>영업일 기준 1~2일 이내</strong>에 조치하겠습니다.
             </p>
             <div className="contact-methods">
-              <a href="mailto:wdv96wdv@naver.com?subject=[DoRunning] 이미지 삭제/수정 요청&body=안녕하세요.%0A%0A삭제/수정을 요청드리는 콘텐츠:%0A- 대회명:%0A- 해당 페이지 URL:%0A- 요청 사유:%0A%0A감사합니다." className="contact-method email">
+              <a href="mailto:kimdohwan969@gmail.com?subject=[DoRunning] 이미지 삭제/수정 요청&body=안녕하세요.%0A%0A삭제/수정을 요청드리는 콘텐츠:%0A- 대회명:%0A- 해당 페이지 URL:%0A- 요청 사유:%0A%0A감사합니다." className="contact-method email">
                 <Mail size={18} />
                 <div>
                   <strong>이메일 문의</strong>
-                  <span>wdv96wdv@naver.com</span>
+                  <span>kimdohwan969@gmail.com</span>
                 </div>
                 <ExternalLink size={14} />
               </a>
@@ -118,14 +118,14 @@ const Copyright = () => {
             <h2>4. 면책 고지</h2>
             <ul className="disclaimer-list">
               <li>
-                본 사이트의 대회 정보는 각 대회 공식 홈페이지, 보도자료, 공공 데이터 등을 참고하여 작성되었으며, 
+                본 사이트의 대회 정보는 각 대회 공식 홈페이지, 보도자료, 공공 데이터 등을 참고하여 작성되었으며,
                 정보의 정확성을 보장하지 않습니다. 최종 확인은 반드시 해당 대회 공식 채널을 통해 진행해 주세요.
               </li>
               <li>
                 두러닝은 개별 대회의 주최/주관 기관이 아니며, 대회 참가 신청·환불·변경 등에 대한 직접적인 책임을 지지 않습니다.
               </li>
               <li>
-                게시된 포스터 및 이미지의 저작권은 각 원작자(대회 주최·주관 측)에게 있으며, 
+                게시된 포스터 및 이미지의 저작권은 각 원작자(대회 주최·주관 측)에게 있으며,
                 두러닝은 정보 전달 목적으로 이를 인용합니다.
               </li>
             </ul>
@@ -135,7 +135,7 @@ const Copyright = () => {
           <section className="copyright-section partnership">
             <h2>5. 대회 주최 측 안내</h2>
             <p>
-              두러닝에 귀 대회의 정보를 <strong>공식 등록</strong>하시거나, 포스터·배너 등의 홍보 자료 게재를 
+              두러닝에 귀 대회의 정보를 <strong>공식 등록</strong>하시거나, 포스터·배너 등의 홍보 자료 게재를
               원하시는 주최/주관 측은 언제든지 연락 주세요. 대회 홍보에 적극 협력하겠습니다.
             </p>
             <Link to="/contact" className="partnership-btn">
