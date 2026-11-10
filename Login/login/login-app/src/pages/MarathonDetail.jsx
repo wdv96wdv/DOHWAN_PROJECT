@@ -39,6 +39,7 @@ import {
   getTodayKstStr, 
   STATUS_CLASS_MAP 
 } from '../utils/marathonHelpers';
+import useAuthStore from '../store/useAuthStore';
 import '../assets/css/marathon-detail.css';
 
 const SUPABASE_URL = 'https://ismclnqslxnlsfmqjytc.supabase.co';
@@ -47,6 +48,8 @@ const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || 'sb_publishable_R
 const MarathonDetail = () => {
     const { id } = useParams();
     const navigate = useNavigate();
+    const roles = useAuthStore(state => state.roles);
+    const isAdmin = Boolean(roles?.isAdmin);
 
     const [marathon, setMarathon] = useState(null);
     const [relatedMarathons, setRelatedMarathons] = useState([]);
@@ -404,12 +407,23 @@ const MarathonDetail = () => {
                 <button className="detail-back-btn" onClick={() => navigate('/marathon')}>
                     <ArrowLeft size={18} /> 목록으로 돌아가기
                 </button>
-                <div className="detail-breadcrumbs">
-                    <Link to="/">홈</Link>
-                    <ChevronRight size={14} />
-                    <Link to="/marathon">마라톤 일정</Link>
-                    <ChevronRight size={14} />
-                    <span className="current">{marathon.location || '전국'}</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    {isAdmin && (
+                        <button
+                            className="detail-back-btn"
+                            style={{ color: 'var(--primary)', fontWeight: 600 }}
+                            onClick={() => navigate(`/marathon/edit/${id}`)}
+                        >
+                            ✏️ 수정
+                        </button>
+                    )}
+                    <div className="detail-breadcrumbs">
+                        <Link to="/">홈</Link>
+                        <ChevronRight size={14} />
+                        <Link to="/marathon">마라톤 일정</Link>
+                        <ChevronRight size={14} />
+                        <span className="current">{marathon.location || '전국'}</span>
+                    </div>
                 </div>
             </nav>
 

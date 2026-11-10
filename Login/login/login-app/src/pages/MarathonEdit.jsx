@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import Swal from 'sweetalert2';
 import supabase from '../utils/supabaseClient';
+import { toWebp } from '../utils/imageUtils';
 import useAuthStore from '../store/useAuthStore';
 import '../assets/css/marathon-register.css';
 
@@ -135,16 +136,16 @@ export default function MarathonEdit() {
     try {
       let finalPosterUrl = form.posterUrl || null;
 
-      // 파일 업로드 시도
+      // 파일 업로드 시도 (WebP 변환)
       if (posterFile) {
         try {
-          const ext = posterFile.name.split('.').pop();
-          const fileName = `${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
+          const webpBlob = await toWebp(posterFile, 1200, 0.85);
+          const fileName = `poster_${id}_${Date.now()}.webp`;
           const { data: uploadData, error: uploadError } = await supabase.storage
-            .from('marathon-posters')
-            .upload(fileName, posterFile, { cacheControl: '3600', upsert: false });
+            .from('posters')
+            .upload(fileName, webpBlob, { contentType: 'image/webp', cacheControl: '3600', upsert: true });
           if (!uploadError && uploadData) {
-            const { data: urlData } = supabase.storage.from('marathon-posters').getPublicUrl(fileName);
+            const { data: urlData } = supabase.storage.from('posters').getPublicUrl(fileName);
             finalPosterUrl = urlData?.publicUrl || finalPosterUrl;
           }
         } catch (uploadException) {

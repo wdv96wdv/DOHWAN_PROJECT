@@ -1,0 +1,379 @@
+/* ===== Admin Marathon Management ===== */
+.admin-marathon-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 16px 60px;
+}
+
+/* Header */
+.admin-marathon-header {
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+  border-radius: 16px;
+  padding: 32px 28px;
+  margin-bottom: 24px;
+  color: #fff;
+}
+
+.admin-marathon-header h1 {
+  font-size: 1.6rem;
+  font-weight: 800;
+  margin: 0 0 6px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-marathon-header p {
+  color: #94a3b8;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+/* Stats Bar */
+.admin-stats-bar {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.admin-stat-card {
+  flex: 1;
+  min-width: 140px;
+  background: var(--card-bg, #fff);
+  border: 1px solid rgba(0,0,0,0.06);
+  border-radius: 12px;
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.admin-stat-card .stat-number {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--primary);
+  line-height: 1;
+}
+
+.admin-stat-card .stat-label {
+  font-size: 0.8rem;
+  color: var(--text-muted, #64748b);
+  margin-top: 4px;
+}
+
+.admin-stat-card.warning .stat-number {
+  color: #f59e0b;
+}
+
+.admin-stat-card.success .stat-number {
+  color: #22c55e;
+}
+
+/* Toolbar */
+.admin-toolbar {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.admin-search-input {
+  flex: 1;
+  min-width: 200px;
+  padding: 10px 14px 10px 38px;
+  border-radius: 10px;
+  border: 1px solid rgba(0,0,0,0.1);
+  background: var(--card-bg, #fff);
+  color: var(--text, #1e293b);
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.admin-search-input:focus {
+  border-color: var(--primary);
+}
+
+.admin-search-wrapper {
+  position: relative;
+  flex: 1;
+  min-width: 200px;
+}
+
+.admin-search-wrapper svg {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted, #94a3b8);
+  pointer-events: none;
+}
+
+.admin-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 18px;
+  border-radius: 10px;
+  border: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.admin-btn-primary {
+  background: var(--primary);
+  color: #fff;
+}
+
+.admin-btn-primary:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+/* Table */
+.admin-table-wrapper {
+  background: var(--card-bg, #fff);
+  border-radius: 14px;
+  border: 1px solid rgba(0,0,0,0.06);
+  overflow-x: auto;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+.admin-table thead {
+  background: rgba(0,0,0,0.02);
+}
+
+.admin-table th {
+  padding: 14px 12px;
+  text-align: left;
+  font-weight: 700;
+  color: var(--text-muted, #64748b);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  border-bottom: 2px solid rgba(0,0,0,0.06);
+  white-space: nowrap;
+}
+
+.admin-table td {
+  padding: 12px;
+  border-bottom: 1px solid rgba(0,0,0,0.04);
+  vertical-align: middle;
+  color: var(--text, #1e293b);
+}
+
+.admin-table tbody tr {
+  transition: background 0.15s;
+}
+
+.admin-table tbody tr:hover {
+  background: rgba(0,0,0,0.015);
+}
+
+/* Poster Thumbnail */
+.poster-thumb {
+  width: 50px;
+  height: 66px;
+  border-radius: 6px;
+  object-fit: cover;
+  border: 1px solid rgba(0,0,0,0.08);
+  background: #f1f5f9;
+}
+
+.poster-empty {
+  width: 50px;
+  height: 66px;
+  border-radius: 6px;
+  background: #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed #cbd5e1;
+  color: #94a3b8;
+}
+
+/* Title cell */
+.marathon-title-cell {
+  max-width: 220px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.marathon-title-cell .title-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Type badges */
+.type-badge-row {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.type-badge-sm {
+  font-size: 0.7rem;
+  padding: 2px 7px;
+  border-radius: 6px;
+  background: rgba(59, 130, 246, 0.08);
+  color: var(--primary);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Poster status badge */
+.poster-status {
+  font-size: 0.75rem;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+.poster-status.has {
+  background: rgba(34, 197, 94, 0.1);
+  color: #16a34a;
+}
+
+.poster-status.none {
+  background: rgba(245, 158, 11, 0.1);
+  color: #d97706;
+}
+
+/* Action buttons */
+.action-btns {
+  display: flex;
+  gap: 6px;
+  flex-wrap: nowrap;
+}
+
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 10px;
+  border-radius: 7px;
+  border: none;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.action-btn:hover {
+  transform: translateY(-1px);
+}
+
+.action-btn.edit {
+  background: rgba(59, 130, 246, 0.1);
+  color: #2563eb;
+}
+
+.action-btn.edit:hover {
+  background: rgba(59, 130, 246, 0.2);
+}
+
+.action-btn.upload {
+  background: rgba(34, 197, 94, 0.1);
+  color: #16a34a;
+}
+
+.action-btn.upload:hover {
+  background: rgba(34, 197, 94, 0.2);
+}
+
+.action-btn.delete {
+  background: rgba(239, 68, 68, 0.08);
+  color: #dc2626;
+}
+
+.action-btn.delete:hover {
+  background: rgba(239, 68, 68, 0.18);
+}
+
+.action-btn.uploading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Empty state */
+.admin-empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-muted, #64748b);
+}
+
+.admin-empty svg {
+  margin: 0 auto 12px;
+  color: #cbd5e1;
+}
+
+/* Loading */
+.admin-loading {
+  text-align: center;
+  padding: 80px 20px;
+  color: var(--text-muted);
+}
+
+.admin-loading svg {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .admin-marathon-container {
+    padding: 16px 10px 40px;
+  }
+
+  .admin-marathon-header {
+    padding: 24px 18px;
+  }
+
+  .admin-marathon-header h1 {
+    font-size: 1.3rem;
+  }
+
+  .admin-stats-bar {
+    gap: 8px;
+  }
+
+  .admin-stat-card {
+    min-width: 100px;
+    padding: 12px 14px;
+  }
+
+  .admin-stat-card .stat-number {
+    font-size: 1.4rem;
+  }
+
+  .admin-toolbar {
+    flex-direction: column;
+  }
+
+  .admin-search-wrapper {
+    width: 100%;
+  }
+
+  .admin-table-wrapper {
+    border-radius: 10px;
+  }
+
+  .marathon-title-cell {
+    max-width: 150px;
+  }
+}
+
