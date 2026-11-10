@@ -14,6 +14,7 @@ const Course = lazy(() => import('../pages/Course'));
 const Event = lazy(() => import('../pages/Event'));
 const About = lazy(() => import('../pages/About'));
 const Privacy = lazy(() => import('../pages/Privacy'));
+const Copyright = lazy(() => import('../pages/Copyright'));
 const Contact = lazy(() => import('../pages/Contact'));
 const AdminContact = lazy(() => import("../pages/admin/AdminContact"));
 const AdminMarathon = lazy(() => import("../pages/admin/AdminMarathon"));
@@ -56,6 +57,7 @@ const AppRouter = ({ theme }) => {
         <Route path="/performance" element={<ProtectedRoute message="퍼포먼스 페이지는 로그인 후 이용 가능합니다."><PerformanceTab /></ProtectedRoute>} />
         <Route path="/about" element={<About />} />
         <Route path="/privacy" element={<Privacy />} />
+        <Route path="/copyright" element={<Copyright />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/record" element={<ProtectedRoute message="기록 페이지는 로그인 후 이용 가능합니다."><Record /></ProtectedRoute>} />
         <Route path="/course" element={<Course />} />

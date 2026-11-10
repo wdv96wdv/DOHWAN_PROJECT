@@ -49,6 +49,35 @@ footer.footer {
   padding-left: 4px;
 }
 
+/* 저작권 고지 */
+.footer-copyright-notice {
+  max-width: 1200px;
+  margin: 24px auto 0;
+  padding: 16px 20px;
+  background: rgba(245, 158, 11, 0.06);
+  border: 1px solid rgba(245, 158, 11, 0.15);
+  border-radius: 10px;
+  text-align: center;
+}
+
+.footer-copyright-notice p {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+  margin: 0;
+}
+
+.footer-copyright-notice a {
+  color: var(--primary);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.footer-copyright-notice a:hover {
+  color: var(--text-primary);
+}
+
 .footer-bottom {
   max-width: 1200px;
   margin: 40px auto 0;

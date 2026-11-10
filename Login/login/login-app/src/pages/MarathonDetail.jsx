@@ -455,6 +455,9 @@ const MarathonDetail = () => {
                                     <Maximize2 size={24} />
                                     <span>포스터 원본 크게보기</span>
                                 </div>
+                                <p className="poster-source-label">
+                                    출처: {marathon.title} 주최 측 · <Link to="/copyright">저작권 정책</Link>
+                                </p>
                             </>
                         ) : (
                             <div className="hero-poster-placeholder">
@@ -865,6 +868,9 @@ const MarathonDetail = () => {
                             alt={`${marathon.title} 포스터 원본`}
                             className="poster-modal-img" 
                         />
+                        <p className="poster-modal-source">
+                            이미지 출처: {marathon.title} 주최 측 · 홍보 목적 게시 · <Link to="/copyright" onClick={() => setIsPosterModalOpen(false)}>저작권 정책</Link>
+                        </p>
                     </div>
                 </div>
             )}
