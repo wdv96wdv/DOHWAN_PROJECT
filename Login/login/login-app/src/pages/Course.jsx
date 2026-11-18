@@ -186,7 +186,16 @@ const Course = () => {
               <article key={course.id} className="course-card">
                 {/* Image Section */}
                 <div className="course-img-wrapper" onClick={() => toggleMap(course.id)}>
-                  <img src={course.image} alt={course.title} className="course-img" loading="lazy" />
+                  <img 
+                    src={course.image} 
+                    alt={course.title} 
+                    className="course-img" 
+                    loading="lazy" 
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = "https://images.unsplash.com/photo-1552674605-db6ffd4facb5?auto=format&fit=crop&w=800&q=80";
+                    }}
+                  />
                   
                   <div className={`course-badge-level ${levelClass}`}>
                     {course.level}
