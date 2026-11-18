@@ -13,7 +13,7 @@
  * minimal document if fetch fails.
  */
 
-const SITE = 'https://dorunning.app';
+const SITE = 'https://www.dorunning.app';
 const DEFAULT_OG_IMAGE = `${SITE}/og-image.png`;
 const SUPABASE_URL = 'https://ismclnqslxnlsfmqjytc.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_RWdFyo-SAjkjsNnQJC2JBw_jbX6bdXd';
@@ -42,6 +42,54 @@ const STATIC_META = {
     ogTitle: '전국 마라톤 일정·접수 D-Day 캘린더 | 두러닝',
     ogDescription:
       '2026 다가오는 전국 마라톤 대회 일정, 실시간 접수 현황, 공식 신청 링크 총정리.',
+  },
+  '/boards': {
+    title: '러너 커뮤니티 게시판 | 두러닝',
+    description:
+      '러너들의 대회 후기, 훈련 팁, 장비 리뷰 등을 자유롭게 공유하는 커뮤니티 게시판입니다.',
+    ogTitle: '러너 커뮤니티 게시판 | 두러닝',
+    ogDescription:
+      '러너들이 대회 후기와 훈련 경험을 나누는 커뮤니티.',
+  },
+  '/contact': {
+    title: '문의하기 | 두러닝',
+    description:
+      '두러닝 서비스 관련 문의, 대회 정보 수정 요청, 제휴 제안 등을 보내주세요.',
+    ogTitle: '문의하기 | 두러닝',
+    ogDescription:
+      '두러닝 서비스 관련 문의 및 제안을 접수합니다.',
+  },
+  '/course': {
+    title: '전국 러닝 코스 추천 | 두러닝',
+    description:
+      '서울 한강, 부산 해운대, 제주 올레길 등 전국 인기 러닝 코스를 소개합니다. 거리, 난이도, 경치를 한눈에 확인하세요.',
+    ogTitle: '전국 러닝 코스 추천 | 두러닝',
+    ogDescription:
+      '전국 인기 러닝 코스 정보를 한눈에 확인하세요.',
+  },
+  '/event': {
+    title: '러닝 이벤트·챌린지 | 두러닝',
+    description:
+      '진행 중인 러닝 챌린지와 이벤트 정보를 확인하고 참여해 보세요.',
+    ogTitle: '러닝 이벤트·챌린지 | 두러닝',
+    ogDescription:
+      '러너를 위한 이벤트와 챌린지 소식.',
+  },
+  '/privacy': {
+    title: '개인정보 처리방침 | 두러닝',
+    description:
+      '두러닝의 개인정보 수집·이용·보관·파기에 관한 처리방침을 안내합니다.',
+    ogTitle: '개인정보 처리방침 | 두러닝',
+    ogDescription:
+      '두러닝 개인정보 처리방침 안내.',
+  },
+  '/copyright': {
+    title: '저작권 정책 | 두러닝',
+    description:
+      '두러닝의 콘텐츠 저작권 정책과 이미지 사용에 관한 면책 조항을 안내합니다.',
+    ogTitle: '저작권 정책 | 두러닝',
+    ogDescription:
+      '두러닝 저작권 정책 및 면책 조항 안내.',
   },
 };
 
@@ -163,6 +211,20 @@ async function resolveMeta(pathname) {
       ogImage: DEFAULT_OG_IMAGE,
       canonical,
       h1: '러너를 위한 실전 완주 가이드',
+    };
+  }
+
+  // /boards/:id — 게시글 상세 (DB 조회 없이 기본 메타 제공)
+  const boardMatch = pathname.match(/^\/boards\/([^/]+)\/?$/);
+  if (boardMatch) {
+    return {
+      title: '커뮤니티 게시글 | 두러닝',
+      description: '러너 커뮤니티에서 대회 후기, 훈련 팁, 장비 리뷰를 확인하세요.',
+      ogTitle: '커뮤니티 게시글 | 두러닝',
+      ogDescription: '러너들이 대회 후기와 훈련 경험을 나누는 커뮤니티.',
+      ogImage: DEFAULT_OG_IMAGE,
+      canonical,
+      h1: '커뮤니티 게시글',
     };
   }
 

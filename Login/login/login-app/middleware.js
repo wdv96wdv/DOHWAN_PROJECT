@@ -32,8 +32,37 @@ export const config = {
     '/guide',
     '/guide/',
     '/guide/:path*',
+    '/boards',
+    '/boards/',
+    '/boards/:path*',
+    '/contact',
+    '/contact/',
+    '/course',
+    '/course/',
+    '/event',
+    '/event/',
+    '/privacy',
+    '/privacy/',
+    '/copyright',
+    '/copyright/',
   ],
 };
+
+// Routes that the SEO handler can serve meaningful meta for
+const SEO_ROUTES = [
+  { test: (p) => p === '/about', name: 'about' },
+  { test: (p) => p === '/marathon', name: 'marathon-list' },
+  { test: (p) => /^\/marathon\/[^/]+$/.test(p), name: 'marathon-detail' },
+  { test: (p) => p === '/guide', name: 'guide' },
+  { test: (p) => /^\/guide\/[^/]+$/.test(p), name: 'guide-detail' },
+  { test: (p) => p === '/boards', name: 'boards' },
+  { test: (p) => /^\/boards\/[^/]+$/.test(p), name: 'board-detail' },
+  { test: (p) => p === '/contact', name: 'contact' },
+  { test: (p) => p === '/course', name: 'course' },
+  { test: (p) => p === '/event', name: 'event' },
+  { test: (p) => p === '/privacy', name: 'privacy' },
+  { test: (p) => p === '/copyright', name: 'copyright' },
+];
 
 export default function middleware(request) {
   const url = new URL(request.url);
@@ -51,12 +80,8 @@ export default function middleware(request) {
   }
 
   // Only the routes we can serve useful meta for
-  const isAbout = pathname === '/about';
-  const isList = pathname === '/marathon';
-  const isDetail = /^\/marathon\/[^/]+$/.test(pathname);
-  const isGuide = pathname === '/guide';
-  const isGuideDetail = /^\/guide\/[^/]+$/.test(pathname);
-  if (!isAbout && !isList && !isDetail && !isGuide && !isGuideDetail) {
+  const matched = SEO_ROUTES.some((r) => r.test(pathname));
+  if (!matched) {
     return next();
   }
 

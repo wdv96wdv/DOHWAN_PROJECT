@@ -8,11 +8,13 @@ Disallow: /wishlist
 Disallow: /record
 Disallow: /admin
 Disallow: /marathon/register
+Disallow: /marathon/edit
 Disallow: /boards/insert
 Disallow: /boards/update/
 Disallow: /recommend
+Disallow: /performance
 
 User-agent: Yeti
 Allow: /
 
-Sitemap: https://dorunning.app/sitemap.xml
+Sitemap: https://www.dorunning.app/sitemap.xml
