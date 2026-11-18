@@ -17,6 +17,16 @@ export const DISTANCE_FILTERS = [
   { key: "Long", label: "10km 이상 (하프/LSD)" }
 ];
 
+export const THEME_TAGS = [
+  "전체",
+  "#초보환영",
+  "#야경명소",
+  "#우레탄트랙",
+  "#업힐훈련",
+  "#물품보관소완비",
+  "#대회실전대비"
+];
+
 export const COURSE_LIST = [
   // ===================== 대회 공식 코스 (OFFICIAL MARATHON) =====================
   {
