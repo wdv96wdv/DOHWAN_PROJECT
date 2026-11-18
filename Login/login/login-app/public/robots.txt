@@ -17,4 +17,4 @@ Disallow: /performance
 User-agent: Yeti
 Allow: /
 
-Sitemap: https://www.dorunning.app/sitemap.xml
+Sitemap: https://www.dorunning.app/api/sitemap

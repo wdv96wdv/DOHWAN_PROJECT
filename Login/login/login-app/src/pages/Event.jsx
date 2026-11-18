@@ -32,7 +32,7 @@ const EventPage = () => {
 
     const currentMonth = new Date().toLocaleString('en-US', { month: 'long' });
 
-    if (loading) return <Loading text="랭킹 데이터를 불러오는 중입니다..." />;
+    if (loading) return <Loading text="??�� ?�이?��? 불러?�는 중입?�다..." />;
 
     // Top 3 and others
     const top3 = leaderboard.slice(0, 3);
@@ -40,35 +40,34 @@ const EventPage = () => {
 
     // Fallback Avatar Generator
     const getAvatar = (user) => {
-        // 1. 현재 로그인한 본인인 경우, userInfo의 최신 프로필 사진을 우선 사용
+        // 1. ?�재 로그?�한 본인??경우, userInfo??최신 ?�로???�진???�선 ?�용
         if (userInfo && userInfo.username === user.username && userInfo.avatarUrl) {
             return userInfo.avatarUrl;
         }
 
-        // 2. 백엔드에서 전달받은 아바타가 유효한 경우 사용
+        // 2. 백엔?�에???�달받�? ?�바?�가 ?�효??경우 ?�용
         if (user.avatarUrl && user.avatarUrl.trim() !== '') {
             return user.avatarUrl;
         }
 
-        // 3. 사진이 없으면 null 반환하여 기본 아이콘으로 렌더링되게 함
-        return null;
+        // 3. ?�진???�으�?null 반환?�여 기본 ?�이콘으�??�더링되�???        return null;
     };
 
     return (
         <div className="event-page">
             <Helmet>
                 <title>Dorunning | 챌린지</title>
-                <meta name="description" content="이달의 러닝 챌린지에 도전하고 명예의 전당에 이름을 올리세요. 다른 러너들과 함께 목표를 달성하며 즐겁게 달려보세요!" />
+                <meta name="description" content="?�달???�닝 챌린지???�전?�고 명예???�당???�름???�리?�요. ?�른 ?�너?�과 ?�께 목표�??�성?�며 즐겁�??�려보세??" />
                 <meta property="og:title" content="Dorunning | 챌린지" />
-                <meta property="og:description" content="이달의 러닝 챌린지에 도전하고 명예의 전당에 이름을 올리세요." />
-                <link rel="canonical" href="https://dorunning.app/event" />
+                <meta property="og:description" content="?�달???�닝 챌린지???�전?�고 명예???�당???�름???�리?�요." />
+                <link rel="canonical" href="https://www.dorunning.app/event" />
             </Helmet>
             <header className="event-header">
                 <h1><Trophy size={40} style={{ verticalAlign: 'middle', marginRight: '16px', color: 'var(--primary)' }} /> {currentMonth.toUpperCase()} CHALLENGE</h1>
             </header>
 
             <div className="leaderboard-container glass-card">
-                <h2 className="leaderboard-title"><TrendingUp size={28} style={{ marginRight: '10px', verticalAlign: 'middle', color: 'var(--primary)' }} /> 월간 명예의 전당</h2>
+                <h2 className="leaderboard-title"><TrendingUp size={28} style={{ marginRight: '10px', verticalAlign: 'middle', color: 'var(--primary)' }} /> ?�간 명예???�당</h2>
 
                 {leaderboard.length === 0 ? (
                     <div className="no-data-container">
@@ -110,11 +109,11 @@ const EventPage = () => {
                                 </g>
                             </svg>
                         </div>
-                        <h3 className="no-data-title">첫 번째 주인공이 되어보세요!</h3>
-                        <p className="no-data-text">아직 이번 달 기록이 없습니다.<br />첫 발걸음을 내딛고 이달의 랭킹 1위를 차지해보세요!</p>
+                        <h3 className="no-data-title">�?번째 주인공이 ?�어보세??</h3>
+                        <p className="no-data-text">?�직 ?�번 ??기록???�습?�다.<br />�?발걸?�을 ?�딛�??�달????�� 1?��? 차�??�보?�요!</p>
                         <Link to={isLogin ? "/record" : "/login"} className="no-data-btn">
                             <Activity size={18} />
-                            <span>지금 달리러 가기</span>
+                            <span>지�??�리??가�?/span>
                         </Link>
                     </div>
                 ) : (
@@ -125,7 +124,7 @@ const EventPage = () => {
                             {top3[1] && (
                                 <div className="podium-step podium-silver">
                                     <div className="podium-avatar-wrapper">
-                                        <div className="medal-badge">🥈</div>
+                                        <div className="medal-badge">?��</div>
                                         {getAvatar(top3[1]) ? (
                                             <img src={getAvatar(top3[1])} alt={top3[1].username} className="podium-avatar" />
                                         ) : (
@@ -144,7 +143,7 @@ const EventPage = () => {
                             {top3[0] && (
                                 <div className="podium-step podium-gold">
                                     <div className="podium-avatar-wrapper">
-                                        <div className="medal-badge gold">🥇</div>
+                                        <div className="medal-badge gold">?��</div>
                                         {getAvatar(top3[0]) ? (
                                             <img src={getAvatar(top3[0])} alt={top3[0].username} className="podium-avatar gold-border" />
                                         ) : (
@@ -163,7 +162,7 @@ const EventPage = () => {
                             {top3[2] && (
                                 <div className="podium-step podium-bronze">
                                     <div className="podium-avatar-wrapper">
-                                        <div className="medal-badge">🥉</div>
+                                        <div className="medal-badge">?��</div>
                                         {getAvatar(top3[2]) ? (
                                             <img src={getAvatar(top3[2])} alt={top3[2].username} className="podium-avatar" />
                                         ) : (
@@ -204,7 +203,7 @@ const EventPage = () => {
                                                 {user.username} {isCurrentUser && <span className="me-badge">ME</span>}
                                             </div>
                                             <div className="player-stats">
-                                                <Activity size={14} style={{ verticalAlign: 'middle', marginRight: '4px' }} /> {user.runCount}번 달림
+                                                <Activity size={14} style={{ verticalAlign: 'middle', marginRight: '4px' }} /> {user.runCount}�??�림
                                             </div>
                                         </div>
                                         <div className="player-score">

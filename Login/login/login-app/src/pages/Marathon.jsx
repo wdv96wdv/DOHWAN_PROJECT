@@ -28,15 +28,15 @@ import {
 
 export default function MarathonList() {
     const defaultSearch = "";
-    const defaultType = "전체";
-    const defaultStatus = "전체"; // 전체 = 예정 및 2달 이내 종료 대회 포함 전체 목록
+    const defaultType = "?�체";
+    const defaultStatus = "?�체"; // ?�체 = ?�정 �?2???�내 종료 ?�???�함 ?�체 목록
 
-    const [marathons, setMarathons] = useState([]); // API로 받아올 상태 추가
+    const [marathons, setMarathons] = useState([]); // API�?받아???�태 추�?
     const [search, setSearch] = useState(defaultSearch);
     const [type, setType] = useState(defaultType);
     const [statusFilter, setStatusFilter] = useState(defaultStatus);
-    const [regionFilter, setRegionFilter] = useState("전체");
-    const [loading, setLoading] = useState(true); // 로딩 상태 추가
+    const [regionFilter, setRegionFilter] = useState("?�체");
+    const [loading, setLoading] = useState(true); // 로딩 ?�태 추�?
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize, setPageSize] = useState(12);
     const listTopRef = useRef(null);
@@ -44,7 +44,7 @@ export default function MarathonList() {
     const SUPABASE_URL = 'https://ismclnqslxnlsfmqjytc.supabase.co';
     const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || 'sb_publishable_RWdFyo-SAjkjsNnQJC2JBw_jbX6bdXd';
 
-    // Fisher-Yates 셔플 (페이지 진입 시 1회 랜덤 정렬)
+    // Fisher-Yates ?�플 (?�이지 진입 ??1???�덤 ?�렬)
     const shuffleArray = (arr) => {
         const a = [...arr];
         for (let i = a.length - 1; i > 0; i--) {
@@ -54,7 +54,7 @@ export default function MarathonList() {
         return a;
     };
 
-    // --- 1. Supabase 직접 호출 (종료 2달 이내 및 향후 대회) ---
+    // --- 1. Supabase 직접 ?�출 (종료 2???�내 �??�후 ?�?? ---
     useEffect(() => {
         const twoMonthsAgo = getTwoMonthsAgoKstStr();
 
@@ -87,11 +87,10 @@ export default function MarathonList() {
 
         fetchPage(0)
             .then(data => {
-                // 랜덤 셔플 적용 — 페이지 새로고침 시마다 순서가 바뀜
-                setMarathons(shuffleArray(data.map(normalizeMarathon)));
+                // ?�덤 ?�플 ?�용 ???�이지 ?�로고침 ?�마???�서가 바�?                setMarathons(shuffleArray(data.map(normalizeMarathon)));
             })
             .catch(err => {
-                console.error('데이터 로드 실패:', err);
+                console.error('?�이??로드 ?�패:', err);
             })
             .finally(() => {
                 setLoading(false);
@@ -103,9 +102,9 @@ export default function MarathonList() {
     const twoMonthsAgoStr = getTwoMonthsAgoKstStr();
     const statusClassMap = STATUS_CLASS_MAP;
 
-    const typeOptions = ["전체", "Full", "Half", "10Km", "5Km"];
-    const statusOptions = ["전체", "접수 예정", "접수중", "마감 임박", "접수마감", "종료"];
-    const regionOptions = ["전체", "서울", "경기/인천", "강원", "충청", "전라", "경상", "제주"];
+    const typeOptions = ["?�체", "Full", "Half", "10Km", "5Km"];
+    const statusOptions = ["?�체", "?�수 ?�정", "?�수�?, "마감 ?�박", "?�수마감", "종료"];
+    const regionOptions = ["?�체", "?�울", "경기/?�천", "강원", "충청", "?�라", "경상", "?�주"];
 
     const statusGroups = STATUS_FILTER_GROUPS;
 
@@ -113,44 +112,44 @@ export default function MarathonList() {
         setSearch(defaultSearch);
         setType(defaultType);
         setStatusFilter(defaultStatus);
-        setRegionFilter("전체");
+        setRegionFilter("?�체");
     };
 
-    // --- 2. 필터링 로직 (marathons 상태값 사용) ---
+    // --- 2. ?�터�?로직 (marathons ?�태�??�용) ---
     const filtered = marathons
         .map(m => ({ ...m, status: getMarathonStatus(m, todayStr) }))
         .filter(m => {
-            // 0. 종료된 지 2달 넘은 대회는 제외
+            // 0. 종료??지 2???��? ?�?�는 ?�외
             if (m.raceDate && m.raceDate < twoMonthsAgoStr) {
                 return false;
             }
 
-            // 1. 검색어 필터
+            // 1. 검?�어 ?�터
             const matchText = (m.title + m.location).toLowerCase().includes(search.toLowerCase());
 
-            // 2. 종목(Type) 필터 수정
-            const matchType = type === "전체"
+            // 2. 종목(Type) ?�터 ?�정
+            const matchType = type === "?�체"
                 ? true
                 : (m.type && m.type.some(t => t.toLowerCase().includes(type.toLowerCase())));
 
-            // 3. 상태 필터 — 기본(전체)에서는 2달 이내 종료 대회 포함 노출; 특정 상태 선택 시 해당 상태만 노출
+            // 3. ?�태 ?�터 ??기본(?�체)?�서??2???�내 종료 ?�???�함 ?�출; ?�정 ?�태 ?�택 ???�당 ?�태�??�출
             let matchStatus = true;
-            if (statusFilter !== "전체") {
+            if (statusFilter !== "?�체") {
                 matchStatus = (statusGroups[statusFilter] || []).includes(m.status);
             }
 
-            // 4. 지역 필터
+            // 4. 지???�터
             let matchRegion = true;
-            if (regionFilter !== "전체") {
+            if (regionFilter !== "?�체") {
                 const loc = m.location || "";
-                if (regionFilter === "경기/인천") {
-                    matchRegion = loc.includes("경기") || loc.includes("인천");
+                if (regionFilter === "경기/?�천") {
+                    matchRegion = loc.includes("경기") || loc.includes("?�천");
                 } else if (regionFilter === "충청") {
-                    matchRegion = loc.includes("충남") || loc.includes("충북") || loc.includes("대전") || loc.includes("세종") || loc.includes("충청");
-                } else if (regionFilter === "전라") {
-                    matchRegion = loc.includes("전남") || loc.includes("전북") || loc.includes("광주") || loc.includes("전라");
+                    matchRegion = loc.includes("충남") || loc.includes("충북") || loc.includes("?�??) || loc.includes("?�종") || loc.includes("충청");
+                } else if (regionFilter === "?�라") {
+                    matchRegion = loc.includes("?�남") || loc.includes("?�북") || loc.includes("광주") || loc.includes("?�라");
                 } else if (regionFilter === "경상") {
-                    matchRegion = loc.includes("경남") || loc.includes("경북") || loc.includes("부산") || loc.includes("대구") || loc.includes("울산") || loc.includes("경상");
+                    matchRegion = loc.includes("경남") || loc.includes("경북") || loc.includes("부??) || loc.includes("?��?) || loc.includes("?�산") || loc.includes("경상");
                 } else {
                     matchRegion = loc.includes(regionFilter);
                 }
@@ -158,21 +157,21 @@ export default function MarathonList() {
 
             return matchText && matchType && matchStatus && matchRegion;
         })
-        // 기본 정렬: 다가오는 대회 우선(raceDate), 종료는 아래로
+        // 기본 ?�렬: ?��??�는 ?�???�선(raceDate), 종료???�래�?
         .sort(compareUpcomingFirst);
 
-    // 필터 조건 변경 시 1페이지로 리셋
+    // ?�터 조건 변�???1?�이지�?리셋
     useEffect(() => {
         setCurrentPage(1);
     }, [search, type, statusFilter, regionFilter, pageSize]);
 
-    // 페이징 계산
+    // ?�이�?계산
     const totalCount = filtered.length;
     const totalPages = Math.ceil(totalCount / pageSize) || 1;
     const startIndex = (currentPage - 1) * pageSize;
     const paginatedList = filtered.slice(startIndex, startIndex + pageSize);
 
-    // 페이지 변경 핸들러 (목록 상단으로 부드럽게 스크롤)
+    // ?�이지 변�??�들??(목록 ?�단?�로 부?�럽�??�크�?
     const handlePageChange = (newPage) => {
         if (newPage < 1 || newPage > totalPages || newPage === currentPage) return;
         setCurrentPage(newPage);
@@ -181,7 +180,7 @@ export default function MarathonList() {
         }
     };
 
-    // 5개 단위 페이지 번호 리스트 계산
+    // 5�??�위 ?�이지 번호 리스??계산
     const getPageNumbers = () => {
         const maxPages = 5;
         let start = Math.max(1, currentPage - Math.floor(maxPages / 2));
@@ -199,16 +198,16 @@ export default function MarathonList() {
     return (
         <div className="marathon-page">
             <Helmet>
-                <title>전국 마라톤 일정·접수 D-Day 캘린더 (2026) | 두러닝</title>
-                <meta name="description" content="2026 전국 마라톤·러닝 대회 일정 총정리. 서울·수도권 및 지방 지역별, 거리별(10K·하프·풀) 실시간 접수 상태와 공식 신청 링크를 한곳에서 확인하세요." />
-                <meta property="og:title" content="전국 마라톤 일정·접수 D-Day 캘린더 | 두러닝" />
-                <meta property="og:description" content="2026 다가오는 전국 마라톤 대회 일정, 실시간 접수 현황, 공식 신청 링크 총정리." />
-                <link rel="canonical" href="https://dorunning.app/marathon" />
+                <title>?�국 마라???�정·?�수 D-Day 캘린??(2026) | ?�러??/title>
+                <meta name="description" content="2026 ?�국 마라?�·러???�???�정 총정�? ?�울·?�도�?�?지�?지??��, 거리�?10K·?�프·?�) ?�시�??�수 ?�태?� 공식 ?�청 링크�??�곳?�서 ?�인?�세??" />
+                <meta property="og:title" content="?�국 마라???�정·?�수 D-Day 캘린??| ?�러?? />
+                <meta property="og:description" content="2026 ?��??�는 ?�국 마라???�???�정, ?�시�??�수 ?�황, 공식 ?�청 링크 총정�?" />
+                <link rel="canonical" href="https://www.dorunning.app/marathon" />
             </Helmet>
             <header className="marathon-header">
-                <h1><Award size={40} style={{ verticalAlign: 'middle', marginRight: '16px', color: 'var(--primary)' }} /> 전국 마라톤·러닝 대회 일정</h1>
+                <h1><Award size={40} style={{ verticalAlign: 'middle', marginRight: '16px', color: 'var(--primary)' }} /> ?�국 마라?�·러???�???�정</h1>
                 <p style={{ marginTop: '12px', color: 'var(--text-muted)', fontSize: '1.05rem' }}>
-                    지역·거리·접수 상태로 필터하세요. 상세에서 공식 신청 페이지로 바로 이동합니다.
+                    지??�거�?�접???�태�??�터?�세?? ?�세?�서 공식 ?�청 ?�이지�?바로 ?�동?�니??
                 </p>
             </header>
 
@@ -218,7 +217,7 @@ export default function MarathonList() {
                         <Search className="search-icon" size={18} />
                         <input
                             className="form-control"
-                            placeholder="ex) 서울 마라톤"
+                            placeholder="ex) ?�울 마라??
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
                         />
@@ -230,7 +229,7 @@ export default function MarathonList() {
                         onChange={(e) => setType(e.target.value)}
                     >
                         {typeOptions.map(opt => (
-                            <option key={opt} value={opt}>{opt === '전체' ? '전체' : opt}</option>
+                            <option key={opt} value={opt}>{opt === '?�체' ? '?�체' : opt}</option>
                         ))}
                     </select>
                 </div>
@@ -246,12 +245,12 @@ export default function MarathonList() {
                         </button>
                     ))}
                     <button className="btn-reset" onClick={resetFilters}>
-                        <RotateCcw size={14} /> 초기화
+                        <RotateCcw size={14} /> 초기??
                     </button>
                 </div>
 
                 <div className="status-row" style={{ marginTop: '12px', flexWrap: 'wrap' }}>
-                    <span style={{ fontSize: '0.9rem', color: 'var(--text-muted)', marginRight: '8px' }}>지역:</span>
+                    <span style={{ fontSize: '0.9rem', color: 'var(--text-muted)', marginRight: '8px' }}>지??</span>
                     {regionOptions.map(r => (
                         <button
                             key={r}
@@ -265,13 +264,13 @@ export default function MarathonList() {
                 </div>
             </div>
 
-            {/* 상단 툴바 (총 대회 수 & 페이지당 개수 선택) */}
+            {/* ?�단 ?�바 (�??�????& ?�이지??개수 ?�택) */}
             <div className="marathon-toolbar" ref={listTopRef}>
                 <div className="toolbar-count">
-                    총 <strong className="count-number">{totalCount}</strong>개의 마라톤 대회
+                    �?<strong className="count-number">{totalCount}</strong>개의 마라???�??
                     {totalCount > 0 && (
                         <span className="toolbar-page-info">
-                            ({currentPage} / {totalPages} 페이지)
+                            ({currentPage} / {totalPages} ?�이지)
                         </span>
                     )}
                 </div>
@@ -292,29 +291,29 @@ export default function MarathonList() {
 
             <div className="marathon-grid">
                 {loading ? (
-                    // 로딩 중일 때 8개의 스켈레톤 카드 표시
+                    // 로딩 중일 ??8개의 ?�켈?�톤 카드 ?�시
                     Array.from({ length: 8 }).map((_, i) => (
                         <Skeleton key={i} type="card" />
                     ))
                 ) : paginatedList.length === 0 ? (
                     <div className="glass-card" style={{ gridColumn: '1 / -1', padding: '60px 24px', textAlign: 'center', margin: '20px 0' }}>
                         <h2 style={{ fontSize: '1.4rem', fontWeight: 700, marginBottom: '12px', color: 'var(--text-main)' }}>
-                            2026 전국 마라톤 대회 데이터베이스 정비 안내
+                            2026 ?�국 마라???�???�이?�베?�스 ?�비 ?�내
                         </h2>
                         <p style={{ color: 'var(--text-muted)', lineHeight: '1.8', maxWidth: '600px', margin: '0 auto 24px auto', fontSize: '1rem' }}>
-                            더욱 정확하고 신뢰할 수 있는 공식 마라톤 대회 정보를 제공하기 위해<br />
-                            데이터 파이프라인 및 제휴 검증 개편 작업이 진행되고 있습니다.<br />
-                            새롭게 정돈된 2026/2027 대회 일정으로 곧 업데이트될 예정입니다.
+                            ?�욱 ?�확?�고 ?�뢰?????�는 공식 마라???�???�보�??�공?�기 ?�해<br />
+                            ?�이???�이?�라??�??�휴 검�?개편 ?�업??진행?�고 ?�습?�다.<br />
+                            ?�롭�??�돈??2026/2027 ?�???�정?�로 �??�데?�트???�정?�니??
                         </p>
                         <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
                             <Link to="/marathon/register" className="btn-primary" style={{ padding: '10px 22px', borderRadius: '8px', textDecoration: 'none', background: '#10b981' }}>
-                                + 새 마라톤 일정 직접 등록하기
+                                + ??마라???�정 직접 ?�록?�기
                             </Link>
                             <Link to="/guide" className="btn-secondary" style={{ padding: '10px 22px', borderRadius: '8px', textDecoration: 'none' }}>
-                                러닝 가이드 & 훈련 팁 보기
+                                ?�닝 가?�드 & ?�련 ??보기
                             </Link>
                             <Link to="/course" className="btn-secondary" style={{ padding: '10px 22px', borderRadius: '8px', textDecoration: 'none' }}>
-                                전국 러닝 코스 둘러보기
+                                ?�국 ?�닝 코스 ?�러보기
                             </Link>
                         </div>
                     </div>
@@ -350,7 +349,7 @@ export default function MarathonList() {
                 )}
             </div>
 
-            {/* 페이지네이션 컨트롤 바 */}
+            {/* ?�이지?�이??컨트�?�?*/}
             {!loading && totalPages > 1 && (
                 <div className="marathon-pagination-area">
                     <button
@@ -358,7 +357,7 @@ export default function MarathonList() {
                         className="page-nav-btn"
                         onClick={() => handlePageChange(1)}
                         disabled={currentPage === 1}
-                        title="첫 페이지"
+                        title="�??�이지"
                     >
                         <ChevronsLeft size={16} />
                     </button>
@@ -367,7 +366,7 @@ export default function MarathonList() {
                         className="page-nav-btn"
                         onClick={() => handlePageChange(currentPage - 1)}
                         disabled={currentPage === 1}
-                        title="이전 페이지"
+                        title="?�전 ?�이지"
                     >
                         <ChevronLeft size={16} />
                     </button>
@@ -390,7 +389,7 @@ export default function MarathonList() {
                         className="page-nav-btn"
                         onClick={() => handlePageChange(currentPage + 1)}
                         disabled={currentPage === totalPages}
-                        title="다음 페이지"
+                        title="?�음 ?�이지"
                     >
                         <ChevronRight size={16} />
                     </button>
@@ -399,7 +398,7 @@ export default function MarathonList() {
                         className="page-nav-btn"
                         onClick={() => handlePageChange(totalPages)}
                         disabled={currentPage === totalPages}
-                        title="마지막 페이지"
+                        title="마�?�??�이지"
                     >
                         <ChevronsRight size={16} />
                     </button>
@@ -409,7 +408,7 @@ export default function MarathonList() {
             {!loading && totalCount === 0 && (
                 <div style={{ textAlign: 'center', padding: '100px 0', opacity: 0.5 }}>
                     <Search size={48} style={{ margin: '0 auto 16px' }} />
-                    <h3>조건에 맞는 대회가 없습니다. 필터를 넓히거나 다른 달을 확인해 보세요.</h3>
+                    <h3>조건??맞는 ?�?��? ?�습?�다. ?�터�??�히거나 ?�른 ?�을 ?�인??보세??</h3>
                 </div>
             )}
         </div>

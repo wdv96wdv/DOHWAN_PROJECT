@@ -25,10 +25,10 @@ const Course = () => {
     <div className="course-page" style={{ background: 'var(--bg-color)', minHeight: '100vh', padding: '120px 20px' }}>
       <Helmet>
         <title>Dorunning | 코스</title>
-        <meta name="description" content="전국의 아름다운 러닝 코스를 탐색하세요. 지역별, 난이도별 맞춤 코스 정보와 지도를 제공합니다." />
+        <meta name="description" content="?�국???�름?�운 ?�닝 코스�??�색?�세?? 지??��, ?�이?�별 맞춤 코스 ?�보?� 지?��? ?�공?�니??" />
         <meta property="og:title" content="Dorunning | 코스" />
-        <meta property="og:description" content="전국의 아름다운 러닝 코스를 탐색하세요." />
-        <link rel="canonical" href="https://dorunning.app/course" />
+        <meta property="og:description" content="?�국???�름?�운 ?�닝 코스�??�색?�세??" />
+        <link rel="canonical" href="https://www.dorunning.app/course" />
       </Helmet>
       <header className="course-header" style={{ textAlign: 'center', marginBottom: '60px' }}>
         <h1 style={{ fontFamily: 'Orbitron', fontSize: '3rem', color: 'var(--text-primary)' }}>
@@ -50,7 +50,7 @@ const Course = () => {
              >
                {REGION_LIST.map(region => (
                  <option key={region} value={region}>
-                   {region === "All" ? "전국 (All Regions)" : region}
+                   {region === "All" ? "?�국 (All Regions)" : region}
                  </option>
                ))}
              </select>
@@ -61,7 +61,7 @@ const Course = () => {
       <div className="course-grid">
         {filteredCourses.length === 0 ? (
           <div style={{ textAlign: 'center', color: 'var(--text-muted)', fontSize: '1.2rem', padding: '60px 0', gridColumn: '1 / -1' }}>
-            해당 지역에 등록된 추천 코스가 없습니다.
+            ?�당 지??�� ?�록??추천 코스가 ?�습?�다.
           </div>
         ) : (
           filteredCourses.map((course) => (

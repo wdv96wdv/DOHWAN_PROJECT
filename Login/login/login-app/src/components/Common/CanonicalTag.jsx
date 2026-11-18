@@ -4,9 +4,9 @@ import { Helmet } from 'react-helmet-async';
 
 const CanonicalTag = () => {
   const location = useLocation();
-  // 트레일링 슬래시 제거 (루트 제외)하여 항상 통일된 정규 URL 보장
+  // ?�레?�링 ?�래???�거 (루트 ?�외)?�여 ??�� ?�일???�규 URL 보장
   const cleanPath = location.pathname === '/' ? '/' : location.pathname.replace(/\/+$/, '');
-  const canonicalUrl = `https://dorunning.app${cleanPath}`;
+  const canonicalUrl = `https://www.dorunning.app${cleanPath}`;
 
   return (
     <Helmet>

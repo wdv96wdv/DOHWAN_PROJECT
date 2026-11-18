@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import Read from '../../components/Board/Read'
-import { useParams, useNavigate } from 'react-router-dom' // useNavigate 추가
+import { useParams, useNavigate } from 'react-router-dom' // useNavigate 추�?
 import * as boards from '../../apis/boards'
 import * as files from '../../apis/files'
 import * as comments from '../../apis/comments'
@@ -11,7 +11,7 @@ import { Helmet } from 'react-helmet-async'
 
 const ReadContainer = () => {
   const { id } = useParams()
-  const navigate = useNavigate() // useNavigate 인스턴스 생성
+  const navigate = useNavigate() // useNavigate ?�스?�스 ?�성
   const userInfo = useAuthStore(state => state.userInfo)
 
   const [board, setBoard] = useState({})
@@ -24,9 +24,9 @@ const ReadContainer = () => {
     setBoard(resData.board)
     setFileList(resData.fileList)
 
-    // 타이틀 강제 업데이트
+    // ?�?��? 강제 ?�데?�트
     if (resData.board && resData.board.title) {
-      document.title = `Dorunning | 커뮤니티 | ${resData.board.title}`;
+      document.title = `Dorunning | 커�??�티 | ${resData.board.title}`;
     }
   }
 
@@ -36,7 +36,7 @@ const ReadContainer = () => {
       const resData = response.data.data
       setCommentList(resData || [])
     } catch (err) {
-      console.error('댓글 목록 조회 실패:', err)
+      console.error('?��? 목록 조회 ?�패:', err)
       setCommentList([])
     }
   }
@@ -44,9 +44,9 @@ const ReadContainer = () => {
   const onDownload = async (id, fileName) => {
     try {
       const file = fileList.find(f => f.id === id)
-      if (!file || !file.filePath) throw new Error('파일 정보가 없습니다.')
+      if (!file || !file.filePath) throw new Error('?�일 ?�보가 ?�습?�다.')
 
-      // URL에서 버킷 경로만 추출
+      // URL?�서 버킷 경로�?추출
       const url = new URL(file.filePath)
       const pathIndex = url.pathname.indexOf('/upload/') + '/upload/'.length
       const relativePath = url.pathname.substring(pathIndex) // MAIN/1760469488679-IMG_5582
@@ -64,7 +64,7 @@ const ReadContainer = () => {
 
     } catch (err) {
       console.error(err)
-      alert('파일 다운로드 실패: ' + err.message)
+      alert('?�일 ?�운로드 ?�패: ' + err.message)
     }
   }
 
@@ -72,10 +72,10 @@ const ReadContainer = () => {
     try {
       const newData = { ...data, userNo: userInfo.no, writer: userInfo.name };
       await comments.create(id, newData)
-      await getComments() // 댓글 목록 다시 불러오기
+      await getComments() // ?��? 목록 ?�시 불러?�기
     } catch (err) {
-      console.error('댓글 작성 실패:', err)
-      Swal.fire({ icon: 'error', title: '댓글 작성에 실패했습니다.' })
+      console.error('?��? ?�성 ?�패:', err)
+      Swal.fire({ icon: 'error', title: '?��? ?�성???�패?�습?�다.' })
     }
   }
 
@@ -85,17 +85,17 @@ const ReadContainer = () => {
       await comments.update(id, commentId, newData)
       await getComments()
     } catch (err) {
-      console.error('댓글 수정 실패:', err)
-      Swal.fire({ icon: 'error', title: '댓글 수정에 실패했습니다.' })
+      console.error('?��? ?�정 ?�패:', err)
+      Swal.fire({ icon: 'error', title: '?��? ?�정???�패?�습?�다.' })
     }
   }
 
   const onDeleteComment = async (commentId, userNo) => {
     const result = await Swal.fire({
-      title: '댓글을 삭제하시겠습니까?',
+      title: '?��?????��?�시겠습?�까?',
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: '삭제',
+      confirmButtonText: '??��',
       cancelButtonText: '취소'
     })
     if (!result.isConfirmed) return
@@ -104,24 +104,24 @@ const ReadContainer = () => {
       await comments.remove(id, commentId, { userNo })
       await getComments()
     } catch (err) {
-      console.error('댓글 삭제 실패:', err)
-      Swal.fire({ icon: 'error', title: '댓글 삭제 중 오류 발생:', text: err.message })
+      console.error('?��? ??�� ?�패:', err)
+      Swal.fire({ icon: 'error', title: '?��? ??�� �??�류 발생:', text: err.message })
     }
   }
 
-  // 게시글 삭제
+  // 게시글 ??��
   const onDelete = async (boardId) => {
     try {
       const response = await boards.remove(boardId);
-      if (response.status >= 200 && response.status < 300) { // 2xx 상태 코드 확인
-        Swal.fire({ icon: 'success', title: '게시글이 삭제되었습니다.', timer: 1500, showConfirmButton: false });
-        navigate('/boards'); // 목록으로 이동
+      if (response.status >= 200 && response.status < 300) { // 2xx ?�태 코드 ?�인
+        Swal.fire({ icon: 'success', title: '게시글????��?�었?�니??', timer: 1500, showConfirmButton: false });
+        navigate('/boards'); // 목록?�로 ?�동
       } else {
-        Swal.fire({ icon: 'error', title: `게시글 삭제에 실패했습니다. (상태 코드: ${response.status})` });
+        Swal.fire({ icon: 'error', title: `게시글 ??��???�패?�습?�다. (?�태 코드: ${response.status})` });
       }
     } catch (error) {
-      console.error('게시글 삭제 중 오류 발생:', error);
-      Swal.fire({ icon: 'error', title: '게시글 삭제 중 오류가 발생했습니다.', text: error.message });
+      console.error('게시글 ??�� �??�류 발생:', error);
+      Swal.fire({ icon: 'error', title: '게시글 ??�� �??�류가 발생?�습?�다.', text: error.message });
     }
   };
 
@@ -133,12 +133,12 @@ const ReadContainer = () => {
   return (
     <>
       <Helmet>
-        <title>Dorunning | 커뮤니티 | {board.title || '상세보기'}</title>
-        <meta name="description" content={`${board.writer || '작성자'}님의 게시글: ${board.title}`} />
-        <meta property="og:title" content={`Dorunning | 커뮤니티 | ${board.title || '상세보기'}`} />
-        <meta property="og:description" content={board.content ? board.content.substring(0, 100).replace(/<[^>]*>?/gm, '') : 'Dorunning 커뮤니티 게시글입니다.'} />
+        <title>Dorunning | 커�??�티 | {board.title || '?�세보기'}</title>
+        <meta name="description" content={`${board.writer || '?�성??}?�의 게시글: ${board.title}`} />
+        <meta property="og:title" content={`Dorunning | 커�??�티 | ${board.title || '?�세보기'}`} />
+        <meta property="og:description" content={board.content ? board.content.substring(0, 100).replace(/<[^>]*>?/gm, '') : 'Dorunning 커�??�티 게시글?�니??'} />
         <meta property="og:type" content="article" />
-        <link rel="canonical" href={`https://dorunning.app/boards/${id}`} />
+        <link rel="canonical" href={`https://www.dorunning.app/boards/${id}`} />
       </Helmet>
       <Read
         board={board}
@@ -148,7 +148,7 @@ const ReadContainer = () => {
         onCreateComment={onCreateComment}
         onUpdateComment={onUpdateComment}
         onDeleteComment={onDeleteComment}
-        onDelete={onDelete} // onDelete prop 추가
+        onDelete={onDelete} // onDelete prop 추�?
       />
     </>
   )

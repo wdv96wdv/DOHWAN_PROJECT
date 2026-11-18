@@ -63,6 +63,33 @@
   <!-- Kakao JavaScript SDK -->
   <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.4/kakao.min.js" crossorigin="anonymous"></script>
 
+  <!-- Structured Data: WebSite + Organization -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "두러닝",
+    "alternateName": "DoRunning",
+    "url": "https://www.dorunning.app",
+    "description": "전국 마라톤·러닝 대회 일정을 모으고, 신청 전에 필요한 정보를 한곳에서 확인하게 해 주는 러닝 허브",
+    "inLanguage": "ko",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://www.dorunning.app/marathon?search={search_term_string}",
+      "query-input": "required name=search_term_string"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "두러닝",
+      "url": "https://www.dorunning.app",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://www.dorunning.app/og-image.png"
+      }
+    }
+  }
+  </script>
+
 </head>
 
 <body>

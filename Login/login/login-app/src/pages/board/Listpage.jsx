@@ -6,11 +6,11 @@ const Listpage = () => {
   return (
     <>
       <Helmet>
-        <title>Dorunning | 커뮤니티</title>
-        <meta name="description" content="러닝 팁, 대회 후기, 장비 리뷰 등 러너들과 다양한 이야기를 나누어보세요. 함께 달리는 즐거움을 공유하는 커뮤니티입니다." />
-        <meta property="og:title" content="Dorunning | 커뮤니티" />
-        <meta property="og:description" content="러너들과 함께 다양한 러닝 이야기를 나누어보세요." />
-        <link rel="canonical" href="https://dorunning.app/boards" />
+        <title>Dorunning | 커�??�티</title>
+        <meta name="description" content="?�닝 ?? ?�???�기, ?�비 리뷰 ???�너?�과 ?�양???�야기�? ?�누?�보?�요. ?�께 ?�리??즐거?�??공유?�는 커�??�티?�니??" />
+        <meta property="og:title" content="Dorunning | 커�??�티" />
+        <meta property="og:description" content="?�너?�과 ?�께 ?�양???�닝 ?�야기�? ?�누?�보?�요." />
+        <link rel="canonical" href="https://www.dorunning.app/boards" />
       </Helmet>
       <ListContainer/>
     </>

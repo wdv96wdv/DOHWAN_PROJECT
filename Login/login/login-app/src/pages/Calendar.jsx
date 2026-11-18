@@ -56,10 +56,10 @@ const ExerciseCalendar = () => {
   return (
     <div className="calendar-page">
       <Helmet>
-        <title>Dorunning | 캘린더</title>
-        <meta name="description" content="나의 러닝 스케줄과 활동 내역을 캘린더로 관리하세요. 매일의 성취를 한눈에 확인할 수 있습니다." />
-        <meta property="og:title" content="Dorunning | 캘린더" />
-        <link rel="canonical" href="https://dorunning.app/calendar" />
+        <title>Dorunning | 캘린??/title>
+        <meta name="description" content="?�의 ?�닝 ?��?줄과 ?�동 ?�역??캘린?�로 관리하?�요. 매일???�취�??�눈???�인?????�습?�다." />
+        <meta property="og:title" content="Dorunning | 캘린?? />
+        <link rel="canonical" href="https://www.dorunning.app/calendar" />
       </Helmet>
       <header className="calendar-header">
         <h3 style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>

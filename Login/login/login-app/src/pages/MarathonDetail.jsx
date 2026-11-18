@@ -66,7 +66,7 @@ const MarathonDetail = () => {
             try {
                 setError(null);
 
-                // 1순위: Supabase REST API 직접 조회 (초고속 로딩, 콜드스타트 없음)
+                // 1?�위: Supabase REST API 직접 조회 (초고??로딩, 콜드?��????�음)
                 const url = `${SUPABASE_URL}/rest/v1/marathons?id=eq.${encodeURIComponent(id)}&select=*`;
                 const res = await fetch(url, {
                     headers: {
@@ -81,7 +81,7 @@ const MarathonDetail = () => {
                         const mData = rows[0];
                         setMarathon(mData);
                         if (mData.title) {
-                            document.title = `${mData.title} 일정·접수·코스 정보 (공식링크) | 두러닝`;
+                            document.title = `${mData.title} ?�정·?�수·코스 ?�보 (공식링크) | ?�러??;
                         }
                         fetchRelated(mData);
                         setLoading(false);
@@ -89,17 +89,17 @@ const MarathonDetail = () => {
                     }
                 }
 
-                // 2순위: 백엔드 API 폴백
+                // 2?�위: 백엔??API ?�백
                 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
                 const response = await axios.get(`${API_BASE_URL}/api/marathons/${id}`);
                 setMarathon(response.data);
                 if (response.data && response.data.title) {
-                    document.title = `${response.data.title} 일정·접수·코스 정보 (공식링크) | 두러닝`;
+                    document.title = `${response.data.title} ?�정·?�수·코스 ?�보 (공식링크) | ?�러??;
                 }
                 fetchRelated(response.data);
             } catch (err) {
-                console.error('상세 정보 로드 실패:', err);
-                setError('대회 정보를 불러오지 못했습니다.');
+                console.error('?�세 ?�보 로드 ?�패:', err);
+                setError('?�???�보�?불러?��? 못했?�니??');
             } finally {
                 setLoading(false);
             }
@@ -108,12 +108,12 @@ const MarathonDetail = () => {
         fetchDetail();
     }, [id]);
 
-    // 연관/추천 대회 조회 (3개)
+    // ?��?/추천 ?�??조회 (3�?
     const fetchRelated = async (currentM) => {
         try {
             const todayStr = getTodayKstStr();
             let queryUrl = `${SUPABASE_URL}/rest/v1/marathons?id=neq.${currentM.id}&race_date=gte.${todayStr}&order=race_date.asc&limit=3`;
-            if (currentM.location && currentM.location !== '전국') {
+            if (currentM.location && currentM.location !== '?�국') {
                 queryUrl += `&location=like.*${encodeURIComponent(currentM.location)}*`;
             }
 
@@ -129,8 +129,7 @@ const MarathonDetail = () => {
                 }
             }
 
-            // 폴백: 지역 무관 가장 가까운 대회 3개
-            const fallbackUrl = `${SUPABASE_URL}/rest/v1/marathons?id=neq.${currentM.id}&race_date=gte.${todayStr}&order=race_date.asc&limit=3`;
+            // ?�백: 지??무�? 가??가까운 ?�??3�?            const fallbackUrl = `${SUPABASE_URL}/rest/v1/marathons?id=neq.${currentM.id}&race_date=gte.${todayStr}&order=race_date.asc&limit=3`;
             const fbRes = await fetch(fallbackUrl, {
                 headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
             });
@@ -139,26 +138,25 @@ const MarathonDetail = () => {
                 setRelatedMarathons(fbList.map(normalizeMarathon));
             }
         } catch (e) {
-            // 추천 에러는 무시
+            // 추천 ?�러??무시
         }
     };
 
-    // 요일 포함 날짜 포맷팅
-    const formatDateWithDay = (dateStr) => {
+    // ?�일 ?�함 ?�짜 ?�맷??    const formatDateWithDay = (dateStr) => {
         if (!dateStr) return '-';
-        const days = ['일', '월', '화', '수', '목', '금', '토'];
+        const days = ['??, '??, '??, '??, '�?, '�?, '??];
         const d = new Date(dateStr);
         if (isNaN(d.getTime())) return dateStr;
         return `${dateStr} (${days[d.getDay()]})`;
     };
 
-    // 기간 일수 계산
+    // 기간 ?�수 계산
     const getPeriodDays = (start, end) => {
         if (!start || !end) return '';
         const s = new Date(start);
         const e = new Date(end);
         const diff = Math.round((e - s) / (1000 * 60 * 60 * 24)) + 1;
-        return diff > 0 ? ` (총 ${diff}일간)` : '';
+        return diff > 0 ? ` (�?${diff}?�간)` : '';
     };
 
     // D-Day 계산
@@ -171,10 +169,10 @@ const MarathonDetail = () => {
         return days === 0 ? 'D-Day' : days > 0 ? `D-${days}` : `종료`;
     };
 
-    // 실시간 라이브 초 단위 카운트다운 타이머
+    // ?�시�??�이�?�??�위 카운?�다???�?�머
     useEffect(() => {
         if (!marathon?.race_date) return;
-        // 대회 당일 오전 08:30 기준
+        // ?�???�일 ?�전 08:30 기�?
         const targetTime = new Date(`${marathon.race_date}T08:30:00+09:00`).getTime();
         
         const updateCountdown = () => {
@@ -196,8 +194,7 @@ const MarathonDetail = () => {
         return () => clearInterval(intervalId);
     }, [marathon?.race_date]);
 
-    // 링크 복사 핸들러
-    const handleShare = () => {
+    // 링크 복사 ?�들??    const handleShare = () => {
         if (navigator.clipboard) {
             navigator.clipboard.writeText(window.location.href);
             setCopied(true);
@@ -206,15 +203,14 @@ const MarathonDetail = () => {
                 toast: true,
                 position: 'top-end',
                 icon: 'success',
-                title: '대회 상세 링크가 복사되었습니다!',
+                title: '?�???�세 링크가 복사?�었?�니??',
                 showConfirmButton: false,
                 timer: 2000
             });
         }
     };
 
-    // 카카오톡 원클릭 카드 공유 핸들러
-    const handleKakaoShare = async () => {
+    // 카카?�톡 ?�클�?카드 공유 ?�들??    const handleKakaoShare = async () => {
         if (!marathon) return;
         const currentDDay = calculateDDay(marathon.race_date);
         const res = await shareKakaoMarathon({
@@ -233,24 +229,23 @@ const MarathonDetail = () => {
                 toast: true,
                 position: 'top-end',
                 icon: 'info',
-                title: '카카오톡 연동 확인 중 링크가 클립보드에 복사되었습니다.',
+                title: '카카?�톡 ?�동 ?�인 �?링크가 ?�립보드??복사?�었?�니??',
                 showConfirmButton: false,
                 timer: 2500
             });
         }
     };
 
-    // 애플 / 스마트폰 (.ics) 캘린더 파일 다운로드 핸들러
-    const handleDownloadIcs = () => {
+    // ?�플 / ?�마?�폰 (.ics) 캘린???�일 ?�운로드 ?�들??    const handleDownloadIcs = () => {
         if (!marathon) return;
         const success = downloadIcsCalendar(marathon);
         if (success) {
             Swal.fire({
-                title: '캘린더 일정 파일 (.ics) 저장 완료',
-                html: '<p style="font-size:0.95rem; color:#475569; margin-top:8px;">다운로드된 <strong>.ics 파일</strong>을 열면 아이폰/갤럭시/PC 캘린더에 마라톤 대회가 즉시 등록됩니다.<br><br><span style="color:#2563eb; font-weight:600;">✨ 대회 1일 전 아침 리마인더 알림 자동 설정 포함</span></p>',
+                title: '캘린???�정 ?�일 (.ics) ?�???�료',
+                html: '<p style="font-size:0.95rem; color:#475569; margin-top:8px;">?�운로드??<strong>.ics ?�일</strong>???�면 ?�이??갤럭??PC 캘린?�에 마라???�?��? 즉시 ?�록?�니??<br><br><span style="color:#2563eb; font-weight:600;">???�??1?????�침 리마?�더 ?�림 ?�동 ?�정 ?�함</span></p>',
                 icon: 'success',
                 confirmButtonColor: '#2563eb',
-                confirmButtonText: '확인'
+                confirmButtonText: '?�인'
             });
         }
     };
@@ -259,10 +254,10 @@ const MarathonDetail = () => {
         return (
             <div className="marathon-detail-container">
                 <Helmet>
-                    <title>대회 정보 불러오는 중... | 두러닝</title>
+                    <title>?�???�보 불러?�는 �?.. | ?�러??/title>
                 </Helmet>
                 <div style={{ padding: '120px 0', textAlign: 'center' }}>
-                    <Loading text="대회 상세 정보를 안전하게 불러오고 있습니다..." />
+                    <Loading text="?�???�세 ?�보�??�전?�게 불러?�고 ?�습?�다..." />
                 </div>
             </div>
         );
@@ -272,24 +267,23 @@ const MarathonDetail = () => {
         return (
             <div className="marathon-detail-container">
                 <Helmet>
-                    <title>대회 정보 업데이트 안내 | 두러닝</title>
+                    <title>?�???�보 ?�데?�트 ?�내 | ?�러??/title>
                 </Helmet>
                 <div style={{ textAlign: 'center', padding: '100px 0' }}>
-                    <div style={{ fontSize: '3rem', marginBottom: '16px' }}>🏃‍♂️✨</div>
+                    <div style={{ fontSize: '3rem', marginBottom: '16px' }}>?��?�♂️✨</div>
                     <h2 style={{ fontSize: '1.5rem', marginBottom: '12px', fontWeight: 700, color: 'var(--text-main)' }}>
-                        마라톤 대회 정보 정비 및 업데이트 안내
+                        마라???�???�보 ?�비 �??�데?�트 ?�내
                     </h2>
                     <p style={{ color: 'var(--text-muted)', marginBottom: '28px', lineHeight: '1.8', maxWidth: '540px', margin: '0 auto 28px' }}>
-                        더욱 정확하고 신뢰할 수 있는 공식 마라톤 대회 정보를 제공하기 위해<br />
-                        데이터베이스 개편 작업이 진행되고 있습니다. 곧 새로운 일정으로 찾아뵙겠습니다.
+                        ?�욱 ?�확?�고 ?�뢰?????�는 공식 마라???�???�보�??�공?�기 ?�해<br />
+                        ?�이?�베?�스 개편 ?�업??진행?�고 ?�습?�다. �??�로???�정?�로 찾아뵙겠?�니??
                     </p>
                     <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
                         <button className="cta-btn-primary" onClick={() => navigate('/guide')}>
-                            러닝 가이드 팁 보기
+                            ?�닝 가?�드 ??보기
                         </button>
                         <button className="cta-btn-secondary" onClick={() => navigate('/')}>
-                            홈으로 가기
-                        </button>
+                            ?�으�?가�?                        </button>
                     </div>
                 </div>
             </div>
@@ -304,26 +298,26 @@ const MarathonDetail = () => {
 
     const types = Array.isArray(marathon.type) 
         ? marathon.type.filter(Boolean) 
-        : (marathon.type ? [marathon.type] : ['마라톤']);
+        : (marathon.type ? [marathon.type] : ['마라??]);
 
     const typesStr = types.join(', ');
-    const metaTitle = `${marathon.title} 일정·접수·코스 정보 (공식링크) | 두러닝`;
+    const metaTitle = `${marathon.title} ?�정·?�수·코스 ?�보 (공식링크) | ?�러??;
 
     const descItems = [];
-    if (marathon.race_date) descItems.push(`개최일: ${marathon.race_date}`);
+    if (marathon.race_date) descItems.push(`개최?? ${marathon.race_date}`);
     if (marathon.start_date || marathon.end_date) {
         const regPeriod = [marathon.start_date, marathon.end_date].filter(Boolean).join(' ~ ');
-        descItems.push(`접수: ${regPeriod}`);
+        descItems.push(`?�수: ${regPeriod}`);
     }
-    if (marathon.location) descItems.push(`장소: ${marathon.location}`);
+    if (marathon.location) descItems.push(`?�소: ${marathon.location}`);
     if (typesStr) descItems.push(`종목: ${typesStr}`);
 
     const descDetail = descItems.length ? `[${descItems.join(' | ')}] ` : '';
-    const metaDescription = `${descDetail}${marathon.title} 마라톤 상세 정보. 일정, 접수 방법, 코스 안내 및 공식 참가신청 링크를 두러닝에서 확인하세요.`;
-    const ogDesc = descItems.length ? descItems.join(' · ') : `${marathon.title} 대회 일정 및 공식 신청 안내`;
-    const ogImg = marathon.poster_url || "https://dorunning.app/og-image.png";
+    const metaDescription = `${descDetail}${marathon.title} 마라???�세 ?�보. ?�정, ?�수 방법, 코스 ?�내 �?공식 참�??�청 링크�??�러?�에???�인?�세??`;
+    const ogDesc = descItems.length ? descItems.join(' · ') : `${marathon.title} ?�???�정 �?공식 ?�청 ?�내`;
+    const ogImg = marathon.poster_url || "https://www.dorunning.app/og-image.png";
 
-    // 타임라인 단계 계산
+    // ?�?�라???�계 계산
     const hasStarted = marathon.start_date && todayStr >= marathon.start_date;
     const hasRegClosed = marathon.end_date && todayStr > marathon.end_date;
     const hasRaceFinished = marathon.race_date && todayStr >= marathon.race_date;
@@ -333,7 +327,7 @@ const MarathonDetail = () => {
             <Helmet>
                 <title>{metaTitle}</title>
                 <meta name="description" content={metaDescription} />
-                <link rel="canonical" href={`https://dorunning.app/marathon/${marathon.id}`} />
+                <link rel="canonical" href={`https://www.dorunning.app/marathon/${marathon.id}`} />
 
                 {/* Breadcrumb Structured Data */}
                 <script type="application/ld+json">
@@ -341,9 +335,9 @@ const MarathonDetail = () => {
                         "@context": "https://schema.org",
                         "@type": "BreadcrumbList",
                         "itemListElement": [
-                            { "@type": "ListItem", "position": 1, "name": "두러닝", "item": "https://dorunning.app" },
-                            { "@type": "ListItem", "position": 2, "name": "마라톤 일정", "item": "https://dorunning.app/marathon" },
-                            { "@type": "ListItem", "position": 3, "name": marathon.title, "item": `https://dorunning.app/marathon/${marathon.id}` }
+                            { "@type": "ListItem", "position": 1, "name": "?�러??, "item": "https://www.dorunning.app" },
+                            { "@type": "ListItem", "position": 2, "name": "마라???�정", "item": "https://www.dorunning.app/marathon" },
+                            { "@type": "ListItem", "position": 3, "name": marathon.title, "item": `https://www.dorunning.app/marathon/${marathon.id}` }
                         ]
                     })}
                 </script>
@@ -380,12 +374,12 @@ const MarathonDetail = () => {
                         },
                         "performer": {
                             "@type": "PerformingGroup",
-                            "name": "대회 참가자 및 러너"
+                            "name": "?�??참�???�??�너"
                         },
                         "organizer": {
                             "@type": "Organization",
-                            "name": "두러닝",
-                            "url": "https://dorunning.app"
+                            "name": "?�러??,
+                            "url": "https://www.dorunning.app"
                         }
                     })}
                 </script>
@@ -405,8 +399,7 @@ const MarathonDetail = () => {
             {/* Top Navigation */}
             <nav className="detail-top-nav">
                 <button className="detail-back-btn" onClick={() => navigate('/marathon')}>
-                    <ArrowLeft size={18} /> 목록으로 돌아가기
-                </button>
+                    <ArrowLeft size={18} /> 목록?�로 ?�아가�?                </button>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                     {isAdmin && (
                         <button
@@ -414,15 +407,15 @@ const MarathonDetail = () => {
                             style={{ color: 'var(--primary)', fontWeight: 600 }}
                             onClick={() => navigate(`/marathon/edit/${id}`)}
                         >
-                            ✏️ 수정
+                            ?�️ ?�정
                         </button>
                     )}
                     <div className="detail-breadcrumbs">
-                        <Link to="/">홈</Link>
+                        <Link to="/">??/Link>
                         <ChevronRight size={14} />
-                        <Link to="/marathon">마라톤 일정</Link>
+                        <Link to="/marathon">마라???�정</Link>
                         <ChevronRight size={14} />
-                        <span className="current">{marathon.location || '전국'}</span>
+                        <span className="current">{marathon.location || '?�국'}</span>
                     </div>
                 </div>
             </nav>
@@ -436,7 +429,7 @@ const MarathonDetail = () => {
                 fontSize: '0.9rem', color: '#92400e'
               }}>
                 <AlertCircle size={18} />
-                <span>이 대회는 현재 <strong>관리자 승인 대기 중</strong>입니다. 승인 후 목록에 노출됩니다.</span>
+                <span>???�?�는 ?�재 <strong>관리자 ?�인 ?��?�?/strong>?�니?? ?�인 ??목록???�출?�니??</span>
               </div>
             )}
 
@@ -454,22 +447,22 @@ const MarathonDetail = () => {
                     <div 
                         className="hero-poster-wrapper"
                         onClick={() => marathon.poster_url && setIsPosterModalOpen(true)}
-                        title={marathon.poster_url ? "클릭하여 포스터 크게보기" : undefined}
+                        title={marathon.poster_url ? "?�릭?�여 ?�스???�게보기" : undefined}
                     >
                         {marathon.poster_url ? (
                             <>
                                 <img 
                                     src={marathon.poster_url} 
-                                    alt={`${marathon.title} 포스터`}
+                                    alt={`${marathon.title} ?�스??}
                                     className="hero-poster-img"
                                     loading="eager"
                                 />
                                 <div className="poster-enlarge-overlay">
                                     <Maximize2 size={24} />
-                                    <span>포스터 원본 크게보기</span>
+                                    <span>?�스???�본 ?�게보기</span>
                                 </div>
                                 <p className="poster-source-label">
-                                    출처: {marathon.title} 주최 측 · <Link to="/copyright">저작권 정책</Link>
+                                    출처: {marathon.title} 주최 �?· <Link to="/copyright">?�?�권 ?�책</Link>
                                 </p>
                             </>
                         ) : (
@@ -481,7 +474,7 @@ const MarathonDetail = () => {
                                     <p style={{ fontWeight: 700, color: 'var(--text-primary)', marginBottom: '4px' }}>
                                         {marathon.title}
                                     </p>
-                                    <p style={{ fontSize: '0.8rem' }}>공식 포스터 준비 중</p>
+                                    <p style={{ fontSize: '0.8rem' }}>공식 ?�스??준�?�?/p>
                                 </div>
                             </div>
                         )}
@@ -498,18 +491,18 @@ const MarathonDetail = () => {
                                     {dDay}
                                 </span>
                             )}
-                            {/* 실시간 초단위 카운트다운 타이머 배지 */}
+                            {/* ?�시�?초단??카운?�다???�?�머 배�? */}
                             {liveCountdown.isLive && (
-                                <span className="badge-live-countdown" title="대회 당일까지 남은 시간">
+                                <span className="badge-live-countdown" title="?�???�일까�? ?��? ?�간">
                                     <span className="live-pulse-dot" />
                                     <Clock size={13} />
                                     <span>
-                                        <strong>{liveCountdown.days}일</strong> {String(liveCountdown.hours).padStart(2, '0')}:{String(liveCountdown.minutes).padStart(2, '0')}:{String(liveCountdown.seconds).padStart(2, '0')} 남음
+                                        <strong>{liveCountdown.days}??/strong> {String(liveCountdown.hours).padStart(2, '0')}:{String(liveCountdown.minutes).padStart(2, '0')}:{String(liveCountdown.seconds).padStart(2, '0')} ?�음
                                     </span>
                                 </span>
                             )}
                             <span className="badge-tag-pill">
-                                {marathon.is_first_come ? '⚡ 선착순 마감' : '📝 일반 접수'}
+                                {marathon.is_first_come ? '???�착??마감' : '?�� ?�반 ?�수'}
                             </span>
                         </div>
 
@@ -521,7 +514,7 @@ const MarathonDetail = () => {
                                     <Calendar size={18} />
                                 </div>
                                 <div className="meta-strip-text">
-                                    <span className="meta-strip-label">대회 개최일</span>
+                                    <span className="meta-strip-label">?�??개최??/span>
                                     <span className="meta-strip-val">{formatDateWithDay(marathon.race_date)}</span>
                                 </div>
                             </div>
@@ -531,8 +524,8 @@ const MarathonDetail = () => {
                                     <MapPin size={18} />
                                 </div>
                                 <div className="meta-strip-text">
-                                    <span className="meta-strip-label">개최 지역</span>
-                                    <span className="meta-strip-val">{marathon.location || '전국'}</span>
+                                    <span className="meta-strip-label">개최 지??/span>
+                                    <span className="meta-strip-val">{marathon.location || '?�국'}</span>
                                 </div>
                             </div>
 
@@ -541,14 +534,14 @@ const MarathonDetail = () => {
                                     <Footprints size={18} />
                                 </div>
                                 <div className="meta-strip-text">
-                                    <span className="meta-strip-label">참가 코스</span>
+                                    <span className="meta-strip-label">참�? 코스</span>
                                     <span className="meta-strip-val">{types.join(' · ')}</span>
                                 </div>
                             </div>
                         </div>
 
                         <div className="hero-action-buttons">
-                            {/* 1. 메인 공식 접수 CTA */}
+                            {/* 1. 메인 공식 ?�수 CTA */}
                             {marathon.link ? (
                                 <a 
                                     href={marathon.link} 
@@ -556,44 +549,43 @@ const MarathonDetail = () => {
                                     rel="noopener noreferrer"
                                     className="cta-btn-primary"
                                 >
-                                    공식 홈페이지 참가신청 <ExternalLink size={18} />
+                                    공식 ?�페?��? 참�??�청 <ExternalLink size={18} />
                                 </a>
                             ) : (
                                 <button className="cta-btn-primary" disabled style={{ opacity: 0.6, cursor: 'not-allowed' }}>
-                                    공식 접수 링크 준비 중
-                                </button>
+                                    공식 ?�수 링크 준�?�?                                </button>
                             )}
 
-                            {/* 2. 유틸리티 3종 버튼 그리드 (카카오 공유, 캘린더 등록, 링크 복사) */}
+                            {/* 2. ?�틸리티 3�?버튼 그리??(카카??공유, 캘린???�록, 링크 복사) */}
                             <div className="hero-sub-actions-grid">
                                 <button 
                                     type="button"
                                     className="cta-btn-kakao"
                                     onClick={handleKakaoShare}
-                                    title="카카오톡 단톡방 및 친구에게 대회 안내 카드 공유"
+                                    title="카카?�톡 ?�톡�?�?친구?�게 ?�???�내 카드 공유"
                                 >
                                     <MessageCircle size={18} fill="#191919" strokeWidth={0} />
-                                    <span>카카오톡 공유</span>
+                                    <span>카카?�톡 공유</span>
                                 </button>
 
                                 <button 
                                     type="button"
                                     className="cta-btn-secondary"
                                     onClick={() => setIsCalendarModalOpen(true)}
-                                    title="마라톤 일정을 캘린더에 추가"
+                                    title="마라???�정??캘린?�에 추�?"
                                 >
                                     <Calendar size={18} />
-                                    <span>캘린더 등록</span>
+                                    <span>캘린???�록</span>
                                 </button>
 
                                 <button 
                                     type="button"
                                     className="cta-btn-secondary" 
                                     onClick={handleShare}
-                                    title="대회 페이지 링크 복사"
+                                    title="?�???�이지 링크 복사"
                                 >
                                     {copied ? <Check size={18} color="#10b981" /> : <Share2 size={18} />}
-                                    <span>{copied ? '복사 완료!' : '링크 복사'}</span>
+                                    <span>{copied ? '복사 ?�료!' : '링크 복사'}</span>
                                 </button>
                             </div>
                         </div>
@@ -604,31 +596,31 @@ const MarathonDetail = () => {
             {/* Timeline Progress Bar Card */}
             <section className="timeline-card">
                 <div className="timeline-title-row">
-                    <h3><Clock size={20} /> 대회 진행 타임라인</h3>
+                    <h3><Clock size={20} /> ?�??진행 ?�?�라??/h3>
                     <span className="timeline-status-tag">
-                        {hasRaceFinished ? '대회 종료' : hasRegClosed ? '대회 준비 중' : hasStarted ? '접수 진행 중' : '접수 예정'}
+                        {hasRaceFinished ? '?�??종료' : hasRegClosed ? '?�??준�?�? : hasStarted ? '?�수 진행 �? : '?�수 ?�정'}
                     </span>
                 </div>
 
                 <div className="timeline-steps-track">
-                    {/* Step 1: 접수 시작 */}
+                    {/* Step 1: ?�수 ?�작 */}
                     <div className={`timeline-step-node ${hasStarted ? 'completed' : 'current'}`}>
                         <div className="step-circle">1</div>
-                        <span className="step-info-label">접수 시작</span>
+                        <span className="step-info-label">?�수 ?�작</span>
                         <span className="step-info-date">{marathon.start_date || '미정'}</span>
                     </div>
 
-                    {/* Step 2: 접수 마감 */}
+                    {/* Step 2: ?�수 마감 */}
                     <div className={`timeline-step-node ${hasRegClosed ? 'completed' : (hasStarted ? 'current' : '')}`}>
                         <div className="step-circle">2</div>
-                        <span className="step-info-label">접수 마감</span>
+                        <span className="step-info-label">?�수 마감</span>
                         <span className="step-info-date">{marathon.end_date || '미정'}</span>
                     </div>
 
-                    {/* Step 3: 대회 개최 */}
+                    {/* Step 3: ?�??개최 */}
                     <div className={`timeline-step-node ${hasRaceFinished ? 'completed' : (hasRegClosed ? 'current' : '')}`}>
                         <div className="step-circle">3</div>
-                        <span className="step-info-label">대회 당일</span>
+                        <span className="step-info-label">?�???�일</span>
                         <span className="step-info-date">{marathon.race_date || '미정'}</span>
                     </div>
                 </div>
@@ -638,27 +630,27 @@ const MarathonDetail = () => {
             <div className="detail-main-grid">
                 {/* Left Column: Comprehensive Details */}
                 <div className="detail-left-col">
-                    {/* 1. 종합 안내 */}
+                    {/* 1. 종합 ?�내 */}
                     <div className="content-card-box">
                         <h2 className="card-heading-title">
-                            <Info size={22} /> 대회 종합 안내
+                            <Info size={22} /> ?�??종합 ?�내
                         </h2>
                         <div className="details-kv-table">
                             <div className="details-kv-row">
-                                <span className="kv-key"><Calendar size={16} /> 개최 일시</span>
+                                <span className="kv-key"><Calendar size={16} /> 개최 ?�시</span>
                                 <span className="kv-value">{formatDateWithDay(marathon.race_date)}</span>
                             </div>
                             <div className="details-kv-row">
-                                <span className="kv-key"><Clock size={16} /> 접수 기간</span>
+                                <span className="kv-key"><Clock size={16} /> ?�수 기간</span>
                                 <span className="kv-value">
                                     {marathon.start_date && marathon.end_date 
                                         ? `${marathon.start_date} ~ ${marathon.end_date}${getPeriodDays(marathon.start_date, marathon.end_date)}`
-                                        : '주최사 공식 공지 참조'}
+                                        : '주최??공식 공�? 참조'}
                                 </span>
                             </div>
                             <div className="details-kv-row">
-                                <span className="kv-key"><MapPin size={16} /> 개최 장소</span>
-                                <span className="kv-value">{marathon.location || '전국'} (상세 코스는 공식 안내 참조)</span>
+                                <span className="kv-key"><MapPin size={16} /> 개최 ?�소</span>
+                                <span className="kv-value">{marathon.location || '?�국'} (?�세 코스??공식 ?�내 참조)</span>
                             </div>
                             <div className="details-kv-row">
                                 <span className="kv-key"><Award size={16} /> 종목 코스</span>
@@ -669,36 +661,36 @@ const MarathonDetail = () => {
                                 </div>
                             </div>
                             <div className="details-kv-row">
-                                <span className="kv-key"><CheckCircle2 size={16} /> 참가 방식</span>
+                                <span className="kv-key"><CheckCircle2 size={16} /> 참�? 방식</span>
                                 <span className="kv-value">
-                                    {marathon.is_first_come ? '선착순 조기 마감 대회 (빠른 접수 권장)' : '일반 모집 접수'}
+                                    {marathon.is_first_come ? '?�착??조기 마감 ?�??(빠른 ?�수 권장)' : '?�반 모집 ?�수'}
                                 </span>
                             </div>
                         </div>
                     </div>
 
-                    {/* 2. 코스별 완주 가이드 */}
+                    {/* 2. 코스�??�주 가?�드 */}
                     <div className="content-card-box">
                         <h2 className="card-heading-title">
-                            <Compass size={22} /> 종목별 코스 가이드
+                            <Compass size={22} /> 종목�?코스 가?�드
                         </h2>
                         <div className="course-guides-grid">
                             {types.map((t, idx) => {
                                 const lower = t.toLowerCase();
-                                let dist = '마라톤 코스';
-                                let desc = '자신의 페이스에 맞춰 안전하고 즐겁게 완주를 목표로 달려보세요.';
-                                if (lower.includes('full') || lower.includes('풀')) {
+                                let dist = '마라??코스';
+                                let desc = '?�신???�이?�에 맞춰 ?�전?�고 즐겁�??�주�?목표�??�려보세??';
+                                if (lower.includes('full') || lower.includes('?�')) {
                                     dist = '42.195 km';
-                                    desc = '철저한 장거리 지속주(LSD) 훈련과 에너지젤 보충 및 페이스 배분이 핵심입니다.';
-                                } else if (lower.includes('half') || lower.includes('하프')) {
+                                    desc = '철�????�거�?지?�주(LSD) ?�련�??�너지??보충 �??�이??배분???�심?�니??';
+                                } else if (lower.includes('half') || lower.includes('?�프')) {
                                     dist = '21.0975 km';
-                                    desc = '러너들이 가장 선호하는 거리로, 중반 이후 일정한 크루즈 페이스 유지가 중요합니다.';
+                                    desc = '?�너?�이 가???�호?�는 거리�? 중반 ?�후 ?�정???�루�??�이???��?가 중요?�니??';
                                 } else if (lower.includes('10k') || lower.includes('10')) {
                                     dist = '10.0 km';
-                                    desc = '입문자부터 기록 단축 러너까지 가장 대중적인 코스로 시원한 스피드를 즐기기 좋습니다.';
+                                    desc = '?�문?��???기록 ?�축 ?�너까�? 가???�중적??코스�??�원???�피?��? 즐기�?좋습?�다.';
                                 } else if (lower.includes('5k') || lower.includes('5')) {
                                     dist = '5.0 km';
-                                    desc = '러닝을 처음 시작하는 비기너나 가족, 친구와 가볍게 펀런하기 가장 좋은 코스입니다.';
+                                    desc = '?�닝??처음 ?�작?�는 비기?�나 가�? 친구?� 가볍게 ?�?�하�?가??좋�? 코스?�니??';
                                 }
                                 return (
                                     <div key={idx} className="course-guide-item">
@@ -713,94 +705,93 @@ const MarathonDetail = () => {
                         </div>
                     </div>
 
-                    {/* 3. 러너 대회 준비 체크리스트 */}
+                    {/* 3. ?�너 ?�??준�?체크리스??*/}
                     <div className="content-card-box">
                         <h2 className="card-heading-title">
-                            <Sparkles size={22} /> 러너 대회 완주 체크리스트
-                        </h2>
+                            <Sparkles size={22} /> ?�너 ?�???�주 체크리스??                        </h2>
                         <div className="checklist-container">
                             <div className="checklist-step-box">
-                                <span className="checklist-badge">대회 1주 전</span>
+                                <span className="checklist-badge">?�??1�???/span>
                                 <p className="checklist-desc-list">
-                                    배번호 및 기념품 수령 확인, 레이스 데이에 신을 검증된 러닝화 점검, 과도한 강훈련 대신 컨디션 조절(테이퍼링).
+                                    배번??�?기념???�령 ?�인, ?�이???�이???�을 검증된 ?�닝???��?, 과도??강훈???�??컨디??조절(?�이?�링).
                                 </p>
                             </div>
                             <div className="checklist-step-box">
-                                <span className="checklist-badge">대회 전날</span>
+                                <span className="checklist-badge">?�???�날</span>
                                 <p className="checklist-desc-list">
-                                    신분증 및 배번호 핀 부착, 탄수화물 위주의 식사(카보로딩), 충분한 수분 섭취 및 최소 7시간 이상의 숙면 취하기.
+                                    ?�분�?�?배번???� 부�? ?�수?�물 ?�주???�사(카보로딩), 충분???�분 ??�� �?최소 7?�간 ?�상???�면 취하�?
                                 </p>
                             </div>
                             <div className="checklist-step-box">
-                                <span className="checklist-badge">대회 당일</span>
+                                <span className="checklist-badge">?�???�일</span>
                                 <p className="checklist-desc-list">
-                                    출발 1시간 30분 전 대회장 도착, 가벼운 조깅과 동적 스트레칭, 물품 보관 후 출발 20분 전 출발선 대기.
+                                    출발 1?�간 30�????�?�장 ?�착, 가벼운 조깅�??�적 ?�트?�칭, 물품 보�? ??출발 20�???출발???��?
                                 </p>
                             </div>
                         </div>
                     </div>
 
-                    {/* 4. 코스 페이스 배분 & 완주 전략 */}
+                    {/* 4. 코스 ?�이??배분 & ?�주 ?�략 */}
                     <div className="content-card-box">
                         <h2 className="card-heading-title">
-                            <Activity size={22} /> 코스 페이스 배분 & 완주 전략
+                            <Activity size={22} /> 코스 ?�이??배분 & ?�주 ?�략
                         </h2>
                         <div className="checklist-container">
                             <div className="checklist-step-box">
                                 <span className="checklist-badge">초반 (0 ~ 5km)</span>
                                 <p className="checklist-desc-list">
-                                    <strong>오버페이스 절대 금지:</strong> 대회장의 뜨거운 열기와 인파에 휩쓸리지 않고 목표 페이스보다 10~15초 늦게 차분히 출발하여 심박수를 안정시킵니다.
+                                    <strong>?�버?�이???��? 금�?:</strong> ?�?�장???�거???�기?� ?�파???�쓸리�? ?�고 목표 ?�이?�보??10~15�???�� 차분??출발?�여 ?�박?��? ?�정?�킵?�다.
                                 </p>
                             </div>
                             <div className="checklist-step-box">
-                                <span className="checklist-badge">중반 (5 ~ 15km / 하프·풀)</span>
+                                <span className="checklist-badge">중반 (5 ~ 15km / ?�프·?�)</span>
                                 <p className="checklist-desc-list">
-                                    <strong>크루즈 페이스 유지:</strong> 호흡과 보폭을 일정하게 정렬하고 5km마다 설치된 급수대에서 목마름을 느끼기 전에 소량씩 수분을 규칙적으로 섭취합니다.
+                                    <strong>?�루�??�이???��?:</strong> ?�흡�?보폭???�정?�게 ?�렬?�고 5km마다 ?�치??급수?�?�서 목마름을 ?�끼�??�에 ?�량???�분??규칙?�으�???��?�니??
                                 </p>
                             </div>
                             <div className="checklist-step-box">
-                                <span className="checklist-badge">후반 (라스트 구간)</span>
+                                <span className="checklist-badge">?�반 (?�스??구간)</span>
                                 <p className="checklist-desc-list">
-                                    <strong>네거티브 스플릿 도전:</strong> 남아있는 체력을 바탕으로 턱을 당기고 팔치기를 의식하며 일정한 리듬을 유지해 피니시 라인까지 안정적으로 골인합니다.
+                                    <strong>?�거?�브 ?�플�??�전:</strong> ?�아?�는 체력??바탕?�로 ?�을 ?�기�??�치기�? ?�식?�며 ?�정??리듬???��????�니???�인까�? ?�정?�으�?골인?�니??
                                 </p>
                             </div>
                         </div>
                     </div>
 
-                    {/* 5. 레이스 영양 & 수분 보충 가이드 */}
+                    {/* 5. ?�이???�양 & ?�분 보충 가?�드 */}
                     <div className="content-card-box">
                         <h2 className="card-heading-title">
-                            <Zap size={22} /> 레이스 영양 & 수분 보충 가이드
+                            <Zap size={22} /> ?�이???�양 & ?�분 보충 가?�드
                         </h2>
                         <div className="checklist-container">
                             <div className="checklist-step-box">
-                                <span className="checklist-badge">대회 3일 전</span>
+                                <span className="checklist-badge">?�??3????/span>
                                 <p className="checklist-desc-list">
-                                    <strong>글리코겐 저장(카보로딩):</strong> 자극적인 음식과 기름진 식사를 피하고 쌀밥, 바나나, 고구마 등 복합 탄수화물 비중을 식단의 70%까지 늘립니다.
+                                    <strong>글리코�??�??카보로딩):</strong> ?�극?�인 ?�식�?기름�??�사�??�하�??��? 바나?? 고구�???복합 ?�수?�물 비중???�단??70%까�? ?�립?�다.
                                 </p>
                             </div>
                             <div className="checklist-step-box">
-                                <span className="checklist-badge">대회 당일 아침</span>
+                                <span className="checklist-badge">?�???�일 ?�침</span>
                                 <p className="checklist-desc-list">
-                                    <strong>출발 3~4시간 전 식사:</strong> 소화가 쉬운 떡이나 베이글, 바나나 위주로 가볍게 식사하고 출발 1시간 전까지 미온수 300~500ml를 나누어 마십니다.
+                                    <strong>출발 3~4?�간 ???�사:</strong> ?�화가 ?�운 ?�이??베이글, 바나???�주�?가볍게 ?�사?�고 출발 1?�간 ?�까지 미온??300~500ml�??�누??마십?�다.
                                 </p>
                             </div>
                             <div className="checklist-step-box">
-                                <span className="checklist-badge">레이스 중 보충</span>
+                                <span className="checklist-badge">?�이??�?보충</span>
                                 <p className="checklist-desc-list">
-                                    <strong>에너지젤 타이밍:</strong> 하프/풀코스 주자는 10km, 20km, 30km 지점 급수대 직전에 에너지젤을 섭취하고 물과 함께 넘겨 체내 흡수율을 높입니다.
+                                    <strong>?�너지???�?�밍:</strong> ?�프/?�코스 주자??10km, 20km, 30km 지??급수?� 직전???�너지?�을 ??��?�고 물과 ?�께 ?�겨 체내 ?�수?�을 ?�입?�다.
                                 </p>
                             </div>
                         </div>
                     </div>
 
-                    {/* 6. 안내 및 유의사항 */}
+                    {/* 6. ?�내 �??�의?�항 */}
                     <div className="detail-trust-box">
                         <AlertCircle size={22} style={{ flexShrink: 0, marginTop: '2px' }} />
                         <div className="trust-box-text">
-                            <strong>참가 신청 전 확인 안내</strong><br />
-                            대회 일정, 코스 구성, 기념품 및 접수 마감 시간은 주최·주관사의 사정에 따라 예고 없이 변경될 수 있습니다. 
-                            참가 신청 및 결제 전 반드시 아래 공식 홈페이지의 최신 공지사항을 확인해 주시기 바랍니다.
+                            <strong>참�? ?�청 ???�인 ?�내</strong><br />
+                            ?�???�정, 코스 구성, 기념??�??�수 마감 ?�간?� 주최·주�??�의 ?�정???�라 ?�고 ?�이 변경될 ???�습?�다. 
+                            참�? ?�청 �?결제 ??반드???�래 공식 ?�페?��???최신 공�??�항???�인??주시�?바랍?�다.
                         </div>
                     </div>
                 </div>
@@ -810,10 +801,10 @@ const MarathonDetail = () => {
                     {/* Official Hub Card */}
                     <div className="sidebar-action-card">
                         <h3 className="sidebar-title">
-                            <LinkIcon size={18} /> 공식 참가 신청
+                            <LinkIcon size={18} /> 공식 참�? ?�청
                         </h3>
                         <p className="sidebar-desc">
-                            공식 주최사 웹사이트로 연결됩니다. 참가 요강 및 코스도를 확인 후 접수하세요.
+                            공식 주최???�사?�트�??�결?�니?? 참�? ?�강 �?코스?��? ?�인 ???�수?�세??
                         </p>
                         {marathon.link ? (
                             <a 
@@ -822,12 +813,11 @@ const MarathonDetail = () => {
                                 rel="noopener noreferrer"
                                 className="sidebar-cta-btn"
                             >
-                                공식 사이트 바로가기 <ExternalLink size={18} />
+                                공식 ?�이??바로가�?<ExternalLink size={18} />
                             </a>
                         ) : (
                             <button className="sidebar-cta-btn" disabled style={{ opacity: 0.6, cursor: 'not-allowed' }}>
-                                공식 접수 링크 준비 중
-                            </button>
+                                공식 ?�수 링크 준�?�?                            </button>
                         )}
                     </div>
 
@@ -835,8 +825,7 @@ const MarathonDetail = () => {
                     {relatedMarathons.length > 0 && (
                         <div className="related-widget">
                             <h3 className="sidebar-title">
-                                <Award size={18} /> 함께 둘러보는 대회
-                            </h3>
+                                <Award size={18} /> ?�께 ?�러보는 ?�??                            </h3>
                             <div className="related-list">
                                 {relatedMarathons.map((rm) => (
                                     <Link 
@@ -872,23 +861,23 @@ const MarathonDetail = () => {
                         <button 
                             className="poster-modal-close-btn"
                             onClick={() => setIsPosterModalOpen(false)}
-                            title="닫기"
+                            title="?�기"
                         >
                             <X size={20} />
                         </button>
                         <img 
                             src={marathon.poster_url} 
-                            alt={`${marathon.title} 포스터 원본`}
+                            alt={`${marathon.title} ?�스???�본`}
                             className="poster-modal-img" 
                         />
                         <p className="poster-modal-source">
-                            이미지 출처: {marathon.title} 주최 측 · 홍보 목적 게시 · <Link to="/copyright" onClick={() => setIsPosterModalOpen(false)}>저작권 정책</Link>
+                            ?��?지 출처: {marathon.title} 주최 �?· ?�보 목적 게시 · <Link to="/copyright" onClick={() => setIsPosterModalOpen(false)}>?�?�권 ?�책</Link>
                         </p>
                     </div>
                 </div>
             )}
 
-            {/* Calendar Integration Modal (모바일 & 데스크톱 완벽 대응) */}
+            {/* Calendar Integration Modal (모바??& ?�스?�톱 ?�벽 ?�?? */}
             {isCalendarModalOpen && (
                 <div 
                     className="cal-modal-backdrop"
@@ -901,19 +890,19 @@ const MarathonDetail = () => {
                         <div className="cal-modal-header">
                             <div className="cal-modal-title-group">
                                 <Calendar size={22} className="cal-modal-icon" />
-                                <h3>마라톤 일정 캘린더 등록</h3>
+                                <h3>마라???�정 캘린???�록</h3>
                             </div>
                             <button 
                                 className="cal-modal-close-btn"
                                 onClick={() => setIsCalendarModalOpen(false)}
-                                title="닫기"
+                                title="?�기"
                             >
                                 <X size={20} />
                             </button>
                         </div>
                         
                         <p className="cal-modal-desc">
-                            대회 일정을 캘린더에 등록하여 접수 마감과 대회 당일을 놓치지 마세요.
+                            ?�???�정??캘린?�에 ?�록?�여 ?�수 마감�??�???�일???�치지 마세??
                         </p>
 
                         <div className="cal-modal-options">
@@ -926,8 +915,8 @@ const MarathonDetail = () => {
                             >
                                 <div className="cal-opt-badge google">G</div>
                                 <div className="cal-opt-text">
-                                    <strong>구글 캘린더에 등록</strong>
-                                    <small>구글 웹 캘린더 새 창에서 바로 추가</small>
+                                    <strong>구�? 캘린?�에 ?�록</strong>
+                                    <small>구�? ??캘린????창에??바로 추�?</small>
                                 </div>
                                 <ExternalLink size={16} className="cal-opt-arrow" />
                             </a>
@@ -944,8 +933,8 @@ const MarathonDetail = () => {
                                     <Download size={18} />
                                 </div>
                                 <div className="cal-opt-text">
-                                    <strong>애플 / 스마트폰 캘린더 (.ics)</strong>
-                                    <small>아이폰/갤럭시 기본 캘린더 자동 등록 (D-1 알림 포함)</small>
+                                    <strong>?�플 / ?�마?�폰 캘린??(.ics)</strong>
+                                    <small>?�이??갤럭??기본 캘린???�동 ?�록 (D-1 ?�림 ?�함)</small>
                                 </div>
                                 <ChevronRight size={18} className="cal-opt-arrow" />
                             </button>

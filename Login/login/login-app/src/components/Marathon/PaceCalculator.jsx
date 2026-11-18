@@ -4,10 +4,10 @@ import Swal from 'sweetalert2';
 import './PaceCalculator.css';
 
 const DISTANCE_PRESETS = [
-    { label: '5 km', km: 5.0, popularTimes: [{ h: 0, m: 25, s: 0, name: '25분 (5:00/km)' }, { h: 0, m: 30, s: 0, name: '30분 (6:00/km)' }, { h: 0, m: 35, s: 0, name: '35분 (7:00/km)' }] },
-    { label: '10 km', km: 10.0, popularTimes: [{ h: 0, m: 45, s: 0, name: '45분 (4:30/km)' }, { h: 0, m: 50, s: 0, name: '50분 (5:00/km)' }, { h: 1, m: 0, s: 0, name: '60분 (6:00/km)' }] },
-    { label: '하프 (21.0975km)', km: 21.0975, popularTimes: [{ h: 1, m: 40, s: 0, name: '1시간 40분' }, { h: 1, m: 50, s: 0, name: '1시간 50분' }, { h: 2, m: 0, s: 0, name: '2시간 (5:41/km)' }] },
-    { label: '풀코스 (42.195km)', km: 42.195, popularTimes: [{ h: 2, m: 59, s: 59, name: 'Sub-3 (2:59)' }, { h: 3, m: 30, s: 0, name: 'Sub-3.5 (3:30)' }, { h: 4, m: 0, s: 0, name: 'Sub-4 (4:00)' }, { h: 4, m: 30, s: 0, name: '4시간 30분' }] },
+    { label: '5 km', km: 5.0, popularTimes: [{ h: 0, m: 25, s: 0, name: '25�?(5:00/km)' }, { h: 0, m: 30, s: 0, name: '30�?(6:00/km)' }, { h: 0, m: 35, s: 0, name: '35�?(7:00/km)' }] },
+    { label: '10 km', km: 10.0, popularTimes: [{ h: 0, m: 45, s: 0, name: '45�?(4:30/km)' }, { h: 0, m: 50, s: 0, name: '50�?(5:00/km)' }, { h: 1, m: 0, s: 0, name: '60�?(6:00/km)' }] },
+    { label: '?�프 (21.0975km)', km: 21.0975, popularTimes: [{ h: 1, m: 40, s: 0, name: '1?�간 40�? }, { h: 1, m: 50, s: 0, name: '1?�간 50�? }, { h: 2, m: 0, s: 0, name: '2?�간 (5:41/km)' }] },
+    { label: '?�코스 (42.195km)', km: 42.195, popularTimes: [{ h: 2, m: 59, s: 59, name: 'Sub-3 (2:59)' }, { h: 3, m: 30, s: 0, name: 'Sub-3.5 (3:30)' }, { h: 4, m: 0, s: 0, name: 'Sub-4 (4:00)' }, { h: 4, m: 30, s: 0, name: '4?�간 30�? }] },
 ];
 
 const PaceCalculator = ({ initialDistance = '10 km' }) => {
@@ -22,7 +22,7 @@ const PaceCalculator = ({ initialDistance = '10 km' }) => {
     const [showSplitTable, setShowSplitTable] = useState(true);
     const [copied, setCopied] = useState(false);
 
-    // 실제 거리 km 계산
+    // ?�제 거리 km 계산
     const currentDistanceKm = useMemo(() => {
         if (selectedPreset === 'custom') {
             const parsed = parseFloat(customKm);
@@ -32,7 +32,7 @@ const PaceCalculator = ({ initialDistance = '10 km' }) => {
         return preset ? preset.km : 10;
     }, [selectedPreset, customKm]);
 
-    // 총 시간(초)
+    // �??�간(�?
     const totalSeconds = useMemo(() => {
         const h = parseInt(hours, 10) || 0;
         const m = parseInt(minutes, 10) || 0;
@@ -40,7 +40,7 @@ const PaceCalculator = ({ initialDistance = '10 km' }) => {
         return h * 3600 + m * 60 + s;
     }, [hours, minutes, seconds]);
 
-    // 1km당 페이스 및 시속 계산
+    // 1km???�이??�??�속 계산
     const paceStats = useMemo(() => {
         if (totalSeconds <= 0 || currentDistanceKm <= 0) {
             return { paceMin: 0, paceSec: 0, speedKmh: '0.0', track400mSec: 0, estCalories: 0 };
@@ -51,13 +51,13 @@ const PaceCalculator = ({ initialDistance = '10 km' }) => {
         const paceSec = Math.round(secPerKm % 60);
         const speedKmh = ((currentDistanceKm / (totalSeconds / 3600))).toFixed(1);
         const track400mSec = Math.round((secPerKm * 0.4));
-        // 대략 체중 65kg 기준 마라톤 소모 칼로리 (km * 체중 * 1.036)
+        // ?�??체중 65kg 기�? 마라???�모 칼로�?(km * 체중 * 1.036)
         const estCalories = Math.round(currentDistanceKm * 65 * 1.036);
 
         return { paceMin, paceSec, speedKmh, track400mSec, estCalories };
     }, [totalSeconds, currentDistanceKm]);
 
-    // 5km 단위 스플릿 테이블 생성
+    // 5km ?�위 ?�플�??�이�??�성
     const splitTable = useMemo(() => {
         if (totalSeconds <= 0 || currentDistanceKm <= 0) return [];
 
@@ -80,7 +80,7 @@ const PaceCalculator = ({ initialDistance = '10 km' }) => {
             checkpoint += 5;
         }
 
-        // 완주 지점 (Finish)
+        // ?�주 지??(Finish)
         const fh = Math.floor(totalSeconds / 3600);
         const fm = Math.floor((totalSeconds % 3600) / 60);
         const fs = totalSeconds % 60;
@@ -96,24 +96,24 @@ const PaceCalculator = ({ initialDistance = '10 km' }) => {
         return splits;
     }, [totalSeconds, currentDistanceKm]);
 
-    // 프리셋 목표시간 설정
+    // ?�리??목표?�간 ?�정
     const handleSetTime = (h, m, s) => {
         setHours(String(h));
         setMinutes(String(m));
         setSeconds(String(s));
     };
 
-    // 스플릿 타임 텍스트 복사
+    // ?�플�??�???�스??복사
     const handleCopySplits = () => {
         if (!splitTable.length) return;
         const lines = [
-            `🏃 [두러닝] 목표 페이스 & 스플릿 타임 계획`,
-            `거리: ${currentDistanceKm} km | 목표 시간: ${hours}시 ${minutes}분 ${seconds}초`,
-            `평균 페이스: ${paceStats.paceMin}'${String(paceStats.paceSec).padStart(2, '0')}"/km (시속 ${paceStats.speedKmh} km/h)`,
+            `?�� [?�러?? 목표 ?�이??& ?�플�??�??계획`,
+            `거리: ${currentDistanceKm} km | 목표 ?�간: ${hours}??${minutes}�?${seconds}�?,
+            `?�균 ?�이?? ${paceStats.paceMin}'${String(paceStats.paceSec).padStart(2, '0')}"/km (?�속 ${paceStats.speedKmh} km/h)`,
             `------------------------`,
-            ...splitTable.map(s => `${s.distLabel} ➔ ${s.cumulativeTime}`),
+            ...splitTable.map(s => `${s.distLabel} ??${s.cumulativeTime}`),
             `------------------------`,
-            `두러닝에서 계산됨: https://dorunning.app`
+            `?�러?�에??계산?? https://www.dorunning.app`
         ];
         navigator.clipboard.writeText(lines.join('\n'));
         setCopied(true);
@@ -122,7 +122,7 @@ const PaceCalculator = ({ initialDistance = '10 km' }) => {
             toast: true,
             position: 'top-end',
             icon: 'success',
-            title: '구간별 스플릿 타임이 복사되었습니다!',
+            title: '구간�??�플�??�?�이 복사?�었?�니??',
             showConfirmButton: false,
             timer: 2000
         });
@@ -134,18 +134,17 @@ const PaceCalculator = ({ initialDistance = '10 km' }) => {
         <div className="content-card-box pace-calculator-card">
             <div className="card-heading-title-row">
                 <h2 className="card-heading-title" style={{ margin: 0 }}>
-                    <Gauge size={22} className="text-primary-blue" /> 러너 목표 페이스 & 스플릿 계산기
-                </h2>
+                    <Gauge size={22} className="text-primary-blue" /> ?�너 목표 ?�이??& ?�플�?계산�?                </h2>
                 <span className="pace-sub-badge">Race Pace</span>
             </div>
 
             <p className="pace-calc-intro">
-                목표 완주 시간과 종목을 선택하면 <strong>1km당 필요 페이스</strong>와 <strong>5km 단위 통과 시간(Split)</strong>을 즉시 산출합니다.
+                목표 ?�주 ?�간�?종목???�택?�면 <strong>1km???�요 ?�이??/strong>?� <strong>5km ?�위 ?�과 ?�간(Split)</strong>??즉시 ?�출?�니??
             </p>
 
-            {/* 거리 프리셋 버튼 */}
+            {/* 거리 ?�리??버튼 */}
             <div className="pace-distance-selector">
-                <span className="selector-label"><Target size={14} /> 종목 선택</span>
+                <span className="selector-label"><Target size={14} /> 종목 ?�택</span>
                 <div className="distance-chips-row">
                     {DISTANCE_PRESETS.map((dp) => (
                         <button
@@ -168,13 +167,13 @@ const PaceCalculator = ({ initialDistance = '10 km' }) => {
                         className={`distance-chip ${selectedPreset === 'custom' ? 'active' : ''}`}
                         onClick={() => setSelectedPreset('custom')}
                     >
-                        직접 입력
+                        직접 ?�력
                     </button>
                 </div>
 
                 {selectedPreset === 'custom' && (
                     <div className="custom-km-input-row">
-                        <label>직접 거리 입력 (km):</label>
+                        <label>직접 거리 ?�력 (km):</label>
                         <input
                             type="number"
                             step="0.1"
@@ -189,9 +188,9 @@ const PaceCalculator = ({ initialDistance = '10 km' }) => {
                 )}
             </div>
 
-            {/* 목표 시간 입력 & 빠른 프리셋 */}
+            {/* 목표 ?�간 ?�력 & 빠른 ?�리??*/}
             <div className="pace-time-input-section">
-                <span className="selector-label"><Clock size={14} /> 목표 완주 시간 입력</span>
+                <span className="selector-label"><Clock size={14} /> 목표 ?�주 ?�간 ?�력</span>
                 <div className="time-inputs-cluster">
                     <div className="time-input-group">
                         <input
@@ -202,7 +201,7 @@ const PaceCalculator = ({ initialDistance = '10 km' }) => {
                             onChange={(e) => setHours(e.target.value)}
                             className="pace-number-input time-box"
                         />
-                        <span className="unit-label">시간</span>
+                        <span className="unit-label">?�간</span>
                     </div>
                     <span className="time-colon">:</span>
                     <div className="time-input-group">
@@ -214,7 +213,7 @@ const PaceCalculator = ({ initialDistance = '10 km' }) => {
                             onChange={(e) => setMinutes(e.target.value)}
                             className="pace-number-input time-box"
                         />
-                        <span className="unit-label">분</span>
+                        <span className="unit-label">�?/span>
                     </div>
                     <span className="time-colon">:</span>
                     <div className="time-input-group">
@@ -226,11 +225,11 @@ const PaceCalculator = ({ initialDistance = '10 km' }) => {
                             onChange={(e) => setSeconds(e.target.value)}
                             className="pace-number-input time-box"
                         />
-                        <span className="unit-label">초</span>
+                        <span className="unit-label">�?/span>
                     </div>
                 </div>
 
-                {/* 인기 목표 기록 원클릭 프리셋 */}
+                {/* ?�기 목표 기록 ?�클�??�리??*/}
                 {currentPresetObj && currentPresetObj.popularTimes && (
                     <div className="popular-times-row">
                         <span className="popular-label">추천 목표:</span>
@@ -248,44 +247,44 @@ const PaceCalculator = ({ initialDistance = '10 km' }) => {
                 )}
             </div>
 
-            {/* 결과 대시보드 카드 */}
+            {/* 결과 ?�?�보??카드 */}
             <div className="pace-result-summary-grid">
                 <div className="pace-stat-card highlight">
-                    <span className="stat-card-title"><Zap size={16} /> 목표 1km 페이스</span>
+                    <span className="stat-card-title"><Zap size={16} /> 목표 1km ?�이??/span>
                     <div className="stat-card-big-value">
-                        {paceStats.paceMin}<span>분</span> {String(paceStats.paceSec).padStart(2, '0')}<span>초</span>
+                        {paceStats.paceMin}<span>�?/span> {String(paceStats.paceSec).padStart(2, '0')}<span>�?/span>
                         <small>/ km</small>
                     </div>
                     <span className="stat-card-sub">
-                        400m 트랙 1바퀴 약 <strong>{paceStats.track400mSec}초</strong>
+                        400m ?�랙 1바�???<strong>{paceStats.track400mSec}�?/strong>
                     </span>
                 </div>
 
                 <div className="pace-stat-card">
-                    <span className="stat-card-title"><Gauge size={16} /> 평균 주행 속도</span>
+                    <span className="stat-card-title"><Gauge size={16} /> ?�균 주행 ?�도</span>
                     <div className="stat-card-big-value">
                         {paceStats.speedKmh} <small>km/h</small>
                     </div>
-                    <span className="stat-card-sub">러닝 머신 트레드밀 속도 설정 기준</span>
+                    <span className="stat-card-sub">?�닝 머신 ?�레?��? ?�도 ?�정 기�?</span>
                 </div>
 
                 <div className="pace-stat-card">
-                    <span className="stat-card-title"><Flame size={16} /> 예상 소모 열량</span>
+                    <span className="stat-card-title"><Flame size={16} /> ?�상 ?�모 ?�량</span>
                     <div className="stat-card-big-value">
                         ~{paceStats.estCalories.toLocaleString()} <small>kcal</small>
                     </div>
-                    <span className="stat-card-sub">체중 65kg 기준 (기초 대사 외)</span>
+                    <span className="stat-card-sub">체중 65kg 기�? (기초 ?�????</span>
                 </div>
             </div>
 
-            {/* 5km 단위 스플릿 테이블 아코디언 */}
+            {/* 5km ?�위 ?�플�??�이�??�코?�언 */}
             {splitTable.length > 0 && (
                 <div className="split-table-wrapper">
                     <div className="split-table-header" onClick={() => setShowSplitTable(!showSplitTable)}>
                         <div className="split-title-left">
                             <Clock size={16} />
-                            <span>구간별 예상 통과 시간 (5km Split Table)</span>
-                            <span className="split-count-badge">{splitTable.length}개 구간</span>
+                            <span>구간�??�상 ?�과 ?�간 (5km Split Table)</span>
+                            <span className="split-count-badge">{splitTable.length}�?구간</span>
                         </div>
                         <div className="split-actions-right">
                             <button
@@ -295,10 +294,10 @@ const PaceCalculator = ({ initialDistance = '10 km' }) => {
                                     e.stopPropagation();
                                     handleCopySplits();
                                 }}
-                                title="스플릿 테이블 텍스트 복사"
+                                title="?�플�??�이�??�스??복사"
                             >
                                 {copied ? <Check size={14} color="#10b981" /> : <Copy size={14} />}
-                                <span>{copied ? '복사됨' : '구간 기록 복사'}</span>
+                                <span>{copied ? '복사?? : '구간 기록 복사'}</span>
                             </button>
                             {showSplitTable ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
                         </div>

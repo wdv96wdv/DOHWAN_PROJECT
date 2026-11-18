@@ -15,28 +15,28 @@ const GuideList = () => {
   return (
     <div className="guide-page">
       <Helmet>
-        <title>러닝 가이드 & 마라톤 훈련 팁 매거진 | 두러닝</title>
+        <title>?�닝 가?�드 & 마라???�련 ??매거�?| ?�러??/title>
         <meta
           name="description"
-          content="런린이 10K 완주 훈련 플랜, 러닝화 추천 가이드, 마라톤 카보로딩 식단, 에너지젤 섭취법, 부상 예방까지 러너를 위한 전문 정보를 만나보세요."
+          content="?�린??10K ?�주 ?�련 ?�랜, ?�닝??추천 가?�드, 마라??카보로딩 ?�단, ?�너지????���? 부???�방까�? ?�너�??�한 ?�문 ?�보�?만나보세??"
         />
-        <meta property="og:title" content="러닝 가이드 & 마라톤 훈련 팁 매거진 | 두러닝" />
-        <meta property="og:description" content="완주를 꿈꾸는 모든 러너를 위한 체계적인 마라톤 훈련과 기어 가이드." />
-        <link rel="canonical" href="https://dorunning.app/guide" />
+        <meta property="og:title" content="?�닝 가?�드 & 마라???�련 ??매거�?| ?�러?? />
+        <meta property="og:description" content="?�주�?꿈꾸??모든 ?�너�??�한 체계?�인 마라???�련�?기어 가?�드." />
+        <link rel="canonical" href="https://www.dorunning.app/guide" />
       </Helmet>
 
       <header className="guide-header">
         <div className="guide-badge">
           <BookOpen size={15} /> RUNNING MAGAZINE & GUIDE
         </div>
-        <h1 className="guide-title">러너를 위한 실전 완주 가이드</h1>
+        <h1 className="guide-title">?�너�??�한 ?�전 ?�주 가?�드</h1>
         <p className="guide-subtitle">
-          첫 10km 완주부터 풀코스 서브4 도전까지, 마라톤 코치와 에디터가 검증한 실전 훈련법, 영양 보급, 장비 선택 팁을 제공합니다.
+          �?10km ?�주부???�코스 ?�브4 ?�전까�?, 마라??코치?� ?�디?��? 검증한 ?�전 ?�련�? ?�양 보급, ?�비 ?�택 ?�을 ?�공?�니??
         </p>
       </header>
 
       {/* Category Nav */}
-      <nav className="guide-category-nav" aria-label="가이드 카테고리">
+      <nav className="guide-category-nav" aria-label="가?�드 카테고리">
         {GUIDE_CATEGORIES.map(cat => (
           <button
             key={cat.id}
@@ -64,7 +64,7 @@ const GuideList = () => {
             <div className="guide-card-footer">
               <span>{article.date}</span>
               <span className="guide-card-readmore">
-                가이드 읽기 <ChevronRight size={16} />
+                가?�드 ?�기 <ChevronRight size={16} />
               </span>
             </div>
           </Link>
