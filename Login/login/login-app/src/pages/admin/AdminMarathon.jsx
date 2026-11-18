@@ -13,6 +13,10 @@ import {
   MapPin,
   Trophy,
   AlertCircle,
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
 } from 'lucide-react';
 import Swal from 'sweetalert2';
 import supabase from '../../utils/supabaseClient';
@@ -30,6 +34,8 @@ const AdminMarathon = () => {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
+  const [currentPage, setCurrentPage] = useState(1);
+  const PAGE_SIZE = 20;
   const [uploadingId, setUploadingId] = useState(null);
   const fileInputRef = useRef(null);
   const uploadTargetId = useRef(null);
@@ -225,6 +231,15 @@ const AdminMarathon = () => {
     return matchSearch && matchStatus;
   });
 
+  // 페이징
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const safeCurrentPage = Math.min(currentPage, totalPages);
+  const paged = filtered.slice((safeCurrentPage - 1) * PAGE_SIZE, safeCurrentPage * PAGE_SIZE);
+
+  // 필터/검색 변경 시 1페이지로
+  const updateSearch = (val) => { setSearch(val); setCurrentPage(1); };
+  const updateStatusFilter = (val) => { setStatusFilter(val); setCurrentPage(1); };
+
   // 통계
   const totalCount = marathons.length;
   const pendingCount = marathons.filter(m => m.status === 'pending').length;
@@ -252,16 +267,16 @@ const AdminMarathon = () => {
 
       {/* 통계 */}
       <div className="admin-stats-bar">
-        <div className={`admin-stat-card ${statusFilter === 'all' ? 'active-filter' : ''}`} onClick={() => setStatusFilter('all')} style={{ cursor: 'pointer' }}>
+        <div className={`admin-stat-card ${statusFilter === 'all' ? 'active-filter' : ''}`} onClick={() => updateStatusFilter('all')} style={{ cursor: 'pointer' }}>
           <div className="stat-number">{totalCount}</div>
           <div className="stat-label">전체 대회</div>
         </div>
-        <div className={`admin-stat-card success ${statusFilter === 'approved' ? 'active-filter' : ''}`} onClick={() => setStatusFilter('approved')} style={{ cursor: 'pointer' }}>
+        <div className={`admin-stat-card success ${statusFilter === 'approved' ? 'active-filter' : ''}`} onClick={() => updateStatusFilter('approved')} style={{ cursor: 'pointer' }}>
           <div className="stat-number">{approvedCount}</div>
           <div className="stat-label">✅ 승인됨</div>
         </div>
         {pendingCount > 0 && (
-          <div className={`admin-stat-card warning ${statusFilter === 'pending' ? 'active-filter' : ''}`} onClick={() => setStatusFilter('pending')} style={{ cursor: 'pointer' }}>
+          <div className={`admin-stat-card warning ${statusFilter === 'pending' ? 'active-filter' : ''}`} onClick={() => updateStatusFilter('pending')} style={{ cursor: 'pointer' }}>
             <div className="stat-number">{pendingCount}</div>
             <div className="stat-label">⏳ 승인 대기</div>
           </div>
@@ -281,7 +296,7 @@ const AdminMarathon = () => {
             className="admin-search-input"
             placeholder="대회명으로 검색..."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => updateSearch(e.target.value)}
           />
         </div>
         <button
@@ -320,7 +335,7 @@ const AdminMarathon = () => {
               </tr>
             </thead>
             <tbody>
-              {filtered.map(m => {
+              {paged.map(m => {
                 const types = Array.isArray(m.type) ? m.type : (m.type ? [m.type] : []);
                 const isUploading = uploadingId === m.id;
 
@@ -437,6 +452,71 @@ const AdminMarathon = () => {
               })}
             </tbody>
           </table>
+        )}
+
+        {/* 페이징 */}
+        {!loading && filtered.length > PAGE_SIZE && (
+          <div className="admin-pagination">
+            <span className="page-info">
+              {filtered.length}건 중 {(safeCurrentPage - 1) * PAGE_SIZE + 1}–{Math.min(safeCurrentPage * PAGE_SIZE, filtered.length)}
+            </span>
+            <div className="page-btns">
+              <button
+                className="page-btn"
+                onClick={() => setCurrentPage(1)}
+                disabled={safeCurrentPage === 1}
+                title="처음"
+              >
+                <ChevronsLeft size={16} />
+              </button>
+              <button
+                className="page-btn"
+                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                disabled={safeCurrentPage === 1}
+                title="이전"
+              >
+                <ChevronLeft size={16} />
+              </button>
+
+              {Array.from({ length: totalPages }, (_, i) => i + 1)
+                .filter(p => p === 1 || p === totalPages || Math.abs(p - safeCurrentPage) <= 2)
+                .reduce((acc, p, idx, arr) => {
+                  if (idx > 0 && p - arr[idx - 1] > 1) acc.push('...');
+                  acc.push(p);
+                  return acc;
+                }, [])
+                .map((p, i) =>
+                  p === '...' ? (
+                    <span key={`dot-${i}`} className="page-dots">…</span>
+                  ) : (
+                    <button
+                      key={p}
+                      className={`page-btn num ${p === safeCurrentPage ? 'active' : ''}`}
+                      onClick={() => setCurrentPage(p)}
+                    >
+                      {p}
+                    </button>
+                  )
+                )}
+
+              <button
+                className="page-btn"
+                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                disabled={safeCurrentPage === totalPages}
+                title="다음"
+              >
+                <ChevronRight size={16} />
+              </button>
+              <button
+                className="page-btn"
+                onClick={() => setCurrentPage(totalPages)}
+                disabled={safeCurrentPage === totalPages}
+                title="마지막"
+              >
+                <ChevronsRight size={16} />
+              </button>
+            </div>
+          </div>
         )}
       </div>
     </div>

@@ -62,8 +62,25 @@ function todayKst() {
 }
 
 async function fetchMarathon(id) {
-  // 마라톤 DB 점검 및 개편 작업으로 외부 Supabase 조회 일시 중단
-  return null;
+  try {
+    const url = `${SUPABASE_URL}/rest/v1/marathons?id=eq.${encodeURIComponent(id)}&select=id,title,race_date,location,type,link,poster_url,start_date,end_date,is_first_come,status&limit=1`;
+    const res = await fetch(url, {
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: `Bearer ${SUPABASE_KEY}`,
+      },
+    });
+    if (!res.ok) return null;
+    const rows = await res.json();
+    if (!rows || rows.length === 0) return null;
+    const m = rows[0];
+    // 승인되지 않은 대회는 크롤러에 노출하지 않음
+    if (m.status && m.status !== 'approved') return null;
+    return m;
+  } catch (err) {
+    console.warn('fetchMarathon error:', err?.message);
+    return null;
+  }
 }
 
 function typeLabel(type) {
@@ -107,15 +124,33 @@ async function resolveMeta(pathname) {
     if (!m) {
       return {
         notFound: true,
-        title: '대회 정보 준비 중 | 두러닝',
-        description: '현재 신규 마라톤 데이터 개편 작업이 진행 중입니다.',
-        ogTitle: '대회 정보 준비 중 | 두러닝',
-        ogDescription: '현재 신규 마라톤 데이터 개편 작업이 진행 중입니다.',
+        title: '대회 정보를 찾을 수 없습니다 | 두러닝',
+        description: '요청하신 마라톤 대회 정보가 존재하지 않습니다.',
+        ogTitle: '대회 정보를 찾을 수 없습니다 | 두러닝',
+        ogDescription: '요청하신 마라톤 대회 정보가 존재하지 않습니다.',
         ogImage: DEFAULT_OG_IMAGE,
         canonical: `${SITE}/marathon`,
-        h1: '대회 정보 준비 중',
+        h1: '대회 정보를 찾을 수 없습니다',
       };
     }
+
+    // 대회 상세 메타 태그 생성
+    const types = typeLabel(m.type);
+    const dateStr = m.race_date || '';
+    const loc = m.location || '';
+    const title = `${m.title} - ${dateStr} ${loc} 마라톤 | 두러닝`;
+    const desc = `${m.title} 대회 정보. 개최일 ${dateStr}, 장소 ${loc}${types ? ', 종목 ' + types : ''}. 접수 일정, 코스 정보, 공식 신청 링크를 확인하세요.`;
+    const ogImg = m.poster_url || DEFAULT_OG_IMAGE;
+
+    return {
+      title,
+      description: desc,
+      ogTitle: title,
+      ogDescription: desc,
+      ogImage: ogImg,
+      canonical,
+      h1: m.title,
+    };
   }
 
   const guideMatch = pathname.match(/^\/guide\/([^/]+)\/?$/);
