@@ -566,6 +566,101 @@
   border-top-color: rgba(255, 255, 255, 0.1);
 }
 
+/* ==================
+   Pagination
+================== */
+.admin-course-pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 24px;
+  padding: 14px 20px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+[data-theme='dark'] .admin-course-pagination {
+  background: #18181b;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.admin-course-page-info {
+  font-size: 0.88rem;
+  color: #64748b;
+}
+
+.admin-course-page-info strong {
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+[data-theme='dark'] .admin-course-page-info {
+  color: #94a3b8;
+}
+
+.admin-course-page-btns {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.admin-course-page-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 34px;
+  height: 34px;
+  padding: 0 8px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  background: #f8fafc;
+  color: #334155;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+[data-theme='dark'] .admin-course-page-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.15);
+  color: #cbd5e1;
+}
+
+.admin-course-page-btn:hover:not(:disabled) {
+  background: #eff6ff;
+  color: #2563eb;
+  border-color: #bfdbfe;
+}
+
+[data-theme='dark'] .admin-course-page-btn:hover:not(:disabled) {
+  background: rgba(37, 99, 235, 0.2);
+  color: #60a5fa;
+  border-color: rgba(37, 99, 235, 0.4);
+}
+
+.admin-course-page-btn.active {
+  background: #2563eb !important;
+  color: #ffffff !important;
+  border-color: #2563eb !important;
+}
+
+.admin-course-page-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.admin-course-page-dots {
+  padding: 0 4px;
+  color: #94a3b8;
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
 @media (max-width: 768px) {
   .admin-course-page {
     padding: 80px 16px 60px;

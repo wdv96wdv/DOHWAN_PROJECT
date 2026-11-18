@@ -22,7 +22,11 @@ import {
   ExternalLink, 
   Sparkles,
   Navigation,
-  Settings
+  Settings,
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight
 } from 'lucide-react';
 import Swal from 'sweetalert2';
 import "../assets/css/course.css";
@@ -37,6 +41,8 @@ const Course = () => {
   const [selectedDistance, setSelectedDistance] = useState("All");
   const [selectedTag, setSelectedTag] = useState("전체");
   const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const PAGE_SIZE = 9;
 
   // Load courses dynamically from service
   useEffect(() => {
@@ -112,6 +118,31 @@ const Course = () => {
     });
   }, [courses, selectedRegion, selectedDistance, selectedTag, searchQuery]);
 
+  // Pagination calculation
+  const totalCourses = filteredCourses.length;
+  const totalPages = Math.max(1, Math.ceil(totalCourses / PAGE_SIZE));
+  const safeCurrentPage = Math.min(currentPage, totalPages);
+
+  const paginatedCourses = useMemo(() => {
+    const start = (safeCurrentPage - 1) * PAGE_SIZE;
+    return filteredCourses.slice(start, start + PAGE_SIZE);
+  }, [filteredCourses, safeCurrentPage, PAGE_SIZE]);
+
+  const handleRegionChange = (key) => {
+    setSelectedRegion(key);
+    setCurrentPage(1);
+  };
+
+  const handleDistanceChange = (key) => {
+    setSelectedDistance(key);
+    setCurrentPage(1);
+  };
+
+  const handleSearchChange = (val) => {
+    setSearchQuery(val);
+    setCurrentPage(1);
+  };
+
   return (
     <div className="course-page">
       <Helmet>
@@ -167,10 +198,10 @@ const Course = () => {
             className="course-search-input"
             placeholder="코스 이름, 지역(한강, 석촌호수, 부산, 남산 등) 검색..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) => handleSearchChange(e.target.value)}
           />
           {searchQuery && (
-            <button className="course-search-clear" onClick={() => setSearchQuery("")}>
+            <button className="course-search-clear" onClick={() => handleSearchChange("")}>
               <X size={16} />
             </button>
           )}
@@ -185,7 +216,7 @@ const Course = () => {
             <button
               key={tab.key}
               className={`region-tab-btn ${selectedRegion === tab.key ? "active" : ""}`}
-              onClick={() => setSelectedRegion(tab.key)}
+              onClick={() => handleRegionChange(tab.key)}
             >
               {tab.label}
             </button>
@@ -200,7 +231,7 @@ const Course = () => {
               <button
                 key={df.key}
                 className={`distance-chip ${selectedDistance === df.key ? "active" : ""}`}
-                onClick={() => setSelectedDistance(df.key)}
+                onClick={() => handleDistanceChange(df.key)}
               >
                 {df.label}
               </button>
@@ -222,7 +253,7 @@ const Course = () => {
             <p>검색어나 필터를 재설정해 보세요.</p>
           </div>
         ) : (
-          filteredCourses.map((course) => {
+          paginatedCourses.map((course) => {
             const isMapOpen = openMaps.includes(course.id);
             const levelClass = course.level?.toLowerCase() || 'beginner';
 
@@ -388,6 +419,92 @@ const Course = () => {
           })
         )}
       </main>
+
+      {/* Pagination Controls */}
+      {totalPages > 1 && (
+        <div className="course-pagination">
+          <span className="course-page-info">
+            전체 <strong>{totalCourses}</strong>개 코스 중 <strong>{(safeCurrentPage - 1) * PAGE_SIZE + 1}–{Math.min(safeCurrentPage * PAGE_SIZE, totalCourses)}</strong>번째
+          </span>
+
+          <div className="course-page-btns">
+            <button
+              type="button"
+              className="course-page-btn"
+              onClick={() => {
+                setCurrentPage(1);
+                window.scrollTo({ top: 380, behavior: 'smooth' });
+              }}
+              disabled={safeCurrentPage === 1}
+              title="첫 페이지"
+            >
+              <ChevronsLeft size={16} />
+            </button>
+            <button
+              type="button"
+              className="course-page-btn"
+              onClick={() => {
+                setCurrentPage(p => Math.max(1, p - 1));
+                window.scrollTo({ top: 380, behavior: 'smooth' });
+              }}
+              disabled={safeCurrentPage === 1}
+              title="이전 페이지"
+            >
+              <ChevronLeft size={16} />
+            </button>
+
+            {Array.from({ length: totalPages }, (_, i) => i + 1)
+              .filter(p => p === 1 || p === totalPages || Math.abs(p - safeCurrentPage) <= 2)
+              .reduce((acc, p, idx, arr) => {
+                if (idx > 0 && p - arr[idx - 1] > 1) acc.push('...');
+                acc.push(p);
+                return acc;
+              }, [])
+              .map((p, i) =>
+                p === '...' ? (
+                  <span key={`dot-${i}`} className="course-page-dots">…</span>
+                ) : (
+                  <button
+                    key={p}
+                    type="button"
+                    className={`course-page-btn num ${p === safeCurrentPage ? 'active' : ''}`}
+                    onClick={() => {
+                      setCurrentPage(p);
+                      window.scrollTo({ top: 380, behavior: 'smooth' });
+                    }}
+                  >
+                    {p}
+                  </button>
+                )
+              )}
+
+            <button
+              type="button"
+              className="course-page-btn"
+              onClick={() => {
+                setCurrentPage(p => Math.min(totalPages, p + 1));
+                window.scrollTo({ top: 380, behavior: 'smooth' });
+              }}
+              disabled={safeCurrentPage === totalPages}
+              title="다음 페이지"
+            >
+              <ChevronRight size={16} />
+            </button>
+            <button
+              type="button"
+              className="course-page-btn"
+              onClick={() => {
+                setCurrentPage(totalPages);
+                window.scrollTo({ top: 380, behavior: 'smooth' });
+              }}
+              disabled={safeCurrentPage === totalPages}
+              title="마지막 페이지"
+            >
+              <ChevronsRight size={16} />
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

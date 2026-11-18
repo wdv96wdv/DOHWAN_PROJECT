@@ -15,6 +15,9 @@ import {
   X,
   ExternalLink,
   ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
   Navigation
 } from 'lucide-react';
 import Swal from 'sweetalert2';
@@ -61,6 +64,8 @@ const AdminCourse = () => {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [regionFilter, setRegionFilter] = useState('All');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
 
   // Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -128,6 +133,31 @@ const AdminCourse = () => {
       return true;
     });
   }, [courses, regionFilter, search]);
+
+  // 페이징 계산
+  const totalCourses = filteredCourses.length;
+  const totalPages = Math.max(1, Math.ceil(totalCourses / pageSize));
+  const safeCurrentPage = Math.min(currentPage, totalPages);
+
+  const paginatedCourses = useMemo(() => {
+    const start = (safeCurrentPage - 1) * pageSize;
+    return filteredCourses.slice(start, start + pageSize);
+  }, [filteredCourses, safeCurrentPage, pageSize]);
+
+  const handleSearchChange = (e) => {
+    setSearch(e.target.value);
+    setCurrentPage(1);
+  };
+
+  const handleRegionFilterChange = (e) => {
+    setRegionFilter(e.target.value);
+    setCurrentPage(1);
+  };
+
+  const handlePageSizeChange = (e) => {
+    setPageSize(Number(e.target.value));
+    setCurrentPage(1);
+  };
 
   // 통계 계산
   const stats = useMemo(() => {
@@ -390,21 +420,34 @@ const AdminCourse = () => {
             className="admin-course-search-input"
             placeholder="코스 이름, 지역명으로 검색..."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={handleSearchChange}
           />
         </div>
 
-        <select
-          className="admin-course-region-select"
-          value={regionFilter}
-          onChange={(e) => setRegionFilter(e.target.value)}
-        >
-          {REGION_TABS.map((tab) => (
-            <option key={tab.key} value={tab.key}>
-              {tab.label}
-            </option>
-          ))}
-        </select>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <select
+            className="admin-course-region-select"
+            value={regionFilter}
+            onChange={handleRegionFilterChange}
+          >
+            {REGION_TABS.map((tab) => (
+              <option key={tab.key} value={tab.key}>
+                {tab.label}
+              </option>
+            ))}
+          </select>
+
+          <select
+            className="admin-course-region-select"
+            value={pageSize}
+            onChange={handlePageSizeChange}
+            title="페이지당 표시 개수"
+          >
+            <option value={10}>10개씩 보기</option>
+            <option value={20}>20개씩 보기</option>
+            <option value={50}>50개씩 보기</option>
+          </select>
+        </div>
       </section>
 
       {/* Course Table */}
@@ -432,7 +475,7 @@ const AdminCourse = () => {
               </tr>
             </thead>
             <tbody>
-              {filteredCourses.map((c) => (
+              {paginatedCourses.map((c) => (
                 <tr key={c.id}>
                   {/* Thumbnail & Quick Change */}
                   <td>
@@ -517,6 +560,77 @@ const AdminCourse = () => {
           </table>
         )}
       </div>
+
+      {/* Admin Pagination Controls */}
+      {totalPages > 1 && (
+        <div className="admin-course-pagination">
+          <span className="admin-course-page-info">
+            전체 <strong>{totalCourses}</strong>개 중 <strong>{(safeCurrentPage - 1) * pageSize + 1}–{Math.min(safeCurrentPage * pageSize, totalCourses)}</strong>번째
+          </span>
+
+          <div className="admin-course-page-btns">
+            <button
+              type="button"
+              className="admin-course-page-btn"
+              onClick={() => setCurrentPage(1)}
+              disabled={safeCurrentPage === 1}
+              title="첫 페이지"
+            >
+              <ChevronsLeft size={16} />
+            </button>
+            <button
+              type="button"
+              className="admin-course-page-btn"
+              onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+              disabled={safeCurrentPage === 1}
+              title="이전 페이지"
+            >
+              <ChevronLeft size={16} />
+            </button>
+
+            {Array.from({ length: totalPages }, (_, i) => i + 1)
+              .filter(p => p === 1 || p === totalPages || Math.abs(p - safeCurrentPage) <= 2)
+              .reduce((acc, p, idx, arr) => {
+                if (idx > 0 && p - arr[idx - 1] > 1) acc.push('...');
+                acc.push(p);
+                return acc;
+              }, [])
+              .map((p, i) =>
+                p === '...' ? (
+                  <span key={`dot-${i}`} className="admin-course-page-dots">…</span>
+                ) : (
+                  <button
+                    key={p}
+                    type="button"
+                    className={`admin-course-page-btn num ${p === safeCurrentPage ? 'active' : ''}`}
+                    onClick={() => setCurrentPage(p)}
+                  >
+                    {p}
+                  </button>
+                )
+              )}
+
+            <button
+              type="button"
+              className="admin-course-page-btn"
+              onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+              disabled={safeCurrentPage === totalPages}
+              title="다음 페이지"
+            >
+              <ChevronRight size={16} />
+            </button>
+            <button
+              type="button"
+              className="admin-course-page-btn"
+              onClick={() => setCurrentPage(totalPages)}
+              disabled={safeCurrentPage === totalPages}
+              title="마지막 페이지"
+            >
+              <ChevronsRight size={16} />
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Course Modal (Create & Edit) */}
       {isModalOpen && (
