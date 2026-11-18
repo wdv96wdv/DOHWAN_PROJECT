@@ -1,5 +1,5 @@
-import React from 'react';
-import { MapContainer, TileLayer, Polyline, Marker, Popup } from 'react-leaflet';
+import React, { useEffect } from 'react';
+import { MapContainer, TileLayer, Polyline, Marker, Popup, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 
@@ -11,12 +11,27 @@ L.Icon.Default.mergeOptions({
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
 });
 
+// Auto-fit bounds component
+function FitBounds({ coords }) {
+  const map = useMap();
+  useEffect(() => {
+    if (coords && coords.length > 1) {
+      try {
+        const bounds = L.latLngBounds(coords);
+        map.fitBounds(bounds, { padding: [30, 30] });
+      } catch (e) {
+        console.warn('Map fitBounds error:', e);
+      }
+    }
+  }, [coords, map]);
+  return null;
+}
+
 const LeafletMap = ({ courseId, coords, center, themeColor }) => {
   if (!coords || coords.length < 2) {
-    return <div style={{ padding: '20px', textAlign: 'center' }}>코스 데이터가 없습니다.</div>;
+    return <div style={{ padding: '40px', textAlign: 'center', color: '#888' }}>코스 좌표 데이터가 없습니다.</div>;
   }
 
-  // Create a custom icon for start/finish if needed
   const startIcon = new L.Icon({
     iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
     shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
@@ -35,23 +50,33 @@ const LeafletMap = ({ courseId, coords, center, themeColor }) => {
     shadowSize: [41, 41]
   });
 
-  const polylineOptions = { color: themeColor || 'blue', weight: 5, opacity: 0.8 };
+  const polylineOptions = {
+    color: themeColor || '#00ffcc',
+    weight: 5,
+    opacity: 0.9,
+    lineJoin: 'round',
+    lineCap: 'round'
+  };
 
   return (
-    <MapContainer center={center} zoom={13} style={{ height: '100%', width: '100%', zIndex: 1 }}>
+    <MapContainer
+      center={center || coords[0]}
+      zoom={13}
+      scrollWheelZoom={false}
+      style={{ height: '100%', width: '100%', zIndex: 1 }}
+    >
       <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
       />
       <Polyline positions={coords} pathOptions={polylineOptions} />
-      
       <Marker position={coords[0]} icon={startIcon}>
-        <Popup>출발지 (Start)</Popup>
+        <Popup><b>🚩 출발 지점 (Start)</b></Popup>
       </Marker>
-      
       <Marker position={coords[coords.length - 1]} icon={finishIcon}>
-        <Popup>도착지 (Finish)</Popup>
+        <Popup><b>🏁 도착 지점 (Finish)</b></Popup>
       </Marker>
+      <FitBounds coords={coords} />
     </MapContainer>
   );
 };
