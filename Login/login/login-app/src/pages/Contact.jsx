@@ -67,19 +67,19 @@ const Contact = () => {
       }}
     >
       <Helmet>
-        <title>Dorunning | 고객지??/title>
-        <meta name="description" content="Dorunning ?�비?�에 ?�??궁금???�이???�안 ?�항???�으?��??? ?�제??메시지�??�겨주세??" />
-        <meta property="og:title" content="Dorunning | 고객지?? />
-        <meta property="og:description" content="Dorunning ?�비?�에 궁금???�이???�안 ?�항???�으?��???" />
+        <title>Dorunning | 고객지원</title>
+        <meta name="description" content="Dorunning 서비스에 대한 궁금한 점이나 제안 사항이 있으신가요? 언제든 메시지를 남겨주세요." />
+        <meta property="og:title" content="Dorunning | 고객지원" />
+        <meta property="og:description" content="Dorunning 서비스에 궁금한 점이나 제안 사항이 있으신가요?" />
         <link rel="canonical" href="https://www.dorunning.app/contact" />
       </Helmet>
       <header className="info-header">
-        <h1>문의<span style={{ color: 'var(--primary)' }}>?�기</span></h1>
-        <p>궁금???�이 ?�으?��??? 메시지�??�겨주시�??�성�??��????�리겠습?�다.</p>
+        <h1>문의<span style={{ color: 'var(--primary)' }}>하기</span></h1>
+        <p>궁금한 점이 있으신가요? 메시지를 남겨주시면 정성껏 답변해 드리겠습니다.</p>
       </header>
 
       <div className="info-section">
-        <h2><MessageSquare size={24} /> 메시지 보내�?/h2>
+        <h2><MessageSquare size={24} /> 메시지 보내기</h2>
         {success ? (
           <motion.div
             className="info-highlight"
@@ -89,17 +89,17 @@ const Contact = () => {
             style={{ textAlign: 'center', borderLeft: 'none', borderRadius: '12px' }}
           >
             <CheckCircle size={48} color="var(--primary)" style={{ margin: '0 auto 16px' }} />
-            <p className="info-text">감사?�니?? 문의가 ?�상?�으�??�수?�었?�니?? �??��? ?�리겠습?�다.</p>
-            <button className="btn-auth secondary" onClick={() => setSuccess(false)}>??메시지 보내�?/button>
+            <p className="info-text">감사합니다! 문의가 정상적으로 접수되었습니다. 곧 답변 드리겠습니다.</p>
+            <button className="btn-auth secondary" onClick={() => setSuccess(false)}>새 메시지 보내기</button>
           </motion.div>
         ) : (
           <form onSubmit={onSubmit} className="auth-form" style={{ maxWidth: '600px', margin: '0 auto', gap: '24px' }}>
             <div className="auth-form-group">
-               <label className="auth-label"><User size={14} /> ?�름</label>
-               <input type="text" name="name" className="form-control" placeholder="?�함???�력?�주?�요" required />
+               <label className="auth-label"><User size={14} /> 이름</label>
+               <input type="text" name="name" className="form-control" placeholder="성함을 입력해주세요" required />
             </div>
             <div className="auth-form-group">
-               <label className="auth-label"><AtSign size={14} /> ?�메??/label>
+               <label className="auth-label"><AtSign size={14} /> 이메일</label>
                <input type="email" name="email" className="form-control" placeholder="answer@email.com" required />
             </div>
             <div className="auth-form-group">
@@ -107,7 +107,7 @@ const Contact = () => {
                <textarea
                  name="message"
                  className="form-control"
-                 placeholder="무엇???��??�릴까요?"
+                 placeholder="무엇을 도와드릴까요?"
                  rows="5"
                  required
                  maxLength={500}
@@ -116,7 +116,7 @@ const Contact = () => {
                />
             </div>
             <button className="btn-auth" type="submit" disabled={loading} style={{ padding: '16px', marginTop: '10px', width: 'auto', alignSelf: 'center', minWidth: '200px' }}>
-               {loading ? '?�송 �?..' : <><Send size={18} style={{ marginRight: '8px' }} /> 메시지 보내�?/>}
+               {loading ? '전송 중...' : <><Send size={18} style={{ marginRight: '8px' }} /> 메시지 보내기</>}
             </button>
           </form>
         )}
@@ -126,14 +126,14 @@ const Contact = () => {
         <div className="contact-item">
           <div className="contact-icon-wrapper"><Mail size={24} /></div>
           <div>
-            <div className="contact-label">?�메??/div>
+            <div className="contact-label">이메일</div>
             <div className="contact-value">kimdohwan969@gmail.com</div>
           </div>
         </div>
         <div className="contact-item">
           <div className="contact-icon-wrapper"><Phone size={24} /></div>
           <div>
-            <div className="contact-label">?�락�?/div>
+            <div className="contact-label">연락처</div>
             <div className="contact-value">010-4426-9958</div>
           </div>
         </div>

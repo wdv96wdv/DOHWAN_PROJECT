@@ -48,7 +48,7 @@ const Home = () => {
       once: true,
     });
 
-    // Supabase 직접 ?�출 (?�늘 ?�후 ?�?�만, ?�수�??�터)
+    // Supabase 직접 호출 (오늘 이후 대회만, 접수중 필터)
     const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
     const SUPABASE_URL = 'https://ismclnqslxnlsfmqjytc.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_RWdFyo-SAjkjsNnQJC2JBw_jbX6bdXd';
@@ -85,14 +85,14 @@ const Home = () => {
 
     fetchPage(0)
       .then(data => {
-        // 지�??�수 �? ?�수 기간 ??+ ?�?�일 미경�?
+        // 지금 접수 중: 접수 기간 안 + 대회일 미경과
         const activeList = data
           .map(normalizeMarathon)
           .filter((item) => isOpenRegistration(item, todayStr));
 
         setActiveMarathonCount(activeList.length);
 
-        // ?�수 마감?�이 가까운 ?�으�??�렬
+        // 접수 마감일이 가까운 순으로 정렬
         const sorted = [...activeList].sort(compareByEndDateAsc);
         setUpcomingMarathons(sorted.slice(0, 7));
       })
@@ -116,7 +116,7 @@ const Home = () => {
 
   useEffect(() => {
     if (upcomingMarathons.length > 0) {
-      // Swiper가 ?�더�?????AOS ?�이?�웃???�시 계산?�도�???
+      // Swiper가 렌더링 된 후 AOS 레이아웃을 다시 계산하도록 함
       setTimeout(() => {
         AOS.refresh();
       }, 100);
@@ -126,19 +126,19 @@ const Home = () => {
   return (
     <div className="home-page">
       <Helmet>
-        <title>?�러?????�국 마라???�???�정</title>
-        <meta name="description" content="?�러?��? ?�국 마라?�·러???�???�정??모으�? ?�청 ?�에 ?�요???�보�??�곳?�서 ?�인?�게 ??주는 ?�닝 ?�브?�니??" />
-        <meta property="og:title" content="?�러?????�국 마라???�???�정" />
-        <meta property="og:description" content="?�울부??지방까지, ?��??�는 ?�닝 ?�???�정�??�수 ?�보�?모았?�니??" />
+        <title>두러닝 – 전국 마라톤 대회 일정</title>
+        <meta name="description" content="두러닝은 전국 마라톤·러닝 대회 일정을 모으고, 신청 전에 필요한 정보를 한곳에서 확인하게 해 주는 러닝 허브입니다." />
+        <meta property="og:title" content="두러닝 – 전국 마라톤 대회 일정" />
+        <meta property="og:description" content="서울부터 지방까지, 다가오는 러닝 대회 일정과 접수 정보를 모았습니다." />
         <link rel="canonical" href="https://www.dorunning.app/" />
 
-        {/* ?�이�??�이???�름 구조???�이??*/}
+        {/* 네이버 사이트 이름 구조화 데이터 */}
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "http://schema.org",
             "@type": "WebSite",
             "name": "Dorunning",
-            "alternateName": "?�러??,
+            "alternateName": "두러닝",
             "url": "https://www.dorunning.app"
           })}
         </script>
@@ -153,14 +153,14 @@ const Home = () => {
           <span className="hero-badge" data-aos="fade-down">KOREA MARATHON HUB</span>
           <h1 data-aos="zoom-in" className="hero-title">Dorunning</h1>
           <p data-aos="fade-up" data-aos-delay="200" className="hero-subtitle">
-            ?�국 마라?�·하?��?0K ?�정??모았?�니?? ?�수 기간, 거리, 지??��지 ?�곳?�서 비교?�세??
+            전국 마라톤·하프·10K 일정을 모았습니다. 접수 기간, 거리, 지역까지 한곳에서 비교하세요.
           </p>
           <div data-aos="fade-up" data-aos-delay="400" className="hero-action-group">
             <Link to="/marathon" className="hero-btn primary-glow">
-              ?��??�는 ?�??보기 <ArrowRight size={20} />
+              다가오는 대회 보기 <ArrowRight size={20} />
             </Link>
             <Link to="/marathon" className="hero-btn outline">
-              지??�� 찾아보기
+              지역별 찾아보기
             </Link>
           </div>
         </div>
@@ -169,8 +169,8 @@ const Home = () => {
       {/* Marathon Schedule Carousel */}
       <section className="marathon-carousel-section">
         <div className="home-section-header" data-aos="fade-up">
-          <h2>지�??�수 중인 ?�??/h2>
-          <p>?�수 마감?�이 가까운 ?�으�?보여 ?�립?�다.</p>
+          <h2>지금 접수 중인 대회</h2>
+          <p>접수 마감일이 가까운 순으로 보여 드립니다.</p>
         </div>
 
         {loadingMarathon ? (
@@ -215,7 +215,7 @@ const Home = () => {
                     {item.type.map(t => <span key={t} className="marathon-tag">{t}</span>)}
                   </div>
                   <Link to={`/marathon/${item.id}`} className="marathon-link-btn">
-                    ?�세?�보 보기 <ChevronRight size={16} />
+                    상세정보 보기 <ChevronRight size={16} />
                   </Link>
                 </div>
               </SwiperSlide>
@@ -224,8 +224,8 @@ const Home = () => {
         ) : (
           <div className="no-active-marathons" style={{ textAlign: 'center', padding: '60px 20px', color: 'var(--text-muted)' }}>
             <Calendar size={48} style={{ opacity: 0.5, marginBottom: '16px' }} />
-            <h3>지�??�수 중인 ?�?��? ?�습?�다.</h3>
-            <p>?�터�??�히거나 ?�른 ?�을 ?�인??보세??</p>
+            <h3>지금 접수 중인 대회가 없습니다.</h3>
+            <p>필터를 넓히거나 다른 달을 확인해 보세요.</p>
           </div>
         )}
       </section>
@@ -234,12 +234,12 @@ const Home = () => {
       <section className="feature-section reverse" data-aos="fade-up">
         <div className="feature-text">
           <div className="section-badge">COMMUNITY</div>
-          <h2>?�신�?같�? ?�너?�과 ?�께</h2>
+          <h2>당신과 같은 러너들과 함께</h2>
           <p>
-            ?�자 ?�리지 마세?? ?�른 ?�너?�과 기록??공유?�고, ?�상???�누�?긍정?�인 ?�너지�??�으?�요. ?�유게시?��????�닝 ?�루 ?�증까�? 모든 것이 준비되???�습?�다.
+            혼자 달리지 마세요. 다른 러너들과 기록을 공유하고, 일상을 나누며 긍정적인 에너지를 얻으세요. 자유게시판부터 러닝 크루 인증까지 모든 것이 준비되어 있습니다.
           </p>
           <Link to="/boards" className="btn-feature">
-            커�??�티 구경?�기 <ArrowRight size={18} style={{ marginLeft: '8px' }} />
+            커뮤니티 구경하기 <ArrowRight size={18} style={{ marginLeft: '8px' }} />
           </Link>
         </div>
         <div className="feature-media glass-media">
@@ -251,58 +251,58 @@ const Home = () => {
       <section className="feature-section" data-aos="fade-up">
         <div className="feature-text">
           <div className="section-badge">MAGAZINE & TIPS</div>
-          <h2>?�주�??�한 ?�닝 가?�드</h2>
+          <h2>완주를 위한 러닝 가이드</h2>
           <p>
-            ?�린??10K �??�주 ?�련 ?�랜, ??발에 맞는 ?�닝??고르??�? ?�??3????카보로딩 ?�단�??�너지????�� ?�령까�? ??마라??코치?�이 검증한 ?�전 가?�드�?지�??�어보세??
+            런린이 10K 첫 완주 훈련 플랜, 내 발에 맞는 러닝화 고르는 법, 대회 3일 전 카보로딩 식단과 에너지젤 섭취 요령까지 — 마라톤 코치들이 검증한 실전 가이드를 지금 읽어보세요.
           </p>
           <Link to="/guide" className="btn-feature">
-            ?�닝 가?�드 ?�기 <ArrowRight size={18} style={{ marginLeft: '8px' }} />
+            러닝 가이드 읽기 <ArrowRight size={18} style={{ marginLeft: '8px' }} />
           </Link>
         </div>
         <div className="feature-media glass-media" style={{ display: 'flex', flexDirection: 'column', gap: '12px', padding: '24px' }}>
           <div style={{ padding: '16px 20px', borderRadius: '12px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)' }}>
-            <h4 style={{ color: 'var(--primary)', marginBottom: '4px' }}>?�� 10K ?�주 8�??�랜</h4>
-            <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', margin: 0 }}>걷기?� ?�리기�? ?�진?�으�?결합?�여 부???�이 �??�니???�인???�과?�는 �?/p>
+            <h4 style={{ color: 'var(--primary)', marginBottom: '4px' }}>🏃 10K 완주 8주 플랜</h4>
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', margin: 0 }}>걷기와 달리기를 점진적으로 결합하여 부상 없이 첫 피니시 라인을 통과하는 법</p>
           </div>
           <div style={{ padding: '16px 20px', borderRadius: '12px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)' }}>
-            <h4 style={{ color: 'var(--primary)', marginBottom: '4px' }}>?�� ?�닝???�택 가?�드</h4>
-            <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', margin: 0 }}>?�일�?쿠션?��???카본 ?�이?�화까�? ??주법??맞는 ?�발 찾는 기�?</p>
+            <h4 style={{ color: 'var(--primary)', marginBottom: '4px' }}>👟 러닝화 선택 가이드</h4>
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', margin: 0 }}>데일리 쿠션화부터 카본 레이싱화까지 내 주법에 맞는 신발 찾는 기준</p>
           </div>
           <div style={{ padding: '16px 20px', borderRadius: '12px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)' }}>
-            <h4 style={{ color: 'var(--primary)', marginBottom: '4px' }}>?�� D-7 카보로딩 ?�단</h4>
-            <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', margin: 0 }}>30km 벽을 ?�기 ?�한 복합 ?�수?�물 로딩�??�???�일 ?�침 ?�사�?/p>
+            <h4 style={{ color: 'var(--primary)', marginBottom: '4px' }}>🍌 D-7 카보로딩 식단</h4>
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', margin: 0 }}>30km 벽을 넘기 위한 복합 탄수화물 로딩과 대회 당일 아침 식사법</p>
           </div>
         </div>
       </section>
 
       {/* Stats Section */}
       <section className="stats-section" data-aos="fade-up">
-        <h2 className="stats-title">?�러???�황</h2>
+        <h2 className="stats-title">두러닝 현황</h2>
         <div className="stats-grid">
           <div className="stat-card glass-glow">
             <Activity className="stat-icon" size={36} />
             <h3><CountUp end={appStats.activeRunners} duration={2.5} separator="," />+</h3>
-            <p>?�동 중인 ?�너</p>
+            <p>활동 중인 러너</p>
           </div>
           <div className="stat-card glass-glow">
             <MapPin className="stat-icon" size={36} />
             <h3><CountUp end={appStats.totalDistance} duration={2.5} separator="," />km</h3>
-            <p>�??�적 거리</p>
+            <p>총 누적 거리</p>
           </div>
           <div className="stat-card glass-glow">
             <Calendar className="stat-icon" size={36} />
-            <h3><CountUp end={activeMarathonCount} duration={2.5} />�?/h3>
-            <p>?�수 중인 ?�??/p>
+            <h3><CountUp end={activeMarathonCount} duration={2.5} />개</h3>
+            <p>접수 중인 대회</p>
           </div>
         </div>
       </section>
 
       <footer className="home-footer" data-aos="zoom-in">
         <div className="footer-glass-box">
-          <h2 className="footer-title">관???�?�만 모아 ?�세??/h2>
-          <p>?�시리스?�에 ?�아 ?�면 ?�수 ?�작·마감???��??????�시 찾기 ?�습?�다.</p>
+          <h2 className="footer-title">관심 대회만 모아 두세요</h2>
+          <p>위시리스트에 담아 두면 접수 시작·마감이 다가올 때 다시 찾기 쉽습니다.</p>
           <Link to={isLogin === "true" || isLogin === true ? "/boards" : "/login"} className="hero-btn primary-glow">
-            무료�??�작?�기
+            무료로 시작하기
           </Link>
         </div>
       </footer>

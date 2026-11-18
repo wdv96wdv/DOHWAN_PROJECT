@@ -28,16 +28,16 @@ const PerformanceTab = () => {
   const [socialFeed, setSocialFeed] = useState([]);
   const [feedLoading, setFeedLoading] = useState(false);
 
-  // 비로그인 ?�근 차단 (URL 직접 ?�근 방�?: 경고 ?�럿 ?�시 ??메인?�로 리다?�렉??
+  // 비로그인 접근 차단 (URL 직접 접근 방지: 경고 알럿 표시 후 메인으로 리다이렉트)
   useEffect(() => {
     if (!isLogin && !hasAlerted.current) {
       hasAlerted.current = true;
       Swal.fire({
         icon: 'warning',
-        title: '로그?�이 ?�요?�니??,
-        text: '?�포먼스 ?�이지??로그?????�용 가?�합?�다.',
+        title: '로그인이 필요합니다',
+        text: '퍼포먼스 페이지는 로그인 후 이용 가능합니다.',
         confirmButtonColor: 'var(--primary)',
-        confirmButtonText: '?�인'
+        confirmButtonText: '확인'
       }).then(() => {
         navigate('/', { replace: true });
       });
@@ -48,7 +48,8 @@ const PerformanceTab = () => {
     setRefreshKey(prev => prev + 1);
   };
 
-  // ??기록 최신??  useEffect(() => {
+  // 내 기록 최신화
+  useEffect(() => {
     if (!isLogin) return;
     getRunRecords()
       .then((res) => {
@@ -60,7 +61,7 @@ const PerformanceTab = () => {
       });
   }, [refreshKey, isLogin]);
 
-  // ?�체 ?�셜 ?�드 ?�이??로드 (records/feed ?�용 API)
+  // 전체 소셜 피드 데이터 로드 (records/feed 전용 API)
   useEffect(() => {
     if (activeTab !== 'feed' || !isLogin) return;
     setFeedLoading(true);
@@ -73,7 +74,7 @@ const PerformanceTab = () => {
         const list = json.data || json;
         const normalized = Array.isArray(list) ? list.map(r => ({
           id: r.id,
-          username: r.username || '?�너',
+          username: r.username || '러너',
           avatarUrl: r.avatarUrl || null,
           runningName: r.runningName || '',
           date: r.date ? r.date.slice(0, 10) : '',
@@ -112,8 +113,8 @@ const PerformanceTab = () => {
   return (
     <div className="performance-page">
       <Helmet>
-        <title>Dorunning | ?�포먼스</title>
-        <meta name="description" content="?�의 ?�적 ?�닝 거리, ?�이?? ?�모 칼로리�? ?�인?�고 체계?�인 ?�닝 목표�??�정?�세?? ?�신???�장??차트�??�눈??�????�습?�다." />
+        <title>Dorunning | 퍼포먼스</title>
+        <meta name="description" content="나의 누적 러닝 거리, 페이스, 소모 칼로리를 확인하고 체계적인 러닝 목표를 설정하세요. 당신의 성장을 차트로 한눈에 볼 수 있습니다." />
         <link rel="canonical" href="https://www.dorunning.app/performance" />
       </Helmet>
 
@@ -127,14 +128,14 @@ const PerformanceTab = () => {
       {/* Tab Switcher */}
       <div style={{ display: 'flex', gap: '12px', marginBottom: '32px', justifyContent: 'center' }}>
         <button style={tabStyle('my')} onClick={() => setActiveTab('my')}>
-          <User size={18} /> ??기록
+          <User size={18} /> 내 기록
         </button>
         <button style={tabStyle('feed')} onClick={() => setActiveTab('feed')}>
-          <Users size={18} /> ?�너 ?�드
+          <Users size={18} /> 러너 피드
         </button>
       </div>
 
-      {/* === ??기록 ??=== */}
+      {/* === 내 기록 탭 === */}
       {activeTab === 'my' && (
         <>
           <PerformanceSummary refreshKey={refreshKey} />
@@ -181,7 +182,7 @@ const PerformanceTab = () => {
             </motion.div>
           </div>
 
-          {/* 목표 ?�이??& ?�플�?계산�??�구 */}
+          {/* 목표 페이스 & 스플릿 계산기 도구 */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -202,10 +203,10 @@ const PerformanceTab = () => {
         </>
       )}
 
-      {/* === ?�너 ?�드 ??=== */}
+      {/* === 러너 피드 탭 === */}
       {activeTab === 'feed' && (
         <div style={{ maxWidth: '640px', margin: '0 auto' }}>
-          {/* 기록 ?�력 ?�내 */}
+          {/* 기록 입력 안내 */}
           <div style={{
             marginBottom: '28px', padding: '18px 20px',
             borderRadius: '14px', border: '1.5px dashed var(--primary)',
@@ -214,10 +215,10 @@ const PerformanceTab = () => {
           }}>
             <div>
               <div style={{ fontWeight: 700, fontSize: '0.95rem', marginBottom: '3px' }}>
-                ?�� ??기록???�기�??�으?��???
+                🏃 새 기록을 남기고 싶으신가요?
               </div>
               <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
-                기록 ?�이지?�서 ?�이?????�진?�로 ?�동 ?�력?�거??직접 ?�력?????�습?�다.
+                기록 페이지에서 나이키 런 사진으로 자동 입력하거나 직접 입력할 수 있습니다.
               </div>
             </div>
             <Link to="/record" style={{
@@ -226,23 +227,23 @@ const PerformanceTab = () => {
               background: 'var(--primary)', color: '#fff',
               fontWeight: 600, fontSize: '0.9rem', whiteSpace: 'nowrap'
             }}>
-              <PlusCircle size={16} /> 기록 ?�력?�기
+              <PlusCircle size={16} /> 기록 입력하기
             </Link>
           </div>
 
           <h3 style={{ margin: '32px 0 16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Users size={20} /> ?�너?�의 기록
+            <Users size={20} /> 러너들의 기록
           </h3>
 
           {feedLoading ? (
             <div style={{ textAlign: 'center', padding: '60px 0', color: 'var(--text-muted)' }}>
-              기록??불러?�는 �?..
+              기록을 불러오는 중...
             </div>
           ) : socialFeed.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '60px 0', color: 'var(--text-muted)', opacity: 0.6 }}>
               <Users size={48} style={{ margin: '0 auto 16px', display: 'block' }} />
-              <p>?�직 공유??기록???�습?�다.</p>
-              <p style={{ fontSize: '0.9rem' }}>가??먼�? 기록???�겨보세??</p>
+              <p>아직 공유된 기록이 없습니다.</p>
+              <p style={{ fontSize: '0.9rem' }}>가장 먼저 기록을 남겨보세요!</p>
             </div>
           ) : (
             socialFeed.map((record, idx) => (

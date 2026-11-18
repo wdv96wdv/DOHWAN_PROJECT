@@ -18,17 +18,18 @@ const GuideDetail = () => {
   if (!article) {
     return (
       <div className="guide-detail-container" style={{ textAlign: 'center', padding: '160px 20px' }}>
-        <h2>가?�드�?찾을 ???�습?�다</h2>
+        <h2>가이드를 찾을 수 없습니다</h2>
         <p style={{ color: 'var(--text-muted)', margin: '16px 0 24px' }}>
-          ?�청?�신 가?�드가 ??��?�었거나 존재?��? ?�습?�다.
+          요청하신 가이드가 삭제되었거나 존재하지 않습니다.
         </p>
         <Link to="/guide" className="guide-detail-back">
-          <ArrowLeft size={16} /> 가?�드 목록?�로 ?�아가�?        </Link>
+          <ArrowLeft size={16} /> 가이드 목록으로 돌아가기
+        </Link>
       </div>
     );
   }
 
-  // 간단??마크?�운 ?�딩/문단 ?�더�??�퍼
+  // 간단한 마크다운 헤딩/문단 렌더링 헬퍼
   const renderContent = (rawText) => {
     const lines = rawText.trim().split('\n');
     const elements = [];
@@ -81,7 +82,7 @@ const GuideDetail = () => {
   };
 
   const pageUrl = `https://www.dorunning.app/guide/${article.id}`;
-  const fullTitle = `${article.title} | ?�러???�닝 가?�드`;
+  const fullTitle = `${article.title} | 두러닝 러닝 가이드`;
 
   return (
     <div className="guide-detail-container">
@@ -99,12 +100,12 @@ const GuideDetail = () => {
             "description": article.summary,
             "author": {
               "@type": "Organization",
-              "name": "?�러??Dorunning)",
+              "name": "두러닝(Dorunning)",
               "url": "https://www.dorunning.app"
             },
             "publisher": {
               "@type": "Organization",
-              "name": "?�러??,
+              "name": "두러닝",
               "logo": {
                 "@type": "ImageObject",
                 "url": "https://www.dorunning.app/og-image.png"
@@ -124,14 +125,15 @@ const GuideDetail = () => {
 
       <nav className="guide-detail-nav">
         <Link to="/guide" className="guide-detail-back">
-          <ArrowLeft size={16} /> 가?�드 목록?�로 ?�아가�?        </Link>
+          <ArrowLeft size={16} /> 가이드 목록으로 돌아가기
+        </Link>
       </nav>
 
       <header className="guide-detail-header">
         <div className="guide-detail-meta">
           <span className="guide-card-cat">{article.categoryName}</span>
           <span><Calendar size={14} style={{ verticalAlign: 'middle', marginRight: '4px' }} /> {article.date}</span>
-          <span><Clock size={14} style={{ verticalAlign: 'middle', marginRight: '4px' }} /> ?�는 ?�간 {article.readTime}</span>
+          <span><Clock size={14} style={{ verticalAlign: 'middle', marginRight: '4px' }} /> 읽는 시간 {article.readTime}</span>
         </div>
         <h1 className="guide-detail-title">{article.title}</h1>
         <div className="guide-detail-lead">{article.summary}</div>
@@ -143,12 +145,12 @@ const GuideDetail = () => {
 
       {/* End of Guide CTA */}
       <section className="guide-end-cta">
-        <h3>?�번 주말, 배운 ?�으�?마라???�?�에 ?�전?�보?�요</h3>
+        <h3>이번 주말, 배운 팁으로 마라톤 대회에 도전해보세요</h3>
         <p>
-          ?�국 200??�?마라???�?�의 ?�시�??�수 ?�정�?코스 ?�보�??�러?�에???�눈??비교?�고 ?�청?????�습?�다.
+          전국 200여 개 마라톤 대회의 실시간 접수 일정과 코스 정보를 두러닝에서 한눈에 비교하고 신청할 수 있습니다.
         </p>
         <Link to="/marathon" className="guide-cta-btn">
-          <Trophy size={18} /> ?��??�는 ?�국 마라???�정 보기
+          <Trophy size={18} /> 다가오는 전국 마라톤 일정 보기
         </Link>
       </section>
     </div>
