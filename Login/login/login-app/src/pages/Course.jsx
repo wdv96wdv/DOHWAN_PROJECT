@@ -1,5 +1,6 @@
 // src/pages/Course.jsx
-import React, { useState, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import { Helmet } from 'react-helmet-async';
 import LeafletMap from "../components/Course/LeafletMap";
 import { 
@@ -8,7 +9,9 @@ import {
   DISTANCE_FILTERS, 
   THEME_TAGS 
 } from "../utils/courseData";
+import { getCourses } from "../utils/courseService";
 import { downloadCourseGpx } from "../utils/gpxHelper";
+import useAuthStore from "../store/useAuthStore";
 import { 
   Footprints, 
   MapPin, 
@@ -18,17 +21,35 @@ import {
   X, 
   ExternalLink, 
   Sparkles,
-  Navigation
+  Navigation,
+  Settings
 } from 'lucide-react';
 import Swal from 'sweetalert2';
 import "../assets/css/course.css";
 
 const Course = () => {
+  const navigate = useNavigate();
+  const roles = useAuthStore((state) => state.roles);
+
+  const [courses, setCourses] = useState(COURSE_LIST);
   const [openMaps, setOpenMaps] = useState([]);
   const [selectedRegion, setSelectedRegion] = useState("All");
   const [selectedDistance, setSelectedDistance] = useState("All");
   const [selectedTag, setSelectedTag] = useState("전체");
   const [searchQuery, setSearchQuery] = useState("");
+
+  // Load courses dynamically from service
+  useEffect(() => {
+    let isMounted = true;
+    getCourses().then((data) => {
+      if (isMounted && Array.isArray(data) && data.length > 0) {
+        setCourses(data);
+      }
+    });
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const toggleMap = (courseId) => {
     setOpenMaps((prev) =>
@@ -59,7 +80,7 @@ const Course = () => {
 
   // Filter logic
   const filteredCourses = useMemo(() => {
-    return COURSE_LIST.filter((course) => {
+    return courses.filter((course) => {
       // Region filter
       if (selectedRegion !== "All" && course.region !== selectedRegion) {
         return false;
@@ -89,7 +110,7 @@ const Course = () => {
 
       return true;
     });
-  }, [selectedRegion, selectedDistance, selectedTag, searchQuery]);
+  }, [courses, selectedRegion, selectedDistance, selectedTag, searchQuery]);
 
   return (
     <div className="course-page">
@@ -106,8 +127,31 @@ const Course = () => {
 
       {/* Hero Header */}
       <header className="course-header">
-        <div className="course-header-badge">
-          <Sparkles size={14} /> KOREA RUNNING ROUTES & GPX
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px', flexWrap: 'wrap', marginBottom: '16px' }}>
+          <div className="course-header-badge" style={{ marginBottom: 0 }}>
+            <Sparkles size={14} /> KOREA RUNNING ROUTES & GPX
+          </div>
+          {roles?.isAdmin && (
+            <button
+              type="button"
+              onClick={() => navigate('/admin/courses')}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                padding: '6px 14px',
+                borderRadius: '999px',
+                fontSize: '0.85rem',
+                fontWeight: 700,
+                background: '#eff6ff',
+                color: '#2563eb',
+                border: '1px solid #bfdbfe',
+                cursor: 'pointer'
+              }}
+            >
+              <Settings size={14} /> 코스 관리자 모드
+            </button>
+          )}
         </div>
         <h1>RUNNING ROUTES</h1>
         <p className="course-header-desc">

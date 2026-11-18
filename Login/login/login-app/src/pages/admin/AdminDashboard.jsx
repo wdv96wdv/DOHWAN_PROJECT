@@ -9,6 +9,7 @@ import {
   Image as ImageIcon,
   Users,
   Loader2,
+  Footprints,
 } from 'lucide-react';
 import Swal from 'sweetalert2';
 import supabase from '../../utils/supabaseClient';
@@ -172,6 +173,17 @@ const AdminDashboard = () => {
           <div className="dash-menu-card-info">
             <h3>문의 관리</h3>
             <p>사용자 문의 내용 확인 및 처리</p>
+          </div>
+          <ChevronRight size={18} className="dash-menu-card-arrow" />
+        </div>
+
+        <div className="dash-menu-card" onClick={() => navigate('/admin/courses')}>
+          <div className="dash-menu-card-icon" style={{ background: 'rgba(37, 99, 235, 0.15)', color: '#2563eb' }}>
+            <Footprints size={22} />
+          </div>
+          <div className="dash-menu-card-info">
+            <h3>러닝 코스 관리</h3>
+            <p>전국 러닝 성지 및 대회 코스 신규 등록, 대표 이미지 수정, 삭제</p>
           </div>
           <ChevronRight size={18} className="dash-menu-card-arrow" />
         </div>
