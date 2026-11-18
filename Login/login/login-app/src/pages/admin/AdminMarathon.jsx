@@ -29,6 +29,7 @@ const AdminMarathon = () => {
   const [marathons, setMarathons] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
   const [uploadingId, setUploadingId] = useState(null);
   const fileInputRef = useRef(null);
   const uploadTargetId = useRef(null);
@@ -116,6 +117,39 @@ const AdminMarathon = () => {
     }
   };
 
+  // 승인/거절
+  const handleStatusChange = async (marathon, newStatus) => {
+    const labels = { approved: '승인', rejected: '거절', pending: '대기' };
+    const result = await Swal.fire({
+      icon: newStatus === 'approved' ? 'question' : 'warning',
+      title: `${labels[newStatus]}하시겠습니까?`,
+      html: `<b>${marathon.title}</b>`,
+      showCancelButton: true,
+      confirmButtonText: labels[newStatus],
+      cancelButtonText: '취소',
+      confirmButtonColor: newStatus === 'approved' ? '#10b981' : '#ef4444',
+      cancelButtonColor: '#64748b',
+    });
+
+    if (!result.isConfirmed) return;
+
+    try {
+      const { error } = await supabase
+        .from('marathons')
+        .update({ status: newStatus })
+        .eq('id', marathon.id);
+
+      if (error) throw error;
+
+      setMarathons(prev =>
+        prev.map(m => m.id === marathon.id ? { ...m, status: newStatus } : m)
+      );
+      Swal.fire({ icon: 'success', title: `${labels[newStatus]} 완료`, timer: 1500, showConfirmButton: false });
+    } catch (err) {
+      Swal.fire({ icon: 'error', title: '처리 실패', text: err.message });
+    }
+  };
+
   // 포스터 업로드 트리거
   const triggerUpload = (marathonId) => {
     uploadTargetId.current = marathonId;
@@ -185,14 +219,17 @@ const AdminMarathon = () => {
   };
 
   // 필터링
-  const filtered = marathons.filter(m =>
-    !search || (m.title || '').toLowerCase().includes(search.toLowerCase())
-  );
+  const filtered = marathons.filter(m => {
+    const matchSearch = !search || (m.title || '').toLowerCase().includes(search.toLowerCase());
+    const matchStatus = statusFilter === 'all' || (m.status || 'approved') === statusFilter;
+    return matchSearch && matchStatus;
+  });
 
   // 통계
   const totalCount = marathons.length;
+  const pendingCount = marathons.filter(m => m.status === 'pending').length;
+  const approvedCount = marathons.filter(m => (m.status || 'approved') === 'approved').length;
   const posterCount = marathons.filter(m => m.poster_url).length;
-  const noPosterCount = totalCount - posterCount;
 
   if (!isLogin || !roles?.isAdmin) return null;
 
@@ -215,17 +252,23 @@ const AdminMarathon = () => {
 
       {/* 통계 */}
       <div className="admin-stats-bar">
-        <div className="admin-stat-card">
+        <div className={`admin-stat-card ${statusFilter === 'all' ? 'active-filter' : ''}`} onClick={() => setStatusFilter('all')} style={{ cursor: 'pointer' }}>
           <div className="stat-number">{totalCount}</div>
           <div className="stat-label">전체 대회</div>
         </div>
-        <div className="admin-stat-card success">
+        <div className={`admin-stat-card success ${statusFilter === 'approved' ? 'active-filter' : ''}`} onClick={() => setStatusFilter('approved')} style={{ cursor: 'pointer' }}>
+          <div className="stat-number">{approvedCount}</div>
+          <div className="stat-label">✅ 승인됨</div>
+        </div>
+        {pendingCount > 0 && (
+          <div className={`admin-stat-card warning ${statusFilter === 'pending' ? 'active-filter' : ''}`} onClick={() => setStatusFilter('pending')} style={{ cursor: 'pointer' }}>
+            <div className="stat-number">{pendingCount}</div>
+            <div className="stat-label">⏳ 승인 대기</div>
+          </div>
+        )}
+        <div className="admin-stat-card">
           <div className="stat-number">{posterCount}</div>
           <div className="stat-label">포스터 등록</div>
-        </div>
-        <div className="admin-stat-card warning">
-          <div className="stat-number">{noPosterCount}</div>
-          <div className="stat-label">포스터 미등록</div>
         </div>
       </div>
 
@@ -271,6 +314,7 @@ const AdminMarathon = () => {
                 <th>개최일</th>
                 <th>접수기간</th>
                 <th>종목</th>
+                <th>상태</th>
                 <th>포스터</th>
                 <th>관리</th>
               </tr>
@@ -325,6 +369,14 @@ const AdminMarathon = () => {
                       </div>
                     </td>
 
+                    {/* 승인 상태 */}
+                    <td>
+                      <span className={`status-badge ${m.status || 'approved'}`}>
+                        {(m.status || 'approved') === 'approved' ? '✅ 승인' :
+                         m.status === 'pending' ? '⏳ 대기' : '❌ 거절'}
+                      </span>
+                    </td>
+
                     {/* 포스터 상태 */}
                     <td>
                       <span className={`poster-status ${m.poster_url ? 'has' : 'none'}`}>
@@ -335,6 +387,24 @@ const AdminMarathon = () => {
                     {/* 액션 */}
                     <td>
                       <div className="action-btns">
+                        {(m.status === 'pending' || m.status === 'rejected') && (
+                          <button
+                            className="action-btn approve"
+                            onClick={() => handleStatusChange(m, 'approved')}
+                            title="승인"
+                          >
+                            ✅ 승인
+                          </button>
+                        )}
+                        {(m.status === 'pending' || (m.status || 'approved') === 'approved') && (
+                          <button
+                            className="action-btn reject"
+                            onClick={() => handleStatusChange(m, m.status === 'pending' ? 'rejected' : 'pending')}
+                            title={m.status === 'pending' ? '거절' : '승인 취소'}
+                          >
+                            {m.status === 'pending' ? '❌ 거절' : '⏸ 대기'}
+                          </button>
+                        )}
                         <button
                           className="action-btn edit"
                           onClick={() => navigate(`/marathon/edit/${m.id}`)}

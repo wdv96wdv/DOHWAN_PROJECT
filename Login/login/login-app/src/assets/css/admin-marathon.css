@@ -377,3 +377,44 @@
   }
 }
 
+
+
+/* ===== Status Badge ===== */
+.status-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.status-badge.approved { background: #dcfce7; color: #166534; }
+.status-badge.pending { background: #fef3c7; color: #92400e; }
+.status-badge.rejected { background: #fee2e2; color: #991b1b; }
+
+/* Approve / Reject buttons */
+.action-btn.approve {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+.action-btn.approve:hover {
+  background: #10b981;
+  color: white;
+}
+.action-btn.reject {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+.action-btn.reject:hover {
+  background: #ef4444;
+  color: white;
+}
+
+/* Active filter card highlight */
+.admin-stat-card.active-filter {
+  outline: 2px solid var(--primary, #3b82f6);
+  outline-offset: -2px;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+}

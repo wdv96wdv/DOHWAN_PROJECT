@@ -26,6 +26,7 @@ const AdminDashboard = () => {
     totalMarathons: 0,
     withPoster: 0,
     withoutPoster: 0,
+    pendingCount: 0,
     totalContacts: 0,
   });
   const [loading, setLoading] = useState(true);
@@ -63,15 +64,17 @@ const AdminDashboard = () => {
         // 마라톤 통계
         const { data: marathons } = await supabase
           .from('marathons')
-          .select('id, poster_url');
+          .select('id, poster_url, status');
 
         const total = marathons?.length || 0;
         const withPoster = marathons?.filter(m => m.poster_url).length || 0;
+        const pending = marathons?.filter(m => m.status === 'pending').length || 0;
 
         setStats({
           totalMarathons: total,
           withPoster,
           withoutPoster: total - withPoster,
+          pendingCount: pending,
           totalContacts: 0, // 문의는 백엔드 API라 별도 로드 필요
         });
       } catch (err) {
@@ -133,6 +136,18 @@ const AdminDashboard = () => {
               <div className="stat-lbl">포스터 미등록</div>
             </div>
           </div>
+
+          {stats.pendingCount > 0 && (
+            <div className="dash-stat-card" onClick={() => navigate('/admin/marathons')} style={{ cursor: 'pointer' }}>
+              <div className="dash-stat-icon" style={{ background: 'rgba(245,158,11,0.15)', color: '#f59e0b' }}>
+                <CalendarPlus size={22} />
+              </div>
+              <div className="dash-stat-info">
+                <div className="stat-val" style={{ color: '#f59e0b' }}>{stats.pendingCount}</div>
+                <div className="stat-lbl">⏳ 승인 대기</div>
+              </div>
+            </div>
+          )}
         </div>
       )}
 

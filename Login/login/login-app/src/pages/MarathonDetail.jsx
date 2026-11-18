@@ -427,6 +427,19 @@ const MarathonDetail = () => {
                 </div>
             </nav>
 
+            {marathon.status === 'pending' && (
+              <div style={{ 
+                background: '#fef3c7', border: '1px solid #f59e0b', 
+                borderRadius: '10px', padding: '12px 16px', 
+                margin: '0 0 16px', display: 'flex', 
+                alignItems: 'center', gap: '8px',
+                fontSize: '0.9rem', color: '#92400e'
+              }}>
+                <AlertCircle size={18} />
+                <span>이 대회는 현재 <strong>관리자 승인 대기 중</strong>입니다. 승인 후 목록에 노출됩니다.</span>
+              </div>
+            )}
+
             {/* Hero Banner Section */}
             <section className="detail-hero-card">
                 {marathon.poster_url && (

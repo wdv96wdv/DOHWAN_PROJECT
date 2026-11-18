@@ -63,8 +63,9 @@ export default function MarathonList() {
 
         const fetchPage = (offset) => {
             const url = `${SUPABASE_URL}/rest/v1/marathons`
-                + `?select=id,title,location,race_date,start_date,end_date,type,link,is_first_come,poster_url`
+                + `?select=id,title,location,race_date,start_date,end_date,type,link,is_first_come,poster_url,status`
                 + `&race_date=gte.${twoMonthsAgo}`
+                + `&status=eq.approved`
                 + `&limit=${fetchSize}&offset=${offset}`;
 
             return fetch(url, {

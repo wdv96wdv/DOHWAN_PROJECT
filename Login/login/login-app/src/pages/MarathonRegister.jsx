@@ -175,6 +175,7 @@ export default function MarathonRegister() {
         link: validLink,
         is_first_come: form.isFirstCome,
         poster_url: finalPosterUrl || null,
+        status: isAdmin ? 'approved' : 'pending',
       };
 
       const { data, error } = await supabase
@@ -227,8 +228,12 @@ export default function MarathonRegister() {
 
       Swal.fire({
         icon: 'success',
-        title: '마라톤 대회가 성공적으로 등록되었습니다!',
-        text: `대회명: ${form.title}`,
+        title: isAdmin
+          ? '대회가 등록되었습니다!'
+          : '대회 등록 요청이 접수되었습니다.',
+        text: isAdmin
+          ? `대회명: ${form.title}`
+          : '관리자 승인 후 목록에 노출됩니다.',
         showCancelButton: true,
         confirmButtonColor: 'var(--primary)',
         cancelButtonColor: '#64748b',
