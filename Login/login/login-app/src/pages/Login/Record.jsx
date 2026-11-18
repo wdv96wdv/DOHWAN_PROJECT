@@ -1,14 +1,24 @@
-import React, { useEffect, useState, useRef } from "react";
-import { useNavigate } from "react-router-dom"; // ✅ 페이지 이동을 위해 추가
+// src/pages/Login/Record.jsx
+import React, { useEffect, useState, useRef, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import api from "../../apis/api";
 import useAuthStore from "../../store/useAuthStore";
 import RecordForm from "../../components/Record/RecordForm";
 import RecordList from "../../components/Record/RecordList";
 import "../../assets/css/record.css";
-import { v4 as uuidv4 } from "uuid";
-import { Activity } from "lucide-react";
+import { 
+  Activity, 
+  Plus, 
+  ChevronUp, 
+  Footprints, 
+  Clock, 
+  Zap, 
+  Trophy,
+  Sparkles
+} from "lucide-react";
 import { Helmet } from 'react-helmet-async';
+import dayjs from "dayjs";
 
 const parsePaceToSeconds = (paceStr) => {
   if (!paceStr) return 0;
@@ -59,11 +69,12 @@ const getUserNoFromJWT = () => {
 };
 
 export default function RecordPage() {
-  const navigate = useNavigate(); // ✅ 네비게이트 훅 선언
+  const navigate = useNavigate();
   const isLogin = useAuthStore(state => state.isLogin);
   const hasAlerted = useRef(false);
 
   const [records, setRecords] = useState([]);
+  const [isFormOpen, setIsFormOpen] = useState(false);
   const [formData, setFormData] = useState({
     running_name: "",
     distance_km: "",
@@ -77,7 +88,7 @@ export default function RecordPage() {
   const [editingId, setEditingId] = useState(null);
   const user_no = getUserNoFromJWT();
 
-  // 비로그인 접근 차단 (URL 직접 접근 방지)
+  // 비로그인 접근 차단
   useEffect(() => {
     if (!isLogin && !hasAlerted.current) {
       hasAlerted.current = true;
@@ -85,7 +96,7 @@ export default function RecordPage() {
         icon: 'warning',
         title: '로그인이 필요합니다',
         text: '기록 페이지는 로그인 후 이용 가능합니다.',
-        confirmButtonColor: 'var(--primary)',
+        confirmButtonColor: '#2563eb',
         confirmButtonText: '확인'
       }).then(() => {
         navigate('/', { replace: true });
@@ -112,18 +123,70 @@ export default function RecordPage() {
       setRecords(list);
     } catch (error) {
       console.error("불러오기 오류:", error);
-      Swal.fire("오류", "기록을 불러오지 못했습니다.", "error");
     }
   };
+
+  // KPI 통계 계산 (이번 달 누적, 총 횟수, 평균 페이스, 최장 거리)
+  const kpiStats = useMemo(() => {
+    if (!records || records.length === 0) {
+      return {
+        monthDistance: "0.0",
+        totalRuns: 0,
+        avgPace: "-",
+        longestRun: "0.0"
+      };
+    }
+
+    const currentYearMonth = dayjs().format("YYYY-MM");
+    let monthDist = 0;
+    let maxDist = 0;
+    let totalPaceSeconds = 0;
+    let paceCount = 0;
+
+    records.forEach(r => {
+      const dist = Number(r.distance_km) || 0;
+      if (dist > maxDist) maxDist = dist;
+
+      // 이번 달인지 확인
+      if (r.record_date && r.record_date.startsWith(currentYearMonth)) {
+        monthDist += dist;
+      }
+
+      // 페이스 평균 계산
+      if (r.pace_min_per_km) {
+        const secs = parsePaceToSeconds(r.pace_min_per_km);
+        if (secs > 0 && secs < 1200) { // 정상 범위 러닝 페이스 (20분 이내)
+          totalPaceSeconds += secs;
+          paceCount++;
+        }
+      }
+    });
+
+    // 평균 페이스 문자열 포맷
+    let avgPaceStr = "-";
+    if (paceCount > 0) {
+      const avgSecs = Math.round(totalPaceSeconds / paceCount);
+      const mins = Math.floor(avgSecs / 60);
+      const secs = avgSecs % 60;
+      avgPaceStr = `${mins}'${secs.toString().padStart(2, '0')}''`;
+    }
+
+    return {
+      monthDistance: monthDist.toFixed(1),
+      totalRuns: records.length,
+      avgPace: avgPaceStr,
+      longestRun: maxDist.toFixed(1)
+    };
+  }, [records]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.running_name.trim()) {
-      Swal.fire("경고", "활동 제목을 입력해주세요.", "warning"); // ✅ 한글화
+      Swal.fire("경고", "활동 제목을 입력해주세요.", "warning");
       return;
     }
     if (!user_no) {
-      Swal.fire("에러", "로그인이 필요한 서비스입니다.", "error"); // ✅ 한글화
+      Swal.fire("에러", "로그인이 필요한 서비스입니다.", "error");
       return;
     }
 
@@ -131,7 +194,6 @@ export default function RecordPage() {
       const submitData = { ...formData };
       if (!submitData.record_date) submitData.record_date = new Date().toISOString();
 
-      // 데이터 정제 로직은 그대로 유지
       submitData.pace_min_per_km = submitData.pace_min_per_km
         ? parseInt(String(submitData.pace_min_per_km).replace(/[^0-9]/g, ""), 10)
         : null;
@@ -140,7 +202,7 @@ export default function RecordPage() {
       submitData.cadence = submitData.cadence ? parseInt(submitData.cadence, 10) : null;
       submitData.calories = submitData.calories ? parseInt(submitData.calories, 10) : null;
 
-      // 누락된 데이터 자동 계산 로직 (거리, 시간, 페이스 중 2개가 있으면 나머지 1개 계산)
+      // 누락된 데이터 자동 계산
       if (submitData.distance_km > 0 && submitData.duration_sec > 0 && !submitData.pace_min_per_km) {
         submitData.pace_min_per_km = calculatePaceNum(submitData.distance_km, submitData.duration_sec);
       } else if (submitData.pace_min_per_km > 0 && submitData.duration_sec > 0 && !submitData.distance_km) {
@@ -185,10 +247,10 @@ export default function RecordPage() {
           title: "수정 완료",
           text: "활동 기록이 정상적으로 수정되었습니다.",
           icon: "success",
-          confirmButtonText: "확인"
-        }).then(() => {
-          setRecords(prev => prev.map(r => r.id === editingId ? { ...r, ...normalized } : r));
+          timer: 1500,
+          showConfirmButton: false
         });
+        setRecords(prev => prev.map(r => r.id === editingId ? { ...r, ...normalized } : r));
 
       } else {
         // 등록 모드
@@ -202,21 +264,22 @@ export default function RecordPage() {
         };
 
         Swal.fire({
-          title: "등록 완료",
-          text: "오늘의 러닝 기록을 저장했습니다. 수고하셨어요! 🏃‍♂️",
+          title: "러닝 기록 완료! 🏃‍♂️",
+          text: "오늘의 러닝 활동이 성공적으로 저장되었습니다.",
           icon: "success",
-          confirmButtonText: "확인"
-        }).then(() => {
-          setRecords(prev => [normalized, ...prev]);
+          timer: 1500,
+          showConfirmButton: false
         });
+        setRecords(prev => [normalized, ...prev]);
       }
 
-      // 폼 초기화
+      // 폼 초기화 및 닫기
       setFormData({
         running_name: "", distance_km: "", duration_sec: "", pace_min_per_km: "",
         cadence: "", calories: "", note: "", record_date: new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 16),
       });
       setEditingId(null);
+      setIsFormOpen(false);
     } catch (err) {
       console.error(err);
       Swal.fire("실패", "데이터 저장 중 오류가 발생했습니다.", "error");
@@ -235,7 +298,8 @@ export default function RecordPage() {
       record_date: record.record_date?.slice(0, 16) || "",
     });
     setEditingId(record.id);
-    window.scrollTo({ top: 0, behavior: 'smooth' }); // 수정 시 폼이 있는 상단으로 이동
+    setIsFormOpen(true);
+    window.scrollTo({ top: 120, behavior: 'smooth' });
   };
 
   const handleDelete = async (id) => {
@@ -244,8 +308,8 @@ export default function RecordPage() {
       text: "정말로 이 활동 기록을 삭제하시겠습니까? 복구할 수 없습니다.",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
+      confirmButtonColor: "#ef4444",
+      cancelButtonColor: "#64748b",
       confirmButtonText: "삭제",
       cancelButtonText: "취소"
     });
@@ -254,12 +318,21 @@ export default function RecordPage() {
 
     try {
       await api.delete(`/records/${id}`);
-      Swal.fire("삭제 완료", "기록이 삭제되었습니다.", "success");
+      Swal.fire({ title: "삭제 완료", icon: "success", timer: 1200, showConfirmButton: false });
       setRecords(prev => prev.filter(r => r.id !== id));
     } catch (err) {
       console.error(err);
       Swal.fire("오류", "삭제에 실패했습니다.", "error");
     }
+  };
+
+  const handleCancelEdit = () => {
+    setEditingId(null);
+    setFormData({
+      running_name: "", distance_km: "", duration_sec: "", pace_min_per_km: "",
+      cadence: "", calories: "", note: "", record_date: new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 16),
+    });
+    setIsFormOpen(false);
   };
 
   if (!isLogin) {
@@ -269,23 +342,125 @@ export default function RecordPage() {
   return (
     <div className="record-page">
       <Helmet>
-        <title>Dorunning | 기록</title>
+        <title>나만의 러닝 기록 & 통계 분석 | 두러닝</title>
         <meta name="description" content="나의 매일매일 러닝 기록을 체계적으로 저장하고 분석하세요. 거리, 시간, 페이스 통계를 한눈에 확인하며 성장의 즐거움을 느껴보세요." />
-        <meta property="og:title" content="Dorunning | 러닝기록" />
+        <meta property="og:title" content="나만의 러닝 기록 & 통계 분석 | 두러닝" />
         <meta property="og:description" content="나의 매일매일 러닝 기록을 체계적으로 저장하고 분석하세요." />
         <link rel="canonical" href="https://www.dorunning.app/record" />
       </Helmet>
+
+      {/* Hero Header */}
       <header className="record-header">
-        <h1><Activity size={40} style={{ verticalAlign: 'middle', marginRight: '16px', color: 'var(--primary)' }} /> RECORD</h1>
+        <div className="record-header-badge">
+          <Sparkles size={14} /> RUNNING LOG & PERFORMANCE
+        </div>
+        <h1>RUNNING LOG</h1>
+        <p className="record-header-desc">
+          매일의 땀방울과 레이스 기록을 저장하고 나만의 러닝 성장을 한눈에 확인하세요.
+        </p>
       </header>
 
-      <RecordForm
-        formData={formData}
-        setFormData={setFormData}
-        onSubmit={handleSubmit}
-        submitText={editingId ? "기록 수정하기" : "활동 저장하기"}
-      />
+      {/* KPI Stats Grid */}
+      <section className="record-kpi-grid">
+        <div className="record-kpi-card">
+          <div className="record-kpi-header">
+            <span className="record-kpi-label">이번 달 누적</span>
+            <div className="record-kpi-icon blue">
+              <Footprints size={18} />
+            </div>
+          </div>
+          <div className="record-kpi-value-row">
+            <span className="record-kpi-val">{kpiStats.monthDistance}</span>
+            <span className="record-kpi-unit">km</span>
+          </div>
+        </div>
 
+        <div className="record-kpi-card">
+          <div className="record-kpi-header">
+            <span className="record-kpi-label">총 러닝 횟수</span>
+            <div className="record-kpi-icon emerald">
+              <Activity size={18} />
+            </div>
+          </div>
+          <div className="record-kpi-value-row">
+            <span className="record-kpi-val">{kpiStats.totalRuns}</span>
+            <span className="record-kpi-unit">회</span>
+          </div>
+        </div>
+
+        <div className="record-kpi-card">
+          <div className="record-kpi-header">
+            <span className="record-kpi-label">평균 페이스</span>
+            <div className="record-kpi-icon amber">
+              <Zap size={18} />
+            </div>
+          </div>
+          <div className="record-kpi-value-row">
+            <span className="record-kpi-val" style={{ fontSize: '1.4rem' }}>{kpiStats.avgPace}</span>
+            <span className="record-kpi-unit">/km</span>
+          </div>
+        </div>
+
+        <div className="record-kpi-card">
+          <div className="record-kpi-header">
+            <span className="record-kpi-label">최장 거리 (PB)</span>
+            <div className="record-kpi-icon purple">
+              <Trophy size={18} />
+            </div>
+          </div>
+          <div className="record-kpi-value-row">
+            <span className="record-kpi-val">{kpiStats.longestRun}</span>
+            <span className="record-kpi-unit">km</span>
+          </div>
+        </div>
+      </section>
+
+      {/* Form Toggle Bar */}
+      <div className="record-form-toggle-bar">
+        <h2 style={{ fontSize: '1.3rem', fontWeight: 800, margin: 0, color: 'var(--text-primary)' }}>
+          내 활동 피드 ({records.length})
+        </h2>
+
+        <div style={{ display: 'flex', gap: '8px' }}>
+          {editingId && (
+            <button
+              type="button"
+              className="btn-toggle-form open"
+              onClick={handleCancelEdit}
+            >
+              수정 취소
+            </button>
+          )}
+
+          <button
+            type="button"
+            className={`btn-toggle-form ${isFormOpen ? 'open' : ''}`}
+            onClick={() => setIsFormOpen(!isFormOpen)}
+          >
+            {isFormOpen ? (
+              <>
+                <ChevronUp size={16} /> 기록 입력 접기
+              </>
+            ) : (
+              <>
+                <Plus size={16} /> 새 활동 기록하기
+              </>
+            )}
+          </button>
+        </div>
+      </div>
+
+      {/* Collapsible Record Form */}
+      {isFormOpen && (
+        <RecordForm
+          formData={formData}
+          setFormData={setFormData}
+          onSubmit={handleSubmit}
+          submitText={editingId ? "기록 수정 저장" : "오늘의 활동 기록 저장"}
+        />
+      )}
+
+      {/* Record Feed List */}
       <RecordList
         records={records}
         onEdit={handleEdit}
