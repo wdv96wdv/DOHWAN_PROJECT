@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import '../../assets/css/header.css';
 import useAuthStore from '../../store/useAuthStore';
+import supabase from '../../utils/supabaseClient';
+import { getUnreadContactCount } from '../../utils/contactNotification';
 import logo from '../../assets/img/dorunninglogo.png';
 import noImage from '../../assets/img/no-image.png'; // 기본 이미지 임포트 확인
 import ThemeToggle from '../../components/ThemeToggle/ThemeToggle';
@@ -35,6 +38,53 @@ const Header = ({ theme, toggleTheme }) => {
   const closeMenu = () => setMenuOpen(false);
 
   const isAdmin = roles?.isAdmin;
+  const [unreadContacts, setUnreadContacts] = useState(0);
+  const [pendingMarathons, setPendingMarathons] = useState(0);
+  const totalAdminAlerts = unreadContacts + pendingMarathons;
+
+  useEffect(() => {
+    if (!isLogin || !isAdmin) {
+      setUnreadContacts(0);
+      setPendingMarathons(0);
+      return;
+    }
+
+    const fetchAdminAlerts = async () => {
+      const token = localStorage.getItem('jwt');
+      const [contactRes, marathonRes] = await Promise.allSettled([
+        token
+          ? axios.get(`${import.meta.env.VITE_API_BASE_URL}/admin/contact`, {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                Accept: 'application/json',
+              },
+            })
+          : Promise.resolve({ data: [] }),
+        supabase
+          .from('marathons')
+          .select('id', { count: 'exact', head: true })
+          .eq('status', 'pending'),
+      ]);
+
+      if (contactRes.status === 'fulfilled') {
+        setUnreadContacts(getUnreadContactCount(contactRes.value.data));
+      }
+      if (marathonRes.status === 'fulfilled' && !marathonRes.value.error) {
+        setPendingMarathons(marathonRes.value.count || 0);
+      }
+    };
+
+    fetchAdminAlerts();
+
+    const handleContactsSeen = () => setUnreadContacts(0);
+    const handleMarathonsUpdated = () => fetchAdminAlerts();
+    window.addEventListener('contacts-seen', handleContactsSeen);
+    window.addEventListener('marathons-updated', handleMarathonsUpdated);
+    return () => {
+      window.removeEventListener('contacts-seen', handleContactsSeen);
+      window.removeEventListener('marathons-updated', handleMarathonsUpdated);
+    };
+  }, [isLogin, isAdmin]);
 
   const NavItems = () => (
     <ul className="nav-list">
@@ -46,7 +96,22 @@ const Header = ({ theme, toggleTheme }) => {
       <li><Link to="/performance" onClick={closeMenu}><TrendingUp size={20} /><span>퍼포먼스</span></Link></li>
       <li><Link to="/event" onClick={closeMenu}><Gift size={20} /><span>챌린지</span></Link></li>
       <li><Link to="/boards" onClick={closeMenu}><MessageSquare size={20} /><span>커뮤니티</span></Link></li>
-      {isAdmin && <li><Link to="/admin" onClick={closeMenu}><ShieldCheck size={20} /><span>관리자</span></Link></li>}
+      {isAdmin && (
+        <li>
+          <Link to="/admin" onClick={closeMenu} className="admin-nav-link">
+            <ShieldCheck size={20} />
+            <span>관리자</span>
+            {totalAdminAlerts > 0 && (
+              <span
+                className="nav-unread-badge"
+                aria-label={`관리자 알림 ${totalAdminAlerts}건`}
+              >
+                {totalAdminAlerts > 99 ? '99+' : totalAdminAlerts}
+              </span>
+            )}
+          </Link>
+        </li>
+      )}
     </ul>
   );
 

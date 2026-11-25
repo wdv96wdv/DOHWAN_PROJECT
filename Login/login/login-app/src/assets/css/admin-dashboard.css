@@ -139,6 +139,7 @@
 }
 
 .dash-menu-card-icon {
+  position: relative;
   width: 44px;
   height: 44px;
   border-radius: 11px;
@@ -147,6 +148,47 @@
   justify-content: center;
   flex-shrink: 0;
   font-size: 1.2rem;
+}
+
+.dash-unread-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  border-radius: 9999px;
+  background: #ef4444;
+  color: #ffffff;
+  font-size: 0.72rem;
+  font-weight: 800;
+  line-height: 20px;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(239, 68, 68, 0.45);
+  border: 2px solid var(--card-bg, #ffffff);
+}
+
+.dash-menu-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.dash-menu-title-row h3 {
+  margin: 0;
+}
+
+.dash-unread-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 7px;
+  border-radius: 9999px;
+  background: #ef4444;
+  color: #ffffff;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
 }
 
 .dash-menu-card-icon.marathon {

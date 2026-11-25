@@ -16,6 +16,7 @@ import {
   ExternalLink,
 } from 'lucide-react';
 import useAuthStore from "../../store/useAuthStore";
+import { getLastSeenContactId, markContactsAsSeen } from "../../utils/contactNotification";
 import '../../assets/css/admin-marathon.css';
 
 const AdminContact = () => {
@@ -27,6 +28,7 @@ const AdminContact = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [expandedId, setExpandedId] = useState(null);
+  const [prevSeenId, setPrevSeenId] = useState(() => getLastSeenContactId());
 
   const token = localStorage.getItem("jwt");
 
@@ -61,6 +63,8 @@ const AdminContact = () => {
         },
       });
       setContacts(res.data);
+      setPrevSeenId(getLastSeenContactId());
+      markContactsAsSeen(res.data);
     } catch (err) {
       console.error(err);
       setError("문의 내역을 불러오지 못했습니다.");
@@ -184,8 +188,20 @@ const AdminContact = () => {
 
                   {/* 이름 + 이메일 */}
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--text, #1e293b)' }}>
-                      {c.name}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 700, fontSize: '0.95rem', color: 'var(--text, #1e293b)' }}>
+                      <span>{c.name}</span>
+                      {Number(c.id) > prevSeenId && (
+                        <span style={{
+                          fontSize: '0.68rem',
+                          fontWeight: 800,
+                          padding: '2px 7px',
+                          borderRadius: '9999px',
+                          background: '#ef4444',
+                          color: '#fff',
+                        }}>
+                          NEW
+                        </span>
+                      )}
                     </div>
                     <div style={{ fontSize: '0.8rem', color: 'var(--text-muted, #64748b)', display: 'flex', alignItems: 'center', gap: '4px' }}>
                       <Mail size={12} /> {c.email}

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import {
   ShieldCheck,
   Trophy,
@@ -13,6 +14,7 @@ import {
 } from 'lucide-react';
 import Swal from 'sweetalert2';
 import supabase from '../../utils/supabaseClient';
+import { getUnreadContactCount } from '../../utils/contactNotification';
 import useAuthStore from '../../store/useAuthStore';
 import '../../assets/css/admin-dashboard.css';
 
@@ -29,6 +31,7 @@ const AdminDashboard = () => {
     withoutPoster: 0,
     pendingCount: 0,
     totalContacts: 0,
+    unreadContacts: 0,
   });
   const [loading, setLoading] = useState(true);
 
@@ -62,21 +65,38 @@ const AdminDashboard = () => {
 
     const fetchStats = async () => {
       try {
-        // 마라톤 통계
-        const { data: marathons } = await supabase
-          .from('marathons')
-          .select('id, poster_url, status');
+        const token = localStorage.getItem('jwt');
+        const [marathonRes, contactRes] = await Promise.allSettled([
+          supabase.from('marathons').select('id, poster_url, status'),
+          token
+            ? axios.get(`${import.meta.env.VITE_API_BASE_URL}/admin/contact`, {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                  Accept: 'application/json',
+                },
+              })
+            : Promise.resolve({ data: [] }),
+        ]);
 
-        const total = marathons?.length || 0;
-        const withPoster = marathons?.filter(m => m.poster_url).length || 0;
-        const pending = marathons?.filter(m => m.status === 'pending').length || 0;
+        const marathons =
+          marathonRes.status === 'fulfilled' ? marathonRes.value.data || [] : [];
+        const contacts =
+          contactRes.status === 'fulfilled' && Array.isArray(contactRes.value.data)
+            ? contactRes.value.data
+            : [];
+
+        const total = marathons.length;
+        const withPoster = marathons.filter(m => m.poster_url).length;
+        const pending = marathons.filter(m => m.status === 'pending').length;
+        const unreadContacts = getUnreadContactCount(contacts);
 
         setStats({
           totalMarathons: total,
           withPoster,
           withoutPoster: total - withPoster,
           pendingCount: pending,
-          totalContacts: 0, // 문의는 백엔드 API라 별도 로드 필요
+          totalContacts: contacts.length,
+          unreadContacts,
         });
       } catch (err) {
         console.error('통계 로드 실패:', err);
@@ -86,6 +106,12 @@ const AdminDashboard = () => {
     };
 
     fetchStats();
+
+    const handleContactsSeen = () => {
+      setStats(prev => ({ ...prev, unreadContacts: 0 }));
+    };
+    window.addEventListener('contacts-seen', handleContactsSeen);
+    return () => window.removeEventListener('contacts-seen', handleContactsSeen);
   }, [isLogin, roles]);
 
   if (!isLogin || !roles?.isAdmin) return null;
@@ -139,7 +165,7 @@ const AdminDashboard = () => {
           </div>
 
           {stats.pendingCount > 0 && (
-            <div className="dash-stat-card" onClick={() => navigate('/admin/marathons')} style={{ cursor: 'pointer' }}>
+            <div className="dash-stat-card" onClick={() => navigate('/admin/marathons?status=pending')} style={{ cursor: 'pointer' }}>
               <div className="dash-stat-icon" style={{ background: 'rgba(245,158,11,0.15)', color: '#f59e0b' }}>
                 <CalendarPlus size={22} />
               </div>
@@ -149,18 +175,51 @@ const AdminDashboard = () => {
               </div>
             </div>
           )}
+
+          <div className="dash-stat-card" onClick={() => navigate('/admin/contacts')} style={{ cursor: 'pointer' }}>
+            <div
+              className="dash-stat-icon"
+              style={{
+                background: stats.unreadContacts > 0 ? 'rgba(239, 68, 68, 0.12)' : 'rgba(34, 197, 94, 0.1)',
+                color: stats.unreadContacts > 0 ? '#ef4444' : '#22c55e',
+              }}
+            >
+              <MessageSquare size={22} />
+            </div>
+            <div className="dash-stat-info">
+              <div className="stat-val" style={stats.unreadContacts > 0 ? { color: '#ef4444' } : undefined}>
+                {stats.unreadContacts > 0 ? stats.unreadContacts : stats.totalContacts}
+              </div>
+              <div className="stat-lbl">
+                {stats.unreadContacts > 0 ? '새 문의 (미확인)' : '전체 문의'}
+              </div>
+            </div>
+          </div>
         </div>
       )}
 
       {/* 메뉴 카드 */}
       <div className="dash-menu-title">관리 메뉴</div>
       <div className="dash-menu-grid">
-        <div className="dash-menu-card" onClick={() => navigate('/admin/marathons')}>
+        <div
+          className="dash-menu-card"
+          onClick={() => navigate(stats.pendingCount > 0 ? '/admin/marathons?status=pending' : '/admin/marathons')}
+        >
           <div className="dash-menu-card-icon marathon">
             <Trophy size={22} />
+            {stats.pendingCount > 0 && (
+              <span className="dash-unread-badge" aria-label={`승인 대기 마라톤 ${stats.pendingCount}건`}>
+                {stats.pendingCount > 99 ? '99+' : stats.pendingCount}
+              </span>
+            )}
           </div>
           <div className="dash-menu-card-info">
-            <h3>마라톤 대회 관리</h3>
+            <div className="dash-menu-title-row">
+              <h3>마라톤 대회 관리</h3>
+              {stats.pendingCount > 0 && (
+                <span className="dash-unread-pill">승인 대기 {stats.pendingCount}</span>
+              )}
+            </div>
             <p>등록된 대회 목록 조회, 수정, 삭제 및 포스터 이미지 업로드</p>
           </div>
           <ChevronRight size={18} className="dash-menu-card-arrow" />
@@ -169,10 +228,20 @@ const AdminDashboard = () => {
         <div className="dash-menu-card" onClick={() => navigate('/admin/contacts')}>
           <div className="dash-menu-card-icon contact">
             <MessageSquare size={22} />
+            {stats.unreadContacts > 0 && (
+              <span className="dash-unread-badge" aria-label={`새 문의 ${stats.unreadContacts}건`}>
+                {stats.unreadContacts > 99 ? '99+' : stats.unreadContacts}
+              </span>
+            )}
           </div>
           <div className="dash-menu-card-info">
-            <h3>문의 관리</h3>
-            <p>사용자 문의 내용 확인 및 처리</p>
+            <div className="dash-menu-title-row">
+              <h3>문의 관리</h3>
+              {stats.unreadContacts > 0 && (
+                <span className="dash-unread-pill">NEW {stats.unreadContacts}</span>
+              )}
+            </div>
+            <p>사용자 문의 내용 확인 및 처리 (전체 {stats.totalContacts}건)</p>
           </div>
           <ChevronRight size={18} className="dash-menu-card-arrow" />
         </div>

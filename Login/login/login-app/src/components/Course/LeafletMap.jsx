@@ -66,8 +66,8 @@ const LeafletMap = ({ courseId, coords, center, themeColor }) => {
       style={{ height: '100%', width: '100%', zIndex: 1 }}
     >
       <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       <Polyline positions={coords} pathOptions={polylineOptions} />
       <Marker position={coords[0]} icon={startIcon}>

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
   ShieldCheck,
   Search,
@@ -26,6 +26,8 @@ import '../../assets/css/admin-marathon.css';
 
 const AdminMarathon = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const initialStatus = searchParams.get('status');
   const isLogin = useAuthStore(state => state.isLogin);
   const roles = useAuthStore(state => state.roles);
   const hasAlerted = useRef(false);
@@ -33,7 +35,9 @@ const AdminMarathon = () => {
   const [marathons, setMarathons] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
-  const [statusFilter, setStatusFilter] = useState('all');
+  const [statusFilter, setStatusFilter] = useState(
+    ['all', 'approved', 'pending', 'rejected'].includes(initialStatus) ? initialStatus : 'all'
+  );
   const [currentPage, setCurrentPage] = useState(1);
   const PAGE_SIZE = 20;
   const [uploadingId, setUploadingId] = useState(null);
@@ -117,6 +121,7 @@ const AdminMarathon = () => {
       if (error) throw error;
 
       setMarathons(prev => prev.filter(m => m.id !== marathon.id));
+      window.dispatchEvent(new Event('marathons-updated'));
       Swal.fire({ icon: 'success', title: '삭제 완료', timer: 1500, showConfirmButton: false });
     } catch (err) {
       Swal.fire({ icon: 'error', title: '삭제 실패', text: err.message });
@@ -150,6 +155,7 @@ const AdminMarathon = () => {
       setMarathons(prev =>
         prev.map(m => m.id === marathon.id ? { ...m, status: newStatus } : m)
       );
+      window.dispatchEvent(new Event('marathons-updated'));
       Swal.fire({ icon: 'success', title: `${labels[newStatus]} 완료`, timer: 1500, showConfirmButton: false });
     } catch (err) {
       Swal.fire({ icon: 'error', title: '처리 실패', text: err.message });

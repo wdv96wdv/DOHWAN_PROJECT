@@ -170,6 +170,10 @@
   color: var(--text, #1e293b);
 }
 
+.admin-table td:nth-child(3) {
+  white-space: nowrap;
+}
+
 .admin-table tbody tr {
   transition: background 0.15s;
 }
@@ -233,10 +237,12 @@
 
 /* Poster status badge */
 .poster-status {
+  display: inline-block;
   font-size: 0.75rem;
   padding: 3px 8px;
   border-radius: 6px;
   font-weight: 600;
+  white-space: nowrap;
 }
 
 .poster-status.has {
